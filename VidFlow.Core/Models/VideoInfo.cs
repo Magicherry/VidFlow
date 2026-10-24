@@ -37,6 +37,9 @@ public sealed class VideoInfo : MediaInfo
 
     /// <summary>Estimated size of the best audio-only stream (for audio downloads).</summary>
     public long? AudioBytes { get; init; }
+
+    /// <summary>Video codecs offered (see <c>VideoCodecs</c>) and the highest resolution available in each.</summary>
+    public IReadOnlyDictionary<string, int> Codecs { get; init; } = new Dictionary<string, int>();
 }
 
 public sealed class PlaylistInfo : MediaInfo
@@ -59,4 +62,5 @@ public sealed record DownloadRequest(
     string Mode,          // video, mp3, m4a
     int MaxHeight,        // 0 = best
     bool WriteSubtitles,
-    string OutputFolder);
+    string OutputFolder,
+    string Codec = "auto"); // auto, h264, h265, av1, vp9 (see VideoCodecs)

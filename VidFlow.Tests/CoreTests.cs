@@ -98,6 +98,33 @@ public class ErrorMapperTests
     public void DetectsCookieReadErrors(string line) => Assert.True(ErrorMapper.IsCookieReadError(line));
 
     [Fact]
+    public void NoFormatsIsNotReportedAsUnavailable()
+    {
+        var saved = CultureInfo.CurrentUICulture;
+        try
+        {
+            L.ApplyLanguage("en");
+            var raw = "ERROR: [youtube] qY6lCyN0CJA: Requested format is not available. Use --list-formats for a list of available formats";
+            Assert.True(ErrorMapper.IsNoFormats(raw));
+            Assert.StartsWith(L.Get("Error_NoFormats"), ErrorMapper.Friendly(raw));
+            Assert.DoesNotContain(L.Get("Error_Unavailable"), ErrorMapper.Friendly(raw));
+            Assert.StartsWith(L.Get("Error_Unavailable"), ErrorMapper.Friendly("ERROR: [youtube] x: Video unavailable"));
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = saved;
+        }
+    }
+
+    [Theory]
+    [InlineData("ERROR: [youtube] x: Sign in to confirm your age. This video may be inappropriate for some users.", true)]
+    [InlineData("ERROR: [youtube] x: Join this channel to get access to members-only content", true)]
+    [InlineData("ERROR: [youtube] x: Private video. Sign in if you've been granted access to this video", true)]
+    [InlineData("ERROR: [youtube] x: Requested format is not available", false)]
+    [InlineData("ERROR: [youtube] x: Video unavailable", false)]
+    public void DetectsSignInRequired(string error, bool expected) => Assert.Equal(expected, ErrorMapper.NeedsSignIn(error));
+
+    [Fact]
     public void UnknownErrorIsPassedThrough() =>
         Assert.Equal("ERROR: weird", ErrorMapper.Friendly("ERROR: weird"));
 }
@@ -131,6 +158,8 @@ public class InfoParserTests
         Assert.Equal(8_000_000 + 1_000_000, v.Qualities[0].EstimatedBytes); // largest 1080p stream + best audio
         Assert.Equal(800 * 1000 / 8 * 100 + 1_000_000, v.Qualities[1].EstimatedBytes); // from tbr × duration
         Assert.Equal(1_000_000, v.AudioBytes);
+        Assert.Equal(1080, v.Codecs["h264"]); // all three avc1 streams; the highest is 1080p
+        Assert.Single(v.Codecs);
     }
 
     [Fact]
@@ -174,6 +203,25 @@ public class ToolVersionTests
     [InlineData("2026.10.21", null, false)]
     public void ComparesYtDlpVersions(string? installed, string? latest, bool expected) =>
         Assert.Equal(expected, ToolManager.IsUpToDate(installed, latest));
+
+    [Fact]
+    public void ComparesFfmpegBuildDates()
+    {
+        const string installed = "N-128018-ga881f0a9ad-20261024";
+        Assert.Equal(new DateOnly(2026, 10, 24), ToolManager.FfmpegBuildDate(installed));
+        Assert.True(ToolManager.IsFfmpegUpToDate(installed, new DateOnly(2026, 10, 24)));
+        Assert.False(ToolManager.IsFfmpegUpToDate(installed, new DateOnly(2026, 10, 25)));
+        Assert.False(ToolManager.IsFfmpegUpToDate("7.1-full_build", new DateOnly(2026, 10, 24))); // no date: can't tell
+        Assert.False(ToolManager.IsFfmpegUpToDate(installed, null));
+    }
+
+    [Fact]
+    public void ReadsTagFromReleaseRedirect()
+    {
+        Assert.Equal("2026.10.21", ToolManager.TagFromReleaseUrl(new Uri("https://github.com/yt-dlp/yt-dlp/releases/tag/2026.10.21")));
+        Assert.Null(ToolManager.TagFromReleaseUrl(new Uri("https://github.com/yt-dlp/yt-dlp/releases/latest")));
+        Assert.Null(ToolManager.TagFromReleaseUrl(null));
+    }
 }
 
 public class BilibiliApiTests
@@ -246,6 +294,32 @@ public class YtDlpArgsTests
     }
 
     [Fact]
+    public void ChosenCodecIsTriedFirstWithFallback()
+    {
+        var req = Req(height: 1080) with { Codec = "h264" };
+        var args = YtDlpArgs.Download(req, new AppSettings { PreferH264 = false }, WithFfmpeg);
+        Assert.Equal("bv*[vcodec~='^(avc|h264)']+ba[ext=m4a]/bv*[vcodec~='^(avc|h264)']+ba/bv*+ba[ext=m4a]/bv*+ba/b",
+            args[args.IndexOf("-f") + 1]);
+
+        // An explicit codec overrides the global compatibility mode's codec preference.
+        var hevc = YtDlpArgs.Download(Req() with { Codec = "h265" }, new AppSettings { PreferH264 = true }, WithFfmpeg);
+        Assert.DoesNotContain("-S", hevc);
+
+        Assert.Equal("b[vcodec^=av01]/b", YtDlpArgs.Download(Req() with { Codec = "av1" }, new AppSettings(), WithFfmpeg with { FfmpegDir = null })
+            .SkipWhile(a => a != "-f").Skip(1).First());
+    }
+
+    [Theory]
+    [InlineData("avc1.640032", "h264")]
+    [InlineData("hev1.1.6.L120.90", "h265")]
+    [InlineData("hvc1.2.4.L153", "h265")]
+    [InlineData("av01.0.08M.08", "av1")]
+    [InlineData("vp09.00.40.08", "vp9")]
+    [InlineData("vp9", "vp9")]
+    [InlineData("none", null)]
+    public void MapsCodecFamilies(string vcodec, string? expected) => Assert.Equal(expected, VideoCodecs.Family(vcodec));
+
+    [Fact]
     public void SpeedLimitIsPassed()
     {
         var args = YtDlpArgs.Download(Req(), new AppSettings { SpeedLimitKBps = 2048 }, WithFfmpeg);
@@ -277,6 +351,10 @@ public class YtDlpArgsTests
         var fallback = YtDlpArgs.Common(s, env with { SkipBrowserCookies = true });
         Assert.DoesNotContain("--cookies-from-browser", fallback);
         Assert.Equal(@"C:\login.txt", fallback[fallback.IndexOf("--cookies") + 1]);
+
+        // YouTube tries anonymously first: no cookies at all.
+        var anonymous = YtDlpArgs.Common(s, env with { SkipBrowserCookies = true, SkipLoginCookies = true });
+        Assert.DoesNotContain("--cookies", anonymous);
     }
 
     [Fact]

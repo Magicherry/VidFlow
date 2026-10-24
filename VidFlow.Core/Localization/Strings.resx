@@ -30,6 +30,8 @@
   <data name="Batch_Description" xml:space="preserve"><value>These links are added with the options below; titles appear once each download starts.</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>{0} links</value></data>
   <data name="Batch_UnsupportedHint" xml:space="preserve"><value>Some links are not YouTube / Bilibili. yt-dlp will still try them, but they may fail.</value></data>
+  <data name="Codec_Auto" xml:space="preserve"><value>Auto (best quality)</value></data>
+  <data name="Codec_WithMax" xml:space="preserve"><value>{0} · up to {1}p</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="Common_Clear" xml:space="preserve"><value>Clear</value></data>
   <data name="Common_Close" xml:space="preserve"><value>Close</value></data>
@@ -54,6 +56,7 @@
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
   <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network).</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → Components.</value></data>
+  <data name="Error_NoFormats" xml:space="preserve"><value>The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube in Settings → Accounts, or update yt-dlp.</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>yt-dlp is not installed. Install it in Settings → Components.</value></data>
   <data name="Error_Private" xml:space="preserve"><value>This is a private or members-only video; sign in with an account that can watch it.</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>Too many requests. Wait a while or switch proxy node, then retry.</value></data>
@@ -86,7 +89,7 @@
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>Download components not installed</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>https://www.youtube.com/watch?v=…  or  https://www.bilibili.com/video/BV…  (Shift+Enter for more links)</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube or Bilibili link (separate several links with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>
@@ -112,6 +115,8 @@
   <data name="Notify_InTray" xml:space="preserve"><value>VidFlow is still running</value></data>
   <data name="Notify_InTrayBody" xml:space="preserve"><value>Downloads continue in the background. Use the tray icon to reopen or exit.</value></data>
   <data name="Notify_LinkDetected" xml:space="preserve"><value>Video link copied — download it?</value></data>
+  <data name="Options_Codec" xml:space="preserve"><value>Video codec</value></data>
+  <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 plays everywhere; H.265 / AV1 are smaller but may not play on older devices. Falls back to the best quality if the codec isn&apos;t offered</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>Save to</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>Download</value></data>
   <data name="Options_ModeDescription" xml:space="preserve"><value>The full video, or just its audio</value></data>
@@ -183,7 +188,7 @@
   <data name="Settings_SourceManaged" xml:space="preserve"><value>managed by VidFlow</value></data>
   <data name="Settings_SourceSystem" xml:space="preserve"><value>installed on this PC</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>Speed limit</value></data>
-  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>Per download; applies to downloads that start after changing it</value></data>
+  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>In MB/s, per download; leave empty for unlimited. Applies to downloads that start after changing it</value></data>
   <data name="Settings_SpeedUnlimited" xml:space="preserve"><value>Unlimited</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>Subtitle languages</value></data>
   <data name="Settings_SubLangsDescription" xml:space="preserve"><value>yt-dlp language codes, comma separated (e.g. zh-Hans,en)</value></data>

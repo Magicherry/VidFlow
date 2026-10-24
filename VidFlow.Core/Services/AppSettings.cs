@@ -34,6 +34,9 @@ public sealed class AppSettings
     /// <summary>Maximum video height; 0 means best available.</summary>
     public int DefaultHeight { get; set; }
 
+    /// <summary>Last chosen video codec (see VideoCodecs).</summary>
+    public string DefaultCodec { get; set; } = "auto";
+
     public bool PreferH264 { get; set; }
     public bool EmbedMetadata { get; set; } = true;
     public bool WriteSubtitles { get; set; }

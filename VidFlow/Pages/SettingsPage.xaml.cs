@@ -10,8 +10,6 @@ namespace VidFlow.Pages;
 
 public sealed partial class SettingsPage : Page
 {
-    static readonly int[] SpeedLimits = [0, 512, 1024, 2048, 5120, 10240];
-
     bool _loading;
     bool _installing;
 
@@ -19,12 +17,6 @@ public sealed partial class SettingsPage : Page
     {
         InitializeComponent();
         for (var i = 1; i <= 5; i++) ConcurrencyCombo.Items.Add(i);
-        foreach (var kb in SpeedLimits)
-            SpeedCombo.Items.Add(new ComboBoxItem
-            {
-                Content = kb == 0 ? L.Get("Settings_SpeedUnlimited") : $"{Format.Bytes(kb * 1024.0)}/s",
-                Tag = kb,
-            });
         AddItems(BrowserCombo, ("", L.Get("Settings_BrowserNone")), ("edge", "Microsoft Edge"), ("chrome", "Google Chrome"),
             ("firefox", "Firefox"), ("brave", "Brave"), ("opera", "Opera"), ("vivaldi", "Vivaldi"));
         AddItems(LanguageCombo, ("", L.Get("Settings_LanguageSystem")), ("zh", "简体中文"), ("en", "English"));
@@ -49,7 +41,8 @@ public sealed partial class SettingsPage : Page
         _loading = true;
         FolderCard.Description = s.DownloadFolder;
         ConcurrencyCombo.SelectedItem = Math.Clamp(s.MaxConcurrent, 1, 5);
-        Select(SpeedCombo, SpeedLimits.Contains(s.SpeedLimitKBps) ? s.SpeedLimitKBps : 0);
+        // Empty box = unlimited.
+        SpeedBox.Value = s.SpeedLimitKBps > 0 ? Math.Round(s.SpeedLimitKBps / 1024.0, 2) : double.NaN;
         H264Toggle.IsOn = s.PreferH264;
         MetadataToggle.IsOn = s.EmbedMetadata;
         SubLangsBox.Text = s.SubtitleLanguages;
@@ -75,48 +68,62 @@ public sealed partial class SettingsPage : Page
         var ff = ToolManager.FfmpegPath;
         YtDlpCard.Description = yt is null ? L.Get("Settings_YtDlpMissing") : L.Get("Settings_Checking");
         FfmpegCard.Description = ff is null ? L.Get("Settings_FfmpegMissing") : L.Get("Settings_Checking");
-        YtDlpButton.Content = yt is null ? L.Get("Settings_Install") : ToolManager.IsYtDlpManaged ? L.Get("Settings_Checking") : L.Get("Settings_InstallManaged");
-        YtDlpButton.IsEnabled = !_installing && !(yt is not null && ToolManager.IsYtDlpManaged); // re-enabled once the check finishes
-        FfmpegButton.Content = ff is null ? L.Get("Settings_Install") : L.Get("Settings_Reinstall");
+        ShowInitialState(YtDlpButton, yt);
+        ShowInitialState(FfmpegButton, ff);
 
         // Paths can be very long; keep the description short and expose the full path as a tooltip.
         ToolTipService.SetToolTip(YtDlpCard, yt);
         ToolTipService.SetToolTip(FfmpegCard, ff);
         var (ytVerTask, ffVerTask) = (ToolManager.GetVersionAsync(yt, "--version"), ToolManager.GetVersionAsync(ff, "-version"));
         var ytVer = await ytVerTask;
+        var ffVer = await ffVerTask;
         if (yt is not null) YtDlpCard.Description = L.Format("Settings_ToolVersion", ytVer ?? "?", Source(yt));
-        if (ff is not null) FfmpegCard.Description = L.Format("Settings_ToolVersion", Shorten(await ffVerTask), Source(ff));
+        if (ff is not null) FfmpegCard.Description = L.Format("Settings_ToolVersion", Shorten(ffVer), Source(ff));
 
-        // Only VidFlow's own copy can be updated from here: compare it with the latest release.
-        if (yt is not null && ToolManager.IsYtDlpManaged)
+        // Both components follow the same rules; only VidFlow's own copies are compared with the latest release.
+        if (yt is not null && ToolManager.IsManaged(yt))
         {
             var latest = await ToolManager.GetLatestYtDlpVersionAsync();
-            if (latest is null)
-            {
-                YtDlpButton.Content = L.Get("Settings_CheckUpdate");
-                YtDlpButton.IsEnabled = !_installing;
-            }
-            else if (ToolManager.IsUpToDate(ytVer, latest))
-            {
-                YtDlpButton.Content = L.Get("Settings_UpToDate");
-                YtDlpButton.IsEnabled = false;
-            }
-            else
-            {
-                YtDlpButton.Content = L.Format("Settings_UpdateTo", latest);
-                YtDlpButton.IsEnabled = !_installing;
-            }
+            ShowUpdateState(YtDlpButton, latest is null ? null : ToolManager.IsUpToDate(ytVer, latest), latest);
         }
+        if (ff is not null && ToolManager.IsManaged(ff))
+        {
+            var latest = await ToolManager.GetLatestFfmpegDateAsync();
+            ShowUpdateState(FfmpegButton, latest is null ? null : ToolManager.IsFfmpegUpToDate(ffVer, latest),
+                latest?.ToString("yyyy-MM-dd"));
+        }
+    }
+
+    /// <summary>Before the version check: Install / Install app copy, or "Checking…" (disabled) for our own copy.</summary>
+    void ShowInitialState(Button button, string? exe)
+    {
+        button.Content = exe is null ? L.Get("Settings_Install")
+            : ToolManager.IsManaged(exe) ? L.Get("Settings_Checking")
+            : L.Get("Settings_InstallManaged");
+        button.IsEnabled = !_installing && !(exe is not null && ToolManager.IsManaged(exe));
+    }
+
+    /// <summary>After the check: Up to date (disabled) / Update to X / Check for updates (the check failed).</summary>
+    void ShowUpdateState(Button button, bool? upToDate, string? latest)
+    {
+        button.Content = upToDate switch
+        {
+            null => L.Get("Settings_CheckUpdate"),
+            true => L.Get("Settings_UpToDate"),
+            false => L.Format("Settings_UpdateTo", latest),
+        };
+        button.IsEnabled = upToDate != true && !_installing;
     }
 
     static string Source(string exe) => ToolManager.IsManaged(exe) ? L.Get("Settings_SourceManaged") : L.Get("Settings_SourceSystem");
 
-    /// <summary>"N-128018-ga881f0a9ad-20261024" → "N-128018".</summary>
+    /// <summary>"N-128018-ga881f0a9ad-20261024" → "N-128018 (2026-10-24)".</summary>
     static string Shorten(string? version)
     {
         if (version is null) return "?";
         var parts = version.Split('-');
-        return parts.Length >= 2 && parts[0] == "N" ? $"{parts[0]}-{parts[1]}" : version;
+        if (parts.Length < 2 || parts[0] != "N") return version;
+        return ToolManager.FfmpegBuildDate(version) is { } date ? $"N-{parts[1]} ({date:yyyy-MM-dd})" : $"N-{parts[1]}";
     }
 
     async void InstallYtDlp_Click(object sender, RoutedEventArgs e)
@@ -131,8 +138,16 @@ public sealed partial class SettingsPage : Page
         await InstallAsync("yt-dlp", "--version", YtDlpProgress, ToolManager.InstallYtDlpAsync);
     }
 
-    async void InstallFfmpeg_Click(object sender, RoutedEventArgs e) =>
+    async void InstallFfmpeg_Click(object sender, RoutedEventArgs e)
+    {
+        if (FfmpegButton.Content as string == L.Get("Settings_CheckUpdate"))
+        {
+            await ToolManager.GetLatestFfmpegDateAsync(refresh: true);
+            await RefreshToolsAsync();
+            return;
+        }
         await InstallAsync("ffmpeg", "-version", FfmpegProgress, ToolManager.InstallFfmpegAsync);
+    }
 
     async Task InstallAsync(string tool, string versionArg, ProgressBar bar, Func<IProgress<double>, CancellationToken, Task> install)
     {
@@ -192,11 +207,14 @@ public sealed partial class SettingsPage : Page
         AppSettings.Save();
     }
 
-    void SpeedCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    void SpeedBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
     {
-        if (_loading || SpeedCombo.SelectedItem is not ComboBoxItem { Tag: int kb }) return;
-        AppSettings.Current.SpeedLimitKBps = kb;
+        if (_loading) return;
+        var mb = args.NewValue;
+        AppSettings.Current.SpeedLimitKBps = double.IsNaN(mb) || mb <= 0 ? 0 : Math.Max(1, (int)Math.Round(mb * 1024));
         AppSettings.Save();
+        // 0 is shown as the "Unlimited" placeholder rather than a literal 0.
+        if (!double.IsNaN(mb) && mb <= 0) sender.Value = double.NaN;
     }
 
     /// <summary>All toggles save the same way.</summary>

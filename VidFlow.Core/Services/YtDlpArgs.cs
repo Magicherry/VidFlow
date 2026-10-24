@@ -11,7 +11,8 @@ public static class YtDlpArgs
         "download:VFP|%(progress.status)s|%(progress.downloaded_bytes)s|%(progress.total_bytes)s|%(progress.total_bytes_estimate)s|%(progress.speed)s|%(progress.eta)s";
 
     /// <summary>Where cookies and tools come from.</summary>
-    public sealed record Environment(string? FfmpegDir, string? LoginCookieFile, bool SkipBrowserCookies);
+    public sealed record Environment(string? FfmpegDir, string? LoginCookieFile, bool SkipBrowserCookies,
+        bool SkipLoginCookies = false);
 
     public static List<string> Info(string url, AppSettings s, Environment env)
     {
@@ -39,19 +40,25 @@ public static class YtDlpArgs
 
         if (req.Mode == "video")
         {
+            // A chosen codec is tried first; if the site doesn't offer it, fall back to the best of any codec
+            // rather than failing.
+            var codec = VideoCodecs.Filter(req.Codec);
             if (hasFfmpeg)
             {
                 // Prefer AAC audio: Opus inside MP4 is rejected by many players and editors.
-                args.AddRange(["-f", "bv*+ba[ext=m4a]/bv*+ba/b", "--merge-output-format", "mp4"]);
+                var best = "bv*+ba[ext=m4a]/bv*+ba/b";
+                args.AddRange(["-f", codec.Length > 0 ? $"bv*{codec}+ba[ext=m4a]/bv*{codec}+ba/{best}" : best,
+                    "--merge-output-format", "mp4"]);
             }
             else
             {
                 // Without ffmpeg separate streams cannot be merged; take the best single file.
-                args.AddRange(["-f", "b"]);
+                args.AddRange(["-f", codec.Length > 0 ? $"b{codec}/b" : "b"]);
             }
             var sort = new List<string>();
             if (req.MaxHeight > 0) sort.Add($"res:{req.MaxHeight}");
-            if (s.PreferH264) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
+            // The global compatibility mode only steers "auto"; an explicit codec choice wins.
+            if (s.PreferH264 && codec.Length == 0) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
             if (sort.Count > 0) args.AddRange(["-S", string.Join(',', sort)]);
         }
         else
@@ -93,7 +100,7 @@ public static class YtDlpArgs
             args.AddRange(["--cookies", s.CookiesFile]);
         else if (s.CookiesBrowser.Length > 0 && !env.SkipBrowserCookies)
             args.AddRange(["--cookies-from-browser", s.CookiesBrowser]);
-        else if (env.LoginCookieFile is not null)
+        else if (env.LoginCookieFile is not null && !env.SkipLoginCookies)
             args.AddRange(["--cookies", env.LoginCookieFile]);
         return args;
     }

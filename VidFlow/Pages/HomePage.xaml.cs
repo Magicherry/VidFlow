@@ -61,20 +61,28 @@ public sealed partial class HomePage : Page
             ShowMessage(InfoBarSeverity.Warning, L.Get("Home_NoLink"));
             return;
         }
-        UrlBox.Text = string.Join(Environment.NewLine, urls);
+        UrlBox.Text = string.Join(' ', urls);
         await ParseAsync();
     }
 
     static async Task<string?> ReadClipboardTextAsync()
     {
-        try
+        // The clipboard is often locked for a moment by the app that just wrote to it; retry briefly.
+        for (var attempt = 0; ; attempt++)
         {
-            var content = Clipboard.GetContent();
-            return content.Contains(StandardDataFormats.Text) ? await content.GetTextAsync() : null;
-        }
-        catch
-        {
-            return null;
+            try
+            {
+                var content = Clipboard.GetContent();
+                return content.Contains(StandardDataFormats.Text) ? await content.GetTextAsync() : null;
+            }
+            catch when (attempt < 4)
+            {
+                await Task.Delay(60);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 
@@ -91,14 +99,31 @@ public sealed partial class HomePage : Page
 
     async void UrlBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
     {
-        // Enter parses; Shift+Enter adds a line for pasting several links.
-        var shift = Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift)
-            .HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
-        if (e.Key == VirtualKey.Enter && !shift)
+        if (e.Key == VirtualKey.Enter)
         {
             e.Handled = true;
             await ParseAsync();
         }
+    }
+
+    /// <summary>A single-line TextBox would keep only the first line of a multi-line paste; join the lines
+    /// with spaces instead so pasting several links at once still works.</summary>
+    void UrlBox_Paste(object sender, TextControlPasteEventArgs e)
+    {
+        // Must be decided synchronously: after an await the TextBox has already done its own paste.
+        e.Handled = true;
+        _ = PasteJoinedAsync(UrlBox.SelectionStart, UrlBox.SelectionLength);
+    }
+
+    async Task PasteJoinedAsync(int start, int length)
+    {
+        var text = await ReadClipboardTextAsync();
+        if (string.IsNullOrEmpty(text)) return;
+        var joined = string.Join(' ', text.Split((char[])['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+        start = Math.Min(start, UrlBox.Text.Length);
+        length = Math.Min(length, UrlBox.Text.Length - start);
+        UrlBox.Text = UrlBox.Text.Remove(start, length).Insert(start, joined);
+        UrlBox.SelectionStart = start + joined.Length;
     }
 
     async void Parse_Click(object sender, RoutedEventArgs e) => await ParseAsync();
@@ -194,6 +219,7 @@ public sealed partial class HomePage : Page
         foreach (var q in info.Qualities)
             QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Quality(q), Tag = q.Height });
         SelectPreferredQuality();
+        FillCodecs(info.Codecs);
 
         PreviewCard.Visibility = OptionsPanel.Visibility = Visibility.Visible;
         UpdateDownloadButton();
@@ -242,6 +268,24 @@ public sealed partial class HomePage : Page
         foreach (var h in GenericHeights)
             QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Height(h), Tag = h });
         SelectPreferredQuality();
+        FillCodecs(null);
+    }
+
+    /// <summary>Codec choices: for a single video only the codecs it offers, each with its highest resolution
+    /// (e.g. YouTube's H.264 stops at 1080p); for playlists / batches all of them.</summary>
+    void FillCodecs(IReadOnlyDictionary<string, int>? available)
+    {
+        CodecCombo.Items.Clear();
+        CodecCombo.Items.Add(new ComboBoxItem { Content = VideoCodecs.DisplayName(VideoCodecs.Auto), Tag = VideoCodecs.Auto });
+        foreach (var codec in VideoCodecs.All)
+        {
+            if (available is null)
+                CodecCombo.Items.Add(new ComboBoxItem { Content = VideoCodecs.DisplayName(codec), Tag = codec });
+            else if (available.TryGetValue(codec, out var maxHeight))
+                CodecCombo.Items.Add(new ComboBoxItem { Content = L.Format("Codec_WithMax", VideoCodecs.DisplayName(codec), maxHeight), Tag = codec });
+        }
+        var preferred = CodecCombo.Items.Cast<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == AppSettings.Current.DefaultCodec);
+        CodecCombo.SelectedItem = preferred ?? CodecCombo.Items[0];
     }
 
     void SelectPreferredQuality()
@@ -299,9 +343,10 @@ public sealed partial class HomePage : Page
     }
 
     void ModeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
-        QualityCard.IsEnabled = SelectedMode == "video";
+        QualityCard.IsEnabled = CodecCard.IsEnabled = SelectedMode == "video";
 
     string SelectedMode => (ModeCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? "video";
+    string SelectedCodec => SelectedMode == "video" ? (CodecCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? VideoCodecs.Auto : VideoCodecs.Auto;
     int SelectedHeight => SelectedMode == "video" ? (QualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0 : 0;
 
     async void ChangeFolder_Click(object sender, RoutedEventArgs e)
@@ -333,6 +378,7 @@ public sealed partial class HomePage : Page
 
         var mode = SelectedMode;
         var height = SelectedHeight;
+        var codec = SelectedCodec;
         var folder = AppSettings.Current.DownloadFolder;
 
         string added;
@@ -342,19 +388,19 @@ public sealed partial class HomePage : Page
             var sub = Path.Combine(folder, SafeFolderName(playlist.Title));
             var selected = EntriesList.SelectedItems.Cast<PlaylistEntry>().OrderBy(x => x.Index).ToList();
             foreach (var entry in selected)
-                App.Downloads.Enqueue(new DownloadRequest(entry.Url, mode, height, SubsToggle.IsOn, sub), entry.Title,
+                App.Downloads.Enqueue(new DownloadRequest(entry.Url, mode, height, SubsToggle.IsOn, sub, codec), entry.Title,
                     entry.ThumbnailUrl, entry.Index);
             added = L.Format("Home_AddedMany", selected.Count);
         }
         else if (_batch.Count > 0)
         {
             foreach (var url in _batch)
-                App.Downloads.Enqueue(new DownloadRequest(url, mode, height, SubsToggle.IsOn, folder), url, null);
+                App.Downloads.Enqueue(new DownloadRequest(url, mode, height, SubsToggle.IsOn, folder, codec), url, null);
             added = L.Format("Home_AddedMany", _batch.Count);
         }
         else if (_video is { } video)
         {
-            App.Downloads.Enqueue(new DownloadRequest(video.Url, mode, height, SubsToggle.IsOn, folder), video.Title,
+            App.Downloads.Enqueue(new DownloadRequest(video.Url, mode, height, SubsToggle.IsOn, folder, codec), video.Title,
                 video.ThumbnailUrl, thumbnail: _thumb);
             added = L.Format("Home_AddedOne", video.Title);
         }
@@ -365,7 +411,11 @@ public sealed partial class HomePage : Page
 
         // Remember the choices as the defaults for next time.
         AppSettings.Current.DefaultMode = mode;
-        if (mode == "video") AppSettings.Current.DefaultHeight = height;
+        if (mode == "video")
+        {
+            AppSettings.Current.DefaultHeight = height;
+            AppSettings.Current.DefaultCodec = codec;
+        }
         AppSettings.Current.WriteSubtitles = SubsToggle.IsOn;
         AppSettings.Save();
 

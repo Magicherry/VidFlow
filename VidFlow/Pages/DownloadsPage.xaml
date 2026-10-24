@@ -41,8 +41,11 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind l:L.Get('Downloads_Title')}" />
+            <!--  Same fixed height for both header buttons: an icon-only button would otherwise come out shorter.  -->
             <Button
                 Grid.Column="1"
+                Height="32"
+                VerticalAlignment="Center"
                 AutomationProperties.Name="{x:Bind l:L.Get('Downloads_OpenFolder')}"
                 Click="OpenDownloadFolder_Click">
                 <StackPanel Orientation="Horizontal" Spacing="8">
@@ -52,6 +55,10 @@
             </Button>
             <Button
                 Grid.Column="2"
+                Width="40"
+                Height="32"
+                Padding="0"
+                VerticalAlignment="Center"
                 AutomationProperties.Name="{x:Bind l:L.Get('Downloads_More')}"
                 ToolTipService.ToolTip="{x:Bind l:L.Get('Downloads_More')}">
                 <FontIcon FontSize="14" Glyph="&#xE712;" />

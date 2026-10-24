@@ -50,6 +50,7 @@ Error_EmptyPlaylist	This playlist has no downloadable videos.	这个播放列表
 Error_Network	Network error. Reaching YouTube may require a proxy (Settings → Network).	网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。
 Error_NoFfmpeg	ffmpeg is required for this. Install it in Settings → Components.	此操作需要 ffmpeg，请在「设置 → 组件」中安装。
 Error_NoYtDlp	yt-dlp is not installed. Install it in Settings → Components.	未找到 yt-dlp，请先在「设置 → 组件」中安装。
+Error_NoFormats	The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube in Settings → Accounts, or update yt-dlp.	网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「设置 → 账号」中退出 YouTube 登录后重试，或更新 yt-dlp。
 Error_Private	This is a private or members-only video; sign in with an account that can watch it.	这是私享 / 会员视频，需要登录有权限观看的账号。
 Error_RateLimited	Too many requests. Wait a while or switch proxy node, then retry.	请求过于频繁，请稍后或更换代理节点后重试。
 Error_Unavailable	The video is unavailable (deleted, region-locked or private).	视频不可用（已删除、地区限制或未公开）。
@@ -79,7 +80,7 @@ Home_ToolsMissingAction	Install	前往安装
 Home_ToolsMissingMessage	VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.	VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。
 Home_ToolsMissingTitle	Download components not installed	尚未安装下载组件
 Home_UrlBoxName	Video link	视频链接
-Home_UrlPlaceholder	https://www.youtube.com/watch?v=…  or  https://www.bilibili.com/video/BV…  (Shift+Enter for more links)	https://www.youtube.com/watch?v=…  或  https://www.bilibili.com/video/BV…（Shift+Enter 换行可添加多个）
+Home_UrlPlaceholder	Paste a YouTube or Bilibili link (separate several links with spaces)	粘贴 YouTube / 哔哩哔哩链接，多个链接用空格分隔
 Home_ViewDownloads	View downloads	查看下载列表
 Label_M4a	M4A audio	M4A 音频
 Label_Mp3	MP3 audio	MP3 音频
@@ -173,7 +174,7 @@ Settings_RestartTitle	Restart required	需要重启
 Settings_SourceManaged	managed by VidFlow	由 VidFlow 管理
 Settings_SourceSystem	installed on this PC	使用系统中已安装的版本
 Settings_SpeedLimit	Speed limit	限速
-Settings_SpeedLimitDescription	Per download; applies to downloads that start after changing it	对每个任务分别限速，修改后对新开始的任务生效
+Settings_SpeedLimitDescription	In MB/s, per download; leave empty for unlimited. Applies to downloads that start after changing it	单位 MB/s，对每个任务分别限速，留空表示不限速；修改后对新开始的任务生效
 Settings_SpeedUnlimited	Unlimited	不限速
 Settings_SubLangs	Subtitle languages	字幕语言
 Settings_SubLangsDescription	yt-dlp language codes, comma separated (e.g. zh-Hans,en)	yt-dlp 语言代码，用逗号分隔（例如 zh-Hans,en）
@@ -235,3 +236,7 @@ Wizard_YtDone	YouTube ✓	YouTube ✓
 Wizard_YtLogin	Sign in to YouTube	登录 YouTube
 Home_ConfirmManyTitle	Add this many downloads?	要添加这么多下载任务吗？
 Home_ConfirmManyBody	You're about to queue {0} videos. They download a few at a time (see Settings → Simultaneous downloads), and you can pause or cancel them in Downloads.	将添加 {0} 个视频到下载队列。它们会按「设置 → 同时下载」的数量依次下载，可随时在下载列表中暂停或取消。
+Codec_Auto	Auto (best quality)	自动（画质优先）
+Codec_WithMax	{0} · up to {1}p	{0} · 最高 {1}p
+Options_Codec	Video codec	视频编码
+Options_CodecDescription	H.264 plays everywhere; H.265 / AV1 are smaller but may not play on older devices. Falls back to the best quality if the codec isn't offered	H.264 兼容性最好；H.265 / AV1 体积更小，但老设备可能无法播放。所选编码不可用时自动改用最高画质

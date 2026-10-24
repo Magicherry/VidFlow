@@ -30,6 +30,8 @@
   <data name="Batch_Description" xml:space="preserve"><value>这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>共 {0} 个链接</value></data>
   <data name="Batch_UnsupportedHint" xml:space="preserve"><value>部分链接不是 YouTube / 哔哩哔哩，yt-dlp 仍会尝试下载，但可能失败。</value></data>
+  <data name="Codec_Auto" xml:space="preserve"><value>自动（画质优先）</value></data>
+  <data name="Codec_WithMax" xml:space="preserve"><value>{0} · 最高 {1}p</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>
   <data name="Common_Clear" xml:space="preserve"><value>清除</value></data>
   <data name="Common_Close" xml:space="preserve"><value>关闭</value></data>
@@ -54,6 +56,7 @@
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>这个播放列表中没有可下载的视频。</value></data>
   <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>此操作需要 ffmpeg，请在「设置 → 组件」中安装。</value></data>
+  <data name="Error_NoFormats" xml:space="preserve"><value>网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「设置 → 账号」中退出 YouTube 登录后重试，或更新 yt-dlp。</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>未找到 yt-dlp，请先在「设置 → 组件」中安装。</value></data>
   <data name="Error_Private" xml:space="preserve"><value>这是私享 / 会员视频，需要登录有权限观看的账号。</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>请求过于频繁，请稍后或更换代理节点后重试。</value></data>
@@ -86,7 +89,7 @@
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>尚未安装下载组件</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>视频链接</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>https://www.youtube.com/watch?v=…  或  https://www.bilibili.com/video/BV…（Shift+Enter 换行可添加多个）</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴 YouTube / 哔哩哔哩链接，多个链接用空格分隔</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A 音频</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 音频</value></data>
@@ -112,6 +115,8 @@
   <data name="Notify_InTray" xml:space="preserve"><value>VidFlow 仍在后台运行</value></data>
   <data name="Notify_InTrayBody" xml:space="preserve"><value>下载会在后台继续。可通过任务栏通知区域的图标重新打开或退出。</value></data>
   <data name="Notify_LinkDetected" xml:space="preserve"><value>检测到视频链接，是否下载？</value></data>
+  <data name="Options_Codec" xml:space="preserve"><value>视频编码</value></data>
+  <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 兼容性最好；H.265 / AV1 体积更小，但老设备可能无法播放。所选编码不可用时自动改用最高画质</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>保存位置</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>下载内容</value></data>
   <data name="Options_ModeDescription" xml:space="preserve"><value>选择下载完整视频，或仅提取音频</value></data>
@@ -183,7 +188,7 @@
   <data name="Settings_SourceManaged" xml:space="preserve"><value>由 VidFlow 管理</value></data>
   <data name="Settings_SourceSystem" xml:space="preserve"><value>使用系统中已安装的版本</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>限速</value></data>
-  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>对每个任务分别限速，修改后对新开始的任务生效</value></data>
+  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>单位 MB/s，对每个任务分别限速，留空表示不限速；修改后对新开始的任务生效</value></data>
   <data name="Settings_SpeedUnlimited" xml:space="preserve"><value>不限速</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>字幕语言</value></data>
   <data name="Settings_SubLangsDescription" xml:space="preserve"><value>yt-dlp 语言代码，用逗号分隔（例如 zh-Hans,en）</value></data>

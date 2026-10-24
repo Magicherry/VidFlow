@@ -15,6 +15,7 @@ public static class DownloadLabels
             "m4a" => L.Get("Label_M4a"),
             _ => r.MaxHeight > 0 ? $"MP4 · {r.MaxHeight}p" : L.Get("Label_Mp4Best"),
         };
+        if (r.Mode == "video" && VideoCodecs.ShortName(r.Codec) is { Length: > 0 } codec) mode += $" · {codec}";
         var label = $"{UrlTools.DetectPlatform(r.Url).DisplayName()}  ·  {mode}";
         return partIndex is { } p ? $"{label}  ·  P{p}" : label;
     }

@@ -95,10 +95,12 @@ public static class ToolManager
         if (!refresh && _latestYtDlp is { } c && DateTime.Now - c.At < TimeSpan.FromMinutes(10)) return c.Version;
         try
         {
-            using var resp = await Http.Client.GetAsync("https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest");
+            // github.com/.../releases/latest redirects to .../releases/tag/<version>. Unlike the REST API this is
+            // not limited to 60 requests/hour per IP, which shared proxy exit IPs exhaust quickly.
+            using var resp = await Http.Client.GetAsync("https://github.com/yt-dlp/yt-dlp/releases/latest",
+                HttpCompletionOption.ResponseHeadersRead);
             resp.EnsureSuccessStatusCode();
-            using var doc = System.Text.Json.JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
-            var tag = doc.RootElement.GetProperty("tag_name").GetString();
+            var tag = TagFromReleaseUrl(resp.RequestMessage?.RequestUri);
             if (tag is null) return null;
             _latestYtDlp = (tag, DateTime.Now);
             return tag;
@@ -108,6 +110,48 @@ public static class ToolManager
             Log.Info($"Latest yt-dlp version check failed: {ex.Message}");
             return null;
         }
+    }
+
+    static (DateOnly Date, DateTime At)? _latestFfmpeg;
+
+    /// <summary>Build date of the latest ffmpeg (the date the release asset was uploaded), cached for 10 minutes;
+    /// null if unreachable. The builds are nightly, so the date is what identifies a version.</summary>
+    public static async Task<DateOnly?> GetLatestFfmpegDateAsync(bool refresh = false)
+    {
+        if (!refresh && _latestFfmpeg is { } c && DateTime.Now - c.At < TimeSpan.FromMinutes(10)) return c.Date;
+        try
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Head, FfmpegUrl);
+            using var resp = await Http.Client.SendAsync(req);
+            resp.EnsureSuccessStatusCode();
+            if (resp.Content.Headers.LastModified is not { } modified) return null;
+            var date = DateOnly.FromDateTime(modified.UtcDateTime);
+            _latestFfmpeg = (date, DateTime.Now);
+            return date;
+        }
+        catch (Exception ex)
+        {
+            Log.Info($"Latest ffmpeg check failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>"N-128018-ga881f0a9ad-20261024" → 2026-10-24.</summary>
+    public static DateOnly? FfmpegBuildDate(string? version)
+    {
+        var m = System.Text.RegularExpressions.Regex.Match(version ?? "", @"-(\d{8})$");
+        return m.Success && DateOnly.TryParseExact(m.Groups[1].Value, "yyyyMMdd", out var d) ? d : null;
+    }
+
+    public static bool IsFfmpegUpToDate(string? installedVersion, DateOnly? latest) =>
+        FfmpegBuildDate(installedVersion) is { } installed && latest is { } l && installed >= l;
+
+    /// <summary>".../releases/tag/2026.10.21" → "2026.10.21".</summary>
+    public static string? TagFromReleaseUrl(Uri? url)
+    {
+        var path = url?.AbsolutePath ?? "";
+        var i = path.IndexOf("/releases/tag/", StringComparison.Ordinal);
+        return i < 0 ? null : Uri.UnescapeDataString(path[(i + "/releases/tag/".Length)..].Trim('/'));
     }
 
     /// <summary>True when <paramref name="installed"/> is the same as or newer than <paramref name="latest"/>

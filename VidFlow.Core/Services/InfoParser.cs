@@ -48,7 +48,7 @@ public static class InfoParser
         }
 
         var duration = Num(root, "duration");
-        var (qualities, audioBytes) = Qualities(root, duration);
+        var (qualities, audioBytes, codecs) = Qualities(root, duration);
         return new VideoInfo
         {
             Url = url,
@@ -60,17 +60,19 @@ public static class InfoParser
             Platform = platform,
             Qualities = qualities,
             AudioBytes = audioBytes,
+            Codecs = codecs,
         };
     }
 
     /// <summary>One option per height (highest first), with the best fps seen and an approximate
     /// size (largest video stream at that height + the best audio stream).</summary>
-    static (List<QualityOption>, long?) Qualities(JsonElement root, double? duration)
+    static (List<QualityOption>, long?, Dictionary<string, int>) Qualities(JsonElement root, double? duration)
     {
         var byHeight = new Dictionary<int, (int Fps, long? Bytes)>();
+        var codecs = new Dictionary<string, int>();
         long? audio = null;
         if (!root.TryGetProperty("formats", out var formats) || formats.ValueKind != JsonValueKind.Array)
-            return ([], null);
+            return ([], null, codecs);
 
         foreach (var f in formats.EnumerateArray())
         {
@@ -87,12 +89,14 @@ public static class InfoParser
             var fps = (int)Math.Round(Num(f, "fps") ?? 0);
             byHeight.TryGetValue(height, out var cur);
             byHeight[height] = (Math.Max(cur.Fps, fps), Max(cur.Bytes, size));
+            if (VideoCodecs.Family(vcodec) is { } codec)
+                codecs[codec] = Math.Max(codecs.GetValueOrDefault(codec), height);
         }
 
         var list = byHeight.OrderByDescending(kv => kv.Key)
             .Select(kv => new QualityOption(kv.Key, kv.Value.Fps, kv.Value.Bytes is > 0 ? kv.Value.Bytes + (audio ?? 0) : null))
             .ToList();
-        return (list, audio);
+        return (list, audio, codecs);
     }
 
     static long? Size(JsonElement f, double? duration)

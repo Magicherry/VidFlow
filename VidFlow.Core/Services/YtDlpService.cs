@@ -23,7 +23,7 @@ public static class YtDlpService
     public static async Task<MediaInfo> GetInfoAsync(string url, CancellationToken ct)
     {
         var stdout = new StringBuilder();
-        var (code, error) = await RunWithCookieFallbackAsync(
+        var (code, error) = await RunWithCookieFallbackAsync(url,
             env => { stdout.Clear(); return YtDlpArgs.Info(url, AppSettings.Current, env); },
             line => stdout.AppendLine(line), ct);
         if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);
@@ -45,7 +45,7 @@ public static class YtDlpService
 
         string? filePath = null;
         var parser = new YtDlpOutputParser();
-        var (code, error) = await RunWithCookieFallbackAsync(
+        var (code, error) = await RunWithCookieFallbackAsync(req.Url,
             env => YtDlpArgs.Download(req, AppSettings.Current, env),
             line =>
             {
@@ -59,26 +59,44 @@ public static class YtDlpService
         return filePath;
     }
 
-    /// <summary>Runs yt-dlp; if reading the configured browser's cookies fails (Chrome/Edge lock and encrypt
-    /// their cookie store while running), retries once without them so parsing/downloading still works.</summary>
+    /// <summary>
+    /// Runs yt-dlp with cookie fallbacks:
+    /// <list type="bullet">
+    /// <item>If the configured browser's cookies can't be read (Chrome/Edge lock them while running), retry
+    /// without them and skip them for the rest of the session.</item>
+    /// <item>YouTube: signed-in requests often come back with no downloadable formats (YouTube treats them
+    /// differently, and exported cookies get rotated), so try without the in-app login first and only use it
+    /// when YouTube says sign-in is needed (age / members-only / bot check). Bilibili always uses the login.</item>
+    /// </list>
+    /// </summary>
     static async Task<(int Code, string Error)> RunWithCookieFallbackAsync(
-        Func<YtDlpArgs.Environment, List<string>> buildArgs, Action<string> onLine, CancellationToken ct)
+        string url, Func<YtDlpArgs.Environment, List<string>> buildArgs, Action<string> onLine, CancellationToken ct)
     {
         var ffmpegDir = ToolManager.FfmpegPath is { } ff ? Path.GetDirectoryName(ff) : null;
-        // Once the browser's cookies have proved unreadable, skip them for the rest of the session
-        // instead of failing and retrying (and warning) on every request.
         var browser = AppSettings.Current.CookiesBrowser;
-        var env = new YtDlpArgs.Environment(ffmpegDir, AccountStore.LoginCookieFileOrNull,
-            SkipBrowserCookies: _unreadableBrowser == browser);
+        var loginFile = AccountStore.LoginCookieFileOrNull;
+        var youTubeLogin = loginFile is not null && UrlTools.DetectPlatform(url) == Platform.YouTube
+                           && AccountStore.IsLoggedIn(Platform.YouTube);
+        var env = new YtDlpArgs.Environment(ffmpegDir, loginFile,
+            SkipBrowserCookies: _unreadableBrowser == browser,
+            SkipLoginCookies: youTubeLogin);
 
         var result = await RunAsync(buildArgs(env), onLine, ct);
+
         if (result.Code != 0 && !env.SkipBrowserCookies && YtDlpArgs.UsesBrowserCookies(AppSettings.Current)
             && ErrorMapper.IsCookieReadError(result.Error))
         {
             Log.Warn($"Browser cookies unreadable, skipping them this session: {ErrorMapper.LastErrorLine(result.Error)}");
             _unreadableBrowser = browser;
             BrowserCookiesFailed?.Invoke();
-            result = await RunAsync(buildArgs(env with { SkipBrowserCookies = true }), onLine, ct);
+            env = env with { SkipBrowserCookies = true };
+            result = await RunAsync(buildArgs(env), onLine, ct);
+        }
+
+        if (result.Code != 0 && youTubeLogin && env.SkipLoginCookies && ErrorMapper.NeedsSignIn(result.Error))
+        {
+            Log.Info($"YouTube needs sign-in, retrying with the in-app login: {ErrorMapper.LastErrorLine(result.Error)}");
+            result = await RunAsync(buildArgs(env with { SkipLoginCookies = false }), onLine, ct);
         }
         return result;
     }
