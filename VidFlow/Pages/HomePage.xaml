@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="VidFlow.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:VidFlow.Localization"
+    xmlns:local="using:VidFlow.Pages"
+    xmlns:m="using:VidFlow.Models"
+    xmlns:tk="using:CommunityToolkit.WinUI.Controls"
+    NavigationCacheMode="Required">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ContentPanel.Padding" Value="{StaticResource PagePaddingNarrow}" />
+                        <!--  Stack the preview: thumbnail on top, details below  -->
+                        <Setter Target="InfoStack.(Grid.Row)" Value="1" />
+                        <Setter Target="InfoStack.(Grid.Column)" Value="0" />
+                        <Setter Target="InfoStack.Margin" Value="16,0,16,16" />
+                        <Setter Target="ThumbBox.HorizontalAlignment" Value="Left" />
+                        <Setter Target="PlaylistThumb.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <!--  The ScrollViewer's direct child must not carry MaxWidth: WinUI centers it by its desired width,
+              which shifts and clips a stretched MaxWidth panel when the viewport is wider than MaxWidth.  -->
+        <Grid>
+            <StackPanel
+                x:Name="ContentPanel"
+                MaxWidth="{StaticResource PageMaxWidth}"
+                Padding="{StaticResource PagePadding}"
+                Spacing="16">
+
+                <StackPanel Spacing="4">
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind l:L.Get('Home_Title')}" />
+                    <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind l:L.Get('Home_Subtitle')}" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <InfoBar
+                    x:Name="ToolsInfoBar"
+                    Visibility="{x:Bind ToolsInfoBar.IsOpen, Mode=OneWay}"
+                    Title="{x:Bind l:L.Get('Home_ToolsMissingTitle')}"
+                    IsClosable="False"
+                    Message="{x:Bind l:L.Get('Home_ToolsMissingMessage')}"
+                    Severity="Warning">
+                    <InfoBar.ActionButton>
+                        <Button Click="GoToSettings_Click" Content="{x:Bind l:L.Get('Home_ToolsMissingAction')}" />
+                    </InfoBar.ActionButton>
+                </InfoBar>
+
+                <!--  URL input (accepts several links, one per line)  -->
+                <Border Style="{StaticResource CardStyle}">
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            x:Name="UrlBox"
+                            MaxHeight="120"
+                            VerticalAlignment="Top"
+                            AcceptsReturn="True"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Home_UrlBoxName')}"
+                            PlaceholderText="{x:Bind l:L.Get('Home_UrlPlaceholder')}"
+                            PreviewKeyDown="UrlBox_PreviewKeyDown"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            TextWrapping="Wrap" />
+                        <Button
+                            Grid.Column="1"
+                            Height="32"
+                            VerticalAlignment="Top"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Home_Paste')}"
+                            Click="Paste_Click"
+                            ToolTipService.ToolTip="{x:Bind l:L.Get('Home_Paste')}">
+                            <FontIcon FontSize="16" Glyph="&#xE77F;" />
+                        </Button>
+                        <Button
+                            x:Name="ParseButton"
+                            Grid.Column="2"
+                            Height="32"
+                            MinWidth="96"
+                            VerticalAlignment="Top"
+                            Click="Parse_Click"
+                            Style="{StaticResource AccentButtonStyle}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE721;" />
+                                <TextBlock Text="{x:Bind l:L.Get('Home_Parse')}" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!--  A closed InfoBar is still Visible (just zero height), so the StackPanel would add spacing for it;
+                     collapsing it with IsOpen keeps the gaps even.  -->
+                <InfoBar
+                    x:Name="MessageBar"
+                    IsOpen="False"
+                    Visibility="{x:Bind MessageBar.IsOpen, Mode=OneWay}">
+                    <InfoBar.ActionButton>
+                        <Button
+                            x:Name="MessageActionButton"
+                            Click="MessageAction_Click"
+                            Visibility="Collapsed" />
+                    </InfoBar.ActionButton>
+                </InfoBar>
+
+                <!--  Loading  -->
+                <Border
+                    x:Name="LoadingCard"
+                    Style="{StaticResource CardStyle}"
+                    Visibility="Collapsed">
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ProgressRing
+                            Width="20"
+                            Height="20"
+                            IsActive="True" />
+                        <TextBlock
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Text="{x:Bind l:L.Get('Home_Loading')}" />
+                        <Button
+                            Grid.Column="2"
+                            Click="CancelParse_Click"
+                            Content="{x:Bind l:L.Get('Common_Cancel')}" />
+                    </Grid>
+                </Border>
+
+                <!--  Single video preview  -->
+                <Border
+                    x:Name="PreviewCard"
+                    Padding="0"
+                    Style="{StaticResource CardStyle}"
+                    Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid
+                            x:Name="ThumbBox"
+                            Width="288"
+                            Height="162"
+                            Margin="16"
+                            Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                            CornerRadius="{StaticResource ControlCornerRadius}">
+                            <FontIcon
+                                FontSize="32"
+                                Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                Glyph="&#xE714;" />
+                            <Image
+                                x:Name="ThumbImage"
+                                AutomationProperties.AccessibilityView="Raw"
+                                Stretch="UniformToFill" />
+                            <Border
+                                x:Name="DurationBadge"
+                                Margin="8"
+                                Padding="6,2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Background="#CC000000"
+                                CornerRadius="4">
+                                <TextBlock
+                                    x:Name="DurationText"
+                                    FontSize="12"
+                                    Foreground="White" />
+                            </Border>
+                        </Grid>
+                        <StackPanel
+                            x:Name="InfoStack"
+                            Grid.Column="1"
+                            Margin="0,16,20,16"
+                            VerticalAlignment="Center"
+                            Spacing="8">
+                            <Border
+                                x:Name="PlatformTag"
+                                Padding="8,2"
+                                HorizontalAlignment="Left"
+                                CornerRadius="4">
+                                <TextBlock
+                                    x:Name="PlatformText"
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Foreground="White" />
+                            </Border>
+                            <TextBlock
+                                x:Name="TitleText"
+                                IsTextSelectionEnabled="True"
+                                MaxLines="3"
+                                Style="{StaticResource SubtitleTextBlockStyle}"
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                x:Name="MetaText"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!--  Playlist / multi-part video  -->
+                <Border
+                    x:Name="PlaylistCard"
+                    Padding="0"
+                    Style="{StaticResource CardStyle}"
+                    Visibility="Collapsed">
+                    <StackPanel>
+                        <Grid Padding="16" ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid
+                                x:Name="PlaylistThumb"
+                                Width="160"
+                                Height="90"
+                                Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                CornerRadius="{StaticResource ControlCornerRadius}">
+                                <FontIcon
+                                    FontSize="24"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Glyph="&#xE8FD;" />
+                                <Image x:Name="PlaylistThumbImage" Stretch="UniformToFill" />
+                            </Grid>
+                            <StackPanel
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Spacing="4">
+                                <TextBlock
+                                    x:Name="PlaylistKind"
+                                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}" />
+                                <TextBlock
+                                    x:Name="PlaylistTitle"
+                                    MaxLines="2"
+                                    Style="{StaticResource SubtitleTextBlockStyle}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="Wrap" />
+                                <TextBlock x:Name="PlaylistMeta" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid
+                            Padding="16,8"
+                            Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                            ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="SelectionText"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <Button
+                                Grid.Column="1"
+                                Click="SelectAll_Click"
+                                Content="{x:Bind l:L.Get('Playlist_SelectAll')}" />
+                            <Button
+                                Grid.Column="2"
+                                Click="SelectNone_Click"
+                                Content="{x:Bind l:L.Get('Playlist_SelectNone')}" />
+                        </Grid>
+                        <ListView
+                            x:Name="EntriesList"
+                            MaxHeight="420"
+                            Padding="0,4,0,8"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Playlist_ListName')}"
+                            SelectionChanged="EntriesList_SelectionChanged"
+                            SelectionMode="Multiple">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="m:PlaylistEntry">
+                                    <Grid Padding="0,6" ColumnSpacing="12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="36" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            Text="{x:Bind Index}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Text="{x:Bind Title}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="{x:Bind local:HomePage.FormatDuration(Duration)}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+                <!--  Batch of links  -->
+                <Border
+                    x:Name="BatchCard"
+                    Style="{StaticResource CardStyle}"
+                    Visibility="Collapsed">
+                    <StackPanel Spacing="8">
+                        <TextBlock x:Name="BatchTitle" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind l:L.Get('Batch_Description')}"
+                            TextWrapping="Wrap" />
+                        <ListView
+                            x:Name="BatchList"
+                            MaxHeight="240"
+                            SelectionMode="None" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Options (shared by all three modes)  -->
+                <StackPanel
+                    x:Name="OptionsPanel"
+                    Spacing="4"
+                    Visibility="Collapsed">
+                    <TextBlock
+                        Margin="1,8,0,4"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="{x:Bind l:L.Get('Options_Title')}" />
+
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Options_ModeDescription')}" Header="{x:Bind l:L.Get('Options_Mode')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE8B2;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ComboBox
+                            x:Name="ModeCombo"
+                            MinWidth="200"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Options_Mode')}"
+                            SelectionChanged="ModeCombo_SelectionChanged" />
+                    </tk:SettingsCard>
+
+                    <tk:SettingsCard
+                        x:Name="QualityCard"
+                        Description="{x:Bind l:L.Get('Options_QualityDescription')}"
+                        Header="{x:Bind l:L.Get('Options_Quality')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE7F4;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ComboBox
+                            x:Name="QualityCombo"
+                            MinWidth="200"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Options_Quality')}" />
+                    </tk:SettingsCard>
+
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Options_SubtitlesDescription')}" Header="{x:Bind l:L.Get('Options_Subtitles')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xED1E;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ToggleSwitch x:Name="SubsToggle" AutomationProperties.Name="{x:Bind l:L.Get('Options_Subtitles')}" />
+                    </tk:SettingsCard>
+
+                    <tk:SettingsCard
+                        x:Name="FolderCard"
+                        Click="ChangeFolder_Click"
+                        Header="{x:Bind l:L.Get('Options_Folder')}"
+                        IsClickEnabled="True">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE8B7;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <tk:SettingsCard.ActionIcon>
+                            <FontIcon Glyph="&#xE70F;" />
+                        </tk:SettingsCard.ActionIcon>
+                    </tk:SettingsCard>
+
+                    <Button
+                        x:Name="DownloadButton"
+                        Height="40"
+                        MinWidth="160"
+                        Margin="0,12,0,0"
+                        HorizontalAlignment="Right"
+                        Click="Download_Click"
+                        Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="16" Glyph="&#xE896;" />
+                            <TextBlock x:Name="DownloadButtonText" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>

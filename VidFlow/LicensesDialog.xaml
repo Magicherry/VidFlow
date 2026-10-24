@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="VidFlow.LicensesDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:VidFlow.Localization"
+    Title="{x:Bind l:L.Get('About_Licenses')}"
+    CloseButtonText="{x:Bind l:L.Get('Common_Close')}"
+    DefaultButton="Close"
+    Style="{StaticResource DefaultContentDialogStyle}">
+
+    <ScrollViewer MaxHeight="420">
+        <StackPanel
+            x:Name="ListPanel"
+            Width="460"
+            Spacing="12">
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind l:L.Get('Licenses_Intro')}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

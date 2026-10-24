@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- UI-independent logic: yt-dlp invocation and output parsing, settings, persistence, localization.
+       Kept free of WinUI so it can be unit tested with a plain test host. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>VidFlow</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SatelliteResourceLanguages>zh</SatelliteResourceLanguages>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="VidFlow.Tests" />
+  </ItemGroup>
+
+</Project>

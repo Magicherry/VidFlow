@@ -1,0 +1,15 @@
+# Build output
+bin/
+obj/
+TestResults/
+
+# Release artifacts (the installer is attached to GitHub Releases instead)
+VidFlow-Release/
+dist/
+
+# IDE / user files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo

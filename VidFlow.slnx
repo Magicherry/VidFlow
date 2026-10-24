@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="VidFlow.Core/VidFlow.Core.csproj" />
+  <Project Path="VidFlow.Tests/VidFlow.Tests.csproj" />
+  <Project Path="VidFlow/VidFlow.csproj" />
+</Solution>

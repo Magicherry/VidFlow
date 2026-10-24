@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RootNamespace>VidFlow</RootNamespace>
+    <AssemblyName>VidFlow</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Program.cs provides Main so we can enforce a single instance before any UI starts. -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+    <!-- Only ship the languages the app is translated into. -->
+    <SatelliteResourceLanguages>zh</SatelliteResourceLanguages>
+    <Version>1.1.0</Version>
+    <Product>VidFlow</Product>
+    <Company>VidFlow</Company>
+    <Description>VidFlow - YouTube / Bilibili video downloader</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\AppIcon.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- Partial trimming: only framework / SDK projection assemblies are trimmed, never the app's own code. -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <!-- TaskbarProgress uses classic [ComImport] interop. -->
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <PublishReadyToRun>true</PublishReadyToRun>
+  </PropertyGroup>
+
+  <!-- The Windows App SDK copies its AI / ML / Widgets runtimes (onnxruntime, DirectML, ~45 MB) through its own
+       build targets, which ExcludeAssets cannot stop. VidFlow never activates those APIs, so drop them on publish. -->
+  <Target Name="RemoveUnusedWindowsAppSdkRuntimes" AfterTargets="Publish">
+    <ItemGroup>
+      <_UnusedRuntime Include="$(PublishDir)onnxruntime*.dll;$(PublishDir)DirectML.dll;$(PublishDir)Microsoft.Windows.AI.*;$(PublishDir)Microsoft.Windows.Vision*;$(PublishDir)Microsoft.Graphics.Imaging*;$(PublishDir)Microsoft.Windows.Widgets.*;$(PublishDir)NpuDetect\**" />
+    </ItemGroup>
+    <Delete Files="@(_UnusedRuntime)" />
+    <RemoveDir Directories="$(PublishDir)NpuDetect" />
+  </Target>
+
+  <!-- Unpackaged publish leaves out the app's own compiled XAML (.xbf) and resource index (.pri),
+       which makes the window fail to load. Copy them from the build output explicitly. -->
+  <Target Name="CopyXamlArtifactsToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <_XamlArtifacts Include="$(OutDir)**\*.xbf;$(OutDir)$(AssemblyName).pri" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_XamlArtifacts)" DestinationFiles="@(_XamlArtifacts->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
+    <PackageReference Include="H.NotifyIcon.WinUI" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VidFlow.Core\VidFlow.Core.csproj" />
+  </ItemGroup>
+
+</Project>

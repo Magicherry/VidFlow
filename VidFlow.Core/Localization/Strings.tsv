@@ -1,0 +1,237 @@
+key	en	zh
+About_Description	YouTube / Bilibili video downloader powered by yt-dlp	基于 yt-dlp 的 YouTube / 哔哩哔哩视频下载器
+About_Disclaimer	Only download content you have the right to save, and follow each platform's terms of service and copyright rules.	请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。
+About_Licenses	Open-source licenses	开源许可
+About_OpenData	Open data folder	打开数据文件夹
+About_OpenLogs	Open log folder	打开日志文件夹
+About_RunWizard	Run the setup wizard again	重新运行首次设置向导
+About_Version	Version {0}	版本 {0}
+Account_BiliIn	Signed in · 1080P and above available (4K / HDR need a premium membership)	已登录 · 可下载 1080P 及以上画质（4K / HDR 等需大会员）
+Account_BiliOut	Not signed in · limited to 480P / 720P	未登录 · 未登录时最高只能下载 480P / 720P
+Account_Login	Sign in	登录
+Account_Logout	Sign out	退出登录
+Account_YtIn	Signed in · age-restricted and members-only videos available	已登录 · 可下载年龄限制、会员专属视频
+Account_YtOut	Not signed in · sign in for age-restricted / members-only videos and fewer bot checks	未登录 · 登录后可下载年龄限制、会员专属视频，并减少人机验证
+Action_CopyError	Copy error details	复制错误详情
+Action_Download	Download	下载
+Action_OpenFolder	Open folder	打开文件夹
+Action_Pause	Pause	暂停
+Action_Play	Play	播放
+Action_Remove	Remove from list	从列表中移除
+Action_Resume	Resume	继续
+Action_Retry	Retry	重试
+Action_ShowInFolder	Show in folder	在文件夹中显示
+App_Subtitle	Video downloader	视频下载器
+Batch_Description	These links are added with the options below; titles appear once each download starts.	这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。
+Batch_Title	{0} links	共 {0} 个链接
+Batch_UnsupportedHint	Some links are not YouTube / Bilibili. yt-dlp will still try them, but they may fail.	部分链接不是 YouTube / 哔哩哔哩，yt-dlp 仍会尝试下载，但可能失败。
+Common_Cancel	Cancel	取消
+Common_Clear	Clear	清除
+Common_Close	Close	关闭
+Common_Failed	Something went wrong	操作失败
+Download_Batch	Add {0} links to queue	添加 {0} 个链接到队列
+Download_Selected	Download {0} selected	下载选中的 {0} 个
+Download_Start	Start download	开始下载
+Downloads_ClearFinished	Clear finished	清除已结束
+Downloads_EmptyBody	Paste a link on the New download page to get started	在「新建下载」中粘贴链接即可开始
+Downloads_EmptyTitle	No downloads yet	暂无下载任务
+Downloads_More	More options	更多操作
+Downloads_OpenFolder	Open folder	打开文件夹
+Downloads_PauseAll	Pause all	全部暂停
+Downloads_ResumeAll	Resume all	全部继续
+Downloads_Title	Downloads	下载列表
+Drop_Caption	Download with VidFlow	用 VidFlow 下载
+Drop_Hint	Drop the link to start	松开以解析链接
+Error_AudioNeedsFfmpeg	Extracting audio needs ffmpeg. Install it in Settings → Components.	提取音频需要 ffmpeg，请先在「设置 → 组件」中安装。
+Error_BotCheck	YouTube wants to confirm you're not a bot. Sign in under Settings → Accounts, or switch proxy node.	YouTube 要求验证身份。请在「设置 → 账号」中登录，或更换代理节点。
+Error_Cookies	Couldn't read browser cookies. Close that browser and retry, or use in-app sign-in instead.	读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。
+Error_DiskFull	Not enough disk space.	磁盘空间不足。
+Error_EmptyPlaylist	This playlist has no downloadable videos.	这个播放列表中没有可下载的视频。
+Error_Network	Network error. Reaching YouTube may require a proxy (Settings → Network).	网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。
+Error_NoFfmpeg	ffmpeg is required for this. Install it in Settings → Components.	此操作需要 ffmpeg，请在「设置 → 组件」中安装。
+Error_NoYtDlp	yt-dlp is not installed. Install it in Settings → Components.	未找到 yt-dlp，请先在「设置 → 组件」中安装。
+Error_Private	This is a private or members-only video; sign in with an account that can watch it.	这是私享 / 会员视频，需要登录有权限观看的账号。
+Error_RateLimited	Too many requests. Wait a while or switch proxy node, then retry.	请求过于频繁，请稍后或更换代理节点后重试。
+Error_Unavailable	The video is unavailable (deleted, region-locked or private).	视频不可用（已删除、地区限制或未公开）。
+Error_UnexpectedExit	yt-dlp exited unexpectedly.	yt-dlp 意外退出。
+Error_Unsupported	This link is not supported.	不支持该链接。
+Error_ZipMissing	{0} is missing from the archive	压缩包中缺少 {0}
+Home_Added	Added	已添加
+Home_AddedMany	{0} downloads added to the queue.	已将 {0} 个任务加入下载队列。
+Home_AddedOne	Added “{0}” to the queue.	「{0}」已加入下载队列。
+Home_BiliLoginHint	Without signing in, Bilibili offers 480P / 720P at most. Sign in to get 1080P and above.	未登录时 B 站最高只提供 480P / 720P，登录后即可下载 1080P 及以上画质。
+Home_BiliLoginHintTitle	Sign in for higher quality	登录解锁更高画质
+Home_BrowserCookiesFailed	The selected browser's cookies couldn't be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (Settings → Accounts) is more reliable.	无法读取所选浏览器的 Cookie（Chrome / Edge 运行时会锁定 Cookie），本次已跳过。建议改用「设置 → 账号」中的应用内登录。
+Home_BrowserCookiesFailedTitle	Browser cookies unavailable	浏览器 Cookie 读取失败
+Home_ClipboardEmpty	No link found on the clipboard.	剪贴板中没有找到链接。
+Home_InvalidLink	Please enter a valid video link.	请输入有效的视频链接。
+Home_Loading	Fetching video info…	正在获取视频信息…
+Home_LoginNow	Sign in now	立即登录
+Home_NoFfmpeg	Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can't be extracted. Install it in Settings → Components.	未安装 ffmpeg：只能下载已合并的低画质文件，且无法提取音频。可在「设置 → 组件」中一键安装。
+Home_NoFfmpegTitle	ffmpeg recommended	建议安装 ffmpeg
+Home_NoLink	No link found.	没有找到链接。
+Home_Parse	Parse	解析
+Home_ParseFailed	Couldn't parse the link	解析失败
+Home_Paste	Paste from clipboard	从剪贴板粘贴
+Home_Subtitle	Paste YouTube or Bilibili links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.	粘贴 YouTube 或哔哩哔哩链接：单个视频、播放列表、多 P 视频，或一次粘贴多个链接；也可以把链接直接拖进窗口。
+Home_Title	New download	新建下载
+Home_ToolsMissingAction	Install	前往安装
+Home_ToolsMissingMessage	VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.	VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。
+Home_ToolsMissingTitle	Download components not installed	尚未安装下载组件
+Home_UrlBoxName	Video link	视频链接
+Home_UrlPlaceholder	https://www.youtube.com/watch?v=…  or  https://www.bilibili.com/video/BV…  (Shift+Enter for more links)	https://www.youtube.com/watch?v=…  或  https://www.bilibili.com/video/BV…（Shift+Enter 换行可添加多个）
+Home_ViewDownloads	View downloads	查看下载列表
+Label_M4a	M4A audio	M4A 音频
+Label_Mp3	MP3 audio	MP3 音频
+Label_Mp4Best	MP4 · best quality	MP4 · 最高画质
+Licenses_FfmpegNote	Downloaded from the official yt-dlp builds when you choose to install it; not bundled with VidFlow. Source code: ffmpeg.org.	仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。
+Licenses_Intro	VidFlow is built on these open-source components. Click a license to read it.	VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。
+Licenses_YtDlpNote	Downloaded on demand and kept up to date automatically.	按需下载，并自动保持最新。
+Login_Done	Done	完成
+Login_Instructions	Sign in below (QR code supported). Your sign-in is stored only on this computer.	请在下方页面中登录（支持扫码）。登录信息仅保存在本机。
+Login_Success	Signed in! Click Done to save and close.	登录成功！点击「完成」保存并关闭窗口。
+Login_TitleBili	Sign in to Bilibili	登录哔哩哔哩
+Login_TitleYt	Sign in to YouTube (Google account)	登录 YouTube（Google 账号）
+Login_WebViewFailed	The built-in browser (WebView2) couldn't start: {0}	无法启动内置浏览器（WebView2）：{0}
+Mode_M4a	Audio only (M4A)	仅音频 (M4A)
+Mode_Mp3	Audio only (MP3)	仅音频 (MP3)
+Mode_Video	Video (MP4)	视频 (MP4)
+Nav_Downloads	Downloads	下载列表
+Nav_Home	New download	新建下载
+Nav_Settings	Settings	设置
+Notify_BatchCompleted	All {0} downloads finished	{0} 个下载已全部完成
+Notify_Completed	Download finished	下载完成
+Notify_Failed	Download failed	下载失败
+Notify_InTray	VidFlow is still running	VidFlow 仍在后台运行
+Notify_InTrayBody	Downloads continue in the background. Use the tray icon to reopen or exit.	下载会在后台继续。可通过任务栏通知区域的图标重新打开或退出。
+Notify_LinkDetected	Video link copied — download it?	检测到视频链接，是否下载？
+Options_Folder	Save to	保存位置
+Options_Mode	Download	下载内容
+Options_ModeDescription	The full video, or just its audio	选择下载完整视频，或仅提取音频
+Options_Quality	Quality	画质
+Options_QualityDescription	Resolutions actually available; sizes are estimates	列表中为实际可用的分辨率，大小为估算值
+Options_Subtitles	Subtitles	字幕
+Options_SubtitlesDescription	Save subtitles (if any) as separate files; languages are set in Settings	同时保存字幕文件（如果有），字幕语言可在设置中调整
+Options_Title	Download options	下载选项
+Platform_Bilibili	Bilibili	哔哩哔哩
+Platform_Other	Video	视频
+Playlist_Count	{0} videos	共 {0} 个视频
+Playlist_EntryFallback	Video {0}	视频 {0}
+Playlist_KindParts	Multi-part video	多 P 视频
+Playlist_KindPlaylist	Playlist	播放列表
+Playlist_ListName	Videos in this playlist	播放列表中的视频
+Playlist_SelectAll	Select all	全选
+Playlist_Selected	{0} of {1} selected	已选择 {0} / {1}
+Playlist_SelectNone	Select none	全不选
+Quality_Best	Best quality	最高画质
+Quality_FullHD	Full HD	全高清
+Quality_HD	HD	高清
+Settings_About	About	关于
+Settings_Accounts	Accounts	账号
+Settings_AutoUpdate	Keep yt-dlp up to date	自动更新 yt-dlp
+Settings_AutoUpdateDescription	Checks once a day. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads	每天检查一次。网站经常变动，过旧的 yt-dlp 是下载失败最常见的原因
+Settings_BrowserCookies	Read from browser	从浏览器读取
+Settings_BrowserCookiesDescription	Chrome / Edge may be unreadable while running; close the browser or use Firefox	Chrome / Edge 运行时可能无法读取，读取失败时请先关闭浏览器，或改用 Firefox
+Settings_BrowserNone	Don't use	不使用
+Settings_Checking	Checking version…	正在检测版本…
+Settings_ChooseFile	Choose file	选择文件
+Settings_Clipboard	Watch the clipboard	监听剪贴板
+Settings_ClipboardDescription	When you copy a YouTube / Bilibili link while VidFlow is in the background, offer to download it	在后台时复制 YouTube / 哔哩哔哩链接，会弹出通知询问是否下载
+Settings_Components	Components	组件
+Settings_Concurrency	Simultaneous downloads	同时下载
+Settings_ConcurrencyDescription	How many downloads run at the same time	同时进行的下载任务数量
+Settings_CookieFile	Or use a cookies.txt file (takes priority)	或使用 cookies.txt 文件（优先）
+Settings_CookieFileDescription	Netscape format, exportable with a browser extension	Netscape 格式，可用浏览器扩展导出
+Settings_Danmaku	Save Bilibili danmaku	保存 B 站弹幕
+Settings_DanmakuDescription	Also save bullet comments as an XML file when subtitles are on	开启字幕时，同时把弹幕保存为 XML 文件
+Settings_Downloads	Downloads	下载
+Settings_FfmpegMissing	Not installed · merges high-quality streams and extracts audio (recommended)	未安装 · 用于合并高清音视频、提取音频（推荐）
+Settings_Folder	Default save location	默认保存位置
+Settings_General	General	通用
+Settings_H264	Compatibility mode	兼容模式
+Settings_H264Description	Prefer H.264 / AAC for older devices and built-in players; top quality may be limited	优先选择 H.264 / AAC，兼容旧设备和系统自带播放器，但最高画质可能受限
+Settings_Install	Install	安装
+Settings_InstallFailed	Installation failed	安装失败
+Settings_InstallFailedMessage	{0}  Downloads come from GitHub; if it can't be reached, set a proxy under Settings → Network.	{0}  下载源位于 GitHub，如无法访问请先在「设置 → 网络」中设置代理。
+Settings_InstallManaged	Install app copy	安装独立版本
+Settings_Language	Language	语言
+Settings_LanguageSystem	Same as Windows	跟随系统
+Settings_Metadata	Embed cover and metadata	嵌入封面与元数据
+Settings_MetadataDescription	Write title, author and cover into the file (needs ffmpeg)	将标题、作者和封面写入文件（需要 ffmpeg）
+Settings_Network	Network	网络
+Settings_Notify	Notifications	完成通知
+Settings_NotifyDescription	Notify when downloads finish or fail while VidFlow is in the background	在后台时，下载完成或失败会发送系统通知
+Settings_OtherCookies	Other cookie sources	其他 Cookie 来源
+Settings_OtherCookiesDescription	Advanced: use cookies from a browser or a cookies.txt file instead of in-app sign-in	高级：改用外部浏览器或 cookies.txt 文件中的登录状态（会覆盖应用内登录）
+Settings_Proxy	Proxy	代理
+Settings_ProxyDescription	e.g. http://127.0.0.1:7890 or socks5://127.0.0.1:1080; empty uses the system proxy	例如 http://127.0.0.1:7890 或 socks5://127.0.0.1:1080；留空则使用系统代理
+Settings_ProxyPlaceholder	System proxy	使用系统代理
+Settings_Reinstall	Reinstall	重新安装
+Settings_RestartMessage	The new language applies after VidFlow restarts. Unfinished downloads resume automatically.	新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。
+Settings_RestartNow	Restart now	立即重启
+Settings_RestartTitle	Restart required	需要重启
+Settings_SourceManaged	managed by VidFlow	由 VidFlow 管理
+Settings_SourceSystem	installed on this PC	使用系统中已安装的版本
+Settings_SpeedLimit	Speed limit	限速
+Settings_SpeedLimitDescription	Per download; applies to downloads that start after changing it	对每个任务分别限速，修改后对新开始的任务生效
+Settings_SpeedUnlimited	Unlimited	不限速
+Settings_SubLangs	Subtitle languages	字幕语言
+Settings_SubLangsDescription	yt-dlp language codes, comma separated (e.g. zh-Hans,en)	yt-dlp 语言代码，用逗号分隔（例如 zh-Hans,en）
+Settings_Subtitles	Subtitles	字幕
+Settings_SubtitlesDescription	Languages to save, and Bilibili danmaku	要保存的字幕语言，以及 B 站弹幕
+Settings_Theme	App theme	应用主题
+Settings_ThemeDark	Dark	深色
+Settings_ThemeLight	Light	浅色
+Settings_ThemeSystem	Same as Windows	跟随系统
+Settings_ToolVersion	Version {0} · {1}	版本 {0} · {1}
+Settings_Tray	Keep running in the notification area	关闭时最小化到托盘
+Settings_TrayDescription	Closing the window keeps downloads going; exit from the tray icon	关闭窗口后下载继续进行，可从任务栏通知区域图标退出
+Settings_CheckUpdate	Check for updates	检查更新
+Settings_UpToDate	Up to date	已是最新
+Settings_UpdateTo	Update to {0}	更新到 {0}
+Settings_InstallDone	Done	完成
+Settings_InstallDoneMessage	{0} {1} is installed and ready.	{0} {1} 已安装，可以使用了。
+Settings_YtDlpMissing	Not installed · parses and downloads videos (required)	未安装 · 用于解析和下载视频（必需）
+Size_Approx	~{0}	约 {0}
+Status_AudioStream	Audio	音频流
+Status_Canceled	Canceled	已取消
+Status_Completed	Completed	已完成
+Status_CompletedFile	Completed · {0}	已完成 · {0}
+Status_Connecting	Connecting…	正在连接…
+Status_Converting	Converting audio…	正在转换音频…
+Status_Merging	Merging video and audio…	正在合并音视频…
+Status_Paused	Paused	已暂停
+Status_PausedAt	Paused at {0}%	已暂停 · {0}%
+Status_Remaining	{0} left	剩余 {0}
+Status_Resuming	Will resume…	即将继续…
+Status_VideoDoneAudioNext	Video done, downloading audio…	视频流已完成，正在下载音频流…
+Status_VideoStream	Video	视频流
+Status_Waiting	Waiting…	等待中…
+Tray_Exit	Exit VidFlow	退出 VidFlow
+Tray_PasteLink	Download copied link	下载已复制的链接
+Tray_Show	Open VidFlow	打开 VidFlow
+Tray_Tooltip	VidFlow · {0} downloading · {1}%	VidFlow · {0} 个任务 · {1}%
+Untitled	Untitled video	未命名视频
+Wizard_AccountsBody	Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later in Settings → Accounts.	可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「设置 → 账号」中登录。
+Wizard_AccountsNote	Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.	登录在官方网页中完成，VidFlow 不会读取或保存你的密码。
+Wizard_AccountsTitle	Accounts (optional)	登录账号（可选）
+Wizard_Back	Back	上一步
+Wizard_BiliDone	Bilibili ✓	哔哩哔哩 ✓
+Wizard_BiliLogin	Sign in to Bilibili	登录哔哩哔哩
+Wizard_Change	Change	更改
+Wizard_FfmpegMissing	ffmpeg — not installed (recommended)	ffmpeg — 未安装（推荐）
+Wizard_FfmpegReady	ffmpeg — ready	ffmpeg — 已就绪
+Wizard_Finish	Get started	开始使用
+Wizard_FolderBody	Downloaded videos are saved here. Playlists get their own subfolder.	下载的视频会保存到这里，播放列表会自动放进单独的子文件夹。
+Wizard_FolderTitle	Where to save	保存位置
+Wizard_InstallAll	Install components	一键安装组件
+Wizard_Next	Next	下一步
+Wizard_Skip	Skip	跳过
+Wizard_WelcomeBody	VidFlow uses two free tools: yt-dlp to download, and ffmpeg to merge high-quality video and audio. They're downloaded from their official GitHub releases (about 140 MB).	VidFlow 需要两个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频。它们将从官方 GitHub 发布页下载（约 140 MB）。
+Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
+Wizard_YtDlpMissing	yt-dlp — not installed (required)	yt-dlp — 未安装（必需）
+Wizard_YtDlpReady	yt-dlp — ready	yt-dlp — 已就绪
+Wizard_YtDone	YouTube ✓	YouTube ✓
+Wizard_YtLogin	Sign in to YouTube	登录 YouTube
+Home_ConfirmManyTitle	Add this many downloads?	要添加这么多下载任务吗？
+Home_ConfirmManyBody	You're about to queue {0} videos. They download a few at a time (see Settings → Simultaneous downloads), and you can pause or cancel them in Downloads.	将添加 {0} 个视频到下载队列。它们会按「设置 → 同时下载」的数量依次下载，可随时在下载列表中暂停或取消。

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="VidFlow.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:VidFlow.Localization"
+    xmlns:tk="using:CommunityToolkit.WinUI.Controls">
+
+    <Page.Resources>
+        <Style
+            x:Key="SectionHeaderStyle"
+            BasedOn="{StaticResource BodyStrongTextBlockStyle}"
+            TargetType="TextBlock">
+            <Setter Property="Margin" Value="1,24,0,4" />
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ContentPanel.Padding" Value="{StaticResource PagePaddingNarrow}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <!--  See HomePage: keep MaxWidth off the ScrollViewer's direct child.  -->
+        <Grid>
+            <StackPanel
+                x:Name="ContentPanel"
+                MaxWidth="{StaticResource PageMaxWidth}"
+                Padding="{StaticResource PagePadding}"
+                Spacing="4">
+                <TextBlock
+                    Margin="0,0,0,4"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="{x:Bind l:L.Get('Nav_Settings')}" />
+
+                <!--  Components  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Components')}" />
+                <tk:SettingsCard x:Name="YtDlpCard" Header="yt-dlp">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE896;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressBar
+                            x:Name="YtDlpProgress"
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="YtDlpButton"
+                            MinWidth="96"
+                            Click="InstallYtDlp_Click" />
+                    </StackPanel>
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="FfmpegCard" Header="ffmpeg">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8B2;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressBar
+                            x:Name="FfmpegProgress"
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="FfmpegButton"
+                            MinWidth="96"
+                            Click="InstallFfmpeg_Click" />
+                    </StackPanel>
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_AutoUpdateDescription')}" Header="{x:Bind l:L.Get('Settings_AutoUpdate')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE895;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="AutoUpdateToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <!--  Collapsed while closed so the StackPanel doesn't add spacing for it.  -->
+                <InfoBar
+                    x:Name="ToolErrorBar"
+                    Severity="Error"
+                    Visibility="{x:Bind ToolErrorBar.IsOpen, Mode=OneWay}" />
+
+                <!--  Downloads  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Downloads')}" />
+                <tk:SettingsCard
+                    x:Name="FolderCard"
+                    Click="ChangeFolder_Click"
+                    Header="{x:Bind l:L.Get('Settings_Folder')}"
+                    IsClickEnabled="True">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8B7;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <tk:SettingsCard.ActionIcon>
+                        <FontIcon Glyph="&#xE70F;" />
+                    </tk:SettingsCard.ActionIcon>
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ConcurrencyDescription')}" Header="{x:Bind l:L.Get('Settings_Concurrency')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE9F5;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox
+                        x:Name="ConcurrencyCombo"
+                        MinWidth="160"
+                        SelectionChanged="ConcurrencyCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SpeedLimitDescription')}" Header="{x:Bind l:L.Get('Settings_SpeedLimit')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xEC4A;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox
+                        x:Name="SpeedCombo"
+                        MinWidth="160"
+                        SelectionChanged="SpeedCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7F4;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="H264Toggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8EC;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="MetadataToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsExpander Description="{x:Bind l:L.Get('Settings_SubtitlesDescription')}" Header="{x:Bind l:L.Get('Settings_Subtitles')}">
+                    <tk:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xED1E;" />
+                    </tk:SettingsExpander.HeaderIcon>
+                    <tk:SettingsExpander.Items>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SubLangsDescription')}" Header="{x:Bind l:L.Get('Settings_SubLangs')}">
+                            <TextBox
+                                x:Name="SubLangsBox"
+                                MinWidth="240"
+                                AutomationProperties.Name="{x:Bind l:L.Get('Settings_SubLangs')}"
+                                LostFocus="SubLangsBox_LostFocus" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_DanmakuDescription')}" Header="{x:Bind l:L.Get('Settings_Danmaku')}">
+                            <ToggleSwitch x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
+                        </tk:SettingsCard>
+                    </tk:SettingsExpander.Items>
+                </tk:SettingsExpander>
+
+                <!--  Accounts  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Accounts')}" />
+                <tk:SettingsCard x:Name="BiliAccountCard" Header="{x:Bind l:L.Get('Platform_Bilibili')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE77B;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <Button
+                        x:Name="BiliAccountButton"
+                        MinWidth="96"
+                        Click="BiliAccount_Click" />
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="YouTubeAccountCard" Header="YouTube">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE77B;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <Button
+                        x:Name="YouTubeAccountButton"
+                        MinWidth="96"
+                        Click="YouTubeAccount_Click" />
+                </tk:SettingsCard>
+                <tk:SettingsExpander Description="{x:Bind l:L.Get('Settings_OtherCookiesDescription')}" Header="{x:Bind l:L.Get('Settings_OtherCookies')}">
+                    <tk:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE8D7;" />
+                    </tk:SettingsExpander.HeaderIcon>
+                    <tk:SettingsExpander.Items>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_BrowserCookiesDescription')}" Header="{x:Bind l:L.Get('Settings_BrowserCookies')}">
+                            <ComboBox
+                                x:Name="BrowserCombo"
+                                MinWidth="160"
+                                SelectionChanged="BrowserCombo_SelectionChanged" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard x:Name="CookieFileCard" Header="{x:Bind l:L.Get('Settings_CookieFile')}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button
+                                    x:Name="ClearCookieFileButton"
+                                    Click="ClearCookieFile_Click"
+                                    Content="{x:Bind l:L.Get('Common_Clear')}" />
+                                <Button Click="PickCookieFile_Click" Content="{x:Bind l:L.Get('Settings_ChooseFile')}" />
+                            </StackPanel>
+                        </tk:SettingsCard>
+                    </tk:SettingsExpander.Items>
+                </tk:SettingsExpander>
+
+                <!--  Network  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Network')}" />
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ProxyDescription')}" Header="{x:Bind l:L.Get('Settings_Proxy')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE774;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <TextBox
+                        x:Name="ProxyBox"
+                        MinWidth="240"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Settings_Proxy')}"
+                        LostFocus="ProxyBox_LostFocus"
+                        PlaceholderText="{x:Bind l:L.Get('Settings_ProxyPlaceholder')}" />
+                </tk:SettingsCard>
+
+                <!--  General  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_General')}" />
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Language')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xF2B7;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox
+                        x:Name="LanguageCombo"
+                        MinWidth="160"
+                        SelectionChanged="LanguageCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <InfoBar
+                    x:Name="RestartBar"
+                    Visibility="{x:Bind RestartBar.IsOpen, Mode=OneWay}"
+                    Title="{x:Bind l:L.Get('Settings_RestartTitle')}"
+                    Message="{x:Bind l:L.Get('Settings_RestartMessage')}"
+                    Severity="Informational">
+                    <InfoBar.ActionButton>
+                        <Button Click="Restart_Click" Content="{x:Bind l:L.Get('Settings_RestartNow')}" />
+                    </InfoBar.ActionButton>
+                </InfoBar>
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Theme')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE790;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox
+                        x:Name="ThemeCombo"
+                        MinWidth="160"
+                        SelectionChanged="ThemeCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_TrayDescription')}" Header="{x:Bind l:L.Get('Settings_Tray')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE737;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="TrayToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyDescription')}" Header="{x:Bind l:L.Get('Settings_Notify')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xEA8F;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="NotifyToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE77F;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+
+                <!--  About  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_About')}" />
+                <tk:SettingsExpander Description="{x:Bind l:L.Get('About_Description')}" Header="VidFlow">
+                    <tk:SettingsExpander.HeaderIcon>
+                        <ImageIcon Source="ms-appx:///Assets/AppIcon.png" />
+                    </tk:SettingsExpander.HeaderIcon>
+                    <TextBlock
+                        x:Name="VersionText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        IsTextSelectionEnabled="True" />
+                    <tk:SettingsExpander.Items>
+                        <tk:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{x:Bind l:L.Get('About_Disclaimer')}"
+                                TextWrapping="Wrap" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard
+                            Click="Licenses_Click"
+                            Header="{x:Bind l:L.Get('About_Licenses')}"
+                            IsClickEnabled="True" />
+                        <tk:SettingsCard
+                            Click="RunWizard_Click"
+                            Header="{x:Bind l:L.Get('About_RunWizard')}"
+                            IsClickEnabled="True" />
+                        <tk:SettingsCard
+                            Click="OpenLogs_Click"
+                            Header="{x:Bind l:L.Get('About_OpenLogs')}"
+                            IsClickEnabled="True">
+                            <tk:SettingsCard.ActionIcon>
+                                <FontIcon Glyph="&#xE8A7;" />
+                            </tk:SettingsCard.ActionIcon>
+                        </tk:SettingsCard>
+                        <tk:SettingsCard
+                            Click="OpenDataFolder_Click"
+                            Header="{x:Bind l:L.Get('About_OpenData')}"
+                            IsClickEnabled="True">
+                            <tk:SettingsCard.ActionIcon>
+                                <FontIcon Glyph="&#xE8A7;" />
+                            </tk:SettingsCard.ActionIcon>
+                        </tk:SettingsCard>
+                    </tk:SettingsExpander.Items>
+                </tk:SettingsExpander>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>
