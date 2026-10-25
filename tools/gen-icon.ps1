@@ -18,8 +18,7 @@ $large = Join-Path $root 'branding\AppIcon.xaml'
 $small = Join-Path $root 'branding\AppIcon-small.xaml'
 $assets = Join-Path $root 'VidFlow\Assets'
 
-function Render([int]$size) {
-    $source = if ($size -le 24) { $small } else { $large }
+function Render([int]$size, [string]$source = $(if ($size -le 24) { $small } else { $large })) {
     $canvas = [Windows.Markup.XamlReader]::Parse([IO.File]::ReadAllText($source))
     $box = [Windows.Controls.Viewbox]@{ Width = $size; Height = $size; Child = $canvas }
     $box.Measure([Windows.Size]::new($size, $size))
@@ -78,6 +77,14 @@ foreach ($e in $entries) { $w.Write([byte[]]$e) }
 $w.Flush()
 [IO.File]::WriteAllBytes((Join-Path $assets 'AppIcon.ico'), $ms.ToArray())
 "Wrote AppIcon.png and AppIcon.ico ($($sizes -join ', ') px)"
+
+# Platform logos drawn as vectors (branding/platforms/*.xaml) -> Assets/Platforms/*.png. The others in that folder
+# are the platforms' own published icons.
+$platformDir = Join-Path $assets 'Platforms'
+foreach ($xaml in Get-ChildItem (Join-Path $root 'branding\platforms') -Filter '*.xaml') {
+    [IO.File]::WriteAllBytes((Join-Path $platformDir "$($xaml.BaseName).png"), (PngBytes (Render 128 $xaml.FullName)))
+    "Wrote Platforms\$($xaml.BaseName).png"
+}
 
 if ($Preview) {
     # Every size on a light and a dark strip.

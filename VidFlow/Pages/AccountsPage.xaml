@@ -47,8 +47,9 @@
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Accounts_Platforms')}" />
                 <tk:SettingsCard x:Name="BiliAccountCard" Header="{x:Bind l:L.Get('Platform_Bilibili')}">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE77B;" />
+                        <ImageIcon Source="ms-appx:///Assets/Platforms/bilibili.png" />
                     </tk:SettingsCard.HeaderIcon>
+
                     <Button
                         x:Name="BiliAccountButton"
                         MinWidth="96"
@@ -56,8 +57,9 @@
                 </tk:SettingsCard>
                 <tk:SettingsCard x:Name="YouTubeAccountCard" Header="YouTube">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE77B;" />
+                        <ImageIcon Source="ms-appx:///Assets/Platforms/youtube.png" />
                     </tk:SettingsCard.HeaderIcon>
+
                     <Button
                         x:Name="YouTubeAccountButton"
                         MinWidth="96"
@@ -65,8 +67,9 @@
                 </tk:SettingsCard>
                 <tk:SettingsCard x:Name="DouyinAccountCard" Header="{x:Bind l:L.Get('Platform_Douyin')}">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE77B;" />
+                        <ImageIcon Source="ms-appx:///Assets/Platforms/douyin.png" />
                     </tk:SettingsCard.HeaderIcon>
+
                     <Button
                         x:Name="DouyinAccountButton"
                         MinWidth="96"

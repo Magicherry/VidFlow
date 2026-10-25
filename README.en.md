@@ -116,7 +116,7 @@ Settings, download history, sign-ins and components live in `%LocalAppData%\VidF
 
 ## Disclaimer
 
-VidFlow is for personal use and backups. Only download content you have the right to save, and follow each platform's terms of service and copyright rules.
+VidFlow is for personal use and backups. Only download content you have the right to save, and follow each platform's terms of service and copyright rules. YouTube, Bilibili and Douyin names and logos belong to their owners and are used only to identify those platforms.
 
 ## Thanks
 
