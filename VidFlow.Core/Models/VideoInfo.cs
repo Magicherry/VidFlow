@@ -52,6 +52,22 @@ public sealed class VideoInfo : MediaInfo
 
     /// <summary>Audio track languages offered (YouTube multi-language audio); the original track first.</summary>
     public IReadOnlyList<string> AudioLanguages { get; init; } = [];
+
+    /// <summary>High dynamic range kinds offered ("DV", "HDR10", "HDR10+", "HLG"), best first; empty when SDR only.</summary>
+    public IReadOnlyList<string> HdrKinds { get; init; } = [];
+
+    /// <summary>A Hi-Res lossless (FLAC) audio track is offered (Bilibili, with membership).</summary>
+    public bool HasHiRes { get; init; }
+
+    /// <summary>A Dolby Atmos (E-AC-3) audio track is offered (Bilibili).</summary>
+    public bool HasAtmos { get; init; }
+
+    public bool HasHdr => HdrKinds.Any(k => k != "DV");
+    public bool HasDolbyVision => HdrKinds.Contains("DV");
+
+    /// <summary>Badges for the preview: picture kinds first, then sound.</summary>
+    public IEnumerable<string> Features =>
+        HdrKinds.Concat(HasHiRes ? [MediaFeatures.HiRes] : []).Concat(HasAtmos ? [MediaFeatures.Atmos] : []);
 }
 
 public sealed class PlaylistInfo : MediaInfo
@@ -83,14 +99,18 @@ public sealed record DownloadRequest(
     string AudioLanguage = "",        // "" = default (original) track, else a language code
     bool Recode = false,              // re-encode when the streams don't fit the container
     string FileNameTemplate = NamingTemplate.DefaultFileName,
-    string FolderTemplate = "")
+    string FolderTemplate = "",
+    string DynamicRange = MediaFeatures.Auto) // auto, dv, sdr (see MediaFeatures)
 {
     public bool IsAudio => Mode is "audio" or "mp3" or "m4a";
 
-    /// <summary>Output format for audio-only downloads.</summary>
+    /// <summary>Output format for audio-only downloads ("best" keeps the source's own format).</summary>
     public string AudioOutputFormat => Mode switch
     {
         "mp3" or "m4a" => Mode,
-        _ => AudioFormat is "mp3" or "m4a" or "opus" or "flac" or "wav" ? AudioFormat : "mp3",
+        _ => AudioFormat is "mp3" or "m4a" or "opus" or "flac" or "wav" or MediaFeatures.Original ? AudioFormat : "mp3",
     };
+
+    /// <summary>The picture or sound chosen can't go in MP4 (yt-dlp would merge into MKV anyway): say MKV up front.</summary>
+    public bool NeedsMkv => !IsAudio && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
 }

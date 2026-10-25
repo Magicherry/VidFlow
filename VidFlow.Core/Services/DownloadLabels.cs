@@ -12,13 +12,15 @@ public static class DownloadLabels
         string mode;
         if (r.IsAudio)
         {
-            mode = L.Format("Label_Audio", r.AudioOutputFormat.ToUpperInvariant());
+            mode = AudioOutputLabel(r.AudioOutputFormat);
         }
         else
         {
-            var container = (string.IsNullOrEmpty(r.Container) ? "mp4" : r.Container).ToUpperInvariant();
+            var container = (r.NeedsMkv ? "mkv" : string.IsNullOrEmpty(r.Container) ? "mp4" : r.Container).ToUpperInvariant();
             mode = r.MaxHeight > 0 ? $"{container} · {r.MaxHeight}p" : $"{container} · {L.Get("Quality_Best")}";
             if (VideoCodecs.ShortName(r.Codec) is { Length: > 0 } codec) mode += $" · {codec}";
+            if (PictureLabel(r.DynamicRange) is { } picture) mode += $" · {picture}";
+            if (SoundLabel(r.AudioFormat) is { } sound) mode += $" · {sound}";
         }
         var label = $"{UrlTools.DetectPlatform(r.Url).DisplayName()}  ·  {mode}";
         return partIndex is { } p ? $"{label}  ·  P{p}" : label;
@@ -30,15 +32,17 @@ public static class DownloadLabels
         var parts = new List<string>();
         if (t.Mode == "audio")
         {
-            parts.Add(L.Format("Label_Audio", (t.AudioFormat is "auto" ? "mp3" : t.AudioFormat).ToUpperInvariant()));
-            if (t.AudioQuality > 0 && t.AudioFormat is not ("flac" or "wav")) parts.Add($"{t.AudioQuality} kbps");
+            parts.Add(AudioOutputLabel(t.AudioFormat is "auto" ? "mp3" : t.AudioFormat));
+            if (t.AudioQuality > 0 && t.AudioFormat is not ("flac" or "wav" or MediaFeatures.Original)) parts.Add($"{t.AudioQuality} kbps");
         }
         else
         {
             parts.Add(t.Container.ToUpperInvariant());
             parts.Add(t.MaxHeight > 0 ? $"{t.MaxHeight}p" : L.Get("Quality_Best"));
             if (VideoCodecs.ShortName(t.Codec) is { Length: > 0 } codec) parts.Add(codec);
+            if (PictureLabel(t.DynamicRange) is { } picture) parts.Add(picture);
             if (t.AudioFormat is "aac" or "opus") parts.Add(t.AudioFormat == "aac" ? "AAC" : "Opus");
+            if (SoundLabel(t.AudioFormat) is { } sound) parts.Add(sound);
             if (t.AudioQuality > 0) parts.Add($"{t.AudioQuality} kbps");
         }
         if (t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
@@ -46,6 +50,24 @@ public static class DownloadLabels
         if (t.FolderTemplate.Length > 0) parts.Add(t.FolderTemplate.Replace('/', '\\'));
         return string.Join(" · ", parts);
     }
+
+    /// <summary>"MP3 audio", or "Original audio" when the source format is kept.</summary>
+    static string AudioOutputLabel(string format) =>
+        format == MediaFeatures.Original ? L.Get("Label_AudioOriginal") : L.Format("Label_Audio", format.ToUpperInvariant());
+
+    /// <summary>Only the non-default picture choices are worth a word in a summary.</summary>
+    static string? PictureLabel(string? picture) => picture switch
+    {
+        MediaFeatures.DolbyVision => MediaFeatures.Label("DV"),
+        MediaFeatures.Sdr => "SDR",
+        _ => null,
+    };
+
+    static string? SoundLabel(string? audioFormat) => audioFormat switch
+    {
+        MediaFeatures.HiRes or MediaFeatures.Atmos => MediaFeatures.Label(audioFormat),
+        _ => null,
+    };
 
     /// <summary>Status text for states that don't carry live progress; null for states whose text is specific
     /// (failures keep their error message).</summary>

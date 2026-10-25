@@ -15,8 +15,9 @@ public static class VideoCodecs
     {
         var v = vcodec?.ToLowerInvariant() ?? "";
         if (v.StartsWith("avc") || v.StartsWith("h264")) return "h264";
-        if (v.StartsWith("hev") || v.StartsWith("hvc") || v.StartsWith("h265")) return "h265";
-        if (v.StartsWith("av01") || v == "av1") return "av1";
+        // Dolby Vision streams are named after their base codec: dvh1 / dvhe (HEVC), dav1 (AV1).
+        if (v.StartsWith("hev") || v.StartsWith("hvc") || v.StartsWith("h265") || v.StartsWith("dvh")) return "h265";
+        if (v.StartsWith("av01") || v == "av1" || v.StartsWith("dav1")) return "av1";
         if (v.StartsWith("vp09") || v.StartsWith("vp9")) return "vp9";
         return null;
     }
@@ -25,8 +26,8 @@ public static class VideoCodecs
     public static string Filter(string codec) => codec switch
     {
         "h264" => "[vcodec~='^(avc|h264)']",
-        "h265" => "[vcodec~='^(hev|hvc|h265)']",
-        "av1" => "[vcodec^=av01]",
+        "h265" => "[vcodec~='^(hev|hvc|h265|dvh)']",
+        "av1" => "[vcodec~='^(av01|dav1)']",
         "vp9" => "[vcodec~='^vp0?9']",
         _ => "",
     };

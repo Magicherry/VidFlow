@@ -24,6 +24,10 @@ public sealed class DownloadTemplate
     public string Mode { get; set; } = "video";            // video | audio
     public int MaxHeight { get; set; }                     // 0 = best (original)
     public string Codec { get; set; } = VideoCodecs.Auto;
+
+    /// <summary>Picture: auto (HDR when offered), dv (Dolby Vision) or sdr. See <see cref="MediaFeatures"/>.</summary>
+    public string DynamicRange { get; set; } = MediaFeatures.Auto;
+
     public string Container { get; set; } = "mp4";
     public string AudioFormat { get; set; } = "auto";
     public int AudioQuality { get; set; }
@@ -41,6 +45,7 @@ public sealed class DownloadTemplate
         Mode = Mode,
         MaxHeight = MaxHeight,
         Codec = Codec,
+        DynamicRange = DynamicRange,
         Container = Container,
         AudioFormat = AudioFormat,
         AudioQuality = AudioQuality,
@@ -53,12 +58,12 @@ public sealed class DownloadTemplate
 
     /// <summary>True when the download options (not the name) differ.</summary>
     public bool SameOptionsAs(DownloadTemplate o) =>
-        Mode == o.Mode && MaxHeight == o.MaxHeight && Codec == o.Codec && Container == o.Container
+        Mode == o.Mode && MaxHeight == o.MaxHeight && Codec == o.Codec && DynamicRange == o.DynamicRange && Container == o.Container
         && AudioFormat == o.AudioFormat && AudioQuality == o.AudioQuality && AudioLanguage == o.AudioLanguage
         && Recode == o.Recode && Subtitles == o.Subtitles && FileNameTemplate == o.FileNameTemplate
         && FolderTemplate == o.FolderTemplate;
 
     public DownloadRequest ToRequest(string url, string baseFolder) =>
         new(url, Mode == "audio" ? "audio" : "video", Mode == "audio" ? 0 : MaxHeight, Subtitles, baseFolder,
-            Codec, Container, AudioFormat, AudioQuality, AudioLanguage, Recode, FileNameTemplate, FolderTemplate);
+            Codec, Container, AudioFormat, AudioQuality, AudioLanguage, Recode, FileNameTemplate, FolderTemplate, DynamicRange);
 }

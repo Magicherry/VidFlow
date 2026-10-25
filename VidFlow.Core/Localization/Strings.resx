@@ -34,8 +34,11 @@
   <data name="Action_Retry" xml:space="preserve"><value>Retry</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
   <data name="App_Subtitle" xml:space="preserve"><value>Video downloader</value></data>
+  <data name="AudioFormat_Atmos" xml:space="preserve"><value>Dolby Atmos (E-AC-3)</value></data>
   <data name="AudioFormat_Auto" xml:space="preserve"><value>Auto (best for the container)</value></data>
   <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC (lossless)</value></data>
+  <data name="AudioFormat_HiRes" xml:space="preserve"><value>Hi-Res lossless (FLAC)</value></data>
+  <data name="AudioFormat_Original" xml:space="preserve"><value>Original (no conversion, best quality)</value></data>
   <data name="AudioQuality_Best" xml:space="preserve"><value>Best available</value></data>
   <data name="AudioTrack_Default" xml:space="preserve"><value>Default (original)</value></data>
   <data name="Batch_Description" xml:space="preserve"><value>These links are added with the options below; titles appear once each download starts.</value></data>
@@ -55,8 +58,12 @@
   <data name="Common_Failed" xml:space="preserve"><value>Something went wrong</value></data>
   <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
   <data name="Compat_Apply" xml:space="preserve"><value>Use recommended</value></data>
+  <data name="Compat_HdrMkv" xml:space="preserve"><value>This video is HDR. HDR picture usually doesn&apos;t fit in MP4, so it will be saved as MKV.</value></data>
+  <data name="Compat_HiResAvailable" xml:space="preserve"><value>This video has Hi-Res lossless audio, which this format would lose. Choose FLAC or Original to keep it.</value></data>
   <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>FLAC / WAV files are much larger, but the source audio is already compressed, so quality does not improve.</value></data>
   <data name="Compat_Mp4Opus" xml:space="preserve"><value>Opus audio in MP4 doesn&apos;t play in some players and editors. AAC is recommended for MP4 (or use MKV).</value></data>
+  <data name="Compat_SavedAsMkv" xml:space="preserve"><value>Dolby Vision and Hi-Res lossless audio don&apos;t fit in MP4, so this will be saved as MKV.</value></data>
+  <data name="Compat_UseMkv" xml:space="preserve"><value>Use MKV</value></data>
   <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM can only hold Opus / Vorbis audio. Switch to Opus, or turn on automatic conversion.</value></data>
   <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM can only hold VP9 / AV1 video. Without automatic conversion the file is saved as MKV instead; MKV is recommended.</value></data>
   <data name="Container_Mkv" xml:space="preserve"><value>MKV (holds any codec)</value></data>
@@ -92,6 +99,9 @@
   <data name="Error_UnexpectedExit" xml:space="preserve"><value>yt-dlp exited unexpectedly.</value></data>
   <data name="Error_Unsupported" xml:space="preserve"><value>This link is not supported.</value></data>
   <data name="Error_ZipMissing" xml:space="preserve"><value>{0} is missing from the archive</value></data>
+  <data name="Feature_Atmos" xml:space="preserve"><value>Dolby Atmos</value></data>
+  <data name="Feature_DolbyVision" xml:space="preserve"><value>Dolby Vision</value></data>
+  <data name="Feature_HiRes" xml:space="preserve"><value>Hi-Res lossless</value></data>
   <data name="Folder_Month" xml:space="preserve"><value>By month</value></data>
   <data name="Folder_None" xml:space="preserve"><value>Don&apos;t sort</value></data>
   <data name="Folder_Platform" xml:space="preserve"><value>By platform</value></data>
@@ -143,6 +153,7 @@
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links or share text (separate several with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
+  <data name="Label_AudioOriginal" xml:space="preserve"><value>Original audio</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · best quality</value></data>
@@ -216,6 +227,8 @@
   <data name="Options_ModeDescription" xml:space="preserve"><value>The full video, or just its audio</value></data>
   <data name="Options_Naming" xml:space="preserve"><value>Naming and folders</value></data>
   <data name="Options_NamingDescription" xml:space="preserve"><value>How files are named and sorted into folders</value></data>
+  <data name="Options_Picture" xml:space="preserve"><value>Picture</value></data>
+  <data name="Options_PictureDescription" xml:space="preserve"><value>HDR needs an HDR display to show. Dolby Vision needs a player that supports it, or colours look wrong.</value></data>
   <data name="Options_PreviewHeader" xml:space="preserve"><value>Preview (sample video)</value></data>
   <data name="Options_PreviewRoot" xml:space="preserve"><value>Download location</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>Quality</value></data>
@@ -227,6 +240,10 @@
   <data name="Options_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Save subtitles (if any) as separate files; languages are set in Settings</value></data>
   <data name="Options_Title" xml:space="preserve"><value>Download options</value></data>
+  <data name="Picture_Auto" xml:space="preserve"><value>Auto (HDR when available)</value></data>
+  <data name="Picture_AutoNoHdr" xml:space="preserve"><value>Auto</value></data>
+  <data name="Picture_DolbyVision" xml:space="preserve"><value>Dolby Vision</value></data>
+  <data name="Picture_Sdr" xml:space="preserve"><value>SDR (standard)</value></data>
   <data name="Platform_Bilibili" xml:space="preserve"><value>Bilibili</value></data>
   <data name="Platform_Douyin" xml:space="preserve"><value>Douyin</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>Video</value></data>

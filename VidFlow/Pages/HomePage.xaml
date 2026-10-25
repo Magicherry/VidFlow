@@ -328,6 +328,12 @@
                                 x:Name="MetaText"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 TextTrimming="CharacterEllipsis" />
+                            <!--  HDR10 / Dolby Vision / Hi-Res / Dolby Atmos, when the video offers them  -->
+                            <StackPanel
+                                x:Name="FeaturePanel"
+                                Margin="0,2,0,0"
+                                Orientation="Horizontal"
+                                Spacing="6" />
                         </StackPanel>
                     </Grid>
                 </Border>

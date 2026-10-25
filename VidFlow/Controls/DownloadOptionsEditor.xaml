@@ -47,6 +47,21 @@
                 SelectionChanged="Option_Changed" />
         </tk:SettingsCard>
 
+        <!--  HDR / Dolby Vision / SDR: shown when the video offers HDR (always in the template editor)  -->
+        <tk:SettingsCard
+            x:Name="PictureCard"
+            Description="{x:Bind l:L.Get('Options_PictureDescription')}"
+            Header="{x:Bind l:L.Get('Options_Picture')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xE706;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ComboBox
+                x:Name="PictureCombo"
+                MinWidth="200"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Picture')}"
+                SelectionChanged="Option_Changed" />
+        </tk:SettingsCard>
+
         <tk:SettingsCard
             x:Name="ContainerCard"
             Description="{x:Bind l:L.Get('Options_ContainerDescription')}"

@@ -96,6 +96,8 @@ public static class YtDlpService
         }
         else
         {
+            if (req.IsAudio && req.AudioOutputFormat == MediaFeatures.Original)
+                req = req with { AudioFormat = await OriginalAudioFormatAsync(req, ct) };
             (code, error) = await RunWithCookieFallbackAsync(req.Url,
                 env => YtDlpArgs.Download(req, AppSettings.Current, env), OnLine, ct);
         }
@@ -103,6 +105,19 @@ public static class YtDlpService
         ct.ThrowIfCancellationRequested();
         if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);
         return filePath;
+    }
+
+    /// <summary>"Original" audio: which codec the track has decides the file type (Hi-Res FLAC → .flac). Falls back to
+    /// yt-dlp's "best" if the question can't be answered.</summary>
+    static async Task<string> OriginalAudioFormatAsync(DownloadRequest req, CancellationToken ct)
+    {
+        string? codec = null;
+        var (code, _) = await RunWithCookieFallbackAsync(req.Url,
+            env => YtDlpArgs.ProbeAudio(req, AppSettings.Current, env),
+            line => codec ??= line.Trim().Length > 0 ? line.Trim() : null, ct);
+        var format = code == 0 ? MediaFeatures.OriginalOutput(codec) : MediaFeatures.Original;
+        Log.Info($"Original audio: {codec ?? "?"} -> {format}");
+        return format;
     }
 
     /// <summary>

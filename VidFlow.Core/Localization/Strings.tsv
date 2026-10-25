@@ -442,3 +442,20 @@ Home_Supports_Xiaohongshu	Video notes, share links	视频笔记、分享链接
 Home_Supports_Weibo	Videos, posts with video, t.cn links	视频、带视频的微博、t.cn 短链接
 Home_Supports_YouTube	Videos, Shorts, playlists	视频、Shorts、播放列表
 Home_Supports_X	Videos and GIFs in posts	帖子里的视频与 GIF
+Options_Picture	Picture	画面
+Options_PictureDescription	HDR needs an HDR display to show. Dolby Vision needs a player that supports it, or colours look wrong.	HDR 需要 HDR 显示器才能看出效果；杜比视界需要支持它的播放器，否则颜色会异常
+Picture_Auto	Auto (HDR when available)	自动（有 HDR 时优先 HDR）
+Picture_AutoNoHdr	Auto	自动
+Picture_DolbyVision	Dolby Vision	杜比视界
+Picture_Sdr	SDR (standard)	SDR（标准动态范围）
+AudioFormat_HiRes	Hi-Res lossless (FLAC)	Hi-Res 无损（FLAC）
+AudioFormat_Atmos	Dolby Atmos (E-AC-3)	杜比全景声（E-AC-3）
+AudioFormat_Original	Original (no conversion, best quality)	原始格式（不转码，音质最佳）
+Label_AudioOriginal	Original audio	原始格式音频
+Feature_DolbyVision	Dolby Vision	杜比视界
+Feature_HiRes	Hi-Res lossless	Hi-Res 无损
+Feature_Atmos	Dolby Atmos	杜比全景声
+Compat_SavedAsMkv	Dolby Vision and Hi-Res lossless audio don't fit in MP4, so this will be saved as MKV.	杜比视界和 Hi-Res 无损音轨无法放入 MP4，将自动保存为 MKV。
+Compat_HdrMkv	This video is HDR. HDR picture usually doesn't fit in MP4, so it will be saved as MKV.	这个视频是 HDR。HDR 画面通常无法放入 MP4，将自动保存为 MKV。
+Compat_HiResAvailable	This video has Hi-Res lossless audio, which this format would lose. Choose FLAC or Original to keep it.	这个视频有 Hi-Res 无损音轨，转成此格式会损失音质；选择 FLAC 或「原始格式」可保留无损。
+Compat_UseMkv	Use MKV	改用 MKV

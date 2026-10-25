@@ -6,7 +6,9 @@ namespace VidFlow.Services;
 /// <param name="MessageKey">Localization key of the explanation.</param>
 /// <param name="SuggestedContainer">Container that would work as-is, if switching is the fix.</param>
 /// <param name="SuggestedAudioFormat">Audio format that would work as-is, if switching is the fix.</param>
-public sealed record CompatibilityIssue(string MessageKey, string? SuggestedContainer = null, string? SuggestedAudioFormat = null);
+/// <param name="Info">Not a problem, just what will happen (e.g. "saved as MKV"): shown as information, not a warning.</param>
+public sealed record CompatibilityIssue(string MessageKey, string? SuggestedContainer = null, string? SuggestedAudioFormat = null,
+    bool Info = false);
 
 /// <summary>
 /// Which codecs each container can hold. Downloads never fail over it (yt-dlp falls back to MKV, or re-encodes
@@ -16,11 +18,27 @@ public static class FormatCompatibility
 {
     public static readonly string[] Containers = ["mp4", "mkv", "webm"];
 
-    public static CompatibilityIssue? Check(DownloadTemplate t)
+    /// <param name="video">The parsed video, when known: what it offers (HDR, Hi-Res) changes the advice.</param>
+    public static CompatibilityIssue? Check(DownloadTemplate t, VideoInfo? video = null)
     {
         if (t.Mode == "audio")
         {
-            return t.AudioFormat is "flac" or "wav" ? new CompatibilityIssue("Compat_LosslessFromLossy") : null;
+            var hiRes = video?.HasHiRes == true;
+            if (t.AudioFormat is "flac" or "wav")
+                return hiRes ? null : new CompatibilityIssue("Compat_LosslessFromLossy");
+            // A lossy output from a Hi-Res source throws the lossless track away.
+            return hiRes && t.AudioFormat != MediaFeatures.Original
+                ? new CompatibilityIssue("Compat_HiResAvailable", SuggestedAudioFormat: "flac")
+                : null;
+        }
+        if (t.Container != "mkv")
+        {
+            // Dolby Vision and Hi-Res FLAC only fit MKV; downloads go there automatically, so this is just a heads-up.
+            if (t.DynamicRange == MediaFeatures.DolbyVision || t.AudioFormat == MediaFeatures.HiRes)
+                return new CompatibilityIssue("Compat_SavedAsMkv", SuggestedContainer: "mkv", Info: true);
+            // HDR is mostly VP9 / AV1 / HEVC with 10-bit colour, which yt-dlp usually can't merge into MP4.
+            if (video?.HasHdr == true && t.DynamicRange == MediaFeatures.Auto && t.Container == "mp4")
+                return new CompatibilityIssue("Compat_HdrMkv", SuggestedContainer: "mkv", Info: true);
         }
         if (t.Container == "webm")
         {

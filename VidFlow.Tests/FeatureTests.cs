@@ -39,7 +39,7 @@ public class FormatSelectionTests
     {
         var req = new DownloadRequest("https://youtu.be/x", "video", 0, false, "o", AudioLanguage: "ja");
         var chain = F(YtDlpArgs.Download(req, new AppSettings(), Env)).Split('/');
-        Assert.Equal("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[ext=m4a][language^=ja]", chain[0]);
+        Assert.Equal("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[acodec^=mp4a][language^=ja]", chain[0]);
         Assert.Contains("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[language^=ja]", chain);
         Assert.Equal("b", chain[^1]);
     }
@@ -48,7 +48,7 @@ public class FormatSelectionTests
     public void AudioQualityLimitsAudioBitrateInVideoMode()
     {
         var req = new DownloadRequest("https://youtu.be/x", "video", 720, false, "o", AudioQuality: 128);
-        Assert.Equal("res:720,fps,tbr,abr:128", Arg(YtDlpArgs.Download(req, new AppSettings(), Env), "-S"));
+        Assert.Equal("res:720,hdr:HDR10,fps,tbr,abr:128", Arg(YtDlpArgs.Download(req, new AppSettings(), Env), "-S"));
     }
 
     [Theory]
@@ -541,6 +541,106 @@ public class ImageFormatTests
         var args = YtDlpArgs.Download(req, new AppSettings(), new YtDlpArgs.Environment(@"C:\ff", null, false));
         var chain = args[args.IndexOf("-f") + 1].Split('/');
         Assert.All(chain[..^1], s => Assert.Contains("[ext!=jpg]", s));
-        Assert.Equal("res:320,fps,tbr", args[args.IndexOf("-S") + 1]);
+        Assert.Equal("res:320,hdr:HDR10,fps,tbr", args[args.IndexOf("-S") + 1]);
+    }
+}
+
+public class MediaFeatureTests
+{
+    static readonly YtDlpArgs.Environment Env = new(@"C:\ff", null, false);
+    static string Arg(List<string> args, string name) => args[args.IndexOf(name) + 1];
+
+    /// <summary>Trimmed from yt-dlp's answer for a Bilibili video with Dolby Vision, Dolby Atmos and Hi-Res.</summary>
+    const string Bilibili = """
+        {"_type":"video","id":"BV18bnN6nEC6","title":"t","webpage_url":"https://www.bilibili.com/video/BV18bnN6nEC6","duration":200,
+         "formats":[
+           {"format_id":"30250","ext":"m4a","vcodec":"none","acodec":"ec-3","tbr":1665},
+           {"format_id":"30280","ext":"m4a","vcodec":"none","acodec":"mp4a.40.2","tbr":320},
+           {"format_id":"30251","ext":"m4a","vcodec":"none","acodec":"flac","tbr":1690},
+           {"format_id":"30120","ext":"mp4","width":3840,"height":2160,"vcodec":"avc1.640034","acodec":"none","dynamic_range":"SDR","tbr":21240},
+           {"format_id":"30126","ext":"mp4","width":3840,"height":2160,"vcodec":"hvc1.2.4.L156.90","acodec":"none","dynamic_range":"DV","tbr":21003}]}
+        """;
+
+    [Fact]
+    public void FeaturesAreDetected()
+    {
+        var info = Assert.IsType<VideoInfo>(InfoParser.Parse(Bilibili, "https://www.bilibili.com/video/BV18bnN6nEC6"));
+        Assert.Equal(["DV"], info.HdrKinds);
+        Assert.True(info.HasDolbyVision);
+        Assert.False(info.HasHdr);
+        Assert.True(info.HasHiRes);
+        Assert.True(info.HasAtmos);
+        Assert.Equal(["DV", MediaFeatures.HiRes, MediaFeatures.Atmos], info.Features);
+    }
+
+    [Theory]
+    [InlineData(MediaFeatures.Auto, false, "res,hdr:HDR10,fps,tbr")]   // HDR10 / HLG yes, Dolby Vision only on request
+    [InlineData(MediaFeatures.DolbyVision, false, "res,hdr,fps,tbr")]
+    [InlineData(MediaFeatures.Sdr, false, "res,hdr:SDR,fps,tbr")]
+    [InlineData(MediaFeatures.Auto, true, "res,hdr:SDR,vcodec:h264,acodec:m4a,fps,tbr")]  // compatibility mode
+    public void PictureSteersTheSort(string picture, bool compatibility, string expected)
+    {
+        var req = new DownloadRequest("https://www.bilibili.com/video/BV1", "video", 0, false, "o", DynamicRange: picture);
+        Assert.Equal(expected, Arg(YtDlpArgs.Download(req, new AppSettings { PreferH264 = compatibility }, Env), "-S"));
+    }
+
+    [Fact]
+    public void DolbyVisionAndHiResGoToMkvWithoutReencoding()
+    {
+        var dv = new DownloadRequest("https://www.bilibili.com/video/BV1", "video", 0, false, "o", Recode: true, DynamicRange: MediaFeatures.DolbyVision);
+        var args = YtDlpArgs.Download(dv, new AppSettings(), Env);
+        Assert.Equal("mkv", Arg(args, "--merge-output-format"));
+        Assert.DoesNotContain("--recode-video", args);
+
+        var hiRes = new DownloadRequest("https://www.bilibili.com/video/BV1", "video", 0, false, "o", AudioFormat: MediaFeatures.HiRes);
+        var hiResArgs = YtDlpArgs.Download(hiRes, new AppSettings(), Env);
+        Assert.Equal("mkv", Arg(hiResArgs, "--merge-output-format"));
+        Assert.Contains("+ba[acodec~='^(flac|alac)']", Arg(hiResArgs, "-f"));
+
+        var atmos = new DownloadRequest("https://www.bilibili.com/video/BV1", "video", 0, false, "o", AudioFormat: MediaFeatures.Atmos);
+        Assert.Contains("+ba[acodec~='^(ec-?3|eac3|ac-?4)']", Arg(YtDlpArgs.Download(atmos, new AppSettings(), Env), "-f"));
+    }
+
+    [Fact]
+    public void Mp4AutoAudioIsAacByCodecNotExtension()
+    {
+        // Bilibili labels its FLAC track ".m4a": an extension filter would let it into MP4.
+        var req = new DownloadRequest("https://www.bilibili.com/video/BV1", "video", 0, false, "o");
+        Assert.StartsWith("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[acodec^=mp4a]", Arg(YtDlpArgs.Download(req, new AppSettings(), Env), "-f"));
+    }
+
+    [Fact]
+    public void OriginalAudioKeepsTheSource()
+    {
+        var req = new DownloadRequest("https://www.bilibili.com/video/BV1", "audio", 0, false, "o", AudioFormat: MediaFeatures.Original);
+        var args = YtDlpArgs.Download(req, new AppSettings(), Env);
+        Assert.Equal("best", Arg(args, "--audio-format"));
+        Assert.Equal("0", Arg(args, "--audio-quality"));
+    }
+
+    [Fact]
+    public void AdviceFollowsWhatTheVideoOffers()
+    {
+        var info = Assert.IsType<VideoInfo>(InfoParser.Parse(Bilibili, "https://www.bilibili.com/video/BV18bnN6nEC6"));
+
+        var mp3 = new DownloadTemplate { Mode = "audio", AudioFormat = "mp3" };
+        Assert.Equal("flac", FormatCompatibility.Check(mp3, info)!.SuggestedAudioFormat);
+        Assert.Null(FormatCompatibility.Check(mp3));                                    // no Hi-Res known: nothing to say
+        Assert.Null(FormatCompatibility.Check(new DownloadTemplate { Mode = "audio", AudioFormat = "flac" }, info));
+
+        var dv = FormatCompatibility.Check(new DownloadTemplate { DynamicRange = MediaFeatures.DolbyVision }, info)!;
+        Assert.True(dv.Info);
+        Assert.Equal("mkv", dv.SuggestedContainer);
+        Assert.Null(FormatCompatibility.Check(new DownloadTemplate { DynamicRange = MediaFeatures.DolbyVision, Container = "mkv" }, info));
+    }
+
+    [Fact]
+    public void LabelsMentionTheChoices()
+    {
+        var t = new DownloadTemplate { DynamicRange = MediaFeatures.DolbyVision, AudioFormat = MediaFeatures.HiRes };
+        var summary = DownloadLabels.Summary(t);
+        Assert.Contains(MediaFeatures.Label("DV"), summary);
+        Assert.Contains(MediaFeatures.Label(MediaFeatures.HiRes), summary);
+        Assert.StartsWith("MKV", DownloadLabels.Label(t.ToRequest("https://www.bilibili.com/video/BV1", "o"), null).Split("·")[1].Trim());
     }
 }

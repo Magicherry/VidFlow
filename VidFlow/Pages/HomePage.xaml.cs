@@ -310,6 +310,23 @@ public sealed partial class HomePage : Page
         PlatformText.Text = info.Platform.DisplayName();
         PlatformLogo.Source = HomePlatform.LogoFor(info.Platform);
         PlatformLogo.Visibility = PlatformLogo.Source is null ? Visibility.Collapsed : Visibility.Visible;
+        FeaturePanel.Children.Clear();
+        foreach (var feature in info.Features)
+            FeaturePanel.Children.Add(new Border
+            {
+                Padding = new Thickness(6, 1, 6, 2),
+                CornerRadius = new CornerRadius(4),
+                BorderThickness = new Thickness(1),
+                BorderBrush = (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"],
+                Child = new TextBlock
+                {
+                    Text = MediaFeatures.Label(feature),
+                    FontSize = 11,
+                    FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+                    Foreground = (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"],
+                },
+            });
+        FeaturePanel.Visibility = FeaturePanel.Children.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         MetaText.Text = string.Join("  ·  ", new[] { info.Uploader, Format.Date(info.UploadDate) }.Where(s => !string.IsNullOrEmpty(s)));
         DurationBadge.Visibility = info.Duration is > 0 ? Visibility.Visible : Visibility.Collapsed;
         DurationText.Text = FormatDuration(info.Duration);

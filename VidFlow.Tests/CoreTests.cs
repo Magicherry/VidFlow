@@ -314,8 +314,8 @@ public class YtDlpArgsTests
     public void VideoPrefersAacAndAppliesHeightAndH264Sort()
     {
         var args = YtDlpArgs.Download(Req(height: 1080), new AppSettings { PreferH264 = true }, WithFfmpeg);
-        Assert.Contains("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[ext=m4a]/bv*[ext!=jpg][ext!=png][ext!=webp]+ba/b[ext!=jpg][ext!=png][ext!=webp]/b", args);
-        Assert.Equal("res:1080,vcodec:h264,acodec:m4a,fps,tbr", args[args.IndexOf("-S") + 1]);
+        Assert.Contains("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[acodec^=mp4a]/bv*[ext!=jpg][ext!=png][ext!=webp]+ba/b[ext!=jpg][ext!=png][ext!=webp]/b", args);
+        Assert.Equal("res:1080,hdr:SDR,vcodec:h264,acodec:m4a,fps,tbr", args[args.IndexOf("-S") + 1]);
         Assert.Equal("https://www.youtube.com/watch?v=x", args[^1]);
     }
 
@@ -324,9 +324,9 @@ public class YtDlpArgsTests
     {
         // yt-dlp's default would rank AV1 first and pick the lowest-bitrate stream; we sort by bitrate instead.
         var args = YtDlpArgs.Download(Req(height: 1080), new AppSettings(), WithFfmpeg);
-        Assert.Equal("res:1080,fps,tbr", args[args.IndexOf("-S") + 1]);
+        Assert.Equal("res:1080,hdr:HDR10,fps,tbr", args[args.IndexOf("-S") + 1]);
         var best = YtDlpArgs.Download(Req(), new AppSettings(), WithFfmpeg);
-        Assert.Equal("res,fps,tbr", best[best.IndexOf("-S") + 1]);
+        Assert.Equal("res,hdr:HDR10,fps,tbr", best[best.IndexOf("-S") + 1]);
     }
 
     [Fact]
@@ -351,15 +351,15 @@ public class YtDlpArgsTests
     {
         var req = Req(height: 1080) with { Codec = "h264" };
         var args = YtDlpArgs.Download(req, new AppSettings { PreferH264 = false }, WithFfmpeg);
-        Assert.Equal("bv*[ext!=jpg][ext!=png][ext!=webp][vcodec~='^(avc|h264)']+ba[ext=m4a]/bv*[ext!=jpg][ext!=png][ext!=webp][vcodec~='^(avc|h264)']+ba/bv*[ext!=jpg][ext!=png][ext!=webp]+ba[ext=m4a]/bv*[ext!=jpg][ext!=png][ext!=webp]+ba/b[ext!=jpg][ext!=png][ext!=webp]/b",
+        Assert.Equal("bv*[ext!=jpg][ext!=png][ext!=webp][vcodec~='^(avc|h264)']+ba[acodec^=mp4a]/bv*[ext!=jpg][ext!=png][ext!=webp][vcodec~='^(avc|h264)']+ba/bv*[ext!=jpg][ext!=png][ext!=webp]+ba[acodec^=mp4a]/bv*[ext!=jpg][ext!=png][ext!=webp]+ba/b[ext!=jpg][ext!=png][ext!=webp]/b",
 
             args[args.IndexOf("-f") + 1]);
 
         // An explicit codec overrides the global compatibility mode's codec preference.
         var hevc = YtDlpArgs.Download(Req() with { Codec = "h265" }, new AppSettings { PreferH264 = true }, WithFfmpeg);
-        Assert.Equal("res,fps,tbr", hevc[hevc.IndexOf("-S") + 1]);
+        Assert.Equal("res,hdr:HDR10,fps,tbr", hevc[hevc.IndexOf("-S") + 1]);
 
-        Assert.Equal("b[ext!=jpg][ext!=png][ext!=webp][vcodec^=av01]/b[ext!=jpg][ext!=png][ext!=webp]/b", YtDlpArgs.Download(Req() with { Codec = "av1" }, new AppSettings(), WithFfmpeg with { FfmpegDir = null })
+        Assert.Equal("b[ext!=jpg][ext!=png][ext!=webp][vcodec~='^(av01|dav1)']/b[ext!=jpg][ext!=png][ext!=webp]/b", YtDlpArgs.Download(Req() with { Codec = "av1" }, new AppSettings(), WithFfmpeg with { FfmpegDir = null })
             .SkipWhile(a => a != "-f").Skip(1).First());
     }
 

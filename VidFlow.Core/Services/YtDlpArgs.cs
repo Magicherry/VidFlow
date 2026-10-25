@@ -72,9 +72,12 @@ public static class YtDlpArgs
             var audio = AudioFilter(req);
             if (hasFfmpeg)
             {
-                args.AddRange(["-f", FormatChain(video, audio, lang), "--merge-output-format", FormatCompatibility.MergeFormats(req.Container)]);
-                // Re-encode when the streams don't fit the chosen container (only if needed; slow).
-                if (req.Recode) args.AddRange(["--recode-video", req.Container]);
+                // Dolby Vision and Hi-Res FLAC only fit MKV: say so up front rather than let MP4 fail over to it.
+                var merge = req.NeedsMkv ? "mkv" : FormatCompatibility.MergeFormats(req.Container);
+                args.AddRange(["-f", FormatChain(video, audio, lang), "--merge-output-format", merge]);
+                // Re-encode when the streams don't fit the chosen container (only if needed; slow). Never for Dolby
+                // Vision / Hi-Res: re-encoding would throw away exactly what was asked for.
+                if (req.Recode && !req.NeedsMkv) args.AddRange(["--recode-video", req.Container]);
             }
             else
             {
@@ -88,7 +91,11 @@ public static class YtDlpArgs
             // 1080p would otherwise lose to a 2.8 Mbps HLS stream).
             var sort = new List<string> { req.MaxHeight > 0 ? $"res:{req.MaxHeight}" : "res" };
             // The global compatibility mode only steers "auto"; an explicit codec choice wins.
-            if (s.PreferH264 && req.Codec == VideoCodecs.Auto) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
+            var compatibility = s.PreferH264 && req.Codec == VideoCodecs.Auto;
+            // Then the picture asked for (HDR / Dolby Vision / SDR) at that resolution, ahead of bitrate: a Dolby
+            // Vision stream can have a slightly lower bitrate than the SDR one and would otherwise lose.
+            sort.Add(MediaFeatures.HdrSort(req.DynamicRange, compatibility));
+            if (compatibility) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
             sort.AddRange(["fps", "tbr"]);
             if (req.AudioQuality > 0) sort.Add($"abr:{req.AudioQuality}");
             args.AddRange(["-S", string.Join(',', sort)]);
@@ -96,14 +103,9 @@ public static class YtDlpArgs
         else
         {
             var fmt = req.AudioOutputFormat;
-            var preferred = fmt switch { "m4a" => "[ext=m4a]", "opus" => "[acodec=opus]", _ => "" };
-            var chain = new List<string>();
-            if (lang.Length > 0) chain.Add($"ba{preferred}{lang}");
-            if (preferred.Length > 0) chain.Add($"ba{preferred}");
-            if (lang.Length > 0) chain.Add($"ba{lang}");
-            chain.AddRange(["ba", "b"]);
-            args.AddRange(["-f", string.Join('/', chain.Distinct()), "-x", "--audio-format", fmt,
-                "--audio-quality", fmt is "flac" or "wav" || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
+            // "best" (original) keeps the source as it is; YtDlpService turns it into the source's own format first.
+            args.AddRange(["-f", AudioChain(req), "-x", "--audio-format", fmt,
+                "--audio-quality", fmt is "flac" or "wav" or MediaFeatures.Original || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
         }
 
         if (req.WriteSubtitles)
@@ -135,18 +137,44 @@ public static class YtDlpArgs
     }
 
     /// <summary>Audio stream filter for video downloads. MP4 prefers AAC (Opus in MP4 trips up many players and
-    /// editors), WebM needs Opus / Vorbis, MKV takes the best of anything.</summary>
+    /// editors), WebM needs Opus / Vorbis, MKV takes the best of anything (Hi-Res FLAC when offered). By codec, not
+    /// extension: Bilibili labels its FLAC and Dolby tracks ".m4a" too.</summary>
     static string AudioFilter(DownloadRequest r) => r.AudioFormat switch
     {
         "aac" => "[acodec^=mp4a]",
         "opus" => "[acodec=opus]",
+        MediaFeatures.HiRes => "[acodec~='^(flac|alac)']",
+        MediaFeatures.Atmos => "[acodec~='^(ec-?3|eac3|ac-?4)']",
         _ => r.Container switch
         {
             "webm" => "[acodec~='^(opus|vorbis)']",
             "mkv" => "",
-            _ => "[ext=m4a]",
+            _ => "[acodec^=mp4a]",
         },
     };
+
+    /// <summary>Audio-only downloads: the track in the wanted format and language, relaxing to the best one.</summary>
+    static string AudioChain(DownloadRequest req)
+    {
+        var lang = LanguageFilter(req.AudioLanguage);
+        var preferred = req.AudioOutputFormat switch { "m4a" => "[acodec^=mp4a]", "opus" => "[acodec=opus]", _ => "" };
+        var chain = new List<string>();
+        if (lang.Length > 0) chain.Add($"ba{preferred}{lang}");
+        if (preferred.Length > 0) chain.Add($"ba{preferred}");
+        if (lang.Length > 0) chain.Add($"ba{lang}");
+        chain.AddRange(["ba", "b"]);
+        return string.Join('/', chain.Distinct());
+    }
+
+    /// <summary>Asks (without downloading) which audio track an audio-only download would take, printing its codec.
+    /// yt-dlp's own "best" output keeps the source container, which leaves Bilibili's Hi-Res FLAC inside an .m4a.</summary>
+    public static List<string> ProbeAudio(DownloadRequest req, AppSettings s, Environment env)
+    {
+        var args = new List<string> { "-s", "--no-playlist", "--no-warnings", "--print", "%(acodec)s", "-f", AudioChain(req) };
+        args.AddRange(Common(s, env));
+        args.Add(req.Url);
+        return args;
+    }
 
     static string LanguageFilter(string language) =>
         string.IsNullOrWhiteSpace(language) ? "" : $"[language^={language.Trim()}]";

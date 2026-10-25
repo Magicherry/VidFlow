@@ -50,8 +50,12 @@ public static class InfoParser
         var duration = Num(root, "duration");
         var (qualities, audioBytes, codecs) = Qualities(root, duration);
         var audioLanguages = AudioLanguages(root);
+        var (hdrKinds, hiRes, atmos) = Features(root);
         return new VideoInfo
         {
+            HdrKinds = hdrKinds,
+            HasHiRes = hiRes,
+            HasAtmos = atmos,
             Url = url,
             Title = Str(root, "title") ?? L.Get("Untitled"),
             Uploader = Str(root, "uploader") ?? Str(root, "channel"),
@@ -64,6 +68,25 @@ public static class InfoParser
             Codecs = codecs,
             AudioLanguages = audioLanguages,
         };
+    }
+
+    /// <summary>HDR kinds among the video streams (in yt-dlp's preference order: DV first), and whether a Hi-Res
+    /// lossless or Dolby Atmos audio stream is offered.</summary>
+    static (List<string> HdrKinds, bool HiRes, bool Atmos) Features(JsonElement root)
+    {
+        var kinds = new HashSet<string>();
+        bool hiRes = false, atmos = false;
+        if (root.TryGetProperty("formats", out var formats) && formats.ValueKind == JsonValueKind.Array)
+            foreach (var f in formats.EnumerateArray())
+            {
+                if (Str(f, "vcodec") is not (null or "none") && MediaFeatures.HdrKind(Str(f, "dynamic_range")) is { } kind)
+                    kinds.Add(kind);
+                var acodec = Str(f, "acodec");
+                hiRes |= MediaFeatures.IsHiResCodec(acodec);
+                atmos |= MediaFeatures.IsAtmosCodec(acodec);
+            }
+        string[] order = ["DV", "HDR12", "HDR10+", "HDR10", "HLG"];
+        return (kinds.OrderBy(k => Array.IndexOf(order, k) is var i and >= 0 ? i : order.Length).ToList(), hiRes, atmos);
     }
 
     /// <summary>One option per resolution (shorter side, highest first), with the best fps seen and an approximate

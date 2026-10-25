@@ -34,8 +34,11 @@
   <data name="Action_Retry" xml:space="preserve"><value>重试</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>在文件夹中显示</value></data>
   <data name="App_Subtitle" xml:space="preserve"><value>视频下载器</value></data>
+  <data name="AudioFormat_Atmos" xml:space="preserve"><value>杜比全景声（E-AC-3）</value></data>
   <data name="AudioFormat_Auto" xml:space="preserve"><value>自动（按封装格式选择）</value></data>
   <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC（无损）</value></data>
+  <data name="AudioFormat_HiRes" xml:space="preserve"><value>Hi-Res 无损（FLAC）</value></data>
+  <data name="AudioFormat_Original" xml:space="preserve"><value>原始格式（不转码，音质最佳）</value></data>
   <data name="AudioQuality_Best" xml:space="preserve"><value>最高音质</value></data>
   <data name="AudioTrack_Default" xml:space="preserve"><value>默认（原声）</value></data>
   <data name="Batch_Description" xml:space="preserve"><value>这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。</value></data>
@@ -55,8 +58,12 @@
   <data name="Common_Failed" xml:space="preserve"><value>操作失败</value></data>
   <data name="Common_Save" xml:space="preserve"><value>保存</value></data>
   <data name="Compat_Apply" xml:space="preserve"><value>改用推荐设置</value></data>
+  <data name="Compat_HdrMkv" xml:space="preserve"><value>这个视频是 HDR。HDR 画面通常无法放入 MP4，将自动保存为 MKV。</value></data>
+  <data name="Compat_HiResAvailable" xml:space="preserve"><value>这个视频有 Hi-Res 无损音轨，转成此格式会损失音质；选择 FLAC 或「原始格式」可保留无损。</value></data>
   <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>FLAC / WAV 文件会大很多，但源音频本身是有损压缩的，音质不会因此提升。</value></data>
   <data name="Compat_Mp4Opus" xml:space="preserve"><value>MP4 中的 Opus 音频在部分播放器和剪辑软件中无法播放，MP4 建议搭配 AAC（或改用 MKV）。</value></data>
+  <data name="Compat_SavedAsMkv" xml:space="preserve"><value>杜比视界和 Hi-Res 无损音轨无法放入 MP4，将自动保存为 MKV。</value></data>
+  <data name="Compat_UseMkv" xml:space="preserve"><value>改用 MKV</value></data>
   <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM 只能封装 Opus / Vorbis 音频，请改用 Opus，或开启自动转换。</value></data>
   <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM 只能封装 VP9 / AV1 视频。未开启自动转换时会改存为 MKV，建议直接选择 MKV。</value></data>
   <data name="Container_Mkv" xml:space="preserve"><value>MKV（支持所有编码）</value></data>
@@ -92,6 +99,9 @@
   <data name="Error_UnexpectedExit" xml:space="preserve"><value>yt-dlp 意外退出。</value></data>
   <data name="Error_Unsupported" xml:space="preserve"><value>不支持该链接。</value></data>
   <data name="Error_ZipMissing" xml:space="preserve"><value>压缩包中缺少 {0}</value></data>
+  <data name="Feature_Atmos" xml:space="preserve"><value>杜比全景声</value></data>
+  <data name="Feature_DolbyVision" xml:space="preserve"><value>杜比视界</value></data>
+  <data name="Feature_HiRes" xml:space="preserve"><value>Hi-Res 无损</value></data>
   <data name="Folder_Month" xml:space="preserve"><value>按年月</value></data>
   <data name="Folder_None" xml:space="preserve"><value>不分类</value></data>
   <data name="Folder_Platform" xml:space="preserve"><value>按平台</value></data>
@@ -143,6 +153,7 @@
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴视频链接或分享口令，多个链接用空格分隔</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} 音频</value></data>
+  <data name="Label_AudioOriginal" xml:space="preserve"><value>原始格式音频</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A 音频</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 音频</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · 最高画质</value></data>
@@ -216,6 +227,8 @@
   <data name="Options_ModeDescription" xml:space="preserve"><value>选择下载完整视频，或仅提取音频</value></data>
   <data name="Options_Naming" xml:space="preserve"><value>命名与分类</value></data>
   <data name="Options_NamingDescription" xml:space="preserve"><value>文件的命名方式，以及是否按平台 / 作者 / 日期放入子文件夹</value></data>
+  <data name="Options_Picture" xml:space="preserve"><value>画面</value></data>
+  <data name="Options_PictureDescription" xml:space="preserve"><value>HDR 需要 HDR 显示器才能看出效果；杜比视界需要支持它的播放器，否则颜色会异常</value></data>
   <data name="Options_PreviewHeader" xml:space="preserve"><value>预览（示例视频）</value></data>
   <data name="Options_PreviewRoot" xml:space="preserve"><value>下载位置</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>画质</value></data>
@@ -227,6 +240,10 @@
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>同时保存字幕文件（如果有），字幕语言可在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
+  <data name="Picture_Auto" xml:space="preserve"><value>自动（有 HDR 时优先 HDR）</value></data>
+  <data name="Picture_AutoNoHdr" xml:space="preserve"><value>自动</value></data>
+  <data name="Picture_DolbyVision" xml:space="preserve"><value>杜比视界</value></data>
+  <data name="Picture_Sdr" xml:space="preserve"><value>SDR（标准动态范围）</value></data>
   <data name="Platform_Bilibili" xml:space="preserve"><value>哔哩哔哩</value></data>
   <data name="Platform_Douyin" xml:space="preserve"><value>抖音</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>视频</value></data>

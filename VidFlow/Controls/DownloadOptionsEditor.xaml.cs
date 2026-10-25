@@ -89,6 +89,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
         Select(ModeCombo, options.Mode == "audio" ? "audio" : "video");
         FillQualities();
         FillCodecs();
+        FillPictures();
         Select(ContainerCombo, options.Container);
         FillAudioFormats();
         Select(AudioQualityCombo, options.AudioQuality);
@@ -144,18 +145,43 @@ public sealed partial class DownloadOptionsEditor : UserControl
         Select(CodecCombo, _options.Codec);
     }
 
+    /// <summary>Picture: Auto / Dolby Vision / SDR. For a parsed video only the kinds it offers (none: hidden).</summary>
+    void FillPictures()
+    {
+        PictureCombo.Items.Clear();
+        var hdr = _video is null || _video.HasHdr;
+        var dv = _video is null || _video.HasDolbyVision;
+        AddItems(PictureCombo, (MediaFeatures.Auto, L.Get(hdr ? "Picture_Auto" : "Picture_AutoNoHdr")));
+        if (dv) AddItems(PictureCombo, (MediaFeatures.DolbyVision, L.Get("Picture_DolbyVision")));
+        AddItems(PictureCombo, (MediaFeatures.Sdr, L.Get("Picture_Sdr")));
+        if (_options.DynamicRange == MediaFeatures.DolbyVision && !dv)
+            PictureCombo.Items.Add(new ComboBoxItem { Content = L.Format("Codec_Unavailable", L.Get("Picture_DolbyVision")), Tag = MediaFeatures.DolbyVision });
+        Select(PictureCombo, _options.DynamicRange);
+    }
+
     void FillAudioFormats()
     {
         AudioFormatCombo.Items.Clear();
         if (_options.Mode == "audio")
         {
-            AddItems(AudioFormatCombo, ("mp3", "MP3"), ("m4a", "M4A (AAC)"), ("opus", "Opus"), ("flac", L.Get("AudioFormat_Flac")), ("wav", "WAV"));
-            if (_options.AudioFormat is not ("mp3" or "m4a" or "opus" or "flac" or "wav")) _options.AudioFormat = "mp3";
+            AddItems(AudioFormatCombo, (MediaFeatures.Original, L.Get("AudioFormat_Original")),
+                ("mp3", "MP3"), ("m4a", "M4A (AAC)"), ("opus", "Opus"), ("flac", L.Get("AudioFormat_Flac")), ("wav", "WAV"));
+            if (_options.AudioFormat is not ("mp3" or "m4a" or "opus" or "flac" or "wav" or MediaFeatures.Original)) _options.AudioFormat = "mp3";
         }
         else
         {
             AddItems(AudioFormatCombo, ("auto", L.Get("AudioFormat_Auto")), ("aac", "AAC"), ("opus", "Opus"));
-            if (_options.AudioFormat is not ("auto" or "aac" or "opus")) _options.AudioFormat = "auto";
+            // Hi-Res / Dolby Atmos: when the video offers them (always listed in the template editor).
+            if (_video is null || _video.HasHiRes) AddItems(AudioFormatCombo, (MediaFeatures.HiRes, L.Get("AudioFormat_HiRes")));
+            if (_video is null || _video.HasAtmos) AddItems(AudioFormatCombo, (MediaFeatures.Atmos, L.Get("AudioFormat_Atmos")));
+            if (_options.AudioFormat is not ("auto" or "aac" or "opus" or MediaFeatures.HiRes or MediaFeatures.Atmos)) _options.AudioFormat = "auto";
+            // Chosen in a template but not offered by this video: keep it visible, the download falls back.
+            if (!AudioFormatCombo.Items.Cast<ComboBoxItem>().Any(i => (string)i.Tag == _options.AudioFormat))
+                AudioFormatCombo.Items.Add(new ComboBoxItem
+                {
+                    Content = L.Format("Codec_Unavailable", L.Get(_options.AudioFormat == MediaFeatures.HiRes ? "AudioFormat_HiRes" : "AudioFormat_Atmos")),
+                    Tag = _options.AudioFormat,
+                });
         }
         Select(AudioFormatCombo, _options.AudioFormat);
     }
@@ -195,6 +221,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
         _options.Mode = TagOf(ModeCombo) ?? "video";
         _options.MaxHeight = (QualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
         _options.Codec = TagOf(CodecCombo) ?? VideoCodecs.Auto;
+        _options.DynamicRange = TagOf(PictureCombo) ?? MediaFeatures.Auto;
         _options.Container = TagOf(ContainerCombo) ?? "mp4";
         _options.AudioFormat = TagOf(AudioFormatCombo) ?? _options.AudioFormat;
         _options.AudioQuality = (AudioQualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
@@ -272,8 +299,13 @@ public sealed partial class DownloadOptionsEditor : UserControl
         var video = _options.Mode != "audio";
         QualityCard.Visibility = CodecCard.Visibility = ContainerCard.Visibility = RecodeCard.Visibility =
             video ? Visibility.Visible : Visibility.Collapsed;
+        // Nothing to choose for a video that is SDR only.
+        PictureCard.Visibility = video && (_video is null || _video.HdrKinds.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
 
-        var ext = video ? _options.Container : _options.AudioFormat;
+        var request = _options.ToRequest("", "");
+        var ext = video ? (request.NeedsMkv ? "mkv" : _options.Container)
+            : _options.AudioFormat == MediaFeatures.Original ? (_video?.HasHiRes == true ? "flac" : "m4a")
+            : _options.AudioFormat;
         PreviewText.Text = $"{L.Get("Options_PreviewRoot")}\\{NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext)}";
         PreviewIcon.Glyph = video ? "" : "";
         var unknown = NamingTemplate.UnknownVariables(_options.FileNameTemplate);
@@ -281,17 +313,20 @@ public sealed partial class DownloadOptionsEditor : UserControl
         if (unknown.Count > 0)
             UnknownVariableText.Text = L.Format("Naming_Unknown", string.Join(" ", unknown.Select(u => $"{{{u}}}")));
 
-        var issue = FormatCompatibility.Check(_options);
+        var issue = FormatCompatibility.Check(_options, _video);
         CompatBar.IsOpen = issue is not null;
         if (issue is null) return;
         CompatBar.Message = L.Get(issue.MessageKey);
+        // "Will be saved as MKV" is what happens, not a problem.
+        CompatBar.Severity = issue.Info ? InfoBarSeverity.Informational : InfoBarSeverity.Warning;
+        CompatFixButton.Content = L.Get(issue.Info ? "Compat_UseMkv" : "Compat_Apply");
         CompatFixButton.Visibility = issue.SuggestedContainer is not null || issue.SuggestedAudioFormat is not null
             ? Visibility.Visible : Visibility.Collapsed;
     }
 
     void CompatFix_Click(object sender, RoutedEventArgs e)
     {
-        if (FormatCompatibility.Check(_options) is not { } issue) return;
+        if (FormatCompatibility.Check(_options, _video) is not { } issue) return;
         if (issue.SuggestedContainer is { } c) _options.Container = c;
         if (issue.SuggestedAudioFormat is { } a) _options.AudioFormat = a;
         Load(_options, _video);
