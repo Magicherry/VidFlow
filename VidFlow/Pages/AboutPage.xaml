@@ -84,61 +84,32 @@
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
 
-                <!--  Components  -->
+                <!--  Components: a status row with "check for updates", then one row per component (built in code)  -->
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Components')}" />
                 <!--  Collapsed while closed so the StackPanel doesn't add spacing for it.  -->
                 <InfoBar
                     x:Name="ToolErrorBar"
                     Severity="Error"
                     Visibility="{x:Bind ToolErrorBar.IsOpen, Mode=OneWay}" />
-                <tk:SettingsCard x:Name="YtDlpCard" Header="yt-dlp">
+                <tk:SettingsCard x:Name="ToolsSummaryCard">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE896;" />
+                        <FontIcon x:Name="ToolsSummaryIcon" Glyph="&#xE895;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <ProgressBar
-                            x:Name="YtDlpProgress"
-                            Width="120"
-                            VerticalAlignment="Center"
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button
+                            x:Name="UpdateAllToolsButton"
+                            Click="UpdateAllTools_Click"
+                            Content="{x:Bind l:L.Get('Tools_UpdateAll')}"
+                            Style="{StaticResource AccentButtonStyle}"
                             Visibility="Collapsed" />
                         <Button
-                            x:Name="YtDlpButton"
+                            x:Name="CheckToolsButton"
                             MinWidth="96"
-                            Click="InstallYtDlp_Click" />
+                            Click="CheckTools_Click"
+                            Content="{x:Bind l:L.Get('Settings_CheckUpdate')}" />
                     </StackPanel>
                 </tk:SettingsCard>
-                <tk:SettingsCard x:Name="FfmpegCard" Header="ffmpeg">
-                    <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE8B2;" />
-                    </tk:SettingsCard.HeaderIcon>
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <ProgressBar
-                            x:Name="FfmpegProgress"
-                            Width="120"
-                            VerticalAlignment="Center"
-                            Visibility="Collapsed" />
-                        <Button
-                            x:Name="FfmpegButton"
-                            MinWidth="96"
-                            Click="InstallFfmpeg_Click" />
-                    </StackPanel>
-                </tk:SettingsCard>
-                <tk:SettingsCard x:Name="DenoCard" Header="Deno">
-                    <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE943;" />
-                    </tk:SettingsCard.HeaderIcon>
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <ProgressBar
-                            x:Name="DenoProgress"
-                            Width="120"
-                            VerticalAlignment="Center"
-                            Visibility="Collapsed" />
-                        <Button
-                            x:Name="DenoButton"
-                            MinWidth="96"
-                            Click="InstallDeno_Click" />
-                    </StackPanel>
-                </tk:SettingsCard>
+                <StackPanel x:Name="ToolList" Spacing="4" />
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_AutoUpdateDescription')}" Header="{x:Bind l:L.Get('Settings_AutoUpdate')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE777;" />

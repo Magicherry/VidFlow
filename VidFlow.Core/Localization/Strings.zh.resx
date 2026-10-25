@@ -217,11 +217,10 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新 yt-dlp</value></data>
-  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查一次。网站经常变动，过旧的 yt-dlp 是下载失败最常见的原因</value></data>
+  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天自动检查并安装新版本。网站经常变动，过旧的 yt-dlp 是下载失败最常见的原因</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 运行时可能无法读取，读取失败时请先关闭浏览器，或改用 Firefox</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
-  <data name="Settings_Checking" xml:space="preserve"><value>正在检测版本…</value></data>
   <data name="Settings_CheckUpdate" xml:space="preserve"><value>检查更新</value></data>
   <data name="Settings_ChooseFile" xml:space="preserve"><value>选择文件</value></data>
   <data name="Settings_Clipboard" xml:space="preserve"><value>监听剪贴板</value></data>
@@ -242,7 +241,6 @@
   <data name="Settings_H264Description" xml:space="preserve"><value>优先选择 H.264 / AAC，兼容旧设备和系统自带播放器，但最高画质可能受限</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>安装</value></data>
   <data name="Settings_InstallDone" xml:space="preserve"><value>完成</value></data>
-  <data name="Settings_InstallDoneMessage" xml:space="preserve"><value>{0} {1} 已安装，可以使用了。</value></data>
   <data name="Settings_InstallFailed" xml:space="preserve"><value>安装失败</value></data>
   <data name="Settings_InstallFailedMessage" xml:space="preserve"><value>{0}  下载源位于 GitHub，如无法访问请先在「设置 → 网络」中设置代理。</value></data>
   <data name="Settings_InstallManaged" xml:space="preserve"><value>安装独立版本</value></data>
@@ -270,8 +268,6 @@
   <data name="Settings_RestartMessage" xml:space="preserve"><value>新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。</value></data>
   <data name="Settings_RestartNow" xml:space="preserve"><value>立即重启</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>需要重启</value></data>
-  <data name="Settings_SourceManaged" xml:space="preserve"><value>由 VidFlow 管理</value></data>
-  <data name="Settings_SourceSystem" xml:space="preserve"><value>使用系统中已安装的版本</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>限速</value></data>
   <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>开启后对每个下载任务分别限速，对之后开始的任务生效</value></data>
   <data name="Settings_SpeedMax" xml:space="preserve"><value>每个任务最高速度</value></data>
@@ -290,7 +286,6 @@
   <data name="Settings_ThemeDark" xml:space="preserve"><value>深色</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>浅色</value></data>
   <data name="Settings_ThemeSystem" xml:space="preserve"><value>跟随系统</value></data>
-  <data name="Settings_ToolVersion" xml:space="preserve"><value>版本 {0} · {1}</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>关闭时最小化到托盘</value></data>
   <data name="Settings_TrayDescription" xml:space="preserve"><value>关闭窗口后下载继续进行，可从任务栏通知区域图标退出</value></data>
   <data name="Settings_UpdateBadge" xml:space="preserve"><value>有可用更新：{0}</value></data>
@@ -342,6 +337,21 @@
   <data name="Templates_Empty" xml:space="preserve"><value>还没有自定义模板</value></data>
   <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」创建，或从内置预设的「…」菜单复制一份再修改</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>我的模板</value></data>
+  <data name="Tools_ActionsNeeded" xml:space="preserve"><value>有 {0} 项可以安装或更新</value></data>
+  <data name="Tools_AllUpToDate" xml:space="preserve"><value>所有组件均为最新</value></data>
+  <data name="Tools_CheckFailed" xml:space="preserve"><value>无法检查</value></data>
+  <data name="Tools_CheckFailedSummary" xml:space="preserve"><value>无法检查更新，请检查网络或代理设置</value></data>
+  <data name="Tools_Checking" xml:space="preserve"><value>正在检查更新…</value></data>
+  <data name="Tools_DenoPurpose" xml:space="preserve"><value>获取部分 YouTube 格式</value></data>
+  <data name="Tools_FfmpegPurpose" xml:space="preserve"><value>合并音视频、转换格式</value></data>
+  <data name="Tools_InstallDoneMessage" xml:space="preserve"><value>已安装，可以使用：{0}</value></data>
+  <data name="Tools_Installed" xml:space="preserve"><value>{0} · 版本 {1}</value></data>
+  <data name="Tools_LastChecked" xml:space="preserve"><value>上次检查：{0}</value></data>
+  <data name="Tools_ManagedNote" xml:space="preserve"><value>这些工具由 VidFlow 下载并保持更新</value></data>
+  <data name="Tools_MissingRequired" xml:space="preserve"><value>缺少必需组件 {0}，安装后才能下载</value></data>
+  <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · 版本 {1} · 使用系统中已安装的版本（不由 VidFlow 更新）</value></data>
+  <data name="Tools_UpdateAll" xml:space="preserve"><value>全部更新</value></data>
+  <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>解析和下载视频</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>退出 VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>下载已复制的链接</value></data>
   <data name="Tray_Show" xml:space="preserve"><value>打开 VidFlow</value></data>

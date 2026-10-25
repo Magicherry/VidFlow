@@ -130,11 +130,10 @@ Quality_HD	HD	高清
 Settings_About	About	关于
 Settings_Accounts	Accounts	账号
 Settings_AutoUpdate	Keep yt-dlp up to date	自动更新 yt-dlp
-Settings_AutoUpdateDescription	Checks once a day. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads	每天检查一次。网站经常变动，过旧的 yt-dlp 是下载失败最常见的原因
+Settings_AutoUpdateDescription	Checks daily and installs new versions automatically. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads	每天自动检查并安装新版本。网站经常变动，过旧的 yt-dlp 是下载失败最常见的原因
 Settings_BrowserCookies	Read from browser	从浏览器读取
 Settings_BrowserCookiesDescription	Chrome / Edge may be unreadable while running; close the browser or use Firefox	Chrome / Edge 运行时可能无法读取，读取失败时请先关闭浏览器，或改用 Firefox
 Settings_BrowserNone	Don't use	不使用
-Settings_Checking	Checking version…	正在检测版本…
 Settings_ChooseFile	Choose file	选择文件
 Settings_Clipboard	Watch the clipboard	监听剪贴板
 Settings_ClipboardDescription	When you copy a YouTube / Bilibili link while VidFlow is in the background, offer to download it	在后台时复制 YouTube / 哔哩哔哩链接，会弹出通知询问是否下载
@@ -171,8 +170,6 @@ Settings_Reinstall	Reinstall	重新安装
 Settings_RestartMessage	The new language applies after VidFlow restarts. Unfinished downloads resume automatically.	新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。
 Settings_RestartNow	Restart now	立即重启
 Settings_RestartTitle	Restart required	需要重启
-Settings_SourceManaged	managed by VidFlow	由 VidFlow 管理
-Settings_SourceSystem	installed on this PC	使用系统中已安装的版本
 Settings_SpeedLimit	Speed limit	限速
 Settings_SpeedLimitDescription	Limit the speed of each download; applies to downloads that start afterwards	开启后对每个下载任务分别限速，对之后开始的任务生效
 Settings_SubLangs	Subtitle languages	字幕语言
@@ -182,14 +179,12 @@ Settings_Theme	App theme	应用主题
 Settings_ThemeDark	Dark	深色
 Settings_ThemeLight	Light	浅色
 Settings_ThemeSystem	Same as Windows	跟随系统
-Settings_ToolVersion	Version {0} · {1}	版本 {0} · {1}
 Settings_Tray	Keep running in the notification area	关闭时最小化到托盘
 Settings_TrayDescription	Closing the window keeps downloads going; exit from the tray icon	关闭窗口后下载继续进行，可从任务栏通知区域图标退出
 Settings_CheckUpdate	Check for updates	检查更新
 Settings_UpToDate	Up to date	已是最新
 Settings_UpdateTo	Update to {0}	更新到 {0}
 Settings_InstallDone	Done	完成
-Settings_InstallDoneMessage	{0} {1} is installed and ready.	{0} {1} 已安装，可以使用了。
 Settings_YtDlpMissing	Not installed · parses and downloads videos (required)	未安装 · 用于解析和下载视频（必需）
 Size_Approx	~{0}	约 {0}
 Status_AudioStream	Audio	音频流
@@ -397,3 +392,18 @@ Var_month	Month	月份
 Var_resolution	Resolution	分辨率
 Var_id	Video ID	视频 ID
 Var_platform	Platform	平台
+Tools_YtDlpPurpose	Parses and downloads videos	解析和下载视频
+Tools_FfmpegPurpose	Merges video and audio, converts formats	合并音视频、转换格式
+Tools_DenoPurpose	Unlocks some YouTube formats	获取部分 YouTube 格式
+Tools_Installed	{0} · version {1}	{0} · 版本 {1}
+Tools_SystemCopy	{0} · version {1} · copy installed on this PC (not updated by VidFlow)	{0} · 版本 {1} · 使用系统中已安装的版本（不由 VidFlow 更新）
+Tools_CheckFailed	Couldn't check	无法检查
+Tools_Checking	Checking for updates…	正在检查更新…
+Tools_MissingRequired	{0} is required: install it to download videos	缺少必需组件 {0}，安装后才能下载
+Tools_ActionsNeeded	{0} to install or update	有 {0} 项可以安装或更新
+Tools_CheckFailedSummary	Couldn't check for updates: check your network or proxy	无法检查更新，请检查网络或代理设置
+Tools_AllUpToDate	All components are up to date	所有组件均为最新
+Tools_LastChecked	Last checked {0}	上次检查：{0}
+Tools_ManagedNote	VidFlow downloads and keeps these tools up to date	这些工具由 VidFlow 下载并保持更新
+Tools_UpdateAll	Update all	全部更新
+Tools_InstallDoneMessage	Ready to use: {0}	已安装，可以使用：{0}

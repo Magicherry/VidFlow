@@ -217,11 +217,10 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>About &amp; updates</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>Accounts</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>Keep yt-dlp up to date</value></data>
-  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checks once a day. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads</value></data>
+  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checks daily and installs new versions automatically. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge may be unreadable while running; close the browser or use Firefox</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>Don&apos;t use</value></data>
-  <data name="Settings_Checking" xml:space="preserve"><value>Checking version…</value></data>
   <data name="Settings_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
   <data name="Settings_ChooseFile" xml:space="preserve"><value>Choose file</value></data>
   <data name="Settings_Clipboard" xml:space="preserve"><value>Watch the clipboard</value></data>
@@ -242,7 +241,6 @@
   <data name="Settings_H264Description" xml:space="preserve"><value>Prefer H.264 / AAC for older devices and built-in players; top quality may be limited</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>Install</value></data>
   <data name="Settings_InstallDone" xml:space="preserve"><value>Done</value></data>
-  <data name="Settings_InstallDoneMessage" xml:space="preserve"><value>{0} {1} is installed and ready.</value></data>
   <data name="Settings_InstallFailed" xml:space="preserve"><value>Installation failed</value></data>
   <data name="Settings_InstallFailedMessage" xml:space="preserve"><value>{0}  Downloads come from GitHub; if it can&apos;t be reached, set a proxy under Settings → Network.</value></data>
   <data name="Settings_InstallManaged" xml:space="preserve"><value>Install app copy</value></data>
@@ -270,8 +268,6 @@
   <data name="Settings_RestartMessage" xml:space="preserve"><value>The new language applies after VidFlow restarts. Unfinished downloads resume automatically.</value></data>
   <data name="Settings_RestartNow" xml:space="preserve"><value>Restart now</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>Restart required</value></data>
-  <data name="Settings_SourceManaged" xml:space="preserve"><value>managed by VidFlow</value></data>
-  <data name="Settings_SourceSystem" xml:space="preserve"><value>installed on this PC</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>Speed limit</value></data>
   <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>Limit the speed of each download; applies to downloads that start afterwards</value></data>
   <data name="Settings_SpeedMax" xml:space="preserve"><value>Maximum speed per download</value></data>
@@ -290,7 +286,6 @@
   <data name="Settings_ThemeDark" xml:space="preserve"><value>Dark</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>Light</value></data>
   <data name="Settings_ThemeSystem" xml:space="preserve"><value>Same as Windows</value></data>
-  <data name="Settings_ToolVersion" xml:space="preserve"><value>Version {0} · {1}</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>Keep running in the notification area</value></data>
   <data name="Settings_TrayDescription" xml:space="preserve"><value>Closing the window keeps downloads going; exit from the tray icon</value></data>
   <data name="Settings_UpdateBadge" xml:space="preserve"><value>Update available: {0}</value></data>
@@ -342,6 +337,21 @@
   <data name="Templates_Empty" xml:space="preserve"><value>No custom templates yet</value></data>
   <data name="Templates_EmptyDescription" xml:space="preserve"><value>Create one with &quot;New template&quot;, or duplicate a built-in preset from its &quot;...&quot; menu and adjust it</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
+  <data name="Tools_ActionsNeeded" xml:space="preserve"><value>{0} to install or update</value></data>
+  <data name="Tools_AllUpToDate" xml:space="preserve"><value>All components are up to date</value></data>
+  <data name="Tools_CheckFailed" xml:space="preserve"><value>Couldn&apos;t check</value></data>
+  <data name="Tools_CheckFailedSummary" xml:space="preserve"><value>Couldn&apos;t check for updates: check your network or proxy</value></data>
+  <data name="Tools_Checking" xml:space="preserve"><value>Checking for updates…</value></data>
+  <data name="Tools_DenoPurpose" xml:space="preserve"><value>Unlocks some YouTube formats</value></data>
+  <data name="Tools_FfmpegPurpose" xml:space="preserve"><value>Merges video and audio, converts formats</value></data>
+  <data name="Tools_InstallDoneMessage" xml:space="preserve"><value>Ready to use: {0}</value></data>
+  <data name="Tools_Installed" xml:space="preserve"><value>{0} · version {1}</value></data>
+  <data name="Tools_LastChecked" xml:space="preserve"><value>Last checked {0}</value></data>
+  <data name="Tools_ManagedNote" xml:space="preserve"><value>VidFlow downloads and keeps these tools up to date</value></data>
+  <data name="Tools_MissingRequired" xml:space="preserve"><value>{0} is required: install it to download videos</value></data>
+  <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · version {1} · copy installed on this PC (not updated by VidFlow)</value></data>
+  <data name="Tools_UpdateAll" xml:space="preserve"><value>Update all</value></data>
+  <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>Parses and downloads videos</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>Exit VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>Download copied link</value></data>
   <data name="Tray_Show" xml:space="preserve"><value>Open VidFlow</value></data>
