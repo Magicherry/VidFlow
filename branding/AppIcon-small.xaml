@@ -1,0 +1,12 @@
+<!-- VidFlow app icon, 16-24 px: thicker ribbons, no shadow, a bigger play mark. Rendered by tools/gen-icon.ps1. -->
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="256" Height="256">
+  <Path Data="M200,64 L128,204" StrokeThickness="72" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+    <Path.Stroke><LinearGradientBrush StartPoint="200,64" EndPoint="128,204" MappingMode="Absolute">
+      <GradientStop Color="#A06CFF" Offset="0"/><GradientStop Color="#4F5CF2" Offset="1"/></LinearGradientBrush></Path.Stroke>
+  </Path>
+  <Path Data="M56,64 L128,204" StrokeThickness="72" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+    <Path.Stroke><LinearGradientBrush StartPoint="56,64" EndPoint="128,204" MappingMode="Absolute">
+      <GradientStop Color="#2EE6C8" Offset="0"/><GradientStop Color="#1C8CF2" Offset="1"/></LinearGradientBrush></Path.Stroke>
+  </Path>
+  <Path Data="M110,26 L110,82 L152,54 Z" Fill="#FF6B6B" Stroke="#FF6B6B" StrokeThickness="14" StrokeLineJoin="Round"/>
+</Canvas>

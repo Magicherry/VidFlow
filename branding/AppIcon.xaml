@@ -1,0 +1,17 @@
+<!-- VidFlow app icon, 32 px and up: two ribbons forming a V (VidFlow, and a download arrow) with a play mark.
+     Rendered by tools/gen-icon.ps1. -->
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="256" Height="256">
+  <Canvas>
+    <Canvas.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="4" Direction="270" Opacity="0.28"/></Canvas.Effect>
+    <Path Data="M194,70 L128,196" StrokeThickness="58" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+      <Path.Stroke><LinearGradientBrush StartPoint="194,70" EndPoint="128,196" MappingMode="Absolute">
+        <GradientStop Color="#A06CFF" Offset="0"/><GradientStop Color="#4F5CF2" Offset="1"/></LinearGradientBrush></Path.Stroke>
+    </Path>
+    <!-- Slightly see-through where the ribbons cross -->
+    <Path Data="M62,70 L128,196" StrokeThickness="58" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.92">
+      <Path.Stroke><LinearGradientBrush StartPoint="62,70" EndPoint="128,196" MappingMode="Absolute">
+        <GradientStop Color="#2EE6C8" Offset="0"/><GradientStop Color="#1C8CF2" Offset="1"/></LinearGradientBrush></Path.Stroke>
+    </Path>
+  </Canvas>
+  <Path Data="M115,46 L115,86 L146,66 Z" Fill="#FF6B6B" Stroke="#FF6B6B" StrokeThickness="10" StrokeLineJoin="Round"/>
+</Canvas>
