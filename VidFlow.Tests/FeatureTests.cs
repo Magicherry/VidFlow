@@ -711,5 +711,33 @@ public class MultiConnectionTests
     public void Aria2Eta(string text, double seconds) => Assert.Equal(seconds, YtDlpOutputParser.Seconds(text));
 
     [Fact]
+    public void YouTubeAudioSkipsAria2()
+    {
+        var env = new YtDlpArgs.Environment(@"C:f", null, false, Aria2Path: @"C:inria2c.exe");
+        var args = YtDlpArgs.Download(Req, new AppSettings(), env);
+        Assert.Equal("youtube:formats=duplicate", args[args.IndexOf("--extractor-args") + 1]);
+        Assert.Contains("dash:native", args);
+        var chain = args[args.IndexOf("-f") + 1].Split('/');
+        // Each audio choice as a dash stream (yt-dlp downloads it), then as it is; the video side is untouched.
+        Assert.Equal(chain[1] + "[protocol=http_dash_segments]", chain[0]);
+        Assert.DoesNotContain("protocol", chain[0].Split('+')[0]);
+        Assert.Equal("b", chain[^1]);
+
+        var audio = YtDlpArgs.Download(new DownloadRequest(Req.Url, "audio", 0, false, "o"), new AppSettings(), env);
+        Assert.StartsWith("ba[protocol=http_dash_segments]", audio[audio.IndexOf("-f") + 1].Split('/').First(f => !f.Contains("acodec")));
+    }
+
+    [Fact]
+    public void OtherSitesAndNoAria2KeepOneFormatList()
+    {
+        var env = new YtDlpArgs.Environment(@"C:f", null, false, Aria2Path: @"C:inria2c.exe");
+        var x = YtDlpArgs.Download(new DownloadRequest("https://x.com/a/status/1", "video", 0, false, "o"), new AppSettings(), env);
+        Assert.DoesNotContain("--extractor-args", x);
+        Assert.DoesNotContain("protocol", x[x.IndexOf("-f") + 1]);
+        var plain = YtDlpArgs.Download(Req, new AppSettings(), new YtDlpArgs.Environment(@"C:f", null, false));
+        Assert.DoesNotContain("--extractor-args", plain);
+    }
+
+    [Fact]
     public void Aria2VersionLine() => Assert.Equal("1.37.0", ToolManager.Aria2Version("aria2 version 1.37.0"));
 }

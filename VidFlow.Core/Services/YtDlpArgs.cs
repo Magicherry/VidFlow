@@ -72,6 +72,7 @@ public static class YtDlpArgs
         }
 
         var lang = LanguageFilter(req.AudioLanguage);
+        var splitAudio = SplitDownloaders(platform, env);
         if (!req.IsAudio)
         {
             var video = VideoFilter(req);
@@ -80,7 +81,8 @@ public static class YtDlpArgs
             {
                 // Dolby Vision and Hi-Res FLAC only fit MKV: say so up front rather than let MP4 fail over to it.
                 var merge = req.NeedsMkv ? "mkv" : FormatCompatibility.MergeFormats(req.Container);
-                args.AddRange(["-f", FormatChain(video, audio, lang), "--merge-output-format", merge]);
+                var chain = FormatChain(video, audio, lang);
+                args.AddRange(["-f", splitAudio ? DashAudioFirst(chain) : chain, "--merge-output-format", merge]);
                 // Re-encode when the streams don't fit the chosen container (only if needed; slow). Never for Dolby
                 // Vision / Hi-Res: re-encoding would throw away exactly what was asked for.
                 if (req.Recode && !req.NeedsMkv) args.AddRange(["--recode-video", req.Container]);
@@ -110,7 +112,7 @@ public static class YtDlpArgs
         {
             var fmt = req.AudioOutputFormat;
             // "best" (original) keeps the source as it is; YtDlpService turns it into the source's own format first.
-            args.AddRange(["-f", AudioChain(req), "-x", "--audio-format", fmt,
+            args.AddRange(["-f", splitAudio ? DashAudioFirst(AudioChain(req)) : AudioChain(req), "-x", "--audio-format", fmt,
                 "--audio-quality", fmt is "flac" or "wav" or MediaFeatures.Original || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
         }
 
@@ -130,6 +132,8 @@ public static class YtDlpArgs
             args.AddRange(["-r", $"{s.SpeedLimitKBps}K"]);
 
         args.AddRange(Connections(s, env));
+        // Each stream also offered as "dash" (the same file in ranged chunks), which DashAudioFirst picks for audio.
+        if (splitAudio) args.AddRange(["--extractor-args", "youtube:formats=duplicate"]);
         args.AddRange(Common(s, env));
         args.Add(req.Url);
         return args;
@@ -142,11 +146,24 @@ public static class YtDlpArgs
     {
         var args = new List<string> { "-N", "8" };
         if (env.Aria2Path is null) return args;
-        args.AddRange(["--downloader", env.Aria2Path, "--downloader", "m3u8:native", "--downloader-args", Aria2Args]);
+        args.AddRange(["--downloader", env.Aria2Path, "--downloader", "m3u8:native", "--downloader", "dash:native",
+            "--downloader-args", Aria2Args]);
         // yt-dlp itself follows Windows' proxy setting, aria2c does not: hand it over explicitly.
         if (s.Proxy.Trim().Length == 0 && env.SystemProxy is not null) args.AddRange(["--proxy", env.SystemProxy]);
         return args;
     }
+
+    /// <summary>YouTube with aria2: video through aria2c, audio through yt-dlp itself. YouTube serves a request that
+    /// names its byte range in the URL (yt-dlp's way) fast at first, then slows it to a crawl; aria2c's ranged
+    /// requests are slow from the start, and only many of them at once make up for it. A video stream is large
+    /// enough for that; an audio stream (a few MB) would take 10 s to minutes through aria2c instead of about 1 s.</summary>
+    static bool SplitDownloaders(Platform platform, Environment env) => platform == Platform.YouTube && env.Aria2Path is not null;
+
+    /// <summary>Tries each audio choice as a "dash" stream first (downloaded by yt-dlp), then as it is.</summary>
+    internal static string DashAudioFirst(string chain) => string.Join('/', chain.Split('/').SelectMany(f =>
+        f.Contains("+ba") || f.StartsWith("ba", StringComparison.Ordinal) ? new[] { f + DashOnly, f } : [f]));
+
+    const string DashOnly = "[protocol=http_dash_segments]";
 
     /// <summary>Video stream filter: the chosen codec, or for WebM (which only holds VP9 / AV1) those codecs.</summary>
     static string VideoFilter(DownloadRequest r)
