@@ -26,6 +26,8 @@ OutputDir=..\dist
 OutputBaseFilename={#AppName}-Setup-{#AppVersion}-x64
 SetupIconFile=..\VidFlow\Assets\AppIcon.ico
 UninstallDisplayIcon={app}\VidFlow.exe
+; Tell Explorer to refresh icons after installing: an update keeps the same path, so the old icon would stay cached.
+ChangesAssociations=yes
 UninstallDisplayName={#AppName}
 Compression=lzma2/ultra64
 SolidCompression=yes
