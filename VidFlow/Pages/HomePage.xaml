@@ -72,7 +72,8 @@
                               (several links still work, they are split on whitespace).  -->
                         <TextBox
                             x:Name="UrlBox"
-                            Height="32"
+                            Height="40"
+                            Padding="12,9,8,0"
                             VerticalAlignment="Center"
                             AutomationProperties.Name="{x:Bind l:L.Get('Home_UrlBoxName')}"
                             Paste="UrlBox_Paste"
@@ -81,7 +82,9 @@
                             TextWrapping="NoWrap" />
                         <Button
                             Grid.Column="1"
-                            Height="32"
+                            Width="40"
+                            Height="40"
+                            Padding="0"
                             VerticalAlignment="Center"
                             AutomationProperties.Name="{x:Bind l:L.Get('Home_Paste')}"
                             Click="Paste_Click"
@@ -91,8 +94,8 @@
                         <Button
                             x:Name="ParseButton"
                             Grid.Column="2"
-                            Height="32"
-                            MinWidth="96"
+                            Height="40"
+                            MinWidth="104"
                             VerticalAlignment="Center"
                             Click="Parse_Click"
                             Style="{StaticResource AccentButtonStyle}">
@@ -117,6 +120,105 @@
                             Visibility="Collapsed" />
                     </InfoBar.ActionButton>
                 </InfoBar>
+
+                <!--  Before anything is parsed: how to start, and which platforms work (with sign-in status)  -->
+                <StackPanel x:Name="EmptyState" Spacing="8">
+                    <TextBlock
+                        Margin="1,8,0,0"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="{x:Bind l:L.Get('Home_TipsTitle')}" />
+                    <ItemsControl x:Name="TipsRepeater" IsTabStop="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <controls:CardGridPanel MinColumnWidth="200" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:HomeTip">
+                                <Border Padding="16" Style="{StaticResource CardStyle}">
+                                    <StackPanel Spacing="10">
+                                        <Border
+                                            Width="36"
+                                            Height="36"
+                                            HorizontalAlignment="Left"
+                                            Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                            CornerRadius="8">
+                                            <FontIcon
+                                                FontSize="18"
+                                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                                Glyph="{x:Bind Glyph}" />
+                                        </Border>
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{x:Bind Body}"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock
+                        Margin="1,16,0,0"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="{x:Bind l:L.Get('Home_PlatformsTitle')}" />
+                    <ItemsControl x:Name="PlatformsRepeater" IsTabStop="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <controls:CardGridPanel MinColumnWidth="200" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:HomePlatform">
+                                <Border Padding="16" Style="{StaticResource CardStyle}">
+                                    <Grid ColumnSpacing="14">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image
+                                            Width="40"
+                                            Height="40"
+                                            VerticalAlignment="Top"
+                                            AutomationProperties.AccessibilityView="Raw"
+                                            Source="{x:Bind Logo}" />
+                                        <StackPanel Grid.Column="1" Spacing="2">
+                                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" />
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{x:Bind Supports}"
+                                                TextWrapping="Wrap" />
+                                            <StackPanel
+                                                Margin="0,6,0,0"
+                                                Orientation="Horizontal"
+                                                Spacing="6"
+                                                Visibility="{x:Bind SignedIn}">
+                                                <FontIcon
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                                                    Glyph="&#xE73E;" />
+                                                <TextBlock
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                                    Text="{x:Bind l:L.Get('Home_SignedIn')}" />
+                                            </StackPanel>
+                                            <HyperlinkButton
+                                                Margin="-6,2,0,-4"
+                                                Padding="6,2"
+                                                Click="PlatformSignIn_Click"
+                                                Content="{x:Bind l:L.Get('Home_SignInForMore')}"
+                                                FontSize="12"
+                                                Visibility="{x:Bind SignedOut}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
 
                 <!--  Loading  -->
                 <Border
@@ -194,16 +296,26 @@
                             Margin="0,16,20,16"
                             VerticalAlignment="Center"
                             Spacing="8">
+                            <!--  Platform chip: logo + name  -->
                             <Border
                                 x:Name="PlatformTag"
-                                Padding="8,2"
+                                Padding="6,3,8,3"
                                 HorizontalAlignment="Left"
+                                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
                                 CornerRadius="4">
-                                <TextBlock
-                                    x:Name="PlatformText"
-                                    FontSize="12"
-                                    FontWeight="SemiBold"
-                                    Foreground="White" />
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Image
+                                        x:Name="PlatformLogo"
+                                        Width="14"
+                                        Height="14"
+                                        VerticalAlignment="Center"
+                                        AutomationProperties.AccessibilityView="Raw" />
+                                    <TextBlock
+                                        x:Name="PlatformText"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                </StackPanel>
                             </Border>
                             <TextBlock
                                 x:Name="TitleText"

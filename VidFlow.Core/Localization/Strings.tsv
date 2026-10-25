@@ -74,7 +74,7 @@ Home_NoLink	No link found.	没有找到链接。
 Home_Parse	Parse	解析
 Home_ParseFailed	Couldn't parse the link	解析失败
 Home_Paste	Paste from clipboard	从剪贴板粘贴
-Home_Subtitle	Paste YouTube, Bilibili or Douyin links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.	粘贴 YouTube、哔哩哔哩或抖音链接：单个视频、播放列表、多 P 视频，或一次粘贴多个链接；也可以把链接直接拖进窗口。
+Home_Subtitle	Paste a video link, pick the quality and format, and download.	粘贴视频链接，选好画质与格式，一键下载。
 Home_Title	New download	新建下载
 Home_ToolsMissingAction	Install	前往安装
 Home_ToolsMissingMessage	VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.	VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。
@@ -424,3 +424,16 @@ Login_TitleDouyin	Sign in to Douyin	登录抖音
 Login_InstructionsDouyin	Click "登录" at the top right of the page and scan with the Douyin app. The window closes by itself once you're signed in.	点击页面右上角的「登录」，用抖音 App 扫码。登录成功后窗口会自动关闭，登录信息仅保存在本机。
 Error_DouyinUnavailable	Couldn't get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).	无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。
 Error_DouyinNotVideo	This Douyin link isn't a video (photo posts and profiles aren't supported).	这个抖音链接不是视频（暂不支持图文作品和主页）。
+Home_TipsTitle	Three ways to start	三种开始方式
+Home_TipPasteTitle	Paste a link	粘贴链接
+Home_TipPasteBody	Copy a video link or the share text from the app, press Ctrl+V, then Enter.	复制视频链接或 App 里的分享口令，按 Ctrl+V 粘贴后回车。
+Home_TipDropTitle	Drag it in	拖进窗口
+Home_TipDropBody	Drag a link from your browser onto the VidFlow window.	把浏览器里的链接直接拖到 VidFlow 窗口上。
+Home_TipBatchTitle	Several at once	一次多个
+Home_TipBatchBody	Paste several links: each is parsed, and you tick the ones to download.	粘贴多个链接，逐个解析后勾选要下载的项目。
+Home_PlatformsTitle	Supported platforms	支持的平台
+Home_BiliSupports	Videos, multi-part videos, collections	视频、多 P 视频、合集
+Home_YtSupports	Videos, Shorts, playlists	视频、Shorts、播放列表
+Home_DouyinSupports	Video links, share text, short links	作品链接、分享口令、短链接
+Home_SignedIn	Signed in	已登录
+Home_SignInForMore	Sign in for more	登录以解锁更多

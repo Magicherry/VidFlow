@@ -102,11 +102,13 @@
   <data name="Home_AddedOne" xml:space="preserve"><value>Added “{0}” to the queue.</value></data>
   <data name="Home_BiliLoginHint" xml:space="preserve"><value>Without signing in, Bilibili offers 480P / 720P at most. Sign in to get 1080P and above.</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>Sign in for higher quality</value></data>
+  <data name="Home_BiliSupports" xml:space="preserve"><value>Videos, multi-part videos, collections</value></data>
   <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>The selected browser&apos;s cookies couldn&apos;t be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (the Accounts page) is more reliable.</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>Browser cookies unavailable</value></data>
   <data name="Home_ClipboardEmpty" xml:space="preserve"><value>No link found on the clipboard.</value></data>
   <data name="Home_ConfirmManyBody" xml:space="preserve"><value>You&apos;re about to queue {0} videos. They download a few at a time (see Settings → Simultaneous downloads), and you can pause or cancel them in Downloads.</value></data>
   <data name="Home_ConfirmManyTitle" xml:space="preserve"><value>Add this many downloads?</value></data>
+  <data name="Home_DouyinSupports" xml:space="preserve"><value>Video links, share text, short links</value></data>
   <data name="Home_InvalidLink" xml:space="preserve"><value>Please enter a valid video link.</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>Fetching video info…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>Sign in now</value></data>
@@ -118,7 +120,17 @@
   <data name="Home_Parse" xml:space="preserve"><value>Parse</value></data>
   <data name="Home_ParseFailed" xml:space="preserve"><value>Couldn&apos;t parse the link</value></data>
   <data name="Home_Paste" xml:space="preserve"><value>Paste from clipboard</value></data>
-  <data name="Home_Subtitle" xml:space="preserve"><value>Paste YouTube, Bilibili or Douyin links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.</value></data>
+  <data name="Home_PlatformsTitle" xml:space="preserve"><value>Supported platforms</value></data>
+  <data name="Home_SignedIn" xml:space="preserve"><value>Signed in</value></data>
+  <data name="Home_SignInForMore" xml:space="preserve"><value>Sign in for more</value></data>
+  <data name="Home_Subtitle" xml:space="preserve"><value>Paste a video link, pick the quality and format, and download.</value></data>
+  <data name="Home_TipBatchBody" xml:space="preserve"><value>Paste several links: each is parsed, and you tick the ones to download.</value></data>
+  <data name="Home_TipBatchTitle" xml:space="preserve"><value>Several at once</value></data>
+  <data name="Home_TipDropBody" xml:space="preserve"><value>Drag a link from your browser onto the VidFlow window.</value></data>
+  <data name="Home_TipDropTitle" xml:space="preserve"><value>Drag it in</value></data>
+  <data name="Home_TipPasteBody" xml:space="preserve"><value>Copy a video link or the share text from the app, press Ctrl+V, then Enter.</value></data>
+  <data name="Home_TipPasteTitle" xml:space="preserve"><value>Paste a link</value></data>
+  <data name="Home_TipsTitle" xml:space="preserve"><value>Three ways to start</value></data>
   <data name="Home_Title" xml:space="preserve"><value>New download</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>Install</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.</value></data>
@@ -126,6 +138,7 @@
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube, Bilibili or Douyin link (separate several links with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
+  <data name="Home_YtSupports" xml:space="preserve"><value>Videos, Shorts, playlists</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>

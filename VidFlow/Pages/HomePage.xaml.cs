@@ -37,6 +37,39 @@ public sealed partial class HomePage : Page
         TemplateStore.Changed += () => DispatcherQueue.TryEnqueue(FillTemplates);
         FillTemplates();
         UseTemplate(TemplateStore.Default);
+
+        TipsRepeater.ItemsSource = new HomeTip[]
+        {
+            new("", L.Get("Home_TipPasteTitle"), L.Get("Home_TipPasteBody")),
+            new("", L.Get("Home_TipDropTitle"), L.Get("Home_TipDropBody")),
+            new("", L.Get("Home_TipBatchTitle"), L.Get("Home_TipBatchBody")),
+        };
+        FillPlatforms();
+        // The page is cached: follow sign-ins made elsewhere (Accounts page, wizard).
+        AccountStore.Changed += () => DispatcherQueue.TryEnqueue(FillPlatforms);
+
+        // The getting-started cards show only while nothing else is: not loading, no results.
+        foreach (var card in new UIElement[] { LoadingCard, PreviewCard, PlaylistCard, BatchCard })
+            card.RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => UpdateEmptyState());
+    }
+
+    void FillPlatforms() => PlatformsRepeater.ItemsSource = new[]
+    {
+        HomePlatform.Create(Platform.Bilibili, L.Get("Home_BiliSupports")),
+        HomePlatform.Create(Platform.YouTube, L.Get("Home_YtSupports")),
+        HomePlatform.Create(Platform.Douyin, L.Get("Home_DouyinSupports")),
+    };
+
+    void UpdateEmptyState() =>
+        EmptyState.Visibility = new[] { LoadingCard, PreviewCard, PlaylistCard, BatchCard }.Any(c => c.Visibility == Visibility.Visible)
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
+    async void PlatformSignIn_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.DataContext is not HomePlatform p) return;
+        await new LoginWindow(p.Platform).ShowAsync();
+        FillPlatforms();
     }
 
     public static string FormatDuration(double? seconds) => seconds is > 0 ? Format.Duration(seconds.Value) : "";
@@ -278,13 +311,8 @@ public sealed partial class HomePage : Page
         ThumbImage.Source = null;
         TitleText.Text = info.Title;
         PlatformText.Text = info.Platform.DisplayName();
-        PlatformTag.Background = new SolidColorBrush(info.Platform switch
-        {
-            Platform.YouTube => ColorHelper.FromArgb(255, 230, 33, 23),
-            Platform.Bilibili => ColorHelper.FromArgb(255, 251, 114, 153),
-            Platform.Douyin => ColorHelper.FromArgb(255, 22, 24, 35),
-            _ => Colors.Gray,
-        });
+        PlatformLogo.Source = HomePlatform.LogoFor(info.Platform);
+        PlatformLogo.Visibility = PlatformLogo.Source is null ? Visibility.Collapsed : Visibility.Visible;
         MetaText.Text = string.Join("  ·  ", new[] { info.Uploader, Format.Date(info.UploadDate) }.Where(s => !string.IsNullOrEmpty(s)));
         DurationBadge.Visibility = info.Duration is > 0 ? Visibility.Visible : Visibility.Collapsed;
         DurationText.Text = FormatDuration(info.Duration);

@@ -19,7 +19,9 @@ $small = Join-Path $root 'branding\AppIcon-small.xaml'
 $assets = Join-Path $root 'VidFlow\Assets'
 
 function Render([int]$size, [string]$source = $(if ($size -le 24) { $small } else { $large })) {
-    $canvas = [Windows.Markup.XamlReader]::Parse([IO.File]::ReadAllText($source))
+    # Relative image paths in the XAML (e.g. a wordmark PNG) resolve next to the XAML file.
+    $context = [Windows.Markup.ParserContext]@{ BaseUri = [Uri]::new((Split-Path $source) + '\') }
+    $canvas = [Windows.Markup.XamlReader]::Parse([IO.File]::ReadAllText($source), $context)
     $box = [Windows.Controls.Viewbox]@{ Width = $size; Height = $size; Child = $canvas }
     $box.Measure([Windows.Size]::new($size, $size))
     $box.Arrange([Windows.Rect]::new(0, 0, $size, $size))
@@ -82,8 +84,9 @@ $w.Flush()
 # are the platforms' own published icons.
 $platformDir = Join-Path $assets 'Platforms'
 foreach ($xaml in Get-ChildItem (Join-Path $root 'branding\platforms') -Filter '*.xaml') {
-    [IO.File]::WriteAllBytes((Join-Path $platformDir "$($xaml.BaseName).png"), (PngBytes (Render 128 $xaml.FullName)))
-    "Wrote Platforms\$($xaml.BaseName).png"
+    $name = $xaml.BaseName -replace '-tile$', ''
+    [IO.File]::WriteAllBytes((Join-Path $platformDir "$name.png"), (PngBytes (Render 128 $xaml.FullName)))
+    "Wrote Platforms\$name.png"
 }
 
 if ($Preview) {

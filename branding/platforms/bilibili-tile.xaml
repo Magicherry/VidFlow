@@ -1,0 +1,14 @@
+<!-- Bilibili icon: its "bilibili" wordmark (bilibili-wordmark.png, taken from Bilibili's own app icon) in white on
+     Bilibili pink. Rendered by tools/gen-icon.ps1 to VidFlow/Assets/Platforms/bilibili.png. -->
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="256" Height="256">
+  <Rectangle Width="256" Height="256" RadiusX="56" RadiusY="56">
+    <Rectangle.Fill>
+      <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF8DB0" Offset="0" />
+        <GradientStop Color="#FB7299" Offset="0.45" />
+        <GradientStop Color="#F0567F" Offset="1" />
+      </LinearGradientBrush>
+    </Rectangle.Fill>
+  </Rectangle>
+  <Image Canvas.Left="24" Canvas.Top="81" Width="208" Height="95" Stretch="Uniform" Source="bilibili-wordmark.png" />
+</Canvas>
