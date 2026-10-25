@@ -44,22 +44,64 @@ public class OutputParserTests
     public void TracksVideoThenAudioStreams()
     {
         var p = new YtDlpOutputParser();
-        var started = Assert.IsType<StartedEvent>(p.Feed("VFS|137+140|https://i.ytimg.com/a.jpg|A | B title"));
+        var started = Assert.IsType<StartedEvent>(p.Feed("VFS|137+140|900,100|https://i.ytimg.com/a.jpg|A | B title"));
         Assert.Equal(2, started.Parts);
         Assert.Equal("A | B title", started.Title);
+        Assert.Equal("https://i.ytimg.com/a.jpg", started.ThumbnailUrl);
 
-        var prog = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|500|1000|NA|2048|3")).Progress;
-        Assert.Equal(50, prog.Percent);
+        // Video is 900 of 1000 bytes in total: half of it is 45% of the whole download.
+        var prog = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|450|900|NA|2048|3|NA|NA")).Progress;
+        Assert.Equal(45, prog.Percent, 3);
         Assert.Equal(1, prog.Part);
+        Assert.Equal(900, prog.Total);
 
-        var videoDone = Assert.IsType<ProgressEvent>(p.Feed("VFP|finished|1000|1000|NA|NA|NA")).Progress;
+        var videoDone = Assert.IsType<ProgressEvent>(p.Feed("VFP|finished|900|900|NA|NA|NA|NA|NA")).Progress;
         Assert.True(videoDone.StreamFinished);
         Assert.False(videoDone.Processing);
+        Assert.Equal(90, videoDone.Percent, 3);
 
-        Assert.Equal(2, Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|10|100|NA|NA|NA")).Progress.Part);
+        // Audio continues from 90% instead of restarting at 0.
+        var audio = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|50|100|NA|NA|NA|NA|NA")).Progress;
+        Assert.Equal(2, audio.Part);
+        Assert.Equal(95, audio.Percent, 3);
 
-        var audioDone = Assert.IsType<ProgressEvent>(p.Feed("VFP|finished|100|100|NA|NA|NA")).Progress;
+        var audioDone = Assert.IsType<ProgressEvent>(p.Feed("VFP|finished|100|100|NA|NA|NA|NA|NA")).Progress;
         Assert.True(audioDone.Processing);
+        Assert.Equal(100, audioDone.Percent);
+    }
+
+    [Fact]
+    public void FragmentedStreamUsesFragmentCountAndNeverGoesBackwards()
+    {
+        var p = new YtDlpOutputParser();
+        p.Feed("VFS|311|NA,NA|NA|T");
+        // The running estimate grows faster than the bytes: bytes ÷ estimate would fall, fragments don't.
+        var a = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|5000|NA|10000|1|1|10|100")).Progress;
+        var b = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|5500|NA|20000|1|1|10|100")).Progress;
+        Assert.Equal(10, a.Percent, 3);
+        Assert.Equal(10, b.Percent, 3);
+        var c = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|9000|NA|20000|1|1|40|100")).Progress;
+        Assert.Equal(40, c.Percent, 3);
+    }
+
+    [Fact]
+    public void UnknownVideoSizeIsEstimatedWhileAudioSizeIsKnown()
+    {
+        var p = new YtDlpOutputParser();
+        p.Feed("VFS|311+140|NA,1000|NA|T");
+        // Video's estimate 9000 + audio 1000: video done = 90%.
+        var half = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|4500|NA|9000|1|1|50|100")).Progress;
+        Assert.Equal(45, half.Percent, 3);
+        // A smaller later estimate would shift the weights down; the bar holds instead of going back.
+        var later = Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|4600|NA|5000|1|1|50|100")).Progress;
+        Assert.True(later.Percent >= half.Percent);
+    }
+
+    [Fact]
+    public void OldSevenFieldLinesStillParse()
+    {
+        var p = new YtDlpOutputParser();
+        Assert.Equal(50, Assert.IsType<ProgressEvent>(p.Feed("VFP|downloading|500|1000|NA|2048|3")).Progress.Percent);
     }
 
     [Fact]
@@ -75,7 +117,7 @@ public class OutputParserTests
     [Fact]
     public void NaThumbnailBecomesNull()
     {
-        var s = Assert.IsType<StartedEvent>(new YtDlpOutputParser().Feed("VFS|18|NA|Title"));
+        var s = Assert.IsType<StartedEvent>(new YtDlpOutputParser().Feed("VFS|18|NA,NA|NA|Title"));
         Assert.Null(s.ThumbnailUrl);
         Assert.Equal(1, s.Parts);
     }

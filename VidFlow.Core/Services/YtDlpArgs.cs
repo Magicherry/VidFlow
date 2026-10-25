@@ -8,7 +8,15 @@ public static class YtDlpArgs
     public const string OutputTemplate = "%(title).180B [%(id)s].%(ext)s";
 
     public const string ProgressTemplate =
-        "download:VFP|%(progress.status)s|%(progress.downloaded_bytes)s|%(progress.total_bytes)s|%(progress.total_bytes_estimate)s|%(progress.speed)s|%(progress.eta)s";
+        "download:VFP|%(progress.status)s|%(progress.downloaded_bytes)s|%(progress.total_bytes)s|%(progress.total_bytes_estimate)s|%(progress.speed)s|%(progress.eta)s"
+        + "|%(progress.fragment_index)s|%(progress.fragment_count)s";
+
+    /// <summary>Printed before downloading: format, size of each stream (NA when unknown), thumbnail, title.</summary>
+    public const string StartTemplate =
+        "before_dl:VFS|%(format_id)s"
+        + "|%(requested_formats.0.filesize,requested_formats.0.filesize_approx,filesize,filesize_approx|NA)s"
+        + ",%(requested_formats.1.filesize,requested_formats.1.filesize_approx|NA)s"
+        + "|%(thumbnail)s|%(title)s";
 
     /// <summary>Where cookies and tools come from.</summary>
     public sealed record Environment(string? FfmpegDir, string? LoginCookieFile, bool SkipBrowserCookies,
@@ -33,7 +41,7 @@ public static class YtDlpArgs
             "--no-playlist", "--newline", "--progress", "--no-warnings", "--continue",
             "-P", req.OutputFolder,
             "-o", NamingTemplate.ToOutputTemplate(req.FileNameTemplate, req.FolderTemplate, platform.DisplayName()),
-            "--print", "before_dl:VFS|%(format_id)s|%(thumbnail)s|%(title)s",
+            "--print", StartTemplate,
             "--print", "after_move:VFF|%(filepath)s",
             "--progress-template", ProgressTemplate,
         };

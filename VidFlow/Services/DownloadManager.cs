@@ -302,13 +302,15 @@ public sealed class DownloadManager
         }
 
         item.State = DownloadState.Downloading;
+        // One percentage for the whole download: the bar keeps going from video into audio instead of restarting.
+        item.Progress = p.Percent;
         if (p.StreamFinished)
         {
             item.StatusText = L.Get("Status_VideoDoneAudioNext");
+            UpdateOverallProgress();
             return;
         }
 
-        item.Progress = p.Percent;
         var parts = new List<string>();
         if (p.Parts > 1) parts.Add(p.Part == 1 ? L.Get("Status_VideoStream") : L.Get("Status_AudioStream"));
         parts.Add($"{p.Percent:0.0}%");
