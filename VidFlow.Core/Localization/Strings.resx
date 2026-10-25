@@ -13,15 +13,15 @@
   <data name="About_Troubleshoot" xml:space="preserve"><value>Troubleshooting</value></data>
   <data name="About_TroubleshootDescription" xml:space="preserve"><value>Logs, data folder and the setup wizard</value></data>
   <data name="About_Version" xml:space="preserve"><value>Version {0}</value></data>
-  <data name="Account_BiliIn" xml:space="preserve"><value>Signed in · 1080P and above available (4K / HDR need a premium membership)</value></data>
-  <data name="Account_BiliOut" xml:space="preserve"><value>Not signed in · limited to 480P / 720P</value></data>
-  <data name="Account_DouyinIn" xml:space="preserve"><value>Signed in · works that need an account are available too</value></data>
-  <data name="Account_DouyinOut" xml:space="preserve"><value>Not signed in · public videos download without an account</value></data>
+  <data name="Account_BiliIn" xml:space="preserve"><value>Signed in · 1080P and above (4K / HDR need premium)</value></data>
+  <data name="Account_BiliOut" xml:space="preserve"><value>Not signed in · up to 720P</value></data>
+  <data name="Account_DouyinIn" xml:space="preserve"><value>Signed in · account-only videos available</value></data>
+  <data name="Account_DouyinOut" xml:space="preserve"><value>Not signed in · public videos work without it</value></data>
   <data name="Account_Login" xml:space="preserve"><value>Sign in</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>Sign out</value></data>
-  <data name="Account_YtIn" xml:space="preserve"><value>Signed in · age-restricted and members-only videos available</value></data>
-  <data name="Account_YtOut" xml:space="preserve"><value>Not signed in · sign in for age-restricted / members-only videos and fewer bot checks</value></data>
-  <data name="Accounts_Description" xml:space="preserve"><value>Sign in to unlock higher quality and restricted videos. Sign-in happens in a built-in browser window and the cookies stay on this PC.</value></data>
+  <data name="Account_YtIn" xml:space="preserve"><value>Signed in · age-restricted / members-only videos available</value></data>
+  <data name="Account_YtOut" xml:space="preserve"><value>Not signed in · needed for age-restricted / members-only videos</value></data>
+  <data name="Accounts_Description" xml:space="preserve"><value>Sign in for higher quality and restricted videos. Your sign-in stays on this PC.</value></data>
   <data name="Accounts_Platforms" xml:space="preserve"><value>Platform accounts</value></data>
   <data name="Action_CopyError" xml:space="preserve"><value>Copy error details</value></data>
   <data name="Action_Download" xml:space="preserve"><value>Download</value></data>
@@ -48,7 +48,7 @@
   <data name="Batch_Status" xml:space="preserve"><value>Parsed {0} of {1}. Tick the ones to download.</value></data>
   <data name="Batch_StatusFailed" xml:space="preserve"><value>Parsed {0} of {1}, {2} failed. Tick the ones to download.</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>{0} links</value></data>
-  <data name="Batch_UnsupportedHint" xml:space="preserve"><value>Some links are not YouTube / Bilibili. yt-dlp will still try them, but they may fail.</value></data>
+  <data name="Batch_UnsupportedHint" xml:space="preserve"><value>Some links aren&apos;t from a supported platform and may fail.</value></data>
   <data name="Codec_Auto" xml:space="preserve"><value>Auto (best quality)</value></data>
   <data name="Codec_Unavailable" xml:space="preserve"><value>{0} · not offered by this video</value></data>
   <data name="Codec_WithMax" xml:space="preserve"><value>{0} · up to {1}p</value></data>
@@ -58,14 +58,14 @@
   <data name="Common_Failed" xml:space="preserve"><value>Something went wrong</value></data>
   <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
   <data name="Compat_Apply" xml:space="preserve"><value>Use recommended</value></data>
-  <data name="Compat_HdrMkv" xml:space="preserve"><value>This video is HDR. HDR picture usually doesn&apos;t fit in MP4, so it will be saved as MKV.</value></data>
-  <data name="Compat_HiResAvailable" xml:space="preserve"><value>This video has Hi-Res lossless audio, which this format would lose. Choose FLAC or Original to keep it.</value></data>
-  <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>FLAC / WAV files are much larger, but the source audio is already compressed, so quality does not improve.</value></data>
-  <data name="Compat_Mp4Opus" xml:space="preserve"><value>Opus audio in MP4 doesn&apos;t play in some players and editors. AAC is recommended for MP4 (or use MKV).</value></data>
-  <data name="Compat_SavedAsMkv" xml:space="preserve"><value>Dolby Vision and Hi-Res lossless audio don&apos;t fit in MP4, so this will be saved as MKV.</value></data>
+  <data name="Compat_HdrMkv" xml:space="preserve"><value>HDR video will be saved as MKV.</value></data>
+  <data name="Compat_HiResAvailable" xml:space="preserve"><value>This video has Hi-Res audio: choose FLAC or Original to keep it.</value></data>
+  <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>The source is lossy: FLAC / WAV only makes the file bigger.</value></data>
+  <data name="Compat_Mp4Opus" xml:space="preserve"><value>Some players can&apos;t play Opus in MP4; AAC is safer.</value></data>
+  <data name="Compat_SavedAsMkv" xml:space="preserve"><value>Dolby Vision / Hi-Res will be saved as MKV.</value></data>
   <data name="Compat_UseMkv" xml:space="preserve"><value>Use MKV</value></data>
-  <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM can only hold Opus / Vorbis audio. Switch to Opus, or turn on automatic conversion.</value></data>
-  <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM can only hold VP9 / AV1 video. Without automatic conversion the file is saved as MKV instead; MKV is recommended.</value></data>
+  <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM only holds Opus / Vorbis audio.</value></data>
+  <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM only holds VP9 / AV1; MKV fits better.</value></data>
   <data name="Container_Mkv" xml:space="preserve"><value>MKV (holds any codec)</value></data>
   <data name="Container_Mp4" xml:space="preserve"><value>MP4 (most compatible)</value></data>
   <data name="Container_Webm" xml:space="preserve"><value>WebM (VP9 / AV1 + Opus)</value></data>
@@ -110,19 +110,19 @@
   <data name="Home_Added" xml:space="preserve"><value>Added</value></data>
   <data name="Home_AddedMany" xml:space="preserve"><value>{0} downloads added to the queue.</value></data>
   <data name="Home_AddedOne" xml:space="preserve"><value>Added “{0}” to the queue.</value></data>
-  <data name="Home_BiliLoginHint" xml:space="preserve"><value>Without signing in, Bilibili offers 480P / 720P at most. Sign in to get 1080P and above.</value></data>
+  <data name="Home_BiliLoginHint" xml:space="preserve"><value>Sign in to Bilibili for 1080P and above.</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>Sign in for higher quality</value></data>
-  <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>The selected browser&apos;s cookies couldn&apos;t be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (the Accounts page) is more reliable.</value></data>
+  <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>Couldn&apos;t read the browser&apos;s cookies (Chrome / Edge lock them while running), so they were skipped. In-app sign-in is more reliable.</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>Browser cookies unavailable</value></data>
   <data name="Home_ClipboardEmpty" xml:space="preserve"><value>No link found on the clipboard.</value></data>
-  <data name="Home_ConfirmManyBody" xml:space="preserve"><value>You&apos;re about to queue {0} videos. They download a few at a time (see Settings → Simultaneous downloads), and you can pause or cancel them in Downloads.</value></data>
+  <data name="Home_ConfirmManyBody" xml:space="preserve"><value>{0} videos will be queued and downloaded a few at a time. You can pause or cancel any time.</value></data>
   <data name="Home_ConfirmManyTitle" xml:space="preserve"><value>Add this many downloads?</value></data>
   <data name="Home_InvalidLink" xml:space="preserve"><value>Please enter a valid video link.</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>Fetching video info…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>Sign in now</value></data>
-  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → About &amp; updates.</value></data>
+  <data name="Home_NoDeno" xml:space="preserve"><value>Some higher-quality YouTube formats need Deno. Install it in Settings › About &amp; updates.</value></data>
   <data name="Home_NoDenoTitle" xml:space="preserve"><value>Deno recommended</value></data>
-  <data name="Home_NoFfmpeg" xml:space="preserve"><value>Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can&apos;t be extracted. Install it in Settings → About &amp; updates.</value></data>
+  <data name="Home_NoFfmpeg" xml:space="preserve"><value>Without ffmpeg only lower quality downloads and audio can&apos;t be extracted. Install it in Settings › About &amp; updates.</value></data>
   <data name="Home_NoFfmpegTitle" xml:space="preserve"><value>ffmpeg recommended</value></data>
   <data name="Home_NoLink" xml:space="preserve"><value>No link found.</value></data>
   <data name="Home_Parse" xml:space="preserve"><value>Parse</value></data>
@@ -138,16 +138,16 @@
   <data name="Home_Supports_X" xml:space="preserve"><value>Videos and GIFs in posts</value></data>
   <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>Video notes, share links</value></data>
   <data name="Home_Supports_YouTube" xml:space="preserve"><value>Videos, Shorts, playlists</value></data>
-  <data name="Home_TipBatchBody" xml:space="preserve"><value>Paste several links: each is parsed, and you tick the ones to download.</value></data>
+  <data name="Home_TipBatchBody" xml:space="preserve"><value>Each is parsed, then tick what to download</value></data>
   <data name="Home_TipBatchTitle" xml:space="preserve"><value>Several at once</value></data>
-  <data name="Home_TipDropBody" xml:space="preserve"><value>Drag a link from your browser onto the VidFlow window.</value></data>
+  <data name="Home_TipDropBody" xml:space="preserve"><value>From your browser onto the window</value></data>
   <data name="Home_TipDropTitle" xml:space="preserve"><value>Drag it in</value></data>
-  <data name="Home_TipPasteBody" xml:space="preserve"><value>Copy a video link or the share text from the app, press Ctrl+V, then Enter.</value></data>
+  <data name="Home_TipPasteBody" xml:space="preserve"><value>Links and app share text both work</value></data>
   <data name="Home_TipPasteTitle" xml:space="preserve"><value>Paste a link</value></data>
   <data name="Home_TipsTitle" xml:space="preserve"><value>Three ways to start</value></data>
   <data name="Home_Title" xml:space="preserve"><value>New download</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>Install</value></data>
-  <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.</value></data>
+  <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>yt-dlp and ffmpeg need installing first.</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>Download components not installed</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links or share text (separate several with spaces)</value></data>
@@ -161,8 +161,8 @@
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow is built on these open-source components. Click a license to read it.</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically.</value></data>
   <data name="Login_Done" xml:space="preserve"><value>Done</value></data>
-  <data name="Login_Instructions" xml:space="preserve"><value>Sign in below. The window closes by itself once you&apos;re signed in; your sign-in is stored only on this computer.</value></data>
-  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>Click &quot;登录&quot; at the top right of the page and scan with the Douyin app. The window closes by itself once you&apos;re signed in.</value></data>
+  <data name="Login_Instructions" xml:space="preserve"><value>Sign in below; the window closes when you&apos;re done.</value></data>
+  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>Click 登录 at the top right and scan with the Douyin app.</value></data>
   <data name="Login_QrExpired" xml:space="preserve"><value>This code has expired</value></data>
   <data name="Login_QrFailed" xml:space="preserve"><value>Couldn&apos;t get a code: check your network or proxy</value></data>
   <data name="Login_QrHint" xml:space="preserve"><value>Scan with the Bilibili app to sign in</value></data>
@@ -212,33 +212,31 @@
   <data name="Options_AudioFormat" xml:space="preserve"><value>Audio format</value></data>
   <data name="Options_AudioQuality" xml:space="preserve"><value>Audio quality</value></data>
   <data name="Options_AudioTrack" xml:space="preserve"><value>Audio track</value></data>
-  <data name="Options_AudioTrackDescription" xml:space="preserve"><value>For videos with several dubbed languages</value></data>
+  <data name="Options_AudioTrackDescription" xml:space="preserve"><value>For videos dubbed in several languages</value></data>
   <data name="Options_Codec" xml:space="preserve"><value>Video codec</value></data>
-  <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 plays everywhere; H.265 / AV1 are smaller but may not play on older devices. Falls back to the best quality if the codec isn&apos;t offered</value></data>
+  <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 plays everywhere; H.265 / AV1 are smaller</value></data>
   <data name="Options_Container" xml:space="preserve"><value>Container</value></data>
-  <data name="Options_ContainerDescription" xml:space="preserve"><value>The file type; MP4 plays almost everywhere</value></data>
+  <data name="Options_ContainerDescription" xml:space="preserve"><value>MP4 plays almost everywhere</value></data>
   <data name="Options_FileName" xml:space="preserve"><value>File name</value></data>
-  <data name="Options_FileNameDescription" xml:space="preserve"><value>Pick a common format, or compose your own below</value></data>
+  <data name="Options_FileNameDescription" xml:space="preserve"><value>Or compose your own below</value></data>
   <data name="Options_FileNamePattern" xml:space="preserve"><value>Format</value></data>
   <data name="Options_FileNamePlaceholder" xml:space="preserve"><value>e.g. {uploader} - {title}</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>Save to</value></data>
-  <data name="Options_Insert" xml:space="preserve"><value>Click to insert a variable at the cursor:</value></data>
+  <data name="Options_Insert" xml:space="preserve"><value>Insert:</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>Download</value></data>
-  <data name="Options_ModeDescription" xml:space="preserve"><value>The full video, or just its audio</value></data>
   <data name="Options_Naming" xml:space="preserve"><value>Naming and folders</value></data>
-  <data name="Options_NamingDescription" xml:space="preserve"><value>How files are named and sorted into folders</value></data>
+  <data name="Options_NamingDescription" xml:space="preserve"><value>File names and subfolders</value></data>
   <data name="Options_Picture" xml:space="preserve"><value>Picture</value></data>
-  <data name="Options_PictureDescription" xml:space="preserve"><value>HDR needs an HDR display to show. Dolby Vision needs a player that supports it, or colours look wrong.</value></data>
+  <data name="Options_PictureDescription" xml:space="preserve"><value>HDR needs an HDR display; Dolby Vision needs a player that supports it</value></data>
   <data name="Options_PreviewHeader" xml:space="preserve"><value>Preview (sample video)</value></data>
   <data name="Options_PreviewRoot" xml:space="preserve"><value>Download location</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>Quality</value></data>
-  <data name="Options_QualityDescription" xml:space="preserve"><value>Resolutions actually available; sizes are estimates</value></data>
+  <data name="Options_QualityDescription" xml:space="preserve"><value>Sizes are estimates</value></data>
   <data name="Options_Recode" xml:space="preserve"><value>Convert automatically</value></data>
-  <data name="Options_RecodeDescription" xml:space="preserve"><value>Re-encode when the downloaded streams don&apos;t fit the container (slow); otherwise it is saved as MKV</value></data>
+  <data name="Options_RecodeDescription" xml:space="preserve"><value>Re-encode when the format doesn&apos;t fit (slow); otherwise saved as MKV</value></data>
   <data name="Options_Subfolder" xml:space="preserve"><value>Sort into subfolders</value></data>
-  <data name="Options_SubfolderDescription" xml:space="preserve"><value>Created inside the download location</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
-  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Save subtitles (if any) as separate files; languages are set in Settings</value></data>
+  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Languages are set in Settings</value></data>
   <data name="Options_Title" xml:space="preserve"><value>Download options</value></data>
   <data name="Picture_Auto" xml:space="preserve"><value>Auto (HDR when available)</value></data>
   <data name="Picture_AutoNoHdr" xml:space="preserve"><value>Auto</value></data>
@@ -269,28 +267,27 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>About &amp; updates</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>Accounts</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>Keep yt-dlp up to date</value></data>
-  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checks daily and installs new versions automatically. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads</value></data>
+  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checked daily; an outdated yt-dlp is the usual cause of failed downloads</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
-  <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge may be unreadable while running; close the browser or use Firefox</value></data>
+  <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Close Chrome / Edge first</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>Don&apos;t use</value></data>
   <data name="Settings_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
   <data name="Settings_ChooseFile" xml:space="preserve"><value>Choose file</value></data>
   <data name="Settings_Clipboard" xml:space="preserve"><value>Watch the clipboard</value></data>
-  <data name="Settings_ClipboardDescription" xml:space="preserve"><value>When you copy a YouTube / Bilibili link while VidFlow is in the background, offer to download it</value></data>
+  <data name="Settings_ClipboardDescription" xml:space="preserve"><value>Offer to download when you copy a supported link</value></data>
   <data name="Settings_Components" xml:space="preserve"><value>Components</value></data>
   <data name="Settings_Concurrency" xml:space="preserve"><value>Simultaneous downloads</value></data>
-  <data name="Settings_ConcurrencyDescription" xml:space="preserve"><value>How many downloads run at the same time</value></data>
-  <data name="Settings_CookieFile" xml:space="preserve"><value>Or use a cookies.txt file (takes priority)</value></data>
+  <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt file</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape format, exportable with a browser extension</value></data>
   <data name="Settings_Danmaku" xml:space="preserve"><value>Save Bilibili danmaku</value></data>
-  <data name="Settings_DanmakuDescription" xml:space="preserve"><value>Also save bullet comments as an XML file when subtitles are on</value></data>
+  <data name="Settings_DanmakuDescription" xml:space="preserve"><value>Saved as XML alongside subtitles</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>Not installed · needed for some YouTube formats (recommended)</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>Not installed · merges high-quality streams and extracts audio (recommended)</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>Default save location</value></data>
   <data name="Settings_General" xml:space="preserve"><value>General</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>Compatibility mode</value></data>
-  <data name="Settings_H264Description" xml:space="preserve"><value>Prefer H.264 / AAC for older devices and built-in players; top quality may be limited</value></data>
+  <data name="Settings_H264Description" xml:space="preserve"><value>Prefer H.264 / AAC for older devices; may limit quality</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>Install</value></data>
   <data name="Settings_InstallDone" xml:space="preserve"><value>Done</value></data>
   <data name="Settings_InstallFailed" xml:space="preserve"><value>Installation failed</value></data>
@@ -299,21 +296,20 @@
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>Same as Windows</value></data>
   <data name="Settings_Metadata" xml:space="preserve"><value>Embed cover and metadata</value></data>
-  <data name="Settings_MetadataDescription" xml:space="preserve"><value>Write title, author and cover into the file (needs ffmpeg)</value></data>
+  <data name="Settings_MetadataDescription" xml:space="preserve"><value>Title, uploader and cover</value></data>
   <data name="Settings_MoreDownload" xml:space="preserve"><value>Files and compatibility</value></data>
   <data name="Settings_MoreDownloadDescription" xml:space="preserve"><value>Cover and metadata, H.264 compatibility mode</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>Network</value></data>
   <data name="Settings_Notifications" xml:space="preserve"><value>Notifications</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>Notifications</value></data>
-  <data name="Settings_NotifyDescription" xml:space="preserve"><value>Notify when downloads finish while VidFlow is in the background</value></data>
   <data name="Settings_NotifyFailure" xml:space="preserve"><value>Failure notifications</value></data>
-  <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>Notify when a download fails or stalls while VidFlow is in the background</value></data>
+  <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>When a download fails or stalls</value></data>
   <data name="Settings_NotifyGroup" xml:space="preserve"><value>Download notifications</value></data>
-  <data name="Settings_NotifyGroupDescription" xml:space="preserve"><value>Windows notifications while VidFlow is in the background</value></data>
+  <data name="Settings_NotifyGroupDescription" xml:space="preserve"><value>While VidFlow is in the background</value></data>
   <data name="Settings_OtherCookies" xml:space="preserve"><value>Other cookie sources</value></data>
-  <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>Advanced: use cookies from a browser or a cookies.txt file instead of in-app sign-in</value></data>
+  <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>Overrides in-app sign-in; usually not needed</value></data>
   <data name="Settings_Proxy" xml:space="preserve"><value>Proxy</value></data>
-  <data name="Settings_ProxyDescription" xml:space="preserve"><value>e.g. http://127.0.0.1:7890 or socks5://127.0.0.1:1080; empty uses the system proxy</value></data>
+  <data name="Settings_ProxyDescription" xml:space="preserve"><value>e.g. http://127.0.0.1:7890</value></data>
   <data name="Settings_ProxyPlaceholder" xml:space="preserve"><value>System proxy</value></data>
   <data name="Settings_Reinstall" xml:space="preserve"><value>Reinstall</value></data>
   <data name="Settings_ReleaseNotes" xml:space="preserve"><value>What&apos;s new</value></data>
@@ -321,28 +317,27 @@
   <data name="Settings_RestartNow" xml:space="preserve"><value>Restart now</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>Restart required</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>Speed limit</value></data>
-  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>Limit the speed of each download; applies to downloads that start afterwards</value></data>
+  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>Per download</value></data>
   <data name="Settings_SpeedMax" xml:space="preserve"><value>Maximum speed per download</value></data>
   <data name="Settings_SpeedOn" xml:space="preserve"><value>On · up to {0} per download</value></data>
   <data name="Settings_SpeedUnit" xml:space="preserve"><value>Unit</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>Subtitle languages</value></data>
-  <data name="Settings_SubLangsDescription" xml:space="preserve"><value>Only languages the video actually offers are saved</value></data>
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>Other languages</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>Language codes, comma separated</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>No language chosen: Chinese and English subtitles are saved</value></data>
   <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>Languages: {0}</value></data>
   <data name="Settings_Templates" xml:space="preserve"><value>Download templates</value></data>
-  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>Saved sets of download options. New downloads start from the default template; changes on the New download page apply to that download only</value></data>
+  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>New downloads start from the default template</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>App theme</value></data>
   <data name="Settings_ThemeDark" xml:space="preserve"><value>Dark</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>Light</value></data>
   <data name="Settings_ThemeSystem" xml:space="preserve"><value>Same as Windows</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>Keep running in the notification area</value></data>
-  <data name="Settings_TrayDescription" xml:space="preserve"><value>Closing the window keeps downloads going; exit from the tray icon</value></data>
+  <data name="Settings_TrayDescription" xml:space="preserve"><value>Downloads continue after closing the window</value></data>
   <data name="Settings_UpdateBadge" xml:space="preserve"><value>Update available: {0}</value></data>
   <data name="Settings_UpdateMode" xml:space="preserve"><value>Update mode</value></data>
-  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>Automatic downloads updates in the background and asks before installing</value></data>
+  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>Always asks before installing</value></data>
   <data name="Settings_Updates" xml:space="preserve"><value>App updates</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>Update to {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>Up to date</value></data>
@@ -387,7 +382,7 @@
   <data name="Template_SetDefault" xml:space="preserve"><value>Set as default</value></data>
   <data name="Templates_BuiltIn" xml:space="preserve"><value>Built-in presets</value></data>
   <data name="Templates_Empty" xml:space="preserve"><value>No custom templates yet</value></data>
-  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Create one with &quot;New template&quot;, or duplicate a built-in preset from its &quot;...&quot; menu and adjust it</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Use New template, or duplicate a preset</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>{0} to install or update</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>All components are up to date</value></data>
@@ -401,7 +396,7 @@
   <data name="Tools_LastChecked" xml:space="preserve"><value>Last checked {0}</value></data>
   <data name="Tools_ManagedNote" xml:space="preserve"><value>VidFlow downloads and keeps these tools up to date</value></data>
   <data name="Tools_MissingRequired" xml:space="preserve"><value>{0} is required: install it to download videos</value></data>
-  <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · version {1} · copy installed on this PC (not updated by VidFlow)</value></data>
+  <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · version {1} · system copy</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>Update all</value></data>
   <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>Parses and downloads videos</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>Exit VidFlow</value></data>

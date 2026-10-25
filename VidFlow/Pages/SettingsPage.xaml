@@ -93,7 +93,7 @@
                         <FontIcon Glyph="&#xE70F;" />
                     </tk:SettingsCard.ActionIcon>
                 </tk:SettingsCard>
-                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ConcurrencyDescription')}" Header="{x:Bind l:L.Get('Settings_Concurrency')}">
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Concurrency')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE9F5;" />
                     </tk:SettingsCard.HeaderIcon>
@@ -150,7 +150,6 @@
                         <tk:SettingsCard
                             HorizontalContentAlignment="Stretch"
                             ContentAlignment="Vertical"
-                            Description="{x:Bind l:L.Get('Settings_SubLangsDescription')}"
                             Header="{x:Bind l:L.Get('Settings_SubLangs')}">
                             <!--  One check box per common language, filled in code; wraps on narrow windows.  -->
                             <VariableSizedWrapGrid
@@ -207,7 +206,7 @@
                         <FontIcon Glyph="&#xEA8F;" />
                     </tk:SettingsExpander.HeaderIcon>
                     <tk:SettingsExpander.Items>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyDescription')}" Header="{x:Bind l:L.Get('Settings_Notify')}">
+                        <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Notify')}">
                             <ToggleSwitch x:Name="NotifyToggle" Toggled="Toggle_Changed" />
                         </tk:SettingsCard>
                         <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">

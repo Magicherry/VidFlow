@@ -13,15 +13,15 @@
   <data name="About_Troubleshoot" xml:space="preserve"><value>故障排查</value></data>
   <data name="About_TroubleshootDescription" xml:space="preserve"><value>日志、数据文件夹与首次设置向导</value></data>
   <data name="About_Version" xml:space="preserve"><value>版本 {0}</value></data>
-  <data name="Account_BiliIn" xml:space="preserve"><value>已登录 · 可下载 1080P 及以上画质（4K / HDR 等需大会员）</value></data>
-  <data name="Account_BiliOut" xml:space="preserve"><value>未登录 · 未登录时最高只能下载 480P / 720P</value></data>
-  <data name="Account_DouyinIn" xml:space="preserve"><value>已登录 · 需要登录才能观看的作品也可以下载</value></data>
-  <data name="Account_DouyinOut" xml:space="preserve"><value>未登录 · 公开作品无需登录即可下载</value></data>
+  <data name="Account_BiliIn" xml:space="preserve"><value>已登录 · 1080P 及以上（4K / HDR 需大会员）</value></data>
+  <data name="Account_BiliOut" xml:space="preserve"><value>未登录 · 最高 720P</value></data>
+  <data name="Account_DouyinIn" xml:space="preserve"><value>已登录 · 可下载需登录的作品</value></data>
+  <data name="Account_DouyinOut" xml:space="preserve"><value>未登录 · 公开作品无需登录</value></data>
   <data name="Account_Login" xml:space="preserve"><value>登录</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>退出登录</value></data>
-  <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制、会员专属视频</value></data>
-  <data name="Account_YtOut" xml:space="preserve"><value>未登录 · 登录后可下载年龄限制、会员专属视频，并减少人机验证</value></data>
-  <data name="Accounts_Description" xml:space="preserve"><value>登录后可解锁更高画质及受限视频。登录在内置浏览器窗口中完成，Cookie 仅保存在本机。</value></data>
+  <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制、会员视频</value></data>
+  <data name="Account_YtOut" xml:space="preserve"><value>未登录 · 年龄限制、会员视频需登录</value></data>
+  <data name="Accounts_Description" xml:space="preserve"><value>登录后可下载更高画质和受限内容，登录信息仅保存在本机。</value></data>
   <data name="Accounts_Platforms" xml:space="preserve"><value>平台账号</value></data>
   <data name="Action_CopyError" xml:space="preserve"><value>复制错误详情</value></data>
   <data name="Action_Download" xml:space="preserve"><value>下载</value></data>
@@ -48,7 +48,7 @@
   <data name="Batch_Status" xml:space="preserve"><value>已解析 {0} / {1}，勾选要下载的项目</value></data>
   <data name="Batch_StatusFailed" xml:space="preserve"><value>已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>共 {0} 个链接</value></data>
-  <data name="Batch_UnsupportedHint" xml:space="preserve"><value>部分链接不是 YouTube / 哔哩哔哩，yt-dlp 仍会尝试下载，但可能失败。</value></data>
+  <data name="Batch_UnsupportedHint" xml:space="preserve"><value>部分链接不在支持的平台中，可能下载失败。</value></data>
   <data name="Codec_Auto" xml:space="preserve"><value>自动（画质优先）</value></data>
   <data name="Codec_Unavailable" xml:space="preserve"><value>{0} · 此视频不提供</value></data>
   <data name="Codec_WithMax" xml:space="preserve"><value>{0} · 最高 {1}p</value></data>
@@ -58,14 +58,14 @@
   <data name="Common_Failed" xml:space="preserve"><value>操作失败</value></data>
   <data name="Common_Save" xml:space="preserve"><value>保存</value></data>
   <data name="Compat_Apply" xml:space="preserve"><value>改用推荐设置</value></data>
-  <data name="Compat_HdrMkv" xml:space="preserve"><value>这个视频是 HDR。HDR 画面通常无法放入 MP4，将自动保存为 MKV。</value></data>
-  <data name="Compat_HiResAvailable" xml:space="preserve"><value>这个视频有 Hi-Res 无损音轨，转成此格式会损失音质；选择 FLAC 或「原始格式」可保留无损。</value></data>
-  <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>FLAC / WAV 文件会大很多，但源音频本身是有损压缩的，音质不会因此提升。</value></data>
-  <data name="Compat_Mp4Opus" xml:space="preserve"><value>MP4 中的 Opus 音频在部分播放器和剪辑软件中无法播放，MP4 建议搭配 AAC（或改用 MKV）。</value></data>
-  <data name="Compat_SavedAsMkv" xml:space="preserve"><value>杜比视界和 Hi-Res 无损音轨无法放入 MP4，将自动保存为 MKV。</value></data>
+  <data name="Compat_HdrMkv" xml:space="preserve"><value>HDR 视频将保存为 MKV。</value></data>
+  <data name="Compat_HiResAvailable" xml:space="preserve"><value>此视频有 Hi-Res 无损音轨，选 FLAC 或「原始格式」可保留。</value></data>
+  <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>源音频是有损的，转成 FLAC / WAV 只会更大，音质不会提升。</value></data>
+  <data name="Compat_Mp4Opus" xml:space="preserve"><value>部分播放器不支持 MP4 里的 Opus，建议用 AAC。</value></data>
+  <data name="Compat_SavedAsMkv" xml:space="preserve"><value>杜比视界 / Hi-Res 将保存为 MKV。</value></data>
   <data name="Compat_UseMkv" xml:space="preserve"><value>改用 MKV</value></data>
-  <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM 只能封装 Opus / Vorbis 音频，请改用 Opus，或开启自动转换。</value></data>
-  <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM 只能封装 VP9 / AV1 视频。未开启自动转换时会改存为 MKV，建议直接选择 MKV。</value></data>
+  <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM 只支持 Opus / Vorbis 音频。</value></data>
+  <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM 只支持 VP9 / AV1，建议改用 MKV。</value></data>
   <data name="Container_Mkv" xml:space="preserve"><value>MKV（支持所有编码）</value></data>
   <data name="Container_Mp4" xml:space="preserve"><value>MP4（兼容性最好）</value></data>
   <data name="Container_Webm" xml:space="preserve"><value>WebM（VP9 / AV1 + Opus）</value></data>
@@ -110,19 +110,19 @@
   <data name="Home_Added" xml:space="preserve"><value>已添加</value></data>
   <data name="Home_AddedMany" xml:space="preserve"><value>已将 {0} 个任务加入下载队列。</value></data>
   <data name="Home_AddedOne" xml:space="preserve"><value>「{0}」已加入下载队列。</value></data>
-  <data name="Home_BiliLoginHint" xml:space="preserve"><value>未登录时 B 站最高只提供 480P / 720P，登录后即可下载 1080P 及以上画质。</value></data>
+  <data name="Home_BiliLoginHint" xml:space="preserve"><value>登录 B 站后可下载 1080P 及以上画质。</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>登录解锁更高画质</value></data>
-  <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>无法读取所选浏览器的 Cookie（Chrome / Edge 运行时会锁定 Cookie），本次已跳过。建议改用「账号」页面中的应用内登录。</value></data>
+  <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>无法读取浏览器 Cookie（Chrome / Edge 运行时会锁定），本次已跳过。建议改用「账号」页登录。</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>浏览器 Cookie 读取失败</value></data>
   <data name="Home_ClipboardEmpty" xml:space="preserve"><value>剪贴板中没有找到链接。</value></data>
-  <data name="Home_ConfirmManyBody" xml:space="preserve"><value>将添加 {0} 个视频到下载队列。它们会按「设置 → 同时下载」的数量依次下载，可随时在下载列表中暂停或取消。</value></data>
+  <data name="Home_ConfirmManyBody" xml:space="preserve"><value>将添加 {0} 个视频，按同时下载数依次进行，可随时暂停或取消。</value></data>
   <data name="Home_ConfirmManyTitle" xml:space="preserve"><value>要添加这么多下载任务吗？</value></data>
   <data name="Home_InvalidLink" xml:space="preserve"><value>请输入有效的视频链接。</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>正在获取视频信息…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>立即登录</value></data>
-  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube 的部分格式（常是较高画质）需要 Deno 脚本运行环境才能获取，可在「设置 → 关于与更新」中一键安装。</value></data>
+  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube 部分高画质格式需要 Deno，可在「设置 › 关于与更新」安装。</value></data>
   <data name="Home_NoDenoTitle" xml:space="preserve"><value>建议安装 Deno</value></data>
-  <data name="Home_NoFfmpeg" xml:space="preserve"><value>未安装 ffmpeg：只能下载已合并的低画质文件，且无法提取音频。可在「设置 → 关于与更新」中一键安装。</value></data>
+  <data name="Home_NoFfmpeg" xml:space="preserve"><value>未安装 ffmpeg，只能下载低画质且无法提取音频。可在「设置 › 关于与更新」安装。</value></data>
   <data name="Home_NoFfmpegTitle" xml:space="preserve"><value>建议安装 ffmpeg</value></data>
   <data name="Home_NoLink" xml:space="preserve"><value>没有找到链接。</value></data>
   <data name="Home_Parse" xml:space="preserve"><value>解析</value></data>
@@ -138,16 +138,16 @@
   <data name="Home_Supports_X" xml:space="preserve"><value>帖子里的视频与 GIF</value></data>
   <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>视频笔记、分享链接</value></data>
   <data name="Home_Supports_YouTube" xml:space="preserve"><value>视频、Shorts、播放列表</value></data>
-  <data name="Home_TipBatchBody" xml:space="preserve"><value>粘贴多个链接，逐个解析后勾选要下载的项目。</value></data>
+  <data name="Home_TipBatchBody" xml:space="preserve"><value>解析后勾选要下载的</value></data>
   <data name="Home_TipBatchTitle" xml:space="preserve"><value>一次多个</value></data>
-  <data name="Home_TipDropBody" xml:space="preserve"><value>把浏览器里的链接直接拖到 VidFlow 窗口上。</value></data>
+  <data name="Home_TipDropBody" xml:space="preserve"><value>从浏览器拖入窗口</value></data>
   <data name="Home_TipDropTitle" xml:space="preserve"><value>拖进窗口</value></data>
-  <data name="Home_TipPasteBody" xml:space="preserve"><value>复制视频链接或 App 里的分享口令，按 Ctrl+V 粘贴后回车。</value></data>
+  <data name="Home_TipPasteBody" xml:space="preserve"><value>链接和 App 分享口令都可以</value></data>
   <data name="Home_TipPasteTitle" xml:space="preserve"><value>粘贴链接</value></data>
   <data name="Home_TipsTitle" xml:space="preserve"><value>三种开始方式</value></data>
   <data name="Home_Title" xml:space="preserve"><value>新建下载</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>前往安装</value></data>
-  <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。</value></data>
+  <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>首次使用需要安装 yt-dlp 和 ffmpeg。</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>尚未安装下载组件</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>视频链接</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴视频链接或分享口令，多个链接用空格分隔</value></data>
@@ -161,8 +161,8 @@
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新。</value></data>
   <data name="Login_Done" xml:space="preserve"><value>完成</value></data>
-  <data name="Login_Instructions" xml:space="preserve"><value>请在下方页面中登录，登录成功后窗口会自动关闭。登录信息仅保存在本机。</value></data>
-  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>点击页面右上角的「登录」，用抖音 App 扫码。登录成功后窗口会自动关闭，登录信息仅保存在本机。</value></data>
+  <data name="Login_Instructions" xml:space="preserve"><value>在下方登录，完成后窗口自动关闭。</value></data>
+  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>点击右上角「登录」，用抖音 App 扫码。</value></data>
   <data name="Login_QrExpired" xml:space="preserve"><value>二维码已过期</value></data>
   <data name="Login_QrFailed" xml:space="preserve"><value>无法获取二维码，请检查网络或代理设置</value></data>
   <data name="Login_QrHint" xml:space="preserve"><value>打开哔哩哔哩 App，扫码登录</value></data>
@@ -212,33 +212,31 @@
   <data name="Options_AudioFormat" xml:space="preserve"><value>音频格式</value></data>
   <data name="Options_AudioQuality" xml:space="preserve"><value>音质</value></data>
   <data name="Options_AudioTrack" xml:space="preserve"><value>音轨</value></data>
-  <data name="Options_AudioTrackDescription" xml:space="preserve"><value>适用于提供多种配音语言的视频</value></data>
+  <data name="Options_AudioTrackDescription" xml:space="preserve"><value>多语言配音的视频可选</value></data>
   <data name="Options_Codec" xml:space="preserve"><value>视频编码</value></data>
-  <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 兼容性最好；H.265 / AV1 体积更小，但老设备可能无法播放。所选编码不可用时自动改用最高画质</value></data>
+  <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 兼容性最好；H.265 / AV1 体积更小</value></data>
   <data name="Options_Container" xml:space="preserve"><value>封装格式</value></data>
-  <data name="Options_ContainerDescription" xml:space="preserve"><value>文件格式；MP4 几乎所有设备都能播放</value></data>
+  <data name="Options_ContainerDescription" xml:space="preserve"><value>MP4 兼容性最好</value></data>
   <data name="Options_FileName" xml:space="preserve"><value>文件名</value></data>
-  <data name="Options_FileNameDescription" xml:space="preserve"><value>选择常用格式，或在下方自行组合</value></data>
+  <data name="Options_FileNameDescription" xml:space="preserve"><value>或在下方自定义</value></data>
   <data name="Options_FileNamePattern" xml:space="preserve"><value>命名格式</value></data>
   <data name="Options_FileNamePlaceholder" xml:space="preserve"><value>例如 {uploader} - {title}</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>保存位置</value></data>
-  <data name="Options_Insert" xml:space="preserve"><value>点击插入变量（插入到光标处）：</value></data>
+  <data name="Options_Insert" xml:space="preserve"><value>插入：</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>下载内容</value></data>
-  <data name="Options_ModeDescription" xml:space="preserve"><value>选择下载完整视频，或仅提取音频</value></data>
   <data name="Options_Naming" xml:space="preserve"><value>命名与分类</value></data>
-  <data name="Options_NamingDescription" xml:space="preserve"><value>文件的命名方式，以及是否按平台 / 作者 / 日期放入子文件夹</value></data>
+  <data name="Options_NamingDescription" xml:space="preserve"><value>文件名与子文件夹</value></data>
   <data name="Options_Picture" xml:space="preserve"><value>画面</value></data>
-  <data name="Options_PictureDescription" xml:space="preserve"><value>HDR 需要 HDR 显示器才能看出效果；杜比视界需要支持它的播放器，否则颜色会异常</value></data>
+  <data name="Options_PictureDescription" xml:space="preserve"><value>HDR 需 HDR 显示器；杜比视界需播放器支持</value></data>
   <data name="Options_PreviewHeader" xml:space="preserve"><value>预览（示例视频）</value></data>
   <data name="Options_PreviewRoot" xml:space="preserve"><value>下载位置</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>画质</value></data>
-  <data name="Options_QualityDescription" xml:space="preserve"><value>列表中为实际可用的分辨率，大小为估算值</value></data>
+  <data name="Options_QualityDescription" xml:space="preserve"><value>大小为估算值</value></data>
   <data name="Options_Recode" xml:space="preserve"><value>不兼容时自动转换</value></data>
-  <data name="Options_RecodeDescription" xml:space="preserve"><value>下载的编码与封装格式不兼容时重新编码（较慢）；关闭时会改存为 MKV</value></data>
+  <data name="Options_RecodeDescription" xml:space="preserve"><value>格式不兼容时重新编码（较慢），否则存为 MKV</value></data>
   <data name="Options_Subfolder" xml:space="preserve"><value>子文件夹分类</value></data>
-  <data name="Options_SubfolderDescription" xml:space="preserve"><value>在下载位置中自动创建</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
-  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>同时保存字幕文件（如果有），字幕语言可在设置中调整</value></data>
+  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>字幕语言在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
   <data name="Picture_Auto" xml:space="preserve"><value>自动（有 HDR 时优先 HDR）</value></data>
   <data name="Picture_AutoNoHdr" xml:space="preserve"><value>自动</value></data>
@@ -269,28 +267,27 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新 yt-dlp</value></data>
-  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天自动检查并安装新版本。网站经常变动，过旧的 yt-dlp 是下载失败最常见的原因</value></data>
+  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查；过旧的 yt-dlp 常导致下载失败</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
-  <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 运行时可能无法读取，读取失败时请先关闭浏览器，或改用 Firefox</value></data>
+  <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 需先关闭浏览器</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
   <data name="Settings_CheckUpdate" xml:space="preserve"><value>检查更新</value></data>
   <data name="Settings_ChooseFile" xml:space="preserve"><value>选择文件</value></data>
   <data name="Settings_Clipboard" xml:space="preserve"><value>监听剪贴板</value></data>
-  <data name="Settings_ClipboardDescription" xml:space="preserve"><value>在后台时复制 YouTube / 哔哩哔哩链接，会弹出通知询问是否下载</value></data>
+  <data name="Settings_ClipboardDescription" xml:space="preserve"><value>复制支持的链接时提示下载</value></data>
   <data name="Settings_Components" xml:space="preserve"><value>组件</value></data>
   <data name="Settings_Concurrency" xml:space="preserve"><value>同时下载</value></data>
-  <data name="Settings_ConcurrencyDescription" xml:space="preserve"><value>同时进行的下载任务数量</value></data>
-  <data name="Settings_CookieFile" xml:space="preserve"><value>或使用 cookies.txt 文件（优先）</value></data>
+  <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt 文件</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape 格式，可用浏览器扩展导出</value></data>
   <data name="Settings_Danmaku" xml:space="preserve"><value>保存 B 站弹幕</value></data>
-  <data name="Settings_DanmakuDescription" xml:space="preserve"><value>开启字幕时，同时把弹幕保存为 XML 文件</value></data>
+  <data name="Settings_DanmakuDescription" xml:space="preserve"><value>随字幕一起保存为 XML</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>未安装 · YouTube 部分格式需要（推荐）</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>下载</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>未安装 · 用于合并高清音视频、提取音频（推荐）</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>默认保存位置</value></data>
   <data name="Settings_General" xml:space="preserve"><value>通用</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>兼容模式</value></data>
-  <data name="Settings_H264Description" xml:space="preserve"><value>优先选择 H.264 / AAC，兼容旧设备和系统自带播放器，但最高画质可能受限</value></data>
+  <data name="Settings_H264Description" xml:space="preserve"><value>优先 H.264 / AAC，适合旧设备，画质可能受限</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>安装</value></data>
   <data name="Settings_InstallDone" xml:space="preserve"><value>完成</value></data>
   <data name="Settings_InstallFailed" xml:space="preserve"><value>安装失败</value></data>
@@ -299,21 +296,20 @@
   <data name="Settings_Language" xml:space="preserve"><value>语言</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>跟随系统</value></data>
   <data name="Settings_Metadata" xml:space="preserve"><value>嵌入封面与元数据</value></data>
-  <data name="Settings_MetadataDescription" xml:space="preserve"><value>将标题、作者和封面写入文件（需要 ffmpeg）</value></data>
+  <data name="Settings_MetadataDescription" xml:space="preserve"><value>写入标题、作者和封面</value></data>
   <data name="Settings_MoreDownload" xml:space="preserve"><value>文件与兼容性</value></data>
   <data name="Settings_MoreDownloadDescription" xml:space="preserve"><value>封面与元数据、H.264 兼容模式</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>网络</value></data>
   <data name="Settings_Notifications" xml:space="preserve"><value>通知</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>完成通知</value></data>
-  <data name="Settings_NotifyDescription" xml:space="preserve"><value>在后台时，下载完成会发送系统通知</value></data>
   <data name="Settings_NotifyFailure" xml:space="preserve"><value>失败与异常通知</value></data>
-  <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>在后台时，下载失败或长时间无进度会发送系统通知</value></data>
+  <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>下载失败或长时间无进度时</value></data>
   <data name="Settings_NotifyGroup" xml:space="preserve"><value>下载通知</value></data>
-  <data name="Settings_NotifyGroupDescription" xml:space="preserve"><value>VidFlow 在后台时发送系统通知</value></data>
+  <data name="Settings_NotifyGroupDescription" xml:space="preserve"><value>在后台时提醒</value></data>
   <data name="Settings_OtherCookies" xml:space="preserve"><value>其他 Cookie 来源</value></data>
-  <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>高级：改用外部浏览器或 cookies.txt 文件中的登录状态（会覆盖应用内登录）</value></data>
+  <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>会覆盖应用内登录，一般无需设置</value></data>
   <data name="Settings_Proxy" xml:space="preserve"><value>代理</value></data>
-  <data name="Settings_ProxyDescription" xml:space="preserve"><value>例如 http://127.0.0.1:7890 或 socks5://127.0.0.1:1080；留空则使用系统代理</value></data>
+  <data name="Settings_ProxyDescription" xml:space="preserve"><value>例如 http://127.0.0.1:7890</value></data>
   <data name="Settings_ProxyPlaceholder" xml:space="preserve"><value>使用系统代理</value></data>
   <data name="Settings_Reinstall" xml:space="preserve"><value>重新安装</value></data>
   <data name="Settings_ReleaseNotes" xml:space="preserve"><value>更新日志</value></data>
@@ -321,28 +317,27 @@
   <data name="Settings_RestartNow" xml:space="preserve"><value>立即重启</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>需要重启</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>限速</value></data>
-  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>开启后对每个下载任务分别限速，对之后开始的任务生效</value></data>
+  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>按单个任务限速</value></data>
   <data name="Settings_SpeedMax" xml:space="preserve"><value>每个任务最高速度</value></data>
   <data name="Settings_SpeedOn" xml:space="preserve"><value>已开启 · 每个任务最高 {0}</value></data>
   <data name="Settings_SpeedUnit" xml:space="preserve"><value>单位</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>字幕语言</value></data>
-  <data name="Settings_SubLangsDescription" xml:space="preserve"><value>只会保存视频实际提供的语言</value></data>
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>其他语言</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>语言代码，用逗号分隔</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>未选择语言，将保存中文和英文字幕</value></data>
   <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>保存语言：{0}</value></data>
   <data name="Settings_Templates" xml:space="preserve"><value>下载模板</value></data>
-  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>保存好的下载选项组合。新建下载时自动套用默认模板；在新建下载页的修改只对当次任务生效</value></data>
+  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>新建下载会套用默认模板</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>应用主题</value></data>
   <data name="Settings_ThemeDark" xml:space="preserve"><value>深色</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>浅色</value></data>
   <data name="Settings_ThemeSystem" xml:space="preserve"><value>跟随系统</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>关闭时最小化到托盘</value></data>
-  <data name="Settings_TrayDescription" xml:space="preserve"><value>关闭窗口后下载继续进行，可从任务栏通知区域图标退出</value></data>
+  <data name="Settings_TrayDescription" xml:space="preserve"><value>关闭窗口后继续下载</value></data>
   <data name="Settings_UpdateBadge" xml:space="preserve"><value>有可用更新：{0}</value></data>
   <data name="Settings_UpdateMode" xml:space="preserve"><value>更新方式</value></data>
-  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>自动更新会在后台下载更新包，安装前会先询问</value></data>
+  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>安装前都会先询问</value></data>
   <data name="Settings_Updates" xml:space="preserve"><value>应用更新</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>更新到 {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>已是最新</value></data>
@@ -387,7 +382,7 @@
   <data name="Template_SetDefault" xml:space="preserve"><value>设为默认</value></data>
   <data name="Templates_BuiltIn" xml:space="preserve"><value>内置预设</value></data>
   <data name="Templates_Empty" xml:space="preserve"><value>还没有自定义模板</value></data>
-  <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」创建，或从内置预设的「…」菜单复制一份再修改</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」，或复制一个内置预设</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>我的模板</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>有 {0} 项可以安装或更新</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>所有组件均为最新</value></data>
@@ -401,7 +396,7 @@
   <data name="Tools_LastChecked" xml:space="preserve"><value>上次检查：{0}</value></data>
   <data name="Tools_ManagedNote" xml:space="preserve"><value>这些工具由 VidFlow 下载并保持更新</value></data>
   <data name="Tools_MissingRequired" xml:space="preserve"><value>缺少必需组件 {0}，安装后才能下载</value></data>
-  <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · 版本 {1} · 使用系统中已安装的版本（不由 VidFlow 更新）</value></data>
+  <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · 版本 {1} · 系统中的版本</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>全部更新</value></data>
   <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>解析和下载视频</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>退出 VidFlow</value></data>

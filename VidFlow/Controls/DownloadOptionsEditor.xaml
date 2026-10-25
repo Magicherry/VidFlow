@@ -8,7 +8,7 @@
 
     <!--  Edits a DownloadTemplate (or a per-task copy of one). Used by the home page and the template editor.  -->
     <StackPanel Spacing="4">
-        <tk:SettingsCard Description="{x:Bind l:L.Get('Options_ModeDescription')}" Header="{x:Bind l:L.Get('Options_Mode')}">
+        <tk:SettingsCard Header="{x:Bind l:L.Get('Options_Mode')}">
             <tk:SettingsCard.HeaderIcon>
                 <FontIcon Glyph="&#xE8B2;" />
             </tk:SettingsCard.HeaderIcon>
@@ -180,7 +180,7 @@
                             Visibility="Collapsed" />
                     </StackPanel>
                 </tk:SettingsCard>
-                <tk:SettingsCard Description="{x:Bind l:L.Get('Options_SubfolderDescription')}" Header="{x:Bind l:L.Get('Options_Subfolder')}">
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Options_Subfolder')}">
                     <ComboBox
                         x:Name="FolderCombo"
                         MinWidth="240"
