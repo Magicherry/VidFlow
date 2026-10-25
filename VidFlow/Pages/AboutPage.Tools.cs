@@ -7,8 +7,8 @@ using VidFlow.Services;
 
 namespace VidFlow.Pages;
 
-/// <summary>The components section: a status row (overall state, last check, "check for updates", "update all")
-/// and one row per component saying what it is for, its version, and either "up to date" or the action it needs.</summary>
+/// <summary>The components section: one expander whose header gives the overall state, last check, "check for
+/// updates" and "update all", with one row per component inside saying what it is for, its version, and either "up to date" or the action it needs.</summary>
 public sealed partial class AboutPage
 {
     enum ToolState { Checking, UpToDate, UpdateAvailable, Missing, SystemCopy, CheckFailed, Installing }
@@ -92,7 +92,7 @@ public sealed partial class AboutPage
     void BuildToolRows()
     {
         _tools = CreateTools();
-        ToolList.Children.Clear();
+        ToolsSummaryCard.Items.Clear();
         foreach (var tool in _tools)
         {
             tool.Bar = new ProgressBar { Width = 120, VerticalAlignment = VerticalAlignment.Center, Visibility = Visibility.Collapsed };
@@ -117,7 +117,7 @@ public sealed partial class AboutPage
             actions.Children.Add(tool.Button);
             tool.Card = new SettingsCard { Header = tool.Name, HeaderIcon = new FontIcon { Glyph = tool.Glyph }, Content = actions };
             AutomationProperties.SetName(tool.Button, tool.Name);
-            ToolList.Children.Add(tool.Card);
+            ToolsSummaryCard.Items.Add(tool.Card);
         }
     }
 
@@ -248,6 +248,8 @@ public sealed partial class AboutPage
             ? L.Format("Tools_LastChecked", at.ToString(at.Date == DateTime.Today ? "HH:mm" : "yyyy-MM-dd HH:mm"))
             : L.Get("Tools_ManagedNote");
         UpdateAllToolsButton.Visibility = !checking && updates + missing > 1 ? Visibility.Visible : Visibility.Collapsed;
+        // Open by itself only when a component needs something done, so its button is in view.
+        if (!checking && updates + missing > 0) ToolsSummaryCard.IsExpanded = true;
         UpdateAllToolsButton.IsEnabled = !_installing;
     }
 

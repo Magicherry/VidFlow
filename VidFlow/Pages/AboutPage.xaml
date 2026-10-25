@@ -84,17 +84,18 @@
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
 
-                <!--  Components: a status row with "check for updates", then one row per component (built in code)  -->
+                <!--  Components  -->
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Components')}" />
                 <!--  Collapsed while closed so the StackPanel doesn't add spacing for it.  -->
                 <InfoBar
                     x:Name="ToolErrorBar"
                     Severity="Error"
                     Visibility="{x:Bind ToolErrorBar.IsOpen, Mode=OneWay}" />
-                <tk:SettingsCard x:Name="ToolsSummaryCard">
-                    <tk:SettingsCard.HeaderIcon>
+                <!--  The overall state and the buttons in the header; one row per component inside (built in code).  -->
+                <tk:SettingsExpander x:Name="ToolsSummaryCard">
+                    <tk:SettingsExpander.HeaderIcon>
                         <FontIcon x:Name="ToolsSummaryIcon" Glyph="&#xE895;" />
-                    </tk:SettingsCard.HeaderIcon>
+                    </tk:SettingsExpander.HeaderIcon>
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Button
                             x:Name="UpdateAllToolsButton"
@@ -108,8 +109,7 @@
                             Click="CheckTools_Click"
                             Content="{x:Bind l:L.Get('Settings_CheckUpdate')}" />
                     </StackPanel>
-                </tk:SettingsCard>
-                <StackPanel x:Name="ToolList" Spacing="4" />
+                </tk:SettingsExpander>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_AutoUpdateDescription')}" Header="{x:Bind l:L.Get('Settings_AutoUpdate')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE777;" />
