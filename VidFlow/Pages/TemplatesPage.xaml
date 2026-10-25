@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="VidFlow.Pages.TemplatesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:VidFlow.Localization"
+    xmlns:tk="using:CommunityToolkit.WinUI.Controls">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ContentPanel.Padding" Value="{StaticResource PagePaddingNarrow}" />
+                        <Setter Target="NewTemplateLabel.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <!--  See HomePage: keep MaxWidth off the ScrollViewer's direct child.  -->
+        <Grid>
+            <StackPanel
+                x:Name="ContentPanel"
+                MaxWidth="{StaticResource PageMaxWidth}"
+                Padding="{StaticResource PagePadding}"
+                Spacing="4">
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind l:L.Get('Settings_Templates')}" />
+                    <Button
+                        Grid.Column="1"
+                        Height="32"
+                        VerticalAlignment="Center"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Template_New')}"
+                        Click="NewTemplate_Click"
+                        Style="{StaticResource AccentButtonStyle}"
+                        ToolTipService.ToolTip="{x:Bind l:L.Get('Template_New')}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="14" Glyph="&#xE710;" />
+                            <TextBlock x:Name="NewTemplateLabel" Text="{x:Bind l:L.Get('Template_New')}" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <TextBlock
+                    Margin="0,4,0,0"
+                    Style="{StaticResource PageDescriptionStyle}"
+                    Text="{x:Bind l:L.Get('Settings_TemplatesDescription')}" />
+
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Templates_Mine')}" />
+                <!--  Shown instead of the list while there are no custom templates.  -->
+                <tk:SettingsCard
+                    x:Name="EmptyCard"
+                    Description="{x:Bind l:L.Get('Templates_EmptyDescription')}"
+                    Header="{x:Bind l:L.Get('Templates_Empty')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A1;" />
+                    </tk:SettingsCard.HeaderIcon>
+                </tk:SettingsCard>
+                <!--  One card per template, filled in code.  -->
+                <StackPanel x:Name="CustomList" Spacing="4" />
+
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Templates_BuiltIn')}" />
+                <StackPanel x:Name="BuiltInList" Spacing="4" />
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>

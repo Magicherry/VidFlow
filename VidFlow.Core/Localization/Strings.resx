@@ -10,6 +10,8 @@
   <data name="About_OpenData" xml:space="preserve"><value>Open data folder</value></data>
   <data name="About_OpenLogs" xml:space="preserve"><value>Open log folder</value></data>
   <data name="About_RunWizard" xml:space="preserve"><value>Run the setup wizard again</value></data>
+  <data name="About_Troubleshoot" xml:space="preserve"><value>Troubleshooting</value></data>
+  <data name="About_TroubleshootDescription" xml:space="preserve"><value>Logs, data folder and the setup wizard</value></data>
   <data name="About_Version" xml:space="preserve"><value>Version {0}</value></data>
   <data name="Account_BiliIn" xml:space="preserve"><value>Signed in · 1080P and above available (4K / HDR need a premium membership)</value></data>
   <data name="Account_BiliOut" xml:space="preserve"><value>Not signed in · limited to 480P / 720P</value></data>
@@ -17,6 +19,8 @@
   <data name="Account_Logout" xml:space="preserve"><value>Sign out</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>Signed in · age-restricted and members-only videos available</value></data>
   <data name="Account_YtOut" xml:space="preserve"><value>Not signed in · sign in for age-restricted / members-only videos and fewer bot checks</value></data>
+  <data name="Accounts_Description" xml:space="preserve"><value>Sign in to unlock higher quality and restricted videos. Sign-in happens in a built-in browser window and the cookies stay on this PC.</value></data>
+  <data name="Accounts_Platforms" xml:space="preserve"><value>Platform accounts</value></data>
   <data name="Action_CopyError" xml:space="preserve"><value>Copy error details</value></data>
   <data name="Action_Download" xml:space="preserve"><value>Download</value></data>
   <data name="Action_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
@@ -69,15 +73,15 @@
   <data name="Downloads_Title" xml:space="preserve"><value>Downloads</value></data>
   <data name="Drop_Caption" xml:space="preserve"><value>Download with VidFlow</value></data>
   <data name="Drop_Hint" xml:space="preserve"><value>Drop the link to start</value></data>
-  <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>Extracting audio needs ffmpeg. Install it in Settings → Components.</value></data>
-  <data name="Error_BotCheck" xml:space="preserve"><value>YouTube wants to confirm you&apos;re not a bot. Sign in under Settings → Accounts, or switch proxy node.</value></data>
+  <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>Extracting audio needs ffmpeg. Install it in Settings → About &amp; updates.</value></data>
+  <data name="Error_BotCheck" xml:space="preserve"><value>YouTube wants to confirm you&apos;re not a bot. Sign in on the Accounts page, or switch proxy node.</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>Couldn&apos;t read browser cookies. Close that browser and retry, or use in-app sign-in instead.</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>Not enough disk space.</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
   <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network).</value></data>
-  <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → Components.</value></data>
-  <data name="Error_NoFormats" xml:space="preserve"><value>The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube in Settings → Accounts, or update yt-dlp.</value></data>
-  <data name="Error_NoYtDlp" xml:space="preserve"><value>yt-dlp is not installed. Install it in Settings → Components.</value></data>
+  <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → About &amp; updates.</value></data>
+  <data name="Error_NoFormats" xml:space="preserve"><value>The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube on the Accounts page, or update yt-dlp.</value></data>
+  <data name="Error_NoYtDlp" xml:space="preserve"><value>yt-dlp is not installed. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_Private" xml:space="preserve"><value>This is a private or members-only video; sign in with an account that can watch it.</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>Too many requests. Wait a while or switch proxy node, then retry.</value></data>
   <data name="Error_Unavailable" xml:space="preserve"><value>The video is unavailable (deleted, region-locked or private).</value></data>
@@ -94,7 +98,7 @@
   <data name="Home_AddedOne" xml:space="preserve"><value>Added “{0}” to the queue.</value></data>
   <data name="Home_BiliLoginHint" xml:space="preserve"><value>Without signing in, Bilibili offers 480P / 720P at most. Sign in to get 1080P and above.</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>Sign in for higher quality</value></data>
-  <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>The selected browser&apos;s cookies couldn&apos;t be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (Settings → Accounts) is more reliable.</value></data>
+  <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>The selected browser&apos;s cookies couldn&apos;t be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (the Accounts page) is more reliable.</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>Browser cookies unavailable</value></data>
   <data name="Home_ClipboardEmpty" xml:space="preserve"><value>No link found on the clipboard.</value></data>
   <data name="Home_ConfirmManyBody" xml:space="preserve"><value>You&apos;re about to queue {0} videos. They download a few at a time (see Settings → Simultaneous downloads), and you can pause or cancel them in Downloads.</value></data>
@@ -102,9 +106,9 @@
   <data name="Home_InvalidLink" xml:space="preserve"><value>Please enter a valid video link.</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>Fetching video info…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>Sign in now</value></data>
-  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → Components.</value></data>
+  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → About &amp; updates.</value></data>
   <data name="Home_NoDenoTitle" xml:space="preserve"><value>Deno recommended</value></data>
-  <data name="Home_NoFfmpeg" xml:space="preserve"><value>Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can&apos;t be extracted. Install it in Settings → Components.</value></data>
+  <data name="Home_NoFfmpeg" xml:space="preserve"><value>Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can&apos;t be extracted. Install it in Settings → About &amp; updates.</value></data>
   <data name="Home_NoFfmpegTitle" xml:space="preserve"><value>ffmpeg recommended</value></data>
   <data name="Home_NoLink" xml:space="preserve"><value>No link found.</value></data>
   <data name="Home_Parse" xml:space="preserve"><value>Parse</value></data>
@@ -135,9 +139,11 @@
   <data name="Mode_M4a" xml:space="preserve"><value>Audio only (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>Audio only (MP3)</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>Video (MP4)</value></data>
+  <data name="Nav_Accounts" xml:space="preserve"><value>Accounts</value></data>
   <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>New download</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Nav_Templates" xml:space="preserve"><value>Templates</value></data>
   <data name="Notify_BatchCompleted" xml:space="preserve"><value>All {0} downloads finished</value></data>
   <data name="Notify_Completed" xml:space="preserve"><value>Download finished</value></data>
   <data name="Notify_Failed" xml:space="preserve"><value>Download failed</value></data>
@@ -152,7 +158,7 @@
   <data name="Notify_UpdateReady" xml:space="preserve"><value>VidFlow {0} is ready to install</value></data>
   <data name="Notify_UpdateReadyBody" xml:space="preserve"><value>Installing takes a few seconds; downloads resume afterwards.</value></data>
   <data name="Notify_UpdateRolledBack" xml:space="preserve"><value>Update to {0} didn&apos;t complete</value></data>
-  <data name="Notify_UpdateRolledBackBody" xml:space="preserve"><value>Changes were rolled back; you&apos;re still on {0}. You can retry in Settings → Updates.</value></data>
+  <data name="Notify_UpdateRolledBackBody" xml:space="preserve"><value>Changes were rolled back; you&apos;re still on {0}. You can retry in Settings → About &amp; updates.</value></data>
   <data name="Notify_ViewUpdate" xml:space="preserve"><value>View</value></data>
   <data name="Options_Audio" xml:space="preserve"><value>Audio</value></data>
   <data name="Options_AudioDescription" xml:space="preserve"><value>Format, quality and language track</value></data>
@@ -198,6 +204,7 @@
   <data name="Quality_FullHD" xml:space="preserve"><value>Full HD</value></data>
   <data name="Quality_HD" xml:space="preserve"><value>HD</value></data>
   <data name="Settings_About" xml:space="preserve"><value>About</value></data>
+  <data name="Settings_AboutUpdates" xml:space="preserve"><value>About &amp; updates</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>Accounts</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>Keep yt-dlp up to date</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checks once a day. Sites change often, and an outdated yt-dlp is the most common cause of failed downloads</value></data>
@@ -233,11 +240,16 @@
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>Same as Windows</value></data>
   <data name="Settings_Metadata" xml:space="preserve"><value>Embed cover and metadata</value></data>
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>Write title, author and cover into the file (needs ffmpeg)</value></data>
+  <data name="Settings_MoreDownload" xml:space="preserve"><value>Files and compatibility</value></data>
+  <data name="Settings_MoreDownloadDescription" xml:space="preserve"><value>Cover and metadata, H.264 compatibility mode</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>Network</value></data>
+  <data name="Settings_Notifications" xml:space="preserve"><value>Notifications</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>Notifications</value></data>
   <data name="Settings_NotifyDescription" xml:space="preserve"><value>Notify when downloads finish while VidFlow is in the background</value></data>
   <data name="Settings_NotifyFailure" xml:space="preserve"><value>Failure notifications</value></data>
   <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>Notify when a download fails or stalls while VidFlow is in the background</value></data>
+  <data name="Settings_NotifyGroup" xml:space="preserve"><value>Download notifications</value></data>
+  <data name="Settings_NotifyGroupDescription" xml:space="preserve"><value>Windows notifications while VidFlow is in the background</value></data>
   <data name="Settings_OtherCookies" xml:space="preserve"><value>Other cookie sources</value></data>
   <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>Advanced: use cookies from a browser or a cookies.txt file instead of in-app sign-in</value></data>
   <data name="Settings_Proxy" xml:space="preserve"><value>Proxy</value></data>
@@ -266,6 +278,7 @@
   <data name="Settings_ToolVersion" xml:space="preserve"><value>Version {0} · {1}</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>Keep running in the notification area</value></data>
   <data name="Settings_TrayDescription" xml:space="preserve"><value>Closing the window keeps downloads going; exit from the tray icon</value></data>
+  <data name="Settings_UpdateBadge" xml:space="preserve"><value>Update available: {0}</value></data>
   <data name="Settings_UpdateMode" xml:space="preserve"><value>Update mode</value></data>
   <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>Automatic downloads updates in the background and asks before installing</value></data>
   <data name="Settings_Updates" xml:space="preserve"><value>App updates</value></data>
@@ -310,6 +323,10 @@
   <data name="Template_SaveAs" xml:space="preserve"><value>Save as template</value></data>
   <data name="Template_SaveAsTitle" xml:space="preserve"><value>Save as template</value></data>
   <data name="Template_SetDefault" xml:space="preserve"><value>Set as default</value></data>
+  <data name="Templates_BuiltIn" xml:space="preserve"><value>Built-in presets</value></data>
+  <data name="Templates_Empty" xml:space="preserve"><value>No custom templates yet</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Create one with &quot;New template&quot;, or duplicate a built-in preset from its &quot;...&quot; menu and adjust it</value></data>
+  <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>Exit VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>Download copied link</value></data>
   <data name="Tray_Show" xml:space="preserve"><value>Open VidFlow</value></data>
@@ -341,7 +358,7 @@
   <data name="UpdateMode_Auto" xml:space="preserve"><value>Automatic</value></data>
   <data name="UpdateMode_Manual" xml:space="preserve"><value>Manual</value></data>
   <data name="UpdateMode_Notify" xml:space="preserve"><value>Check and notify only</value></data>
-  <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later in Settings → Accounts.</value></data>
+  <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later on the Accounts page.</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>Accounts (optional)</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>Back</value></data>

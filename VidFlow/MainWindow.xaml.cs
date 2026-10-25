@@ -14,6 +14,7 @@ public sealed partial class MainWindow : Window
 {
     bool _reallyClosing;
     bool _trayHintShown;
+    bool _selecting;
 
     public MainWindow()
     {
@@ -46,11 +47,25 @@ public sealed partial class MainWindow : Window
 
     public bool IsForeground => AppWindow.IsVisible && GetForegroundWindow() == Hwnd;
 
+    /// <summary>Shows a page by its nav tag. "about" is a sub-page of Settings: Settings stays selected in the pane.</summary>
     public void NavigateTo(string tag)
     {
-        NavView.SelectedItem = NavView.MenuItems.Concat(NavView.FooterMenuItems)
-            .OfType<NavigationViewItem>().First(i => (string)i.Tag == tag);
+        var item = NavView.MenuItems.Concat(NavView.FooterMenuItems)
+            .OfType<NavigationViewItem>().First(i => (string)i.Tag == (tag == "about" ? "settings" : tag));
+        _selecting = true;
+        try
+        {
+            if (!ReferenceEquals(NavView.SelectedItem, item)) NavView.SelectedItem = item;
+        }
+        finally
+        {
+            _selecting = false;
+        }
+        Show(tag == "about" ? typeof(AboutPage) : PageFor(tag));
     }
+
+    public void UpdateSettingsBadge() =>
+        SettingsBadge.Visibility = App.Updates.HasNewer ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>Opens one or more links (from drag-and-drop, a notification or the tray) on the home page.</summary>
     public void OpenLinks(string text)
@@ -135,16 +150,39 @@ public sealed partial class MainWindow : Window
         ActiveBadge.Visibility = n > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
+    static Type PageFor(object? tag) => tag switch
+    {
+        "downloads" => typeof(DownloadsPage),
+        "templates" => typeof(TemplatesPage),
+        "accounts" => typeof(AccountsPage),
+        "settings" => typeof(SettingsPage),
+        _ => typeof(HomePage),
+    };
+
+    void Show(Type page)
+    {
+        if (ContentFrame.CurrentSourcePageType == page) return;
+        // Settings ⇄ its sub-page slide like a drill-in; everything else uses the usual entrance.
+        NavigationTransitionInfo transition =
+            page == typeof(AboutPage) ? new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromRight }
+            : page == typeof(SettingsPage) && ContentFrame.CurrentSourcePageType == typeof(AboutPage)
+                ? new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromLeft }
+            : new EntranceNavigationTransitionInfo();
+        ContentFrame.Navigate(page, null, transition);
+    }
+
     void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        var page = (args.SelectedItem as NavigationViewItem)?.Tag switch
-        {
-            "downloads" => typeof(DownloadsPage),
-            "settings" => typeof(SettingsPage),
-            _ => typeof(HomePage),
-        };
-        if (ContentFrame.CurrentSourcePageType != page)
-            ContentFrame.Navigate(page, null, new EntranceNavigationTransitionInfo());
+        // NavigateTo picks the page itself (it may be Settings' sub-page).
+        if (_selecting) return;
+        Show(PageFor((args.SelectedItem as NavigationViewItem)?.Tag));
+    }
+
+    /// <summary>Clicking Settings again while on its sub-page goes back up to Settings.</summary>
+    void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+    {
+        if (args.InvokedItemContainer?.Tag is "settings" && ContentFrame.CurrentSourcePageType == typeof(AboutPage))
+            Show(typeof(SettingsPage));
     }
 
     void AppTitleBar_PaneToggleRequested(TitleBar sender, object args) => NavView.IsPaneOpen = !NavView.IsPaneOpen;

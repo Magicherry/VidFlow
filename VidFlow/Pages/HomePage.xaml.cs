@@ -577,5 +577,6 @@ public sealed partial class HomePage : Page
         }
     }
 
-    void GoToSettings_Click(object sender, RoutedEventArgs e) => App.MainWindow.NavigateTo("settings");
+    /// <summary>Missing components are installed from Settings &gt; About &amp; updates.</summary>
+    void GoToSettings_Click(object sender, RoutedEventArgs e) => App.MainWindow.NavigateTo("about");
 }

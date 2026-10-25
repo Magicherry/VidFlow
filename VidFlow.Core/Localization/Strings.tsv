@@ -42,15 +42,15 @@ Downloads_ResumeAll	Resume all	全部继续
 Downloads_Title	Downloads	下载列表
 Drop_Caption	Download with VidFlow	用 VidFlow 下载
 Drop_Hint	Drop the link to start	松开以解析链接
-Error_AudioNeedsFfmpeg	Extracting audio needs ffmpeg. Install it in Settings → Components.	提取音频需要 ffmpeg，请先在「设置 → 组件」中安装。
-Error_BotCheck	YouTube wants to confirm you're not a bot. Sign in under Settings → Accounts, or switch proxy node.	YouTube 要求验证身份。请在「设置 → 账号」中登录，或更换代理节点。
+Error_AudioNeedsFfmpeg	Extracting audio needs ffmpeg. Install it in Settings → About & updates.	提取音频需要 ffmpeg，请先在「设置 → 关于与更新」中安装。
+Error_BotCheck	YouTube wants to confirm you're not a bot. Sign in on the Accounts page, or switch proxy node.	YouTube 要求验证身份。请在「账号」页面中登录，或更换代理节点。
 Error_Cookies	Couldn't read browser cookies. Close that browser and retry, or use in-app sign-in instead.	读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。
 Error_DiskFull	Not enough disk space.	磁盘空间不足。
 Error_EmptyPlaylist	This playlist has no downloadable videos.	这个播放列表中没有可下载的视频。
 Error_Network	Network error. Reaching YouTube may require a proxy (Settings → Network).	网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。
-Error_NoFfmpeg	ffmpeg is required for this. Install it in Settings → Components.	此操作需要 ffmpeg，请在「设置 → 组件」中安装。
-Error_NoYtDlp	yt-dlp is not installed. Install it in Settings → Components.	未找到 yt-dlp，请先在「设置 → 组件」中安装。
-Error_NoFormats	The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube in Settings → Accounts, or update yt-dlp.	网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「设置 → 账号」中退出 YouTube 登录后重试，或更新 yt-dlp。
+Error_NoFfmpeg	ffmpeg is required for this. Install it in Settings → About & updates.	此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。
+Error_NoYtDlp	yt-dlp is not installed. Install it in Settings → About & updates.	未找到 yt-dlp，请先在「设置 → 关于与更新」中安装。
+Error_NoFormats	The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube on the Accounts page, or update yt-dlp.	网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「账号」页面中退出 YouTube 登录后重试，或更新 yt-dlp。
 Error_Private	This is a private or members-only video; sign in with an account that can watch it.	这是私享 / 会员视频，需要登录有权限观看的账号。
 Error_RateLimited	Too many requests. Wait a while or switch proxy node, then retry.	请求过于频繁，请稍后或更换代理节点后重试。
 Error_Unavailable	The video is unavailable (deleted, region-locked or private).	视频不可用（已删除、地区限制或未公开）。
@@ -62,13 +62,13 @@ Home_AddedMany	{0} downloads added to the queue.	已将 {0} 个任务加入下�
 Home_AddedOne	Added “{0}” to the queue.	「{0}」已加入下载队列。
 Home_BiliLoginHint	Without signing in, Bilibili offers 480P / 720P at most. Sign in to get 1080P and above.	未登录时 B 站最高只提供 480P / 720P，登录后即可下载 1080P 及以上画质。
 Home_BiliLoginHintTitle	Sign in for higher quality	登录解锁更高画质
-Home_BrowserCookiesFailed	The selected browser's cookies couldn't be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (Settings → Accounts) is more reliable.	无法读取所选浏览器的 Cookie（Chrome / Edge 运行时会锁定 Cookie），本次已跳过。建议改用「设置 → 账号」中的应用内登录。
+Home_BrowserCookiesFailed	The selected browser's cookies couldn't be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (the Accounts page) is more reliable.	无法读取所选浏览器的 Cookie（Chrome / Edge 运行时会锁定 Cookie），本次已跳过。建议改用「账号」页面中的应用内登录。
 Home_BrowserCookiesFailedTitle	Browser cookies unavailable	浏览器 Cookie 读取失败
 Home_ClipboardEmpty	No link found on the clipboard.	剪贴板中没有找到链接。
 Home_InvalidLink	Please enter a valid video link.	请输入有效的视频链接。
 Home_Loading	Fetching video info…	正在获取视频信息…
 Home_LoginNow	Sign in now	立即登录
-Home_NoFfmpeg	Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can't be extracted. Install it in Settings → Components.	未安装 ffmpeg：只能下载已合并的低画质文件，且无法提取音频。可在「设置 → 组件」中一键安装。
+Home_NoFfmpeg	Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can't be extracted. Install it in Settings → About & updates.	未安装 ffmpeg：只能下载已合并的低画质文件，且无法提取音频。可在「设置 → 关于与更新」中一键安装。
 Home_NoFfmpegTitle	ffmpeg recommended	建议安装 ffmpeg
 Home_NoLink	No link found.	没有找到链接。
 Home_Parse	Parse	解析
@@ -213,7 +213,7 @@ Tray_PasteLink	Download copied link	下载已复制的链接
 Tray_Show	Open VidFlow	打开 VidFlow
 Tray_Tooltip	VidFlow · {0} downloading · {1}%	VidFlow · {0} 个任务 · {1}%
 Untitled	Untitled video	未命名视频
-Wizard_AccountsBody	Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later in Settings → Accounts.	可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「设置 → 账号」中登录。
+Wizard_AccountsBody	Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later on the Accounts page.	可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「账号」页面中登录。
 Wizard_AccountsNote	Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.	登录在官方网页中完成，VidFlow 不会读取或保存你的密码。
 Wizard_AccountsTitle	Accounts (optional)	登录账号（可选）
 Wizard_Back	Back	上一步
@@ -260,7 +260,7 @@ Folder_None	Don't sort	不分类
 Folder_Platform	By platform	按平台
 Folder_PlatformUploader	By platform, then uploader	按平台和作者
 Folder_Uploader	By uploader	按作者
-Home_NoDeno	YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → Components.	YouTube 的部分格式（常是较高画质）需要 Deno 脚本运行环境才能获取，可在「设置 → 组件」中一键安装。
+Home_NoDeno	YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → About & updates.	YouTube 的部分格式（常是较高画质）需要 Deno 脚本运行环境才能获取，可在「设置 → 关于与更新」中一键安装。
 Home_NoDenoTitle	Deno recommended	建议安装 Deno
 Label_Audio	{0} audio	{0} 音频
 Mode_Audio	Audio only	仅音频
@@ -272,7 +272,7 @@ Notify_UpdateDoneBody	Unfinished downloads continue automatically.	未完成的�
 Notify_UpdateReady	VidFlow {0} is ready to install	VidFlow {0} 已下载，可以安装
 Notify_UpdateReadyBody	Installing takes a few seconds; downloads resume afterwards.	安装只需几秒，之后下载会自动继续。
 Notify_UpdateRolledBack	Update to {0} didn't complete	更新到 {0} 未完成
-Notify_UpdateRolledBackBody	Changes were rolled back; you're still on {0}. You can retry in Settings → Updates.	已回滚，当前仍为 {0}。可在「设置 → 应用更新」中重试。
+Notify_UpdateRolledBackBody	Changes were rolled back; you're still on {0}. You can retry in Settings → About & updates.	已回滚，当前仍为 {0}。可在「设置 → 关于与更新」中重试。
 Notify_ViewUpdate	View	查看
 Options_Audio	Audio	音频
 Options_AudioDescription	Format, quality and language track	音频格式、音质与音轨
@@ -357,3 +357,20 @@ Batch_PlaylistMeta	Playlist · {0} videos	播放列表 · {0} 个视频
 Batch_ListName	Links to download	要下载的链接
 Batch_Status	Parsed {0} of {1}. Tick the ones to download.	已解析 {0} / {1}，勾选要下载的项目
 Batch_StatusFailed	Parsed {0} of {1}, {2} failed. Tick the ones to download.	已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目
+Nav_Templates	Templates	下载模板
+Nav_Accounts	Accounts	账号
+Settings_AboutUpdates	About & updates	关于与更新
+Settings_UpdateBadge	Update available: {0}	有可用更新：{0}
+Settings_Notifications	Notifications	通知
+Settings_NotifyGroup	Download notifications	下载通知
+Settings_NotifyGroupDescription	Windows notifications while VidFlow is in the background	VidFlow 在后台时发送系统通知
+Settings_MoreDownload	Files and compatibility	文件与兼容性
+Settings_MoreDownloadDescription	Cover and metadata, H.264 compatibility mode	封面与元数据、H.264 兼容模式
+Templates_Mine	My templates	我的模板
+Templates_BuiltIn	Built-in presets	内置预设
+Templates_Empty	No custom templates yet	还没有自定义模板
+Templates_EmptyDescription	Create one with "New template", or duplicate a built-in preset from its "..." menu and adjust it	点击「新建模板」创建，或从内置预设的「…」菜单复制一份再修改
+Accounts_Description	Sign in to unlock higher quality and restricted videos. Sign-in happens in a built-in browser window and the cookies stay on this PC.	登录后可解锁更高画质及受限视频。登录在内置浏览器窗口中完成，Cookie 仅保存在本机。
+Accounts_Platforms	Platform accounts	平台账号
+About_Troubleshoot	Troubleshooting	故障排查
+About_TroubleshootDescription	Logs, data folder and the setup wizard	日志、数据文件夹与首次设置向导

@@ -52,6 +52,7 @@ public partial class App : Application
         _ = Task.Run(() => ToolManager.AutoUpdateYtDlpAsync());
 
         Updates = new UpdateController(UiQueue);
+        Updates.Changed += MainWindow.UpdateSettingsBadge;
         Updates.Start();
     }
 

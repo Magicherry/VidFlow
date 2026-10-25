@@ -41,6 +41,9 @@ public sealed class UpdateController
     public string? Error { get; private set; }
     public (UpdateOutcome Outcome, string? Version) LastResult { get; private set; }
 
+    /// <summary>A newer version than the running one is known (whether or not it has been downloaded yet).</summary>
+    public bool HasNewer => Latest is { } m && UpdateService.IsNewer(m, Current);
+
     /// <summary>Raised on the UI thread whenever any of the above changes.</summary>
     public event Action? Changed;
 

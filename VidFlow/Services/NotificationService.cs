@@ -131,7 +131,7 @@ public static class NotificationService
                     break;
                 case "showupdate":
                     App.MainWindow.BringToFront();
-                    App.MainWindow.NavigateTo("settings");
+                    App.MainWindow.NavigateTo("about");
                     break;
                 case "installupdate":
                     App.MainWindow.BringToFront();

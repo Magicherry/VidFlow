@@ -42,6 +42,7 @@
             IsSettingsVisible="False"
             IsTitleBarAutoPaddingEnabled="False"
             OpenPaneLength="240"
+            ItemInvoked="NavView_ItemInvoked"
             PaneDisplayMode="Auto"
             SelectionChanged="NavView_SelectionChanged">
             <NavigationView.MenuItems>
@@ -58,9 +59,23 @@
                         <InfoBadge x:Name="ActiveBadge" Visibility="Collapsed" />
                     </NavigationViewItem.InfoBadge>
                 </NavigationViewItem>
+                <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Templates')}" Tag="templates">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8A1;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Accounts')}" Tag="accounts">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE77B;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Settings')}" Tag="settings">
+                    <!--  A dot while an app update is waiting  -->
+                    <NavigationViewItem.InfoBadge>
+                        <InfoBadge x:Name="SettingsBadge" Visibility="Collapsed" />
+                    </NavigationViewItem.InfoBadge>
                     <NavigationViewItem.Icon>
                         <AnimatedIcon>
                             <AnimatedIcon.Source>
