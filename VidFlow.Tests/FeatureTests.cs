@@ -360,3 +360,31 @@ public class BilibiliQrLoginTests
     [Fact]
     public void NonLoginUrlGivesNoCookies() => Assert.Empty(BilibiliQrLogin.CookiesFromUrl(""));
 }
+
+[Collection("DataDir")]
+public class AccountStoreChangeTests
+{
+    [Fact]
+    public async Task SavingCookiesNotifiesListeners()
+    {
+        var old = AppSettings.DataDir;
+        var dir = Path.Combine(Path.GetTempPath(), "vidflow-acct-" + Guid.NewGuid().ToString("N"));
+        AppSettings.DataDir = dir;
+        var raised = 0;
+        void OnChanged() => raised++;
+        AccountStore.Changed += OnChanged;
+        try
+        {
+            await AccountStore.WriteAsync(BilibiliQrLogin.CookiesFromUrl(
+                "https://passport.biligame.com/x/passport-login/web/crossDomain?DedeUserID=1&SESSDATA=s&bili_jct=j&Expires=1893456000"));
+            Assert.Equal(1, raised);
+            Assert.True(AccountStore.IsLoggedIn(Platform.Bilibili));
+        }
+        finally
+        {
+            AccountStore.Changed -= OnChanged;
+            AppSettings.DataDir = old;
+            Directory.Delete(dir, true);
+        }
+    }
+}

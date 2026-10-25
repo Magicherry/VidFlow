@@ -17,7 +17,14 @@ public sealed partial class AccountsPage : Page
         InitializeComponent();
         SettingsPage.AddItems(BrowserCombo, ("", L.Get("Settings_BrowserNone")), ("edge", "Microsoft Edge"), ("chrome", "Google Chrome"),
             ("firefox", "Firefox"), ("brave", "Brave"), ("opera", "Opera"), ("vivaldi", "Vivaldi"));
+
+        // Follow sign-ins wherever they happen (this page, the home page's prompt, the setup wizard), the moment
+        // the cookies are saved rather than when the login window has finished closing.
+        Loaded += (_, _) => AccountStore.Changed += OnAccountsChanged;
+        Unloaded += (_, _) => AccountStore.Changed -= OnAccountsChanged;
     }
+
+    void OnAccountsChanged() => DispatcherQueue.TryEnqueue(UpdateAccounts);
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {

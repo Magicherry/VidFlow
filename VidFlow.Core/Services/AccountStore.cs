@@ -53,9 +53,13 @@ public static class AccountStore
         return sb.ToString();
     }
 
+    /// <summary>Raised after the cookie file is rewritten (sign-in or sign-out), from whichever thread wrote it.</summary>
+    public static event Action? Changed;
+
     public static async Task WriteAsync(IEnumerable<CookieRecord> cookies)
     {
         Directory.CreateDirectory(AppSettings.DataDir);
         await File.WriteAllTextAsync(CookieFile, ToNetscape(cookies));
+        Changed?.Invoke();
     }
 }

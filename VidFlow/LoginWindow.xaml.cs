@@ -130,14 +130,14 @@ public sealed partial class LoginWindow : Window
         StatusText.Text = L.Get("Login_SuccessClosing");
         DoneButton.IsEnabled = false;
         // Let the site finish setting its cookies, then close (which saves them).
-        await CloseSoonAsync();
+        await CloseSoonAsync(TimeSpan.FromSeconds(1.5));
     }
 
-    async Task CloseSoonAsync()
+    async Task CloseSoonAsync(TimeSpan delay)
     {
         if (_closing) return;
         _closing = true;
-        await Task.Delay(1500);
+        await Task.Delay(delay);
         Close();
     }
 
@@ -216,7 +216,9 @@ public sealed partial class LoginWindow : Window
                         await _webReady;
                         AccountService.AddCookies(Web.CoreWebView2, result.Cookies);
                         ShowQrState("", L.Get("Login_QrSuccess"), "SystemFillColorSuccessBrush");
-                        await CloseSoonAsync();
+                        // Save straight away so the app shows "signed in" while this window says so too.
+                        await ExportOnceAsync();
+                        await CloseSoonAsync(TimeSpan.FromSeconds(0.8));
                         return;
                 }
             }
