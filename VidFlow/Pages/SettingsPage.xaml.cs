@@ -42,9 +42,10 @@ public sealed partial class SettingsPage : Page
         ClipboardToggle.IsOn = s.WatchClipboard;
         FolderCard.Description = s.DownloadFolder;
         ConcurrencyCombo.SelectedItem = Math.Clamp(s.MaxConcurrent, 1, 5);
-        // Empty box = unlimited.
-        SpeedBox.Value = s.SpeedLimitKBps > 0 ? Math.Round(s.SpeedLimitKBps / 1024.0, 2) : double.NaN;
-        SubLangsBox.Text = s.SubtitleLanguages;
+        if (s.SpeedLimitKBps > 0) s.SpeedLimitValueKBps = s.SpeedLimitKBps;
+        SpeedToggle.IsOn = s.SpeedLimitKBps > 0;
+        ShowSpeed(s.SpeedLimitKBps > 0 ? s.SpeedLimitKBps : s.SpeedLimitValueKBps);
+        LoadSubtitleLanguages();
         DanmakuToggle.IsOn = s.SaveDanmaku;
         MetadataToggle.IsOn = s.EmbedMetadata;
         H264Toggle.IsOn = s.PreferH264;
@@ -52,7 +53,122 @@ public sealed partial class SettingsPage : Page
         NotifyToggle.IsOn = s.NotifyOnFinish;
         NotifyFailureToggle.IsOn = s.NotifyOnFailure;
         _loading = false;
+        UpdateSpeedSummary();
         RefreshAbout();
+    }
+
+    // ---- Speed limit -------------------------------------------------------------------------------------------
+
+    /// <summary>Shows a KB/s value in the friendliest unit (whole MB/s when it divides evenly, or ≥ 1 MB/s).</summary>
+    void ShowSpeed(int kbps)
+    {
+        var mb = kbps >= 1024;
+        SpeedUnitCombo.SelectedIndex = mb ? 1 : 0;
+        SpeedBox.Value = mb ? Math.Round(kbps / 1024.0, 2) : kbps;
+        SpeedBox.SmallChange = mb ? 1 : 100;
+        SpeedBox.Maximum = mb ? 10000 : 1024 * 1024;
+    }
+
+    int EnteredKBps()
+    {
+        var value = double.IsNaN(SpeedBox.Value) || SpeedBox.Value <= 0 ? 1 : SpeedBox.Value;
+        return Math.Max(1, (int)Math.Round(SpeedUnitCombo.SelectedIndex == 1 ? value * 1024 : value));
+    }
+
+    void UpdateSpeedSummary()
+    {
+        var s = AppSettings.Current;
+        SpeedValueCard.IsEnabled = SpeedToggle.IsOn;
+        SpeedExpander.Description = s.SpeedLimitKBps > 0
+            ? L.Format("Settings_SpeedOn", SpeedText(s.SpeedLimitKBps))
+            : L.Get("Settings_SpeedLimitDescription");
+    }
+
+    static string SpeedText(int kbps) =>
+        kbps >= 1024 ? $"{Math.Round(kbps / 1024.0, 2)} MB/s" : $"{kbps} KB/s";
+
+    void SpeedToggle_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (_loading) return;
+        var s = AppSettings.Current;
+        s.SpeedLimitKBps = SpeedToggle.IsOn ? Math.Max(1, s.SpeedLimitValueKBps) : 0;
+        AppSettings.Save();
+        // Switching it on opens the value so it can be adjusted right away.
+        if (SpeedToggle.IsOn) SpeedExpander.IsExpanded = true;
+        UpdateSpeedSummary();
+    }
+
+    void SpeedBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        if (_loading) return;
+        // An emptied box comes back as the previous value rather than "unlimited": the switch decides that.
+        if (double.IsNaN(args.NewValue))
+        {
+            sender.Value = double.IsNaN(args.OldValue) ? 1 : args.OldValue;
+            return;
+        }
+        SaveSpeed();
+    }
+
+    void SpeedUnitCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || SpeedBox is null) return;
+        // Same speed, shown in the other unit (5 MB/s ⇄ 5120 KB/s).
+        var kbps = AppSettings.Current.SpeedLimitValueKBps;
+        var mb = SpeedUnitCombo.SelectedIndex == 1;
+        _loading = true;
+        SpeedBox.SmallChange = mb ? 1 : 100;
+        SpeedBox.Maximum = mb ? 10000 : 1024 * 1024;
+        SpeedBox.Value = mb ? Math.Max(0.1, Math.Round(kbps / 1024.0, 2)) : kbps;
+        _loading = false;
+    }
+
+    void SaveSpeed()
+    {
+        var s = AppSettings.Current;
+        s.SpeedLimitValueKBps = EnteredKBps();
+        if (SpeedToggle.IsOn) s.SpeedLimitKBps = s.SpeedLimitValueKBps;
+        AppSettings.Save();
+        UpdateSpeedSummary();
+    }
+
+    // ---- Subtitles ---------------------------------------------------------------------------------------------
+
+    void LoadSubtitleLanguages()
+    {
+        var (chosen, other) = SubtitleLanguageSet.Split(AppSettings.Current.SubtitleLanguages);
+        SubLangsPanel.Children.Clear();
+        foreach (var lang in SubtitleLanguageSet.Common)
+        {
+            var box = new CheckBox { Content = lang.NativeName, Tag = lang.Key, IsChecked = chosen.Contains(lang.Key), MinWidth = 120 };
+            box.Checked += (_, _) => SaveSubtitleLanguages();
+            box.Unchecked += (_, _) => SaveSubtitleLanguages();
+            SubLangsPanel.Children.Add(box);
+        }
+        SubLangsOtherBox.Text = other;
+        UpdateSubtitleSummary();
+    }
+
+    void SaveSubtitleLanguages()
+    {
+        if (_loading) return;
+        var chosen = SubLangsPanel.Children.OfType<CheckBox>().Where(b => b.IsChecked == true).Select(b => (string)b.Tag);
+        AppSettings.Current.SubtitleLanguages = SubtitleLanguageSet.Join(chosen, SubLangsOtherBox.Text);
+        AppSettings.Save();
+        UpdateSubtitleSummary();
+    }
+
+    void SubLangsOtherBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SaveSubtitleLanguages();
+        // Show the codes as saved (separators tidied, duplicates of ticked languages dropped).
+        SubLangsOtherBox.Text = SubtitleLanguageSet.Split(AppSettings.Current.SubtitleLanguages).Other;
+    }
+
+    void UpdateSubtitleSummary()
+    {
+        var names = SubtitleLanguageSet.Describe(AppSettings.Current.SubtitleLanguages);
+        SubtitlesExpander.Description = names.Length > 0 ? L.Format("Settings_SubtitlesSummary", names) : L.Get("Settings_SubtitlesNone");
     }
 
     /// <summary>"Version 1.2.0", plus the newer version when one is waiting.</summary>
@@ -83,16 +199,6 @@ public sealed partial class SettingsPage : Page
         AppSettings.Save();
     }
 
-    void SpeedBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-    {
-        if (_loading) return;
-        var mb = args.NewValue;
-        AppSettings.Current.SpeedLimitKBps = double.IsNaN(mb) || mb <= 0 ? 0 : Math.Max(1, (int)Math.Round(mb * 1024));
-        AppSettings.Save();
-        // 0 is shown as the "Unlimited" placeholder rather than a literal 0.
-        if (!double.IsNaN(mb) && mb <= 0) sender.Value = double.NaN;
-    }
-
     /// <summary>All toggles save the same way.</summary>
     void Toggle_Changed(object sender, RoutedEventArgs e)
     {
@@ -105,12 +211,6 @@ public sealed partial class SettingsPage : Page
         s.PreferH264 = H264Toggle.IsOn;
         s.NotifyOnFinish = NotifyToggle.IsOn;
         s.NotifyOnFailure = NotifyFailureToggle.IsOn;
-        AppSettings.Save();
-    }
-
-    void SubLangsBox_LostFocus(object sender, RoutedEventArgs e)
-    {
-        AppSettings.Current.SubtitleLanguages = SubLangsBox.Text.Replace(" ", "").Trim(',');
         AppSettings.Save();
     }
 

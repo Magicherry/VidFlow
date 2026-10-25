@@ -11,6 +11,13 @@ public static partial class NamingTemplate
 {
     public const string DefaultFileName = "{title} [{id}]";
 
+    /// <summary>File name presets (shown in the template editor); anything else is a custom pattern.</summary>
+    public static readonly string[] FilePresets = [DefaultFileName, "{title}", "{uploader} - {title}", "{date} {title}", "{title} ({resolution})"];
+
+    /// <summary>Variables used in the pattern that VidFlow doesn't know (they would be kept as literal text).</summary>
+    public static IReadOnlyList<string> UnknownVariables(string template) =>
+        VariableRegex().Matches(template).Select(m => m.Groups[1].Value).Where(v => !Variables.Contains(v)).Distinct().ToList();
+
     /// <summary>Folder classification presets (shown in the template editor).</summary>
     public static readonly string[] FolderPresets = ["", "{platform}", "{uploader}", "{year}-{month}", "{platform}/{uploader}"];
 

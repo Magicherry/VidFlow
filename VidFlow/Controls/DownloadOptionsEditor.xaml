@@ -127,29 +127,78 @@
                 <FontIcon Glyph="&#xE8AC;" />
             </tk:SettingsExpander.HeaderIcon>
             <tk:SettingsExpander.Items>
+                <!--  Pick a common format…  -->
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Options_FileNameDescription')}" Header="{x:Bind l:L.Get('Options_FileName')}">
+                    <ComboBox
+                        x:Name="FileNamePresetCombo"
+                        MinWidth="240"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_FileName')}"
+                        SelectionChanged="FileNamePresetCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <!--  …or compose one: the pattern, with buttons that insert each variable at the caret  -->
                 <tk:SettingsCard
                     HorizontalContentAlignment="Stretch"
                     ContentAlignment="Vertical"
-                    Description="{x:Bind l:L.Get('Options_FileNameDescription')}"
-                    Header="{x:Bind l:L.Get('Options_FileName')}">
-                    <TextBox
-                        x:Name="FileNameBox"
-                        AutomationProperties.Name="{x:Bind l:L.Get('Options_FileName')}"
-                        TextChanged="FileNameBox_TextChanged" />
+                    Header="{x:Bind l:L.Get('Options_FileNamePattern')}">
+                    <StackPanel Spacing="8">
+                        <TextBox
+                            x:Name="FileNameBox"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Options_FileNamePattern')}"
+                            PlaceholderText="{x:Bind l:L.Get('Options_FileNamePlaceholder')}"
+                            TextChanged="FileNameBox_TextChanged" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{x:Bind l:L.Get('Options_Insert')}" />
+                        <!--  One button per variable, filled in code; wraps on narrow windows.  -->
+                        <VariableSizedWrapGrid
+                            x:Name="VariablePanel"
+                            Margin="0,-4,0,0"
+                            ItemHeight="36"
+                            ItemWidth="96"
+                            Orientation="Horizontal" />
+                        <TextBlock
+                            x:Name="UnknownVariableText"
+                            Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            TextWrapping="Wrap"
+                            Visibility="Collapsed" />
+                    </StackPanel>
                 </tk:SettingsCard>
-                <tk:SettingsCard Header="{x:Bind l:L.Get('Options_Folder')}">
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Options_SubfolderDescription')}" Header="{x:Bind l:L.Get('Options_Subfolder')}">
                     <ComboBox
                         x:Name="FolderCombo"
-                        MinWidth="200"
-                        AutomationProperties.Name="{x:Bind l:L.Get('Options_Folder')}"
+                        MinWidth="240"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_Subfolder')}"
                         SelectionChanged="Option_Changed" />
                 </tk:SettingsCard>
-                <tk:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                    <TextBlock
-                        x:Name="PreviewText"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        IsTextSelectionEnabled="True"
-                        TextWrapping="Wrap" />
+                <!--  What a download will be saved as, with sample values  -->
+                <tk:SettingsCard
+                    HorizontalContentAlignment="Stretch"
+                    ContentAlignment="Vertical"
+                    Header="{x:Bind l:L.Get('Options_PreviewHeader')}">
+                    <Border
+                        Padding="12,8"
+                        Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                        CornerRadius="{StaticResource ControlCornerRadius}">
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon
+                                x:Name="PreviewIcon"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Glyph="&#xE8B2;" />
+                            <TextBlock
+                                x:Name="PreviewText"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                IsTextSelectionEnabled="True"
+                                TextWrapping="Wrap" />
+                        </Grid>
+                    </Border>
                 </tk:SettingsCard>
             </tk:SettingsExpander.Items>
         </tk:SettingsExpander>

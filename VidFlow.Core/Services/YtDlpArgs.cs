@@ -79,7 +79,7 @@ public static class YtDlpArgs
 
         if (req.WriteSubtitles)
         {
-            var langs = string.IsNullOrWhiteSpace(s.SubtitleLanguages) ? "zh.*,en.*" : s.SubtitleLanguages.Trim();
+            var langs = string.IsNullOrWhiteSpace(s.SubtitleLanguages) ? SubtitleLanguageSet.Fallback : s.SubtitleLanguages.Trim();
             if (platform == Platform.Bilibili && s.SaveDanmaku) langs += ",danmaku";
             args.AddRange(["--write-subs", "--sub-langs", langs]);
             // Bilibili already serves SRT, and its danmaku is XML that must not be converted.

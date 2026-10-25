@@ -139,6 +139,10 @@
   <data name="Mode_M4a" xml:space="preserve"><value>仅音频 (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>仅音频 (MP3)</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>视频 (MP4)</value></data>
+  <data name="Naming_Custom" xml:space="preserve"><value>自定义</value></data>
+  <data name="Naming_InsertVariable" xml:space="preserve"><value>插入「{0}」</value></data>
+  <data name="Naming_Recommended" xml:space="preserve"><value>{0}（推荐）</value></data>
+  <data name="Naming_Unknown" xml:space="preserve"><value>无法识别的变量会按原样保留为文字：{0}</value></data>
   <data name="Nav_Accounts" xml:space="preserve"><value>账号</value></data>
   <data name="Nav_Downloads" xml:space="preserve"><value>下载列表</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>新建下载</value></data>
@@ -171,17 +175,23 @@
   <data name="Options_Container" xml:space="preserve"><value>封装格式</value></data>
   <data name="Options_ContainerDescription" xml:space="preserve"><value>文件格式；MP4 几乎所有设备都能播放</value></data>
   <data name="Options_FileName" xml:space="preserve"><value>文件名</value></data>
-  <data name="Options_FileNameDescription" xml:space="preserve"><value>可用变量：{title} {uploader} {date} {year} {month} {resolution} {id} {platform}</value></data>
+  <data name="Options_FileNameDescription" xml:space="preserve"><value>选择常用格式，或在下方自行组合</value></data>
+  <data name="Options_FileNamePattern" xml:space="preserve"><value>命名格式</value></data>
+  <data name="Options_FileNamePlaceholder" xml:space="preserve"><value>例如 {uploader} - {title}</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>保存位置</value></data>
+  <data name="Options_Insert" xml:space="preserve"><value>点击插入变量（插入到光标处）：</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>下载内容</value></data>
   <data name="Options_ModeDescription" xml:space="preserve"><value>选择下载完整视频，或仅提取音频</value></data>
   <data name="Options_Naming" xml:space="preserve"><value>命名与分类</value></data>
   <data name="Options_NamingDescription" xml:space="preserve"><value>文件的命名方式，以及是否按平台 / 作者 / 日期放入子文件夹</value></data>
-  <data name="Options_Preview" xml:space="preserve"><value>示例：{0}</value></data>
+  <data name="Options_PreviewHeader" xml:space="preserve"><value>预览（示例视频）</value></data>
+  <data name="Options_PreviewRoot" xml:space="preserve"><value>下载位置</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>画质</value></data>
   <data name="Options_QualityDescription" xml:space="preserve"><value>列表中为实际可用的分辨率，大小为估算值</value></data>
   <data name="Options_Recode" xml:space="preserve"><value>不兼容时自动转换</value></data>
   <data name="Options_RecodeDescription" xml:space="preserve"><value>下载的编码与封装格式不兼容时重新编码（较慢）；关闭时会改存为 MKV</value></data>
+  <data name="Options_Subfolder" xml:space="preserve"><value>子文件夹分类</value></data>
+  <data name="Options_SubfolderDescription" xml:space="preserve"><value>在下载位置中自动创建</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>同时保存字幕文件（如果有），字幕语言可在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
@@ -263,12 +273,17 @@
   <data name="Settings_SourceManaged" xml:space="preserve"><value>由 VidFlow 管理</value></data>
   <data name="Settings_SourceSystem" xml:space="preserve"><value>使用系统中已安装的版本</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>限速</value></data>
-  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>单位 MB/s，对每个任务分别限速，留空表示不限速；修改后对新开始的任务生效</value></data>
-  <data name="Settings_SpeedUnlimited" xml:space="preserve"><value>不限速</value></data>
+  <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>开启后对每个下载任务分别限速，对之后开始的任务生效</value></data>
+  <data name="Settings_SpeedMax" xml:space="preserve"><value>每个任务最高速度</value></data>
+  <data name="Settings_SpeedOn" xml:space="preserve"><value>已开启 · 每个任务最高 {0}</value></data>
+  <data name="Settings_SpeedUnit" xml:space="preserve"><value>单位</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>字幕语言</value></data>
-  <data name="Settings_SubLangsDescription" xml:space="preserve"><value>yt-dlp 语言代码，用逗号分隔（例如 zh-Hans,en）</value></data>
+  <data name="Settings_SubLangsDescription" xml:space="preserve"><value>只会保存视频实际提供的语言</value></data>
+  <data name="Settings_SubLangsOther" xml:space="preserve"><value>其他语言</value></data>
+  <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>语言代码，用逗号分隔</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>字幕</value></data>
-  <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>要保存的字幕语言，以及 B 站弹幕</value></data>
+  <data name="Settings_SubtitlesNone" xml:space="preserve"><value>未选择语言，将保存中文和英文字幕</value></data>
+  <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>保存语言：{0}</value></data>
   <data name="Settings_Templates" xml:space="preserve"><value>下载模板</value></data>
   <data name="Settings_TemplatesDescription" xml:space="preserve"><value>保存好的下载选项组合。新建下载时自动套用默认模板；在新建下载页的修改只对当次任务生效</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>应用主题</value></data>
@@ -358,6 +373,14 @@
   <data name="UpdateMode_Auto" xml:space="preserve"><value>自动更新</value></data>
   <data name="UpdateMode_Manual" xml:space="preserve"><value>手动更新</value></data>
   <data name="UpdateMode_Notify" xml:space="preserve"><value>仅检查并提醒</value></data>
+  <data name="Var_date" xml:space="preserve"><value>上传日期</value></data>
+  <data name="Var_id" xml:space="preserve"><value>视频 ID</value></data>
+  <data name="Var_month" xml:space="preserve"><value>月份</value></data>
+  <data name="Var_platform" xml:space="preserve"><value>平台</value></data>
+  <data name="Var_resolution" xml:space="preserve"><value>分辨率</value></data>
+  <data name="Var_title" xml:space="preserve"><value>标题</value></data>
+  <data name="Var_uploader" xml:space="preserve"><value>作者</value></data>
+  <data name="Var_year" xml:space="preserve"><value>年份</value></data>
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「账号」页面中登录。</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码。</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>登录账号（可选）</value></data>

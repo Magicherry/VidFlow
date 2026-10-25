@@ -274,3 +274,54 @@ public class UpdateServiceTests
         }
     }
 }
+
+public class SubtitleLanguageTests
+{
+    [Fact]
+    public void OldDefaultSettingReadsAsTicks()
+    {
+        var (chosen, other) = SubtitleLanguageSet.Split("zh-Hans,zh-Hant,zh-CN,zh-TW,zh,ai-zh,en");
+        Assert.Equal(["en", "zh-Hans", "zh-Hant"], chosen.Order());
+        Assert.Equal("", other);
+    }
+
+    [Fact]
+    public void RegionalCodesBelongToTheirLanguageAndUnknownCodesAreKept()
+    {
+        var (chosen, other) = SubtitleLanguageSet.Split("en-US, ja , fr，de;zh-HK");
+        Assert.Equal(["en", "ja", "zh-Hant"], chosen.Order());
+        Assert.Equal("fr, de", other);
+    }
+
+    [Fact]
+    public void JoinWritesEveryCodeOfTickedLanguagesWithoutDuplicates()
+    {
+        Assert.Equal("zh-Hans,zh-CN,zh,ai-zh,en.*,fr", SubtitleLanguageSet.Join(["en", "zh-Hans"], "fr, en.*"));
+        Assert.Equal("", SubtitleLanguageSet.Join([], " "));
+        Assert.Equal("简体中文, English, fr", SubtitleLanguageSet.Describe("zh,en,fr"));
+    }
+
+    [Fact]
+    public void EmptySettingFallsBackToChineseAndEnglish()
+    {
+        var req = new DownloadRequest("https://youtu.be/x", "video", 0, true, "o");
+        var args = YtDlpArgs.Download(req, new AppSettings { SubtitleLanguages = "" }, new YtDlpArgs.Environment(@"C:\ff", null, false));
+        Assert.Equal(SubtitleLanguageSet.Fallback, args[args.IndexOf("--sub-langs") + 1]);
+    }
+}
+
+public class NamingPresetTests
+{
+    [Fact]
+    public void PresetsUseOnlyKnownVariables()
+    {
+        Assert.Contains(NamingTemplate.DefaultFileName, NamingTemplate.FilePresets);
+        Assert.All(NamingTemplate.FilePresets, p => Assert.Empty(NamingTemplate.UnknownVariables(p)));
+    }
+
+    [Fact]
+    public void UnknownVariablesAreReported()
+    {
+        Assert.Equal(["author", "views"], NamingTemplate.UnknownVariables("{author} {title} {views} {author}"));
+    }
+}

@@ -174,12 +174,10 @@ Settings_RestartTitle	Restart required	需要重启
 Settings_SourceManaged	managed by VidFlow	由 VidFlow 管理
 Settings_SourceSystem	installed on this PC	使用系统中已安装的版本
 Settings_SpeedLimit	Speed limit	限速
-Settings_SpeedLimitDescription	In MB/s, per download; leave empty for unlimited. Applies to downloads that start after changing it	单位 MB/s，对每个任务分别限速，留空表示不限速；修改后对新开始的任务生效
-Settings_SpeedUnlimited	Unlimited	不限速
+Settings_SpeedLimitDescription	Limit the speed of each download; applies to downloads that start afterwards	开启后对每个下载任务分别限速，对之后开始的任务生效
 Settings_SubLangs	Subtitle languages	字幕语言
-Settings_SubLangsDescription	yt-dlp language codes, comma separated (e.g. zh-Hans,en)	yt-dlp 语言代码，用逗号分隔（例如 zh-Hans,en）
+Settings_SubLangsDescription	Only languages the video actually offers are saved	只会保存视频实际提供的语言
 Settings_Subtitles	Subtitles	字幕
-Settings_SubtitlesDescription	Languages to save, and Bilibili danmaku	要保存的字幕语言，以及 B 站弹幕
 Settings_Theme	App theme	应用主题
 Settings_ThemeDark	Dark	深色
 Settings_ThemeLight	Light	浅色
@@ -283,10 +281,9 @@ Options_AudioTrackDescription	For videos with several dubbed languages	适用于
 Options_Container	Container	封装格式
 Options_ContainerDescription	The file type; MP4 plays almost everywhere	文件格式；MP4 几乎所有设备都能播放
 Options_FileName	File name	文件名
-Options_FileNameDescription	Variables: {title} {uploader} {date} {year} {month} {resolution} {id} {platform}	可用变量：{title} {uploader} {date} {year} {month} {resolution} {id} {platform}
+Options_FileNameDescription	Pick a common format, or compose your own below	选择常用格式，或在下方自行组合
 Options_Naming	Naming and folders	命名与分类
 Options_NamingDescription	How files are named and sorted into folders	文件的命名方式，以及是否按平台 / 作者 / 日期放入子文件夹
-Options_Preview	Example: {0}	示例：{0}
 Options_Recode	Convert automatically	不兼容时自动转换
 Options_RecodeDescription	Re-encode when the downloaded streams don't fit the container (slow); otherwise it is saved as MKV	下载的编码与封装格式不兼容时重新编码（较慢）；关闭时会改存为 MKV
 Preset_AudioOnly	Audio only	仅下载音频
@@ -374,3 +371,29 @@ Accounts_Description	Sign in to unlock higher quality and restricted videos. Sig
 Accounts_Platforms	Platform accounts	平台账号
 About_Troubleshoot	Troubleshooting	故障排查
 About_TroubleshootDescription	Logs, data folder and the setup wizard	日志、数据文件夹与首次设置向导
+Settings_SpeedMax	Maximum speed per download	每个任务最高速度
+Settings_SpeedUnit	Unit	单位
+Settings_SpeedOn	On · up to {0} per download	已开启 · 每个任务最高 {0}
+Settings_SubLangsOther	Other languages	其他语言
+Settings_SubLangsOtherDescription	Language codes, comma separated	语言代码，用逗号分隔
+Settings_SubtitlesSummary	Languages: {0}	保存语言：{0}
+Settings_SubtitlesNone	No language chosen: Chinese and English subtitles are saved	未选择语言，将保存中文和英文字幕
+Options_FileNamePattern	Format	命名格式
+Options_FileNamePlaceholder	e.g. {uploader} - {title}	例如 {uploader} - {title}
+Options_Insert	Click to insert a variable at the cursor:	点击插入变量（插入到光标处）：
+Options_Subfolder	Sort into subfolders	子文件夹分类
+Options_SubfolderDescription	Created inside the download location	在下载位置中自动创建
+Options_PreviewHeader	Preview (sample video)	预览（示例视频）
+Options_PreviewRoot	Download location	下载位置
+Naming_Recommended	{0} (recommended)	{0}（推荐）
+Naming_Custom	Custom	自定义
+Naming_InsertVariable	Insert {0}	插入「{0}」
+Naming_Unknown	Not recognised, kept as plain text: {0}	无法识别的变量会按原样保留为文字：{0}
+Var_title	Title	标题
+Var_uploader	Uploader	作者
+Var_date	Upload date	上传日期
+Var_year	Year	年份
+Var_month	Month	月份
+Var_resolution	Resolution	分辨率
+Var_id	Video ID	视频 ID
+Var_platform	Platform	平台

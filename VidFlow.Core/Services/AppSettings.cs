@@ -28,6 +28,9 @@ public sealed class AppSettings
     /// <summary>Per-download speed limit in KB/s; 0 means unlimited.</summary>
     public int SpeedLimitKBps { get; set; }
 
+    /// <summary>The limit last entered, restored when the limit is switched back on.</summary>
+    public int SpeedLimitValueKBps { get; set; } = 5 * 1024;
+
     /// <summary>video, mp3 or m4a.</summary>
     public string DefaultMode { get; set; } = "video";
 

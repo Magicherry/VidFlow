@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using VidFlow.Localization;
 using VidFlow.Models;
 using VidFlow.Services;
@@ -29,6 +30,41 @@ public sealed partial class DownloadOptionsEditor : UserControl
             AudioQualityCombo.Items.Add(new ComboBoxItem { Content = q == 0 ? L.Get("AudioQuality_Best") : $"{q} kbps", Tag = q });
         AddItems(FolderCombo, ("", L.Get("Folder_None")), ("{platform}", L.Get("Folder_Platform")), ("{uploader}", L.Get("Folder_Uploader")),
             ("{year}-{month}", L.Get("Folder_Month")), ("{platform}/{uploader}", L.Get("Folder_PlatformUploader")));
+
+        // File name presets read as their variables' names ("Uploader - Title"), plus "Custom".
+        foreach (var preset in NamingTemplate.FilePresets)
+        {
+            var text = Describe(preset);
+            if (preset == NamingTemplate.DefaultFileName) text = L.Format("Naming_Recommended", text);
+            FileNamePresetCombo.Items.Add(new ComboBoxItem { Content = text, Tag = preset });
+        }
+        FileNamePresetCombo.Items.Add(new ComboBoxItem { Content = L.Get("Naming_Custom"), Tag = CustomTag });
+
+        foreach (var name in NamingTemplate.Variables)
+        {
+            var button = new Button
+            {
+                Content = VariableName(name),
+                Padding = new Thickness(8, 3, 8, 4),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Margin = new Thickness(0, 0, 6, 0),
+            };
+            ToolTipService.SetToolTip(button, $"{{{name}}}");
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(button, L.Format("Naming_InsertVariable", VariableName(name)));
+            button.Click += (_, _) => InsertVariable(name);
+            VariablePanel.Children.Add(button);
+        }
+    }
+
+    const string CustomTag = "\0custom";
+
+    static string VariableName(string variable) => L.Get($"Var_{variable}");
+
+    /// <summary>"{uploader} - {title}" → "Uploader - Title".</summary>
+    static string Describe(string pattern)
+    {
+        foreach (var v in NamingTemplate.Variables) pattern = pattern.Replace($"{{{v}}}", VariableName(v));
+        return pattern;
     }
 
     /// <summary>Raised whenever the user changes an option.</summary>
@@ -59,7 +95,8 @@ public sealed partial class DownloadOptionsEditor : UserControl
         FillAudioTracks();
         SubsToggle.IsOn = options.Subtitles;
         RecodeToggle.IsOn = options.Recode;
-        FileNameBox.Text = options.FileNameTemplate;
+        FileNameBox.Text = string.IsNullOrWhiteSpace(options.FileNameTemplate) ? NamingTemplate.DefaultFileName : options.FileNameTemplate;
+        SyncFileNamePreset();
         if (!NamingTemplate.FolderPresets.Contains(options.FolderTemplate))
             FolderCombo.Items.Add(new ComboBoxItem { Content = options.FolderTemplate, Tag = options.FolderTemplate });
         Select(FolderCombo, options.FolderTemplate);
@@ -181,8 +218,53 @@ public sealed partial class DownloadOptionsEditor : UserControl
     {
         if (_loading) return;
         _options.FileNameTemplate = FileNameBox.Text;
+        SyncFileNamePreset();
         Refresh();
         Changed?.Invoke();
+    }
+
+    /// <summary>The preset list follows the pattern: a preset when it matches one, otherwise "Custom".</summary>
+    void SyncFileNamePreset()
+    {
+        var text = FileNameBox.Text.Trim();
+        var match = FileNamePresetCombo.Items.Cast<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == text)
+                    ?? FileNamePresetCombo.Items.Cast<ComboBoxItem>().Last();
+        if (!ReferenceEquals(FileNamePresetCombo.SelectedItem, match))
+        {
+            var loading = _loading;
+            _loading = true;
+            FileNamePresetCombo.SelectedItem = match;
+            _loading = loading;
+        }
+    }
+
+    void FileNamePresetCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || FileNamePresetCombo.SelectedItem is not ComboBoxItem { Tag: string tag }) return;
+        if (tag == CustomTag)
+        {
+            // Keep the current pattern and put the caret at its end, ready to edit.
+            FileNameBox.Focus(FocusState.Programmatic);
+            FileNameBox.SelectionStart = FileNameBox.Text.Length;
+            return;
+        }
+        FileNameBox.Text = tag;
+    }
+
+    /// <summary>Inserts "{variable}" at the caret (replacing any selection), with a space before it if needed.</summary>
+    void InsertVariable(string name)
+    {
+        var text = FileNameBox.Text;
+        var start = Math.Clamp(FileNameBox.SelectionStart, 0, text.Length);
+        var end = Math.Clamp(start + FileNameBox.SelectionLength, start, text.Length);
+        // A button click takes focus from the box; without a caret it appends.
+        if (!ReferenceEquals(FocusManager.GetFocusedElement(XamlRoot), FileNameBox) && FileNameBox.SelectionLength == 0 && start == 0) start = end = text.Length;
+        var token = $"{{{name}}}";
+        if (start > 0 && !char.IsWhiteSpace(text[start - 1]) && text[start - 1] is not ('(' or '[' or '-' or '_')) token = " " + token;
+        FileNameBox.Text = text[..start] + token + text[end..];
+        FileNameBox.Focus(FocusState.Programmatic);
+        FileNameBox.SelectionStart = start + token.Length;
+        FileNameBox.SelectionLength = 0;
     }
 
     void Refresh()
@@ -192,7 +274,12 @@ public sealed partial class DownloadOptionsEditor : UserControl
             video ? Visibility.Visible : Visibility.Collapsed;
 
         var ext = video ? _options.Container : _options.AudioFormat;
-        PreviewText.Text = L.Format("Options_Preview", NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext));
+        PreviewText.Text = $"{L.Get("Options_PreviewRoot")}\\{NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext)}";
+        PreviewIcon.Glyph = video ? "" : "";
+        var unknown = NamingTemplate.UnknownVariables(_options.FileNameTemplate);
+        UnknownVariableText.Visibility = unknown.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+        if (unknown.Count > 0)
+            UnknownVariableText.Text = L.Format("Naming_Unknown", string.Join(" ", unknown.Select(u => $"{{{u}}}")));
 
         var issue = FormatCompatibility.Check(_options);
         CompatBar.IsOpen = issue is not null;
