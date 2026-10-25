@@ -266,6 +266,7 @@
   <data name="Settings_About" xml:space="preserve"><value>关于</value></data>
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
+  <data name="Settings_Aria2Missing" xml:space="preserve"><value>未安装 · 可大幅提升下载速度（推荐）</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新 yt-dlp</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查；过旧的 yt-dlp 常导致下载失败</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
@@ -299,6 +300,8 @@
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>写入标题、作者和封面</value></data>
   <data name="Settings_MoreDownload" xml:space="preserve"><value>文件与兼容性</value></data>
   <data name="Settings_MoreDownloadDescription" xml:space="preserve"><value>封面与元数据、H.264 兼容模式</value></data>
+  <data name="Settings_MultiConnection" xml:space="preserve"><value>多连接加速</value></data>
+  <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>需要 aria2 · 可在「关于与更新」中安装</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>网络</value></data>
   <data name="Settings_Notifications" xml:space="preserve"><value>通知</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>完成通知</value></data>
@@ -386,6 +389,7 @@
   <data name="Templates_Mine" xml:space="preserve"><value>我的模板</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>有 {0} 项可以安装或更新</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>所有组件均为最新</value></data>
+  <data name="Tools_Aria2Purpose" xml:space="preserve"><value>加速 YouTube、X 等海外视频下载</value></data>
   <data name="Tools_CheckFailed" xml:space="preserve"><value>无法检查</value></data>
   <data name="Tools_CheckFailedSummary" xml:space="preserve"><value>无法检查更新，请检查网络或代理设置</value></data>
   <data name="Tools_Checking" xml:space="preserve"><value>正在检查更新…</value></data>
@@ -453,7 +457,7 @@
   <data name="Wizard_InstallAll" xml:space="preserve"><value>一键安装组件</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>下一步</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>跳过</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 需要三个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境。它们将从官方 GitHub 发布页下载（约 180 MB）。</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 需要四个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境，aria2 负责多连接加速下载。它们将从官方 GitHub 发布页下载（约 185 MB）。</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>欢迎使用 VidFlow</value></data>
   <data name="Wizard_YtDlpMissing" xml:space="preserve"><value>yt-dlp — 未安装（必需）</value></data>
   <data name="Wizard_YtDlpReady" xml:space="preserve"><value>yt-dlp — 已就绪</value></data>

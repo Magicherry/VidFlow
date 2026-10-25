@@ -4,7 +4,7 @@ using VidFlow.Localization;
 
 namespace VidFlow.Services;
 
-/// <summary>Locates, installs and updates the external tools (yt-dlp, ffmpeg).</summary>
+/// <summary>Locates, installs and updates the external tools (yt-dlp, ffmpeg, Deno, aria2).</summary>
 public static class ToolManager
 {
     const string YtDlpUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe";
@@ -188,6 +188,66 @@ public static class ToolManager
         {
             Log.Info($"Latest deno check failed: {ex.Message}");
             return null;
+        }
+    }
+
+    // ---- aria2: splits each download over several connections ---------------------------------------------------
+
+    /// <summary>aria2c, used by yt-dlp to fetch one file over several connections at once. YouTube (and many proxies)
+    /// cap each connection at well under 1 MB/s, so a single connection is what makes downloads slow.</summary>
+    public static string? Aria2Path => Find("aria2c.exe");
+
+    static (string Version, DateTime At)? _latestAria2;
+
+    /// <summary>Latest aria2 release ("1.37.0", from the tag "release-1.37.0"), cached for 10 minutes; null if unreachable.</summary>
+    public static async Task<string?> GetLatestAria2VersionAsync(bool refresh = false)
+    {
+        if (!refresh && _latestAria2 is { } c && DateTime.Now - c.At < TimeSpan.FromMinutes(10)) return c.Version;
+        try
+        {
+            using var resp = await Http.Client.GetAsync("https://github.com/aria2/aria2/releases/latest",
+                HttpCompletionOption.ResponseHeadersRead);
+            resp.EnsureSuccessStatusCode();
+            var tag = TagFromReleaseUrl(resp.RequestMessage?.RequestUri);
+            if (tag is null) return null;
+            var version = tag.Replace("release-", "");
+            _latestAria2 = (version, DateTime.Now);
+            return version;
+        }
+        catch (Exception ex)
+        {
+            Log.Info($"Latest aria2 check failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>"aria2 version 1.37.0" → "1.37.0".</summary>
+    public static string? Aria2Version(string? versionLine) =>
+        versionLine?.StartsWith("aria2 version ", StringComparison.Ordinal) == true ? versionLine["aria2 version ".Length..].Trim() : versionLine;
+
+    public static async Task InstallAria2Async(IProgress<double>? progress, CancellationToken ct)
+    {
+        // The asset name carries the version and a build number (aria2-1.37.0-win-64bit-build1.zip): read it from the
+        // release's asset list rather than the rate-limited API.
+        var version = await GetLatestAria2VersionAsync(refresh: true)
+            ?? throw new InvalidOperationException(L.Get("Error_Network"));
+        var list = await Http.Client.GetStringAsync($"https://github.com/aria2/aria2/releases/expanded_assets/release-{version}", ct);
+        var href = System.Text.RegularExpressions.Regex.Match(list, @"href=""(/aria2/aria2/releases/download/[^""]+-win-64bit[^""]*\.zip)""");
+        if (!href.Success) throw new InvalidDataException(L.Format("Error_ZipMissing", "aria2c.exe"));
+
+        Directory.CreateDirectory(BinDir);
+        var zipPath = Path.Combine(BinDir, "aria2.zip.download");
+        await DownloadFileAsync("https://github.com" + href.Groups[1].Value, zipPath, progress, ct);
+        try
+        {
+            using var zip = ZipFile.OpenRead(zipPath);
+            var entry = zip.Entries.FirstOrDefault(e => e.Name.Equals("aria2c.exe", StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidDataException(L.Format("Error_ZipMissing", "aria2c.exe"));
+            entry.ExtractToFile(Path.Combine(BinDir, "aria2c.exe"), overwrite: true);
+        }
+        finally
+        {
+            File.Delete(zipPath);
         }
     }
 

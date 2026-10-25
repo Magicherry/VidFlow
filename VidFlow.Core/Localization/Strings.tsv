@@ -216,7 +216,7 @@ Wizard_FolderTitle	Where to save	保存位置
 Wizard_InstallAll	Install components	一键安装组件
 Wizard_Next	Next	下一步
 Wizard_Skip	Skip	跳过
-Wizard_WelcomeBody	VidFlow uses three free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, and Deno, which YouTube needs for some formats. They're downloaded from their official GitHub releases (about 180 MB).	VidFlow 需要三个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境。它们将从官方 GitHub 发布页下载（约 180 MB）。
+Wizard_WelcomeBody	VidFlow uses four free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, Deno, which YouTube needs for some formats, and aria2 to download over several connections. They're downloaded from their official GitHub releases (about 185 MB).	VidFlow 需要四个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境，aria2 负责多连接加速下载。它们将从官方 GitHub 发布页下载（约 185 MB）。
 Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
 Wizard_YtDlpMissing	yt-dlp — not installed (required)	yt-dlp — 未安装（必需）
 Wizard_YtDlpReady	yt-dlp — ready	yt-dlp — 已就绪
@@ -282,6 +282,7 @@ Preset_Compatible	Compatible	兼容优先
 Preset_HD	HD first (1080p)	高清优先（1080P）
 Preset_SaveSpace	Save space	节省空间
 Settings_DenoMissing	Not installed · needed for some YouTube formats (recommended)	未安装 · YouTube 部分格式需要（推荐）
+Settings_Aria2Missing	Not installed · makes downloads much faster (recommended)	未安装 · 可大幅提升下载速度（推荐）
 Settings_NotifyFailure	Failure notifications	失败与异常通知
 Settings_NotifyFailureDescription	When a download fails or stalls	下载失败或长时间无进度时
 Settings_ReleaseNotes	What's new	更新日志
@@ -389,6 +390,7 @@ Var_platform	Platform	平台
 Tools_YtDlpPurpose	Parses and downloads videos	解析和下载视频
 Tools_FfmpegPurpose	Merges video and audio, converts formats	合并音视频、转换格式
 Tools_DenoPurpose	Unlocks some YouTube formats	获取部分 YouTube 格式
+Tools_Aria2Purpose	Faster YouTube and X downloads	加速 YouTube、X 等海外视频下载
 Tools_Installed	{0} · version {1}	{0} · 版本 {1}
 Tools_SystemCopy	{0} · version {1} · system copy	{0} · 版本 {1} · 系统中的版本
 Tools_CheckFailed	Couldn't check	无法检查
@@ -454,3 +456,5 @@ Compat_SavedAsMkv	Dolby Vision / Hi-Res will be saved as MKV.	杜比视界 / Hi-
 Compat_HdrMkv	HDR video will be saved as MKV.	HDR 视频将保存为 MKV。
 Compat_HiResAvailable	This video has Hi-Res audio: choose FLAC or Original to keep it.	此视频有 Hi-Res 无损音轨，选 FLAC 或「原始格式」可保留。
 Compat_UseMkv	Use MKV	改用 MKV
+Settings_MultiConnection	Multi-connection acceleration	多连接加速
+Settings_MultiConnectionNeedsAria2	Needs aria2 · install it in About & updates	需要 aria2 · 可在「关于与更新」中安装

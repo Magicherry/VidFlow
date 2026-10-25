@@ -28,6 +28,9 @@ public sealed class AppSettings
     /// <summary>Per-download speed limit in KB/s; 0 means unlimited.</summary>
     public int SpeedLimitKBps { get; set; }
 
+    /// <summary>Download each file over several connections (aria2c), when aria2 is installed.</summary>
+    public bool MultiConnection { get; set; } = true;
+
     /// <summary>The limit last entered, restored when the limit is switched back on.</summary>
     public int SpeedLimitValueKBps { get; set; } = 5 * 1024;
 

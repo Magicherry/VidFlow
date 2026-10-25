@@ -9,7 +9,10 @@ public static class ErrorMapper
     public static string LastErrorLine(string raw)
     {
         var lines = raw.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        return lines.LastOrDefault(l => l.StartsWith("ERROR:", StringComparison.Ordinal)) ?? lines.LastOrDefault() ?? "";
+        var i = Array.FindLastIndex(lines, l => l.StartsWith("ERROR:", StringComparison.Ordinal));
+        if (i < 0) return lines.LastOrDefault() ?? "";
+        // Download errors come as "ERROR: \r[download] Got error: …", which the line reader splits in two.
+        return lines[i] == "ERROR:" && i + 1 < lines.Length ? $"ERROR: {lines[i + 1]}" : lines[i];
     }
 
     public static string Friendly(string raw)
@@ -43,6 +46,9 @@ public static class ErrorMapper
         || Has(error, "Failed to decrypt")
         || Has(error, "cookies from browser")
         || (Has(error, "could not find") && Has(error, "cookies"));
+
+    /// <summary>The external downloader failed ("ERROR: aria2c exited with code 1"), not the site.</summary>
+    public static bool IsAria2Failure(string error) => Has(error, "aria2c exited with code");
 
     /// <summary>The site answered but offered nothing downloadable (on YouTube typically a sign-in / cookie problem).</summary>
     public static bool IsNoFormats(string error) =>

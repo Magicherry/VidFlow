@@ -20,7 +20,12 @@ public static class YtDlpArgs
 
     /// <summary>Where cookies and tools come from.</summary>
     public sealed record Environment(string? FfmpegDir, string? LoginCookieFile, bool SkipBrowserCookies,
-        bool SkipLoginCookies = false, string? DenoPath = null);
+        bool SkipLoginCookies = false, string? DenoPath = null, string? Aria2Path = null, string? SystemProxy = null);
+
+    /// <summary>16 connections per file, fragments of at least 1 MB. aria2's own console output is reduced to one
+    /// summary line a second, which <see cref="YtDlpOutputParser"/> reads as progress (yt-dlp prints none meanwhile).</summary>
+    internal const string Aria2Args =
+        "aria2c:-x16 -s16 -k1M --summary-interval=1 --show-console-readout=false --console-log-level=warn --file-allocation=none";
 
     public static List<string> Info(string url, AppSettings s, Environment env)
     {
@@ -60,6 +65,7 @@ public static class YtDlpArgs
             else if (req.Container != "mp4" && hasFfmpeg)
                 args.AddRange([req.Recode ? "--recode-video" : "--remux-video", req.Container]);
             if (s.SpeedLimitKBps > 0) args.AddRange(["-r", $"{s.SpeedLimitKBps}K"]);
+            args.AddRange(Connections(s, env));
             args.AddRange(Common(s, env));
             args.Add(direct.Url);
             return args;
@@ -123,8 +129,22 @@ public static class YtDlpArgs
         if (s.SpeedLimitKBps > 0)
             args.AddRange(["-r", $"{s.SpeedLimitKBps}K"]);
 
+        args.AddRange(Connections(s, env));
         args.AddRange(Common(s, env));
         args.Add(req.Url);
+        return args;
+    }
+
+    /// <summary>Several connections per download. YouTube (and many proxies) hold each connection to well under
+    /// 1 MB/s, so one connection is what makes a download slow. Whole files go through aria2c; streams made of
+    /// fragments (HLS / DASH) stay with yt-dlp, which fetches 8 fragments at a time.</summary>
+    static List<string> Connections(AppSettings s, Environment env)
+    {
+        var args = new List<string> { "-N", "8" };
+        if (env.Aria2Path is null) return args;
+        args.AddRange(["--downloader", env.Aria2Path, "--downloader", "m3u8:native", "--downloader-args", Aria2Args]);
+        // yt-dlp itself follows Windows' proxy setting, aria2c does not: hand it over explicitly.
+        if (s.Proxy.Trim().Length == 0 && env.SystemProxy is not null) args.AddRange(["--proxy", env.SystemProxy]);
         return args;
     }
 

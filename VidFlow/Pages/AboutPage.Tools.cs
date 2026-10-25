@@ -78,6 +78,15 @@ public sealed partial class AboutPage
             IsUpToDate = ToolManager.IsUpToDate,
             Install = ToolManager.InstallDenoAsync,
         },
+        new()
+        {
+            Name = "aria2", Glyph = "", PurposeKey = "Tools_Aria2Purpose", MissingKey = "Settings_Aria2Missing", Required = false,
+            Path = () => ToolManager.Aria2Path,
+            GetVersion = async exe => ToolManager.Aria2Version(await ToolManager.GetVersionAsync(exe, "--version")),
+            GetLatest = refresh => ToolManager.GetLatestAria2VersionAsync(refresh),
+            IsUpToDate = ToolManager.IsUpToDate,
+            Install = ToolManager.InstallAria2Async,
+        },
     ];
 
     void BuildToolRows()

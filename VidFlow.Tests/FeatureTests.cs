@@ -644,3 +644,72 @@ public class MediaFeatureTests
         Assert.StartsWith("MKV", DownloadLabels.Label(t.ToRequest("https://www.bilibili.com/video/BV1", "o"), null).Split("·")[1].Trim());
     }
 }
+
+public class MultiConnectionTests
+{
+    static readonly DownloadRequest Req = new("https://www.youtube.com/watch?v=abc", "video", 1080, false, "o");
+
+    [Fact]
+    public void Aria2DownloadsWholeFilesAndYtDlpKeepsFragments()
+    {
+        var env = new YtDlpArgs.Environment(@"C:\ff", null, false, Aria2Path: @"C:\bin\aria2c.exe", SystemProxy: "http://127.0.0.1:7897");
+        var args = YtDlpArgs.Download(Req, new AppSettings(), env);
+        Assert.Equal("8", args[args.IndexOf("-N") + 1]);
+        Assert.Contains(@"C:\bin\aria2c.exe", args);
+        Assert.Contains("m3u8:native", args);
+        Assert.StartsWith("aria2c:-x16", args[args.IndexOf("--downloader-args") + 1]);
+        // aria2c ignores Windows' proxy setting, so it is passed on explicitly.
+        Assert.Equal("http://127.0.0.1:7897", args[args.IndexOf("--proxy") + 1]);
+    }
+
+    [Fact]
+    public void OwnProxyWinsAndNoAria2MeansNoDownloader()
+    {
+        var env = new YtDlpArgs.Environment(@"C:\ff", null, false, Aria2Path: @"C:\bin\aria2c.exe", SystemProxy: "http://127.0.0.1:7897");
+        var args = YtDlpArgs.Download(Req, new AppSettings { Proxy = "socks5://10.0.0.1:1080" }, env);
+        Assert.Equal(["socks5://10.0.0.1:1080"], args.Select((a, i) => (a, i)).Where(x => x.a == "--proxy").Select(x => args[x.i + 1]));
+
+        var plain = YtDlpArgs.Download(Req, new AppSettings(), new YtDlpArgs.Environment(@"C:\ff", null, false, SystemProxy: "http://127.0.0.1:7897"));
+        Assert.DoesNotContain("--downloader", plain);
+        Assert.DoesNotContain("--proxy", plain);
+        Assert.Contains("-N", plain);
+    }
+
+    [Fact]
+    public void Aria2ReadoutIsProgress()
+    {
+        var parser = new YtDlpOutputParser();
+        parser.Feed("VFS|137+140|100000000,10000000|NA|Title");
+        var e = Assert.IsType<ProgressEvent>(parser.Feed("[#86c7bd 50MiB/100MiB(50%) CN:16 DL:20MiB ETA:2s]"));
+        Assert.Equal(50L << 20, e.Progress.Downloaded);
+        Assert.Equal(100L << 20, e.Progress.Total);
+        Assert.Equal(20 << 20, e.Progress.Speed);
+        Assert.Equal(2, e.Progress.Eta);
+        Assert.Equal(1, e.Progress.Part);
+        Assert.Null(parser.Feed(@"FILE: C:\x.f137.mp4"));
+    }
+
+    [Fact]
+    public void FinishedLineGluedAfterReadoutCounts()
+    {
+        var parser = new YtDlpOutputParser();
+        parser.Feed("VFS|137+140|100|NA|Title");
+        var e = Assert.IsType<ProgressEvent>(parser.Feed("[#86c7bd 82MiB/83MiB(99%) CN:1 DL:33MiB]VFP|finished|100|100|NA|NA|NA|NA|NA"));
+        Assert.True(e.Progress.StreamFinished);
+    }
+
+    [Theory]
+    [InlineData("0B", 0)]
+    [InlineData("512KiB", 512 * 1024)]
+    [InlineData("1.5GiB", 1610612736)]
+    public void Aria2Sizes(string text, long bytes) => Assert.Equal(bytes, YtDlpOutputParser.Bytes(text));
+
+    [Theory]
+    [InlineData("45s", 45)]
+    [InlineData("3m12s", 192)]
+    [InlineData("1h2m", 3720)]
+    public void Aria2Eta(string text, double seconds) => Assert.Equal(seconds, YtDlpOutputParser.Seconds(text));
+
+    [Fact]
+    public void Aria2VersionLine() => Assert.Equal("1.37.0", ToolManager.Aria2Version("aria2 version 1.37.0"));
+}

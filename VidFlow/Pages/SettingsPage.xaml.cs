@@ -42,6 +42,9 @@ public sealed partial class SettingsPage : Page
         ClipboardToggle.IsOn = s.WatchClipboard;
         FolderCard.Description = s.DownloadFolder;
         ConcurrencyCombo.SelectedItem = Math.Clamp(s.MaxConcurrent, 1, 5);
+        MultiConnectionToggle.IsOn = s.MultiConnection;
+        // Needs aria2 (Components page); say so rather than silently doing nothing.
+        MultiConnectionCard.Description = ToolManager.Aria2Path is null ? L.Get("Settings_MultiConnectionNeedsAria2") : "";
         if (s.SpeedLimitKBps > 0) s.SpeedLimitValueKBps = s.SpeedLimitKBps;
         SpeedToggle.IsOn = s.SpeedLimitKBps > 0;
         ShowSpeed(s.SpeedLimitKBps > 0 ? s.SpeedLimitKBps : s.SpeedLimitValueKBps);
@@ -209,6 +212,7 @@ public sealed partial class SettingsPage : Page
         s.SaveDanmaku = DanmakuToggle.IsOn;
         s.EmbedMetadata = MetadataToggle.IsOn;
         s.PreferH264 = H264Toggle.IsOn;
+        s.MultiConnection = MultiConnectionToggle.IsOn;
         s.NotifyOnFinish = NotifyToggle.IsOn;
         s.NotifyOnFailure = NotifyFailureToggle.IsOn;
         AppSettings.Save();

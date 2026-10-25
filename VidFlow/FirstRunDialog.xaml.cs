@@ -42,7 +42,8 @@ public sealed partial class FirstRunDialog : ContentDialog
         YtDlpStatus.Text = hasYt ? L.Get("Wizard_YtDlpReady") : L.Get("Wizard_YtDlpMissing");
         FfmpegStatus.Text = hasFf ? L.Get("Wizard_FfmpegReady") : L.Get("Wizard_FfmpegMissing");
         InstallButton.Visibility = hasYt && hasFf && ToolManager.IsYtDlpManaged && ToolManager.DenoPath is not null
-            ? Visibility.Collapsed : Visibility.Visible;
+                                     && ToolManager.Aria2Path is not null
+            ?Visibility.Collapsed : Visibility.Visible;
     }
 
     void UpdateAccounts()
@@ -72,6 +73,8 @@ public sealed partial class FirstRunDialog : ContentDialog
             if (ToolManager.FfmpegPath is null) await Task.Run(() => ToolManager.InstallFfmpegAsync(progress, CancellationToken.None));
             // JavaScript runtime yt-dlp needs for YouTube (without it some formats are missing).
             if (ToolManager.DenoPath is null) await Task.Run(() => ToolManager.InstallDenoAsync(progress, CancellationToken.None));
+            // Several connections per download: a single one is often held well under 1 MB/s.
+            if (ToolManager.Aria2Path is null) await Task.Run(() => ToolManager.InstallAria2Async(progress, CancellationToken.None));
         }
         catch (Exception ex)
         {

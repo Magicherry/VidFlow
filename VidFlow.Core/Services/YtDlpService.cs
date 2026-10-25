@@ -99,7 +99,7 @@ public static class YtDlpService
             if (req.IsAudio && req.AudioOutputFormat == MediaFeatures.Original)
                 req = req with { AudioFormat = await OriginalAudioFormatAsync(req, ct) };
             (code, error) = await RunWithCookieFallbackAsync(req.Url,
-                env => YtDlpArgs.Download(req, AppSettings.Current, env), OnLine, ct);
+                env => YtDlpArgs.Download(req, AppSettings.Current, env), OnLine, ct, accelerate: true);
         }
 
         ct.ThrowIfCancellationRequested();
@@ -131,7 +131,8 @@ public static class YtDlpService
     /// </list>
     /// </summary>
     static async Task<(int Code, string Error)> RunWithCookieFallbackAsync(
-        string url, Func<YtDlpArgs.Environment, List<string>> buildArgs, Action<string> onLine, CancellationToken ct)
+        string url, Func<YtDlpArgs.Environment, List<string>> buildArgs, Action<string> onLine, CancellationToken ct,
+        bool accelerate = false)
     {
         var ffmpegDir = ToolManager.FfmpegPath is { } ff ? Path.GetDirectoryName(ff) : null;
         var browser = AppSettings.Current.CookiesBrowser;
@@ -142,6 +143,7 @@ public static class YtDlpService
             SkipBrowserCookies: _unreadableBrowser == browser,
             SkipLoginCookies: youTubeLogin,
             DenoPath: ToolManager.DenoPath);
+        if (accelerate) env = Accelerated(env, url);
 
         var result = await RunAsync(buildArgs(env), onLine, ct);
 
@@ -158,9 +160,39 @@ public static class YtDlpService
         if (result.Code != 0 && youTubeLogin && env.SkipLoginCookies && ErrorMapper.NeedsSignIn(result.Error))
         {
             Log.Info($"YouTube needs sign-in, retrying with the in-app login: {ErrorMapper.LastErrorLine(result.Error)}");
-            result = await RunAsync(buildArgs(env with { SkipLoginCookies = false }), onLine, ct);
+            env = env with { SkipLoginCookies = false };
+            result = await RunAsync(buildArgs(env), onLine, ct);
+        }
+
+        // aria2c can trip over what yt-dlp's own downloader copes with (a host refusing parallel connections, an
+        // unusual proxy): fall back to one connection rather than fail.
+        if (result.Code != 0 && env.Aria2Path is not null && ErrorMapper.IsAria2Failure(result.Error))
+        {
+            Log.Warn($"aria2c failed, retrying with yt-dlp's own downloader: {ErrorMapper.LastErrorLine(result.Error)}");
+            result = await RunAsync(buildArgs(env with { Aria2Path = null }), onLine, ct);
         }
         return result;
+    }
+
+    /// <summary>Adds aria2 (when installed and switched on) and the proxy Windows would use for <paramref name="url"/>.
+    /// Not for the Chinese platforms: their CDNs are fast on one connection, and some of Bilibili's nodes answer a
+    /// burst of connections with 503.</summary>
+    static YtDlpArgs.Environment Accelerated(YtDlpArgs.Environment env, string url)
+    {
+        if (!AppSettings.Current.MultiConnection || ToolManager.Aria2Path is not { } aria2) return env;
+        if (UrlTools.DetectPlatform(url) is Platform.Bilibili or Platform.Douyin or Platform.Weibo or Platform.Xiaohongshu) return env;
+        string? proxy = null;
+        try
+        {
+            var target = new Uri(url);
+            // Environment variables (HTTPS_PROXY) first, then Windows' own proxy setting; null when bypassed.
+            if (HttpClient.DefaultProxy.GetProxy(target) is { } p && p != target) proxy = p.GetLeftPart(UriPartial.Authority);
+        }
+        catch (Exception ex)
+        {
+            Log.Info($"System proxy lookup failed: {ex.Message}");
+        }
+        return env with { Aria2Path = aria2, SystemProxy = proxy };
     }
 
     /// <summary>Runs yt-dlp, streaming stdout lines to <paramref name="onLine"/>. Returns exit code and stderr.</summary>

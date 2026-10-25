@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace VidFlow.Services;
 
@@ -46,47 +47,79 @@ public sealed class YtDlpOutputParser
             for (var i = 0; i < _parts; i++) _sizes[i] = Long(sizes.ElementAtOrDefault(i) ?? "");
             return new StartedEvent(_parts, NullIfNa(f.ElementAtOrDefault(4)), NullIfNa(f.ElementAtOrDefault(3)));
         }
+        // aria2c writes its own readout without a line break, so yt-dlp's final line can end up glued after it.
+        var glued = line.IndexOf("]VF", StringComparison.Ordinal);
+        if (glued > 0) line = line[(glued + 1)..];
         if (line.StartsWith("VFF|", StringComparison.Ordinal))
             return new FileEvent(line[4..].Trim());
+        if (line.StartsWith("[#", StringComparison.Ordinal))
+            return Aria2(line);
         if (!line.StartsWith("VFP|", StringComparison.Ordinal))
             return null;
 
         var p = line.Split('|');
         if (p.Length < 7) return null;
-        var current = Math.Min(_finished, _parts - 1);
-        var downloaded = Long(p[2]);
-        var total = Long(p[3]);
-        // An exact size beats the one printed up front; a running estimate only stands in for an unknown one.
-        if (total > 0)
-        {
-            _sizes[current] = total;
-            _estimated[current] = false;
-        }
-        else if ((total = Long(p[4])) > 0 && (_sizes[current] <= 0 || _estimated[current]))
-        {
-            _sizes[current] = total;
-            _estimated[current] = true;
-        }
-
         if (p[1] == "finished")
         {
+            Sizes(Long(p[3]), Long(p[4]));
             _finished++;
             var last = _finished >= _parts;
             _percent = last ? 100 : Math.Max(_percent, Overall(_finished, 0));
             return new ProgressEvent(new DownloadProgress(last, !last, Math.Min(_finished, _parts), _parts, _percent, 0, 0, 0, 0));
         }
+        return Downloading(Long(p[2]), Long(p[3]), Long(p[4]), Dbl(p[5]), Dbl(p[6]),
+            p.Length >= 9 ? Long(p[7]) : 0, p.Length >= 9 ? Long(p[8]) : 0);
+    }
 
+    /// <summary>aria2c's summary line, e.g. <c>[#86c7bd 82MiB/83MiB(99%) CN:16 DL:33MiB ETA:1s]</c>. While aria2c
+    /// downloads, yt-dlp prints no progress of its own; it reports the stream finished as usual afterwards.</summary>
+    ProgressEvent? Aria2(string line)
+    {
+        var m = Aria2Readout.Match(line);
+        if (!m.Success) return null;
+        var downloaded = Bytes(m.Groups["done"].Value);
+        var total = Bytes(m.Groups["total"].Value);
+        if (total <= 0) return null;
+        return Downloading(downloaded, total, 0, m.Groups["speed"].Success ? Bytes(m.Groups["speed"].Value) : 0,
+            m.Groups["eta"].Success ? Seconds(m.Groups["eta"].Value) : 0, 0, 0);
+    }
+
+    static readonly Regex Aria2Readout = new(
+        @"^\[#\w+ (?<done>[\d.]+\w*)/(?<total>[\d.]+\w*)\(\d+%\)(?: CN:\d+)?(?: DL:(?<speed>[\d.]+\w*))?(?: ETA:(?<eta>\w+))?\]");
+
+    /// <summary>Records the current stream's size: an exact size beats the one printed up front; a running estimate
+    /// only stands in for an unknown one. Returns the size to measure progress against.</summary>
+    long Sizes(long total, long estimate)
+    {
+        var current = Math.Min(_finished, _parts - 1);
+        if (total > 0)
+        {
+            _sizes[current] = total;
+            _estimated[current] = false;
+            return total;
+        }
+        if (estimate > 0 && (_sizes[current] <= 0 || _estimated[current]))
+        {
+            _sizes[current] = estimate;
+            _estimated[current] = true;
+            return estimate;
+        }
+        return 0;
+    }
+
+    ProgressEvent Downloading(long downloaded, long total, long estimate, double speed, double eta, long fragment, long fragments)
+    {
+        var current = Math.Min(_finished, _parts - 1);
+        total = Sizes(total, estimate);
         // Fragmented streams (HLS / DASH segments) re-estimate their total after every fragment, which makes
         // bytes ÷ estimate jump around; the fragment count only goes up.
-        var fragment = p.Length >= 9 ? Long(p[7]) : 0;
-        var fragments = p.Length >= 9 ? Long(p[8]) : 0;
         var streamFraction = fragments > 0 ? (double)fragment / fragments
             : total > 0 ? (double)downloaded / total
             : 0;
         // Never move backwards within one download.
         _percent = Math.Max(_percent, Overall(current, Math.Clamp(streamFraction, 0, 1)));
         return new ProgressEvent(new DownloadProgress(false, false, current + 1, _parts,
-            _percent, downloaded, total, Dbl(p[5]), Dbl(p[6])));
+            _percent, downloaded, total, speed, eta));
     }
 
     /// <summary>Percent of the whole download with <paramref name="done"/> streams finished and the next one
@@ -109,6 +142,29 @@ public sealed class YtDlpOutputParser
 
     static long Long(string s) =>
         double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var v) ? (long)v : 0;
+
+    /// <summary>aria2's sizes: "82MiB", "512KiB", "0B", "1.2GiB".</summary>
+    internal static long Bytes(string s)
+    {
+        var i = 0;
+        while (i < s.Length && (char.IsDigit(s[i]) || s[i] == '.')) i++;
+        if (!double.TryParse(s[..i], NumberStyles.Float, CultureInfo.InvariantCulture, out var v)) return 0;
+        var scale = s[i..] switch { "KiB" => 1L << 10, "MiB" => 1L << 20, "GiB" => 1L << 30, "TiB" => 1L << 40, _ => 1 };
+        return (long)(v * scale);
+    }
+
+    /// <summary>aria2's ETA: "45s", "3m12s", "1h2m".</summary>
+    internal static double Seconds(string s)
+    {
+        double total = 0, n = 0;
+        foreach (var c in s)
+        {
+            if (char.IsDigit(c)) { n = n * 10 + (c - '0'); continue; }
+            total += n * c switch { 'h' => 3600, 'm' => 60, _ => 1 };
+            n = 0;
+        }
+        return total;
+    }
 
     static double Dbl(string s) =>
         double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var v) ? v : 0;

@@ -266,6 +266,7 @@
   <data name="Settings_About" xml:space="preserve"><value>About</value></data>
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>About &amp; updates</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>Accounts</value></data>
+  <data name="Settings_Aria2Missing" xml:space="preserve"><value>Not installed · makes downloads much faster (recommended)</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>Keep yt-dlp up to date</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checked daily; an outdated yt-dlp is the usual cause of failed downloads</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
@@ -299,6 +300,8 @@
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>Title, uploader and cover</value></data>
   <data name="Settings_MoreDownload" xml:space="preserve"><value>Files and compatibility</value></data>
   <data name="Settings_MoreDownloadDescription" xml:space="preserve"><value>Cover and metadata, H.264 compatibility mode</value></data>
+  <data name="Settings_MultiConnection" xml:space="preserve"><value>Multi-connection acceleration</value></data>
+  <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>Needs aria2 · install it in About &amp; updates</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>Network</value></data>
   <data name="Settings_Notifications" xml:space="preserve"><value>Notifications</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>Notifications</value></data>
@@ -386,6 +389,7 @@
   <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>{0} to install or update</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>All components are up to date</value></data>
+  <data name="Tools_Aria2Purpose" xml:space="preserve"><value>Faster YouTube and X downloads</value></data>
   <data name="Tools_CheckFailed" xml:space="preserve"><value>Couldn&apos;t check</value></data>
   <data name="Tools_CheckFailedSummary" xml:space="preserve"><value>Couldn&apos;t check for updates: check your network or proxy</value></data>
   <data name="Tools_Checking" xml:space="preserve"><value>Checking for updates…</value></data>
@@ -453,7 +457,7 @@
   <data name="Wizard_InstallAll" xml:space="preserve"><value>Install components</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>Next</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>Skip</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses three free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, and Deno, which YouTube needs for some formats. They&apos;re downloaded from their official GitHub releases (about 180 MB).</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses four free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, Deno, which YouTube needs for some formats, and aria2 to download over several connections. They&apos;re downloaded from their official GitHub releases (about 185 MB).</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>Welcome to VidFlow</value></data>
   <data name="Wizard_YtDlpMissing" xml:space="preserve"><value>yt-dlp — not installed (required)</value></data>
   <data name="Wizard_YtDlpReady" xml:space="preserve"><value>yt-dlp — ready</value></data>

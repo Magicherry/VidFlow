@@ -134,6 +134,11 @@ public class ErrorMapperTests
         Assert.Contains('\n', msg); // hint + raw line
     }
 
+    [Fact]
+    public void JoinsErrorSplitByCarriageReturn() =>
+        Assert.Equal("ERROR: [download] Got error: HTTP Error 503: Service Unavailable. Giving up after 10 retries",
+            ErrorMapper.LastErrorLine("ERROR:\n[download] Got error: HTTP Error 503: Service Unavailable. Giving up after 10 retries\n"));
+
     [Theory]
     [InlineData("ERROR: Could not copy Chrome cookie database. See https://github.com/yt-dlp/yt-dlp/issues/7271")]
     [InlineData("ERROR: Failed to decrypt with DPAPI")]

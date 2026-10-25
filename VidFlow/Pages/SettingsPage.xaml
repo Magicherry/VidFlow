@@ -102,6 +102,12 @@
                         MinWidth="160"
                         SelectionChanged="ConcurrencyCombo_SelectionChanged" />
                 </tk:SettingsCard>
+                <tk:SettingsCard x:Name="MultiConnectionCard" Header="{x:Bind l:L.Get('Settings_MultiConnection')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xEC4A;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="MultiConnectionToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
                 <!--  Speed limit: a switch, and the value (with its unit) once it's on  -->
                 <tk:SettingsExpander
                     x:Name="SpeedExpander"
