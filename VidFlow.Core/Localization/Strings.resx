@@ -4,7 +4,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>YouTube / Bilibili video downloader powered by yt-dlp</value></data>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>YouTube / Bilibili / Douyin video downloader powered by yt-dlp</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>Only download content you have the right to save, and follow each platform&apos;s terms of service and copyright rules.</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>Open-source licenses</value></data>
   <data name="About_OpenData" xml:space="preserve"><value>Open data folder</value></data>
@@ -15,6 +15,8 @@
   <data name="About_Version" xml:space="preserve"><value>Version {0}</value></data>
   <data name="Account_BiliIn" xml:space="preserve"><value>Signed in · 1080P and above available (4K / HDR need a premium membership)</value></data>
   <data name="Account_BiliOut" xml:space="preserve"><value>Not signed in · limited to 480P / 720P</value></data>
+  <data name="Account_DouyinIn" xml:space="preserve"><value>Signed in · works that need an account are available too</value></data>
+  <data name="Account_DouyinOut" xml:space="preserve"><value>Not signed in · public videos download without an account</value></data>
   <data name="Account_Login" xml:space="preserve"><value>Sign in</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>Sign out</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>Signed in · age-restricted and members-only videos available</value></data>
@@ -77,6 +79,8 @@
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube wants to confirm you&apos;re not a bot. Sign in on the Accounts page, or switch proxy node.</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>Couldn&apos;t read browser cookies. Close that browser and retry, or use in-app sign-in instead.</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>Not enough disk space.</value></data>
+  <data name="Error_DouyinNotVideo" xml:space="preserve"><value>This Douyin link isn&apos;t a video (photo posts and profiles aren&apos;t supported).</value></data>
+  <data name="Error_DouyinUnavailable" xml:space="preserve"><value>Couldn&apos;t get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
   <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network).</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → About &amp; updates.</value></data>
@@ -114,13 +118,13 @@
   <data name="Home_Parse" xml:space="preserve"><value>Parse</value></data>
   <data name="Home_ParseFailed" xml:space="preserve"><value>Couldn&apos;t parse the link</value></data>
   <data name="Home_Paste" xml:space="preserve"><value>Paste from clipboard</value></data>
-  <data name="Home_Subtitle" xml:space="preserve"><value>Paste YouTube or Bilibili links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.</value></data>
+  <data name="Home_Subtitle" xml:space="preserve"><value>Paste YouTube, Bilibili or Douyin links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.</value></data>
   <data name="Home_Title" xml:space="preserve"><value>New download</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>Install</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>Download components not installed</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube or Bilibili link (separate several links with spaces)</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube, Bilibili or Douyin link (separate several links with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
@@ -131,6 +135,7 @@
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically.</value></data>
   <data name="Login_Done" xml:space="preserve"><value>Done</value></data>
   <data name="Login_Instructions" xml:space="preserve"><value>Sign in below. The window closes by itself once you&apos;re signed in; your sign-in is stored only on this computer.</value></data>
+  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>Click &quot;登录&quot; at the top right of the page and scan with the Douyin app. The window closes by itself once you&apos;re signed in.</value></data>
   <data name="Login_QrExpired" xml:space="preserve"><value>This code has expired</value></data>
   <data name="Login_QrFailed" xml:space="preserve"><value>Couldn&apos;t get a code: check your network or proxy</value></data>
   <data name="Login_QrHint" xml:space="preserve"><value>Scan with the Bilibili app to sign in</value></data>
@@ -142,6 +147,7 @@
   <data name="Login_StoredLocally" xml:space="preserve"><value>Your sign-in is stored only on this computer</value></data>
   <data name="Login_SuccessClosing" xml:space="preserve"><value>Signed in. Saving and closing…</value></data>
   <data name="Login_TitleBili" xml:space="preserve"><value>Sign in to Bilibili</value></data>
+  <data name="Login_TitleDouyin" xml:space="preserve"><value>Sign in to Douyin</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>Sign in to YouTube (Google account)</value></data>
   <data name="Login_UseWeb" xml:space="preserve"><value>Sign in with password or SMS instead</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>The built-in browser (WebView2) couldn&apos;t start: {0}</value></data>
@@ -206,6 +212,7 @@
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Save subtitles (if any) as separate files; languages are set in Settings</value></data>
   <data name="Options_Title" xml:space="preserve"><value>Download options</value></data>
   <data name="Platform_Bilibili" xml:space="preserve"><value>Bilibili</value></data>
+  <data name="Platform_Douyin" xml:space="preserve"><value>Douyin</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>Video</value></data>
   <data name="Playlist_Count" xml:space="preserve"><value>{0} videos</value></data>
   <data name="Playlist_EntryFallback" xml:space="preserve"><value>Video {0}</value></data>

@@ -282,6 +282,7 @@ public sealed partial class HomePage : Page
         {
             Platform.YouTube => ColorHelper.FromArgb(255, 230, 33, 23),
             Platform.Bilibili => ColorHelper.FromArgb(255, 251, 114, 153),
+            Platform.Douyin => ColorHelper.FromArgb(255, 22, 24, 35),
             _ => Colors.Gray,
         });
         MetaText.Text = string.Join("  ·  ", new[] { info.Uploader, Format.Date(info.UploadDate) }.Where(s => !string.IsNullOrEmpty(s)));

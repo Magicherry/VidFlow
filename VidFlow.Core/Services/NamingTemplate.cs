@@ -38,16 +38,19 @@ public static partial class NamingTemplate
     [GeneratedRegex(@"\{([a-z]+)\}")]
     private static partial Regex VariableRegex();
 
-    /// <summary>The yt-dlp "-o" value: optional folders, then the file name, then the extension.</summary>
-    public static string ToOutputTemplate(string fileTemplate, string folderTemplate, string platformName)
+    /// <summary>The yt-dlp "-o" value: optional folders, then the file name, then the extension.
+    /// <paramref name="known"/> supplies values VidFlow already has (when yt-dlp is only given a bare media
+    /// address and wouldn't know the title or uploader); the rest are left to yt-dlp.</summary>
+    public static string ToOutputTemplate(string fileTemplate, string folderTemplate, string platformName,
+        IReadOnlyDictionary<string, string?>? known = null)
     {
-        var file = Translate(string.IsNullOrWhiteSpace(fileTemplate) ? DefaultFileName : fileTemplate, platformName, allowFolders: false);
-        if (file.Trim().Length == 0) file = Translate(DefaultFileName, platformName, false);
-        var folder = string.IsNullOrWhiteSpace(folderTemplate) ? "" : Translate(folderTemplate, platformName, allowFolders: true).Trim('/');
+        var file = Translate(string.IsNullOrWhiteSpace(fileTemplate) ? DefaultFileName : fileTemplate, platformName, false, known);
+        if (file.Trim().Length == 0) file = Translate(DefaultFileName, platformName, false, known);
+        var folder = string.IsNullOrWhiteSpace(folderTemplate) ? "" : Translate(folderTemplate, platformName, true, known).Trim('/');
         return (folder.Length > 0 ? folder + "/" : "") + file + ".%(ext)s";
     }
 
-    static string Translate(string template, string platformName, bool allowFolders)
+    static string Translate(string template, string platformName, bool allowFolders, IReadOnlyDictionary<string, string?>? known)
     {
         var sb = new StringBuilder();
         var last = 0;
@@ -56,12 +59,20 @@ public static partial class NamingTemplate
             sb.Append(Literal(template[last..m.Index], allowFolders));
             var name = m.Groups[1].Value;
             sb.Append(name == "platform" ? Literal(platformName, false)
+                : known is not null && known.TryGetValue(name, out var value) ? Literal(Clip(value ?? "", 150), false)
                 : Fields.TryGetValue(name, out var field) ? field
                 : Literal(m.Value, allowFolders)); // unknown variable: keep as text
             last = m.Index + m.Length;
         }
         sb.Append(Literal(template[last..], allowFolders));
         return sb.ToString();
+    }
+
+    /// <summary>At most <paramref name="max"/> characters (Douyin captions can be long), on one line.</summary>
+    static string Clip(string s, int max)
+    {
+        s = string.Join(' ', s.Split(['\r', '\n', '\t'], StringSplitOptions.RemoveEmptyEntries)).Trim();
+        return s.Length <= max ? s : s[..max].TrimEnd();
     }
 
     /// <summary>Literal text: no characters Windows forbids in file names, and "%" escaped for yt-dlp.</summary>

@@ -30,7 +30,14 @@ public sealed partial class LoginWindow : Window
         _platform = platform;
         InitializeComponent();
 
-        Title = LoginTitleBar.Title = platform == Platform.Bilibili ? L.Get("Login_TitleBili") : L.Get("Login_TitleYt");
+        Title = LoginTitleBar.Title = platform switch
+        {
+            Platform.Bilibili => L.Get("Login_TitleBili"),
+            Platform.Douyin => L.Get("Login_TitleDouyin"),
+            _ => L.Get("Login_TitleYt"),
+        };
+        // Douyin's home page has no sign-in form of its own: say where its sign-in button is.
+        if (platform == Platform.Douyin) StatusText.Text = L.Get("Login_InstructionsDouyin");
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(LoginTitleBar);
         AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;

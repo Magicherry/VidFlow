@@ -3,7 +3,7 @@ using VidFlow.Services;
 
 namespace VidFlow.Models;
 
-public enum Platform { YouTube, Bilibili, Other }
+public enum Platform { YouTube, Bilibili, Douyin, Other }
 
 public static class PlatformExtensions
 {
@@ -11,6 +11,7 @@ public static class PlatformExtensions
     {
         Platform.YouTube => "YouTube",
         Platform.Bilibili => L.Get("Platform_Bilibili"),
+        Platform.Douyin => L.Get("Platform_Douyin"),
         _ => L.Get("Platform_Other"),
     };
 }

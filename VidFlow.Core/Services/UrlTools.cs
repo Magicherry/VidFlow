@@ -25,8 +25,26 @@ public static partial class UrlTools
         var u = url.ToLowerInvariant();
         if (u.Contains("youtube.com") || u.Contains("youtu.be")) return Platform.YouTube;
         if (u.Contains("bilibili.com") || u.Contains("b23.tv")) return Platform.Bilibili;
+        if (u.Contains("douyin.com")) return Platform.Douyin;
         return Platform.Other;
     }
+
+    [GeneratedRegex(@"(?:/video/|/share/video/|[?&]modal_id=|[?&]vid=)(\d{15,20})")]
+    private static partial Regex DouyinIdRegex();
+
+    /// <summary>
+    /// yt-dlp only understands douyin.com/video/ID. Douyin links come in several other shapes: the feed
+    /// (douyin.com/jingxuan?modal_id=ID), share pages (iesdouyin.com/share/video/ID) and short links
+    /// (v.douyin.com/xxxx, see <see cref="DouyinLinks"/>). Returns the canonical link, or null if there is no video id.
+    /// </summary>
+    public static string? CanonicalDouyinUrl(string url)
+    {
+        var m = DouyinIdRegex().Match(url);
+        return m.Success ? $"https://www.douyin.com/video/{m.Groups[1].Value}" : null;
+    }
+
+    public static bool IsDouyinShortLink(string url) =>
+        Uri.TryCreate(url, UriKind.Absolute, out var u) && u.Host.Equals("v.douyin.com", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>A YouTube watch link that also carries a playlist (watch?v=…&amp;list=…): we treat it as the single video.</summary>
     public static bool IsYouTubeVideoInPlaylist(string url) =>

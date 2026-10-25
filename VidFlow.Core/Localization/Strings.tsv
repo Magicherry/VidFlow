@@ -1,5 +1,5 @@
 key	en	zh
-About_Description	YouTube / Bilibili video downloader powered by yt-dlp	基于 yt-dlp 的 YouTube / 哔哩哔哩视频下载器
+About_Description	YouTube / Bilibili / Douyin video downloader powered by yt-dlp	基于 yt-dlp 的 YouTube / 哔哩哔哩 / 抖音视频下载器
 About_Disclaimer	Only download content you have the right to save, and follow each platform's terms of service and copyright rules.	请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。
 About_Licenses	Open-source licenses	开源许可
 About_OpenData	Open data folder	打开数据文件夹
@@ -74,13 +74,13 @@ Home_NoLink	No link found.	没有找到链接。
 Home_Parse	Parse	解析
 Home_ParseFailed	Couldn't parse the link	解析失败
 Home_Paste	Paste from clipboard	从剪贴板粘贴
-Home_Subtitle	Paste YouTube or Bilibili links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.	粘贴 YouTube 或哔哩哔哩链接：单个视频、播放列表、多 P 视频，或一次粘贴多个链接；也可以把链接直接拖进窗口。
+Home_Subtitle	Paste YouTube, Bilibili or Douyin links — single videos, playlists, multi-part videos, or several links at once. You can also drag a link onto the window.	粘贴 YouTube、哔哩哔哩或抖音链接：单个视频、播放列表、多 P 视频，或一次粘贴多个链接；也可以把链接直接拖进窗口。
 Home_Title	New download	新建下载
 Home_ToolsMissingAction	Install	前往安装
 Home_ToolsMissingMessage	VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.	VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。
 Home_ToolsMissingTitle	Download components not installed	尚未安装下载组件
 Home_UrlBoxName	Video link	视频链接
-Home_UrlPlaceholder	Paste a YouTube or Bilibili link (separate several links with spaces)	粘贴 YouTube / 哔哩哔哩链接，多个链接用空格分隔
+Home_UrlPlaceholder	Paste a YouTube, Bilibili or Douyin link (separate several links with spaces)	粘贴 YouTube / 哔哩哔哩 / 抖音链接，多个链接用空格分隔
 Home_ViewDownloads	View downloads	查看下载列表
 Label_M4a	M4A audio	M4A 音频
 Label_Mp3	MP3 audio	MP3 音频
@@ -417,3 +417,10 @@ Login_QrSuccess	Signed in	登录成功
 Login_UseWeb	Sign in with password or SMS instead	使用账号密码或短信验证码登录
 Login_StoredLocally	Your sign-in is stored only on this computer	登录信息仅保存在本机
 Login_SuccessClosing	Signed in. Saving and closing…	登录成功，正在保存并关闭…
+Platform_Douyin	Douyin	抖音
+Account_DouyinIn	Signed in · works that need an account are available too	已登录 · 需要登录才能观看的作品也可以下载
+Account_DouyinOut	Not signed in · public videos download without an account	未登录 · 公开作品无需登录即可下载
+Login_TitleDouyin	Sign in to Douyin	登录抖音
+Login_InstructionsDouyin	Click "登录" at the top right of the page and scan with the Douyin app. The window closes by itself once you're signed in.	点击页面右上角的「登录」，用抖音 App 扫码。登录成功后窗口会自动关闭，登录信息仅保存在本机。
+Error_DouyinUnavailable	Couldn't get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).	无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。
+Error_DouyinNotVideo	This Douyin link isn't a video (photo posts and profiles aren't supported).	这个抖音链接不是视频（暂不支持图文作品和主页）。

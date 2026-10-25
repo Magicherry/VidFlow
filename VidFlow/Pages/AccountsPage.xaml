@@ -63,6 +63,15 @@
                         MinWidth="96"
                         Click="YouTubeAccount_Click" />
                 </tk:SettingsCard>
+                <tk:SettingsCard x:Name="DouyinAccountCard" Header="{x:Bind l:L.Get('Platform_Douyin')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE77B;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <Button
+                        x:Name="DouyinAccountButton"
+                        MinWidth="96"
+                        Click="DouyinAccount_Click" />
+                </tk:SettingsCard>
 
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_OtherCookies')}" />
                 <TextBlock

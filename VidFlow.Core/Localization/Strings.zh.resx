@@ -4,7 +4,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>基于 yt-dlp 的 YouTube / 哔哩哔哩视频下载器</value></data>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>基于 yt-dlp 的 YouTube / 哔哩哔哩 / 抖音视频下载器</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>开源许可</value></data>
   <data name="About_OpenData" xml:space="preserve"><value>打开数据文件夹</value></data>
@@ -15,6 +15,8 @@
   <data name="About_Version" xml:space="preserve"><value>版本 {0}</value></data>
   <data name="Account_BiliIn" xml:space="preserve"><value>已登录 · 可下载 1080P 及以上画质（4K / HDR 等需大会员）</value></data>
   <data name="Account_BiliOut" xml:space="preserve"><value>未登录 · 未登录时最高只能下载 480P / 720P</value></data>
+  <data name="Account_DouyinIn" xml:space="preserve"><value>已登录 · 需要登录才能观看的作品也可以下载</value></data>
+  <data name="Account_DouyinOut" xml:space="preserve"><value>未登录 · 公开作品无需登录即可下载</value></data>
   <data name="Account_Login" xml:space="preserve"><value>登录</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>退出登录</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制、会员专属视频</value></data>
@@ -77,6 +79,8 @@
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube 要求验证身份。请在「账号」页面中登录，或更换代理节点。</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>磁盘空间不足。</value></data>
+  <data name="Error_DouyinNotVideo" xml:space="preserve"><value>这个抖音链接不是视频（暂不支持图文作品和主页）。</value></data>
+  <data name="Error_DouyinUnavailable" xml:space="preserve"><value>无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>这个播放列表中没有可下载的视频。</value></data>
   <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。</value></data>
@@ -114,13 +118,13 @@
   <data name="Home_Parse" xml:space="preserve"><value>解析</value></data>
   <data name="Home_ParseFailed" xml:space="preserve"><value>解析失败</value></data>
   <data name="Home_Paste" xml:space="preserve"><value>从剪贴板粘贴</value></data>
-  <data name="Home_Subtitle" xml:space="preserve"><value>粘贴 YouTube 或哔哩哔哩链接：单个视频、播放列表、多 P 视频，或一次粘贴多个链接；也可以把链接直接拖进窗口。</value></data>
+  <data name="Home_Subtitle" xml:space="preserve"><value>粘贴 YouTube、哔哩哔哩或抖音链接：单个视频、播放列表、多 P 视频，或一次粘贴多个链接；也可以把链接直接拖进窗口。</value></data>
   <data name="Home_Title" xml:space="preserve"><value>新建下载</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>前往安装</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>尚未安装下载组件</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>视频链接</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴 YouTube / 哔哩哔哩链接，多个链接用空格分隔</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴 YouTube / 哔哩哔哩 / 抖音链接，多个链接用空格分隔</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} 音频</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A 音频</value></data>
@@ -131,6 +135,7 @@
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新。</value></data>
   <data name="Login_Done" xml:space="preserve"><value>完成</value></data>
   <data name="Login_Instructions" xml:space="preserve"><value>请在下方页面中登录，登录成功后窗口会自动关闭。登录信息仅保存在本机。</value></data>
+  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>点击页面右上角的「登录」，用抖音 App 扫码。登录成功后窗口会自动关闭，登录信息仅保存在本机。</value></data>
   <data name="Login_QrExpired" xml:space="preserve"><value>二维码已过期</value></data>
   <data name="Login_QrFailed" xml:space="preserve"><value>无法获取二维码，请检查网络或代理设置</value></data>
   <data name="Login_QrHint" xml:space="preserve"><value>打开哔哩哔哩 App，扫码登录</value></data>
@@ -142,6 +147,7 @@
   <data name="Login_StoredLocally" xml:space="preserve"><value>登录信息仅保存在本机</value></data>
   <data name="Login_SuccessClosing" xml:space="preserve"><value>登录成功，正在保存并关闭…</value></data>
   <data name="Login_TitleBili" xml:space="preserve"><value>登录哔哩哔哩</value></data>
+  <data name="Login_TitleDouyin" xml:space="preserve"><value>登录抖音</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>登录 YouTube（Google 账号）</value></data>
   <data name="Login_UseWeb" xml:space="preserve"><value>使用账号密码或短信验证码登录</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>无法启动内置浏览器（WebView2）：{0}</value></data>
@@ -206,6 +212,7 @@
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>同时保存字幕文件（如果有），字幕语言可在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
   <data name="Platform_Bilibili" xml:space="preserve"><value>哔哩哔哩</value></data>
+  <data name="Platform_Douyin" xml:space="preserve"><value>抖音</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>视频</value></data>
   <data name="Playlist_Count" xml:space="preserve"><value>共 {0} 个视频</value></data>
   <data name="Playlist_EntryFallback" xml:space="preserve"><value>视频 {0}</value></data>

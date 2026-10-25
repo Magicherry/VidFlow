@@ -10,16 +10,22 @@ public static class AccountStore
 {
     public static string CookieFile => Path.Combine(AppSettings.DataDir, "cookies.txt");
 
-    static string Domain(Platform p) => p == Platform.Bilibili ? "bilibili.com" : "youtube.com";
+    public static string Domain(Platform p) => p switch
+    {
+        Platform.Bilibili => "bilibili.com",
+        Platform.Douyin => "douyin.com",
+        _ => "youtube.com",
+    };
 
     /// <summary>Cookies that only exist while signed in.</summary>
     public static IReadOnlyList<string> SessionCookieNames(Platform p) => p switch
     {
         Platform.Bilibili => ["SESSDATA"],
+        Platform.Douyin => ["sessionid", "sessionid_ss"],
         _ => ["SAPISID", "__Secure-3PAPISID", "LOGIN_INFO"],
     };
 
-    public static bool HasAnyLogin => IsLoggedIn(Platform.Bilibili) || IsLoggedIn(Platform.YouTube);
+    public static bool HasAnyLogin => IsLoggedIn(Platform.Bilibili) || IsLoggedIn(Platform.YouTube) || IsLoggedIn(Platform.Douyin);
 
     /// <summary>The cookie file to pass to yt-dlp, or null when nobody is signed in.</summary>
     public static string? LoginCookieFileOrNull => HasAnyLogin ? CookieFile : null;

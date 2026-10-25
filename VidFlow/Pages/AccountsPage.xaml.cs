@@ -44,10 +44,15 @@ public sealed partial class AccountsPage : Page
         var yt = AccountStore.IsLoggedIn(Platform.YouTube);
         YouTubeAccountCard.Description = yt ? L.Get("Account_YtIn") : L.Get("Account_YtOut");
         YouTubeAccountButton.Content = yt ? L.Get("Account_Logout") : L.Get("Account_Login");
+
+        var douyin = AccountStore.IsLoggedIn(Platform.Douyin);
+        DouyinAccountCard.Description = douyin ? L.Get("Account_DouyinIn") : L.Get("Account_DouyinOut");
+        DouyinAccountButton.Content = douyin ? L.Get("Account_Logout") : L.Get("Account_Login");
     }
 
     async void BiliAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.Bilibili, BiliAccountButton);
     async void YouTubeAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.YouTube, YouTubeAccountButton);
+    async void DouyinAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.Douyin, DouyinAccountButton);
 
     async Task ToggleAccountAsync(Platform platform, Button button)
     {

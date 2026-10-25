@@ -20,8 +20,25 @@ public static class YtDlpService
     /// <summary>The browser whose cookies failed to read this session (reset when the setting changes).</summary>
     static volatile string? _unreadableBrowser;
 
+    /// <summary>
+    /// Douyin: given douyin.com/video/ID, returns the JSON of its "aweme/detail" API. Douyin signs those requests
+    /// in page script (which yt-dlp can't do), so the app loads the page in a hidden WebView2 and reads the answer.
+    /// </summary>
+    public static Func<string, CancellationToken, Task<string>>? FetchDouyinDetail { get; set; }
+
+    const string DouyinReferer = "https://www.douyin.com/";
+
+    static async Task<DouyinVideo> GetDouyinAsync(string url, CancellationToken ct)
+    {
+        if (FetchDouyinDetail is not { } fetch) throw new YtDlpException(L.Get("Error_DouyinUnavailable"));
+        url = await DouyinLinks.NormalizeAsync(url, ct);
+        if (UrlTools.CanonicalDouyinUrl(url) is null) throw new YtDlpException(L.Get("Error_DouyinNotVideo"));
+        return DouyinParser.Parse(await fetch(url, ct));
+    }
+
     public static async Task<MediaInfo> GetInfoAsync(string url, CancellationToken ct)
     {
+        if (UrlTools.DetectPlatform(url) == Platform.Douyin) return DouyinParser.ToVideoInfo(await GetDouyinAsync(url, ct));
         var stdout = new StringBuilder();
         var (code, error) = await RunWithCookieFallbackAsync(url,
             env => { stdout.Clear(); return YtDlpArgs.Info(url, AppSettings.Current, env); },
@@ -45,14 +62,42 @@ public static class YtDlpService
 
         string? filePath = null;
         var parser = new YtDlpOutputParser();
-        var (code, error) = await RunWithCookieFallbackAsync(req.Url,
-            env => YtDlpArgs.Download(req, AppSettings.Current, env),
-            line =>
+        void OnLine(string line)
+        {
+            if (parser.Feed(line) is not { } e) return;
+            if (e is FileEvent f) filePath = f.Path;
+            onEvent(e);
+        }
+
+        int code;
+        string error;
+        if (UrlTools.DetectPlatform(req.Url) == Platform.Douyin)
+        {
+            // Stream addresses expire, so look them up again right before downloading (also after a restart).
+            var video = await GetDouyinAsync(req.Url, ct);
+            var stream = DouyinParser.Pick(video, req.MaxHeight, req.Codec);
+            var date = video.UploadDate is { Length: 8 } d ? $"{d[..4]}-{d[4..6]}-{d[6..]}" : null;
+            var known = new Dictionary<string, string?>
             {
-                if (parser.Feed(line) is not { } e) return;
-                if (e is FileEvent f) filePath = f.Path;
-                onEvent(e);
-            }, ct);
+                ["title"] = video.Title,
+                ["uploader"] = video.Author ?? "Unknown",
+                ["date"] = date ?? "unknown",
+                ["year"] = date?[..4] ?? "unknown",
+                ["month"] = date?[5..7] ?? "00",
+                ["resolution"] = req.IsAudio ? "audio" : $"{stream.Resolution}p",
+                ["id"] = video.Id,
+            };
+            var ffmpegDir = ToolManager.FfmpegPath is { } ff ? Path.GetDirectoryName(ff) : null;
+            // The media host needs no cookies; only the Referer.
+            var env = new YtDlpArgs.Environment(ffmpegDir, null, SkipBrowserCookies: true);
+            var direct = new YtDlpArgs.DirectMedia(stream.Url, DouyinReferer, known);
+            (code, error) = await RunAsync(YtDlpArgs.Download(req with { Url = $"https://www.douyin.com/video/{video.Id}" }, AppSettings.Current, env, direct), OnLine, ct);
+        }
+        else
+        {
+            (code, error) = await RunWithCookieFallbackAsync(req.Url,
+                env => YtDlpArgs.Download(req, AppSettings.Current, env), OnLine, ct);
+        }
 
         ct.ThrowIfCancellationRequested();
         if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);

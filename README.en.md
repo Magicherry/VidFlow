@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>A good-looking, easy video downloader for Windows: paste a link, pick the quality, done.</b><br>
-  YouTube and Bilibili · Native Windows 11 design · Powered by yt-dlp
+  YouTube, Bilibili and Douyin · Native Windows 11 design · Powered by yt-dlp
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 ## Features
 
 ### Downloading
-- Single videos, playlists, and Bilibili multi-part videos (pick the parts you want)
+- Single videos, playlists, Bilibili multi-part videos (pick the parts you want), and Douyin videos (share text and short links work too)
 - Paste several links at once: each is parsed and listed with its title, cover and length, and you tick the ones to download
 - The quality list shows the resolutions actually available, with estimated sizes
 - Video codec: H.264 / H.265 / AV1; container: MP4 / MKV / WebM; or audio only as MP3 / M4A / Opus / FLAC / WAV

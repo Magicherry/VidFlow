@@ -32,7 +32,11 @@ public static class YtDlpArgs
         return args;
     }
 
-    public static List<string> Download(DownloadRequest req, AppSettings s, Environment env)
+    /// <summary>A media file VidFlow located itself (Douyin): yt-dlp only downloads it, so the names it would
+    /// normally read from the page are passed in <see cref="Known"/>.</summary>
+    public sealed record DirectMedia(string Url, string Referer, IReadOnlyDictionary<string, string?> Known);
+
+    public static List<string> Download(DownloadRequest req, AppSettings s, Environment env, DirectMedia? direct = null)
     {
         var hasFfmpeg = env.FfmpegDir is not null;
         var platform = UrlTools.DetectPlatform(req.Url);
@@ -40,11 +44,26 @@ public static class YtDlpArgs
         {
             "--no-playlist", "--newline", "--progress", "--no-warnings", "--continue",
             "-P", req.OutputFolder,
-            "-o", NamingTemplate.ToOutputTemplate(req.FileNameTemplate, req.FolderTemplate, platform.DisplayName()),
+            "-o", NamingTemplate.ToOutputTemplate(req.FileNameTemplate, req.FolderTemplate, platform.DisplayName(), direct?.Known),
             "--print", StartTemplate,
             "--print", "after_move:VFF|%(filepath)s",
             "--progress-template", ProgressTemplate,
         };
+
+        if (direct is not null)
+        {
+            // One ready-made MP4 with picture and sound: nothing to choose or merge.
+            args.AddRange(["--add-header", $"Referer:{direct.Referer}"]);
+            if (req.IsAudio)
+                args.AddRange(["-x", "--audio-format", req.AudioOutputFormat,
+                    "--audio-quality", req.AudioOutputFormat is "flac" or "wav" || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
+            else if (req.Container != "mp4" && hasFfmpeg)
+                args.AddRange([req.Recode ? "--recode-video" : "--remux-video", req.Container]);
+            if (s.SpeedLimitKBps > 0) args.AddRange(["-r", $"{s.SpeedLimitKBps}K"]);
+            args.AddRange(Common(s, env));
+            args.Add(direct.Url);
+            return args;
+        }
 
         var lang = LanguageFilter(req.AudioLanguage);
         if (!req.IsAudio)

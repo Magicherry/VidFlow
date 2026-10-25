@@ -51,6 +51,25 @@ public partial class App : Application
 
         _ = Task.Run(() => ToolManager.AutoUpdateYtDlpAsync());
 
+        // Parsing and downloads run on background threads; the hidden WebView2 that reads Douyin's video details
+        // needs the UI thread.
+        YtDlpService.FetchDouyinDetail = (url, ct) =>
+        {
+            var done = new TaskCompletionSource<string>();
+            UiQueue.TryEnqueue(async () =>
+            {
+                try
+                {
+                    done.TrySetResult(await AccountService.FetchDouyinDetailAsync(MainWindow.Hwnd, url, ct));
+                }
+                catch (Exception ex)
+                {
+                    done.TrySetException(ex);
+                }
+            });
+            return done.Task;
+        };
+
         Updates = new UpdateController(UiQueue);
         Updates.Changed += MainWindow.UpdateSettingsBadge;
         Updates.Start();

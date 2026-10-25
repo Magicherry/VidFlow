@@ -388,3 +388,85 @@ public class AccountStoreChangeTests
         }
     }
 }
+
+public class DouyinLinkTests
+{
+    [Theory]
+    [InlineData("https://www.douyin.com/video/7412345678901234567", "https://www.douyin.com/video/7412345678901234567")]
+    [InlineData("https://www.douyin.com/jingxuan?modal_id=7412345678901234567", "https://www.douyin.com/video/7412345678901234567")]
+    [InlineData("https://www.douyin.com/user/MS4wLjAB?from_tab_name=main&modal_id=7412345678901234567", "https://www.douyin.com/video/7412345678901234567")]
+    [InlineData("https://www.iesdouyin.com/share/video/7412345678901234567/?region=CN", "https://www.douyin.com/video/7412345678901234567")]
+    public void LinksBecomeVideoLinks(string url, string expected) => Assert.Equal(expected, UrlTools.CanonicalDouyinUrl(url));
+
+    [Fact]
+    public void ShareTextYieldsTheShortLinkAndIsRecognised()
+    {
+        var share = "7.94 复制打开抖音，看看【某某的作品】今天的晚霞 # 风景 https://v.douyin.com/iABCdEf/ 12/31 Abc:/";
+        var url = UrlTools.ExtractUrl(share);
+        Assert.Equal("https://v.douyin.com/iABCdEf/", url);
+        Assert.Equal(Platform.Douyin, UrlTools.DetectPlatform(url!));
+        Assert.True(UrlTools.IsDouyinShortLink(url!));
+        Assert.Null(UrlTools.CanonicalDouyinUrl(url!)); // resolved over the network by DouyinLinks
+    }
+
+    [Fact]
+    public void ProfilePagesAreNotVideos() => Assert.Null(UrlTools.CanonicalDouyinUrl("https://www.douyin.com/user/MS4wLjAB"));
+
+    /// <summary>Shape of Douyin's web aweme/detail answer (trimmed to the fields VidFlow reads).</summary>
+    const string Detail = """
+        {"status_code":0,"aweme_detail":{
+          "aweme_id":"7412345678901234567","desc":"晚霞 #风景\n第二行","create_time":1730000000,
+          "author":{"nickname":"某某"},
+          "images":null,
+          "video":{"duration":15200,
+            "cover":{"url_list":["https://p3.douyinpic.com/cover.jpeg"]},
+            "play_addr":{"url_list":["https://www.douyin.com/aweme/v1/play/?video_id=v0"],"width":720,"height":1280},
+            "bit_rate":[
+              {"bit_rate":1200000,"is_h265":0,"play_addr":{"url_list":["https://www.douyin.com/aweme/v1/play/?x=1","https://v26-web.douyinvod.com/720.mp4"],"width":720,"height":1280,"data_size":2000000}},
+              {"bit_rate":2600000,"is_h265":1,"play_addr":{"url_list":["https://v26-web.douyinvod.com/1080-h265.mp4"],"width":1080,"height":1920,"data_size":5000000}},
+              {"bit_rate":3100000,"is_h265":0,"play_addr":{"url_list":["https://v26-web.douyinvod.com/1080-h264.mp4"],"width":1080,"height":1920,"data_size":6000000}}
+            ]}}}
+        """;
+
+    [Fact]
+    public void DetailBecomesVideoInfo()
+    {
+        var video = DouyinParser.Parse(Detail);
+        Assert.Equal("7412345678901234567", video.Id);
+        Assert.Equal("某某", video.Author);
+        Assert.Equal(15.2, video.Duration);
+        Assert.Equal("https://v26-web.douyinvod.com/720.mp4", video.Streams.Single(s => s.Resolution == 720).Url); // CDN over redirect
+
+        var info = DouyinParser.ToVideoInfo(video);
+        Assert.Equal("https://www.douyin.com/video/7412345678901234567", info.Url);
+        Assert.Equal(Platform.Douyin, info.Platform);
+        Assert.Equal([1080, 720], info.Qualities.Select(q => q.Height)); // portrait: the short side
+        Assert.Equal(6000000, info.Qualities[0].EstimatedBytes);
+        Assert.Equal(1080, info.Codecs["h265"]);
+    }
+
+    [Theory]
+    [InlineData(0, "auto", "1080-h264.mp4")]     // best: highest resolution, then bitrate
+    [InlineData(0, "h265", "1080-h265.mp4")]
+    [InlineData(720, "auto", "720.mp4")]
+    [InlineData(480, "auto", "720.mp4")]          // nothing that small: the smallest there is
+    [InlineData(720, "h265", "720.mp4")]          // codec not offered at that size: fall back
+    public void PicksTheStreamThatFits(int maxHeight, string codec, string expected) =>
+        Assert.EndsWith(expected, DouyinParser.Pick(DouyinParser.Parse(Detail), maxHeight, codec).Url);
+
+    [Fact]
+    public void PhotoPostsAndMissingVideosAreRefused()
+    {
+        Assert.Throws<YtDlpException>(() => DouyinParser.Parse("""{"status_code":0,"aweme_detail":null}"""));
+        Assert.Throws<YtDlpException>(() => DouyinParser.Parse(
+            """{"aweme_detail":{"aweme_id":"1","desc":"","images":[{"url_list":["a"]}],"video":{}}}"""));
+    }
+
+    [Fact]
+    public void KnownValuesNameTheFile()
+    {
+        var known = new Dictionary<string, string?> { ["title"] = "晚霞 #风景\n第二行", ["uploader"] = "某某", ["id"] = "7412" };
+        var output = NamingTemplate.ToOutputTemplate("{uploader} - {title} [{id}]", "{platform}", "抖音", known);
+        Assert.Equal("抖音/某某 - 晚霞 #风景 第二行 [7412].%(ext)s", output);
+    }
+}
