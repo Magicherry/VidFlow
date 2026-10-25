@@ -37,6 +37,21 @@ public static class AccountService
         await AccountStore.WriteAsync(all);
     }
 
+    /// <summary>Adds cookies obtained outside the browser (QR login) to the WebView2 profile, which stays the one
+    /// source of truth: later exports and sign-outs then include them.</summary>
+    public static void AddCookies(CoreWebView2 webView, IEnumerable<CookieRecord> cookies)
+    {
+        var mgr = webView.CookieManager;
+        foreach (var c in cookies)
+        {
+            var cookie = mgr.CreateCookie(c.Name, c.Value, c.Domain, c.Path);
+            cookie.IsHttpOnly = c.HttpOnly;
+            cookie.IsSecure = c.Secure;
+            if (c.Expires > 0) cookie.Expires = c.Expires;
+            mgr.AddOrUpdateCookie(cookie);
+        }
+    }
+
     /// <summary>Signs out of one platform: clears its cookies from the WebView2 profile and re-exports.</summary>
     public static async Task LogoutAsync(Platform p, IntPtr parentHwnd)
     {

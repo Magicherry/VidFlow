@@ -130,10 +130,20 @@
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow is built on these open-source components. Click a license to read it.</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically.</value></data>
   <data name="Login_Done" xml:space="preserve"><value>Done</value></data>
-  <data name="Login_Instructions" xml:space="preserve"><value>Sign in below (QR code supported). Your sign-in is stored only on this computer.</value></data>
-  <data name="Login_Success" xml:space="preserve"><value>Signed in! Click Done to save and close.</value></data>
+  <data name="Login_Instructions" xml:space="preserve"><value>Sign in below. The window closes by itself once you&apos;re signed in; your sign-in is stored only on this computer.</value></data>
+  <data name="Login_QrExpired" xml:space="preserve"><value>This code has expired</value></data>
+  <data name="Login_QrFailed" xml:space="preserve"><value>Couldn&apos;t get a code: check your network or proxy</value></data>
+  <data name="Login_QrHint" xml:space="preserve"><value>Scan with the Bilibili app to sign in</value></data>
+  <data name="Login_QrRefresh" xml:space="preserve"><value>Get a new code</value></data>
+  <data name="Login_QrRetry" xml:space="preserve"><value>Try again</value></data>
+  <data name="Login_QrScanned" xml:space="preserve"><value>Scanned. Confirm the sign-in on your phone</value></data>
+  <data name="Login_QrSuccess" xml:space="preserve"><value>Signed in</value></data>
+  <data name="Login_QrTitle" xml:space="preserve"><value>Scan to sign in</value></data>
+  <data name="Login_StoredLocally" xml:space="preserve"><value>Your sign-in is stored only on this computer</value></data>
+  <data name="Login_SuccessClosing" xml:space="preserve"><value>Signed in. Saving and closing…</value></data>
   <data name="Login_TitleBili" xml:space="preserve"><value>Sign in to Bilibili</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>Sign in to YouTube (Google account)</value></data>
+  <data name="Login_UseWeb" xml:space="preserve"><value>Sign in with password or SMS instead</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>The built-in browser (WebView2) couldn&apos;t start: {0}</value></data>
   <data name="Mode_Audio" xml:space="preserve"><value>Audio only</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>Audio only (M4A)</value></data>

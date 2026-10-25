@@ -89,8 +89,7 @@ Licenses_FfmpegNote	Downloaded from the official yt-dlp builds when you choose t
 Licenses_Intro	VidFlow is built on these open-source components. Click a license to read it.	VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。
 Licenses_YtDlpNote	Downloaded on demand and kept up to date automatically.	按需下载，并自动保持最新。
 Login_Done	Done	完成
-Login_Instructions	Sign in below (QR code supported). Your sign-in is stored only on this computer.	请在下方页面中登录（支持扫码）。登录信息仅保存在本机。
-Login_Success	Signed in! Click Done to save and close.	登录成功！点击「完成」保存并关闭窗口。
+Login_Instructions	Sign in below. The window closes by itself once you're signed in; your sign-in is stored only on this computer.	请在下方页面中登录，登录成功后窗口会自动关闭。登录信息仅保存在本机。
 Login_TitleBili	Sign in to Bilibili	登录哔哩哔哩
 Login_TitleYt	Sign in to YouTube (Google account)	登录 YouTube（Google 账号）
 Login_WebViewFailed	The built-in browser (WebView2) couldn't start: {0}	无法启动内置浏览器（WebView2）：{0}
@@ -407,3 +406,14 @@ Tools_LastChecked	Last checked {0}	上次检查：{0}
 Tools_ManagedNote	VidFlow downloads and keeps these tools up to date	这些工具由 VidFlow 下载并保持更新
 Tools_UpdateAll	Update all	全部更新
 Tools_InstallDoneMessage	Ready to use: {0}	已安装，可以使用：{0}
+Login_QrTitle	Scan to sign in	扫码登录
+Login_QrHint	Scan with the Bilibili app to sign in	打开哔哩哔哩 App，扫码登录
+Login_QrScanned	Scanned. Confirm the sign-in on your phone	已扫码，请在手机上确认登录
+Login_QrExpired	This code has expired	二维码已过期
+Login_QrRefresh	Get a new code	刷新二维码
+Login_QrFailed	Couldn't get a code: check your network or proxy	无法获取二维码，请检查网络或代理设置
+Login_QrRetry	Try again	重试
+Login_QrSuccess	Signed in	登录成功
+Login_UseWeb	Sign in with password or SMS instead	使用账号密码或短信验证码登录
+Login_StoredLocally	Your sign-in is stored only on this computer	登录信息仅保存在本机
+Login_SuccessClosing	Signed in. Saving and closing…	登录成功，正在保存并关闭…

@@ -25,10 +25,13 @@
             </TitleBar.IconSource>
         </TitleBar>
 
+        <!--  Web sign-in: status line above the page  -->
         <Grid
+            x:Name="WebStatusBar"
             Grid.Row="1"
             Padding="16,4,16,12"
-            ColumnSpacing="12">
+            ColumnSpacing="12"
+            Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -55,15 +58,102 @@
         </Grid>
 
         <Border
+            x:Name="WebHost"
             Grid.Row="2"
             Margin="8,0,8,8"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
-            CornerRadius="{StaticResource OverlayCornerRadius}">
+            CornerRadius="{StaticResource OverlayCornerRadius}"
+            Visibility="Collapsed">
             <Grid>
                 <ProgressRing x:Name="LoadingRing" IsActive="True" />
                 <WebView2 x:Name="Web" />
             </Grid>
         </Border>
+
+        <!--  Bilibili QR sign-in (shown first; the link switches to the web page)  -->
+        <StackPanel
+            x:Name="QrPanel"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            MaxWidth="360"
+            Margin="24,0,24,32"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="12"
+            Visibility="Collapsed">
+            <TextBlock
+                HorizontalAlignment="Center"
+                Style="{StaticResource SubtitleTextBlockStyle}"
+                Text="{x:Bind l:L.Get('Login_QrTitle')}" />
+            <TextBlock
+                x:Name="QrHint"
+                HorizontalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind l:L.Get('Login_QrHint')}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+            <!--  The code itself always sits on white, as phone cameras expect.  -->
+            <Grid
+                Width="232"
+                Height="232"
+                Margin="0,8,0,4"
+                HorizontalAlignment="Center">
+                <Border
+                    Padding="12"
+                    Background="White"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12">
+                    <Image
+                        x:Name="QrImage"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Login_QrTitle')}"
+                        Stretch="Uniform" />
+                </Border>
+                <ProgressRing x:Name="QrRing" IsActive="True" />
+                <!--  Scanned / expired / failed / signed in: covers the code  -->
+                <Grid x:Name="QrOverlay" Visibility="Collapsed">
+                    <Rectangle
+                        Fill="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                        Opacity="0.95"
+                        RadiusX="12"
+                        RadiusY="12" />
+                    <StackPanel
+                        Padding="16"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="10">
+                        <FontIcon
+                            x:Name="QrOverlayIcon"
+                            FontSize="36"
+                            Glyph="&#xE73E;" />
+                        <TextBlock
+                            x:Name="QrOverlayText"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                        <Button
+                            x:Name="QrRefreshButton"
+                            HorizontalAlignment="Center"
+                            Click="QrRefresh_Click"
+                            Content="{x:Bind l:L.Get('Login_QrRefresh')}"
+                            Style="{StaticResource AccentButtonStyle}"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <HyperlinkButton
+                HorizontalAlignment="Center"
+                Click="UseWebLogin_Click"
+                Content="{x:Bind l:L.Get('Login_UseWeb')}" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind l:L.Get('Login_StoredLocally')}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+        </StackPanel>
     </Grid>
 </Window>

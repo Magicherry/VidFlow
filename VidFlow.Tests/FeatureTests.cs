@@ -325,3 +325,38 @@ public class NamingPresetTests
         Assert.Equal(["author", "views"], NamingTemplate.UnknownVariables("{author} {title} {views} {author}"));
     }
 }
+
+public class BilibiliQrLoginTests
+{
+    [Theory]
+    [InlineData(86101, QrLoginState.Waiting)]
+    [InlineData(86090, QrLoginState.Scanned)]
+    [InlineData(86038, QrLoginState.Expired)]
+    [InlineData(0, QrLoginState.Success)]
+    public void PollCodesMapToStates(int code, QrLoginState expected)
+    {
+        var json = """{"code":0,"message":"OK","data":{"url":"","refresh_token":"","timestamp":0,"code":""" + code + ""","message":""}}""";
+        Assert.Equal(expected, BilibiliQrLogin.ParsePoll(json).State);
+    }
+
+    [Fact]
+    public void SuccessUrlBecomesLoginCookies()
+    {
+        var url = "https://passport.biligame.com/x/passport-login/web/crossDomain?DedeUserID=123&DedeUserID__ckMd5=abc"
+                  + "&Expires=1893456000&SESSDATA=s%2C1893456000%2Cxyz&bili_jct=jct&gourl=https%3A%2F%2Fwww.bilibili.com";
+        var cookies = BilibiliQrLogin.CookiesFromUrl(url);
+        Assert.Equal(["DedeUserID", "DedeUserID__ckMd5", "SESSDATA", "bili_jct"], cookies.Select(c => c.Name));
+        var sess = cookies.Single(c => c.Name == "SESSDATA");
+        Assert.Equal("s,1893456000,xyz", sess.Value);
+        Assert.Equal(".bilibili.com", sess.Domain);
+        Assert.True(sess.HttpOnly);
+        Assert.Equal(1893456000, sess.Expires);
+
+        // Written out, it counts as signed in to Bilibili.
+        var line = AccountStore.ToNetscape(cookies).Split('\n').Single(l => l.Contains("SESSDATA"));
+        Assert.StartsWith("#HttpOnly_.bilibili.com\tTRUE\t/\t", line);
+    }
+
+    [Fact]
+    public void NonLoginUrlGivesNoCookies() => Assert.Empty(BilibiliQrLogin.CookiesFromUrl(""));
+}

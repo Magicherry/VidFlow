@@ -130,10 +130,20 @@
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新。</value></data>
   <data name="Login_Done" xml:space="preserve"><value>完成</value></data>
-  <data name="Login_Instructions" xml:space="preserve"><value>请在下方页面中登录（支持扫码）。登录信息仅保存在本机。</value></data>
-  <data name="Login_Success" xml:space="preserve"><value>登录成功！点击「完成」保存并关闭窗口。</value></data>
+  <data name="Login_Instructions" xml:space="preserve"><value>请在下方页面中登录，登录成功后窗口会自动关闭。登录信息仅保存在本机。</value></data>
+  <data name="Login_QrExpired" xml:space="preserve"><value>二维码已过期</value></data>
+  <data name="Login_QrFailed" xml:space="preserve"><value>无法获取二维码，请检查网络或代理设置</value></data>
+  <data name="Login_QrHint" xml:space="preserve"><value>打开哔哩哔哩 App，扫码登录</value></data>
+  <data name="Login_QrRefresh" xml:space="preserve"><value>刷新二维码</value></data>
+  <data name="Login_QrRetry" xml:space="preserve"><value>重试</value></data>
+  <data name="Login_QrScanned" xml:space="preserve"><value>已扫码，请在手机上确认登录</value></data>
+  <data name="Login_QrSuccess" xml:space="preserve"><value>登录成功</value></data>
+  <data name="Login_QrTitle" xml:space="preserve"><value>扫码登录</value></data>
+  <data name="Login_StoredLocally" xml:space="preserve"><value>登录信息仅保存在本机</value></data>
+  <data name="Login_SuccessClosing" xml:space="preserve"><value>登录成功，正在保存并关闭…</value></data>
   <data name="Login_TitleBili" xml:space="preserve"><value>登录哔哩哔哩</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>登录 YouTube（Google 账号）</value></data>
+  <data name="Login_UseWeb" xml:space="preserve"><value>使用账号密码或短信验证码登录</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>无法启动内置浏览器（WebView2）：{0}</value></data>
   <data name="Mode_Audio" xml:space="preserve"><value>仅音频</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>仅音频 (M4A)</value></data>
