@@ -11,6 +11,7 @@ public sealed partial class LicensesDialog : ContentDialog
     [
         ("yt-dlp", "Unlicense", "https://github.com/yt-dlp/yt-dlp/blob/master/LICENSE", "Licenses_YtDlpNote"),
         ("FFmpeg", "GPL-3.0 (yt-dlp/FFmpeg-Builds)", "https://github.com/yt-dlp/FFmpeg-Builds", "Licenses_FfmpegNote"),
+        ("Deno", "MIT", "https://github.com/denoland/deno/blob/main/LICENSE.md", "Licenses_YtDlpNote"),
         (".NET", "MIT", "https://github.com/dotnet/runtime/blob/main/LICENSE.TXT", null),
         ("Windows App SDK / WinUI 3", "MIT", "https://github.com/microsoft/WindowsAppSDK/blob/main/LICENSE", null),
         ("Windows Community Toolkit", "MIT", "https://github.com/CommunityToolkit/Windows/blob/main/License.md", null),

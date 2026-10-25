@@ -11,6 +11,7 @@ public partial class App : Application
 {
     public static MainWindow MainWindow { get; private set; } = null!;
     public static DownloadManager Downloads { get; private set; } = null!;
+    public static UpdateController Updates { get; private set; } = null!;
     public static DispatcherQueue UiQueue { get; private set; } = null!;
 
     public App()
@@ -49,6 +50,18 @@ public partial class App : Application
             NotificationService.HandleActivation(n);
 
         _ = Task.Run(() => ToolManager.AutoUpdateYtDlpAsync());
+
+        Updates = new UpdateController(UiQueue);
+        Updates.Start();
+    }
+
+    /// <summary>Exit so the update installer can replace the files; downloads resume after the update.</summary>
+    public static void QuitForUpdate()
+    {
+        Downloads.Shutdown();
+        TrayIcon.Dispose();
+        MainWindow.CloseForReal();
+        Current.Exit();
     }
 
     /// <summary>Another launch (second instance or notification click) was redirected here. Called off the UI thread.</summary>

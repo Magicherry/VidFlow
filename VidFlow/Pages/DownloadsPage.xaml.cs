@@ -26,6 +26,7 @@ public sealed partial class DownloadsPage : Page
 
     static DownloadItem ItemOf(object sender) => (DownloadItem)((FrameworkElement)sender).DataContext;
 
+    void Prioritize_Click(object sender, RoutedEventArgs e) => App.Downloads.Prioritize(ItemOf(sender));
     void Pause_Click(object sender, RoutedEventArgs e) => App.Downloads.Pause(ItemOf(sender));
     void Resume_Click(object sender, RoutedEventArgs e) => App.Downloads.Resume(ItemOf(sender));
     void Cancel_Click(object sender, RoutedEventArgs e) => App.Downloads.Cancel(ItemOf(sender));

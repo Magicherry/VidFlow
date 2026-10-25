@@ -3,7 +3,7 @@
 
 #define AppName "VidFlow"
 #ifndef AppVersion
-  #define AppVersion "1.1.1"
+  #define AppVersion "1.2.0"
 #endif
 #define SourceDir "..\VidFlow-Release"
 
@@ -124,6 +124,8 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\VidFlow.exe"; Tasks: desktopi
 
 [Run]
 Filename: "{app}\VidFlow.exe"; Description: "{cm:LaunchApp}"; Flags: nowait postinstall skipifsilent
+; In-app updates run silently with /UPDATE=1: reopen VidFlow when done.
+Filename: "{app}\VidFlow.exe"; Flags: nowait; Check: IsUpdate
 
 [UninstallRun]
 ; Close the app (it may be running in the tray), then remove its notification registration.
@@ -131,6 +133,11 @@ Filename: "{sys}\taskkill.exe"; Parameters: "/IM VidFlow.exe /F"; Flags: runhidd
 Filename: "{app}\VidFlow.exe"; Parameters: "--uninstall-cleanup"; Flags: runhidden waituntilterminated; RunOnceId: "CleanupNotifications"
 
 [Code]
+function IsUpdate: Boolean;
+begin
+  Result := ExpandConstant('{param:UPDATE|0}') = '1';
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   // Keep user data by default (and always in silent mode); remove it only when the user agrees.

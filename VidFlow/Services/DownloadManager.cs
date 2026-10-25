@@ -25,6 +25,28 @@ public sealed class DownloadManager
         _saveTimer.IsRepeating = false;
         _saveTimer.Tick += (_, _) => SaveNow();
         Items.CollectionChanged += (_, _) => ScheduleSave();
+
+        _stallTimer = dispatcher.CreateTimer();
+        _stallTimer.Interval = TimeSpan.FromSeconds(30);
+        _stallTimer.Tick += (_, _) => CheckStalled();
+        _stallTimer.Start();
+    }
+
+    static readonly TimeSpan StallAfter = TimeSpan.FromMinutes(3);
+    readonly DispatcherQueueTimer _stallTimer;
+
+    /// <summary>A running download with no output from yt-dlp for a while is flagged (status + one notification).</summary>
+    void CheckStalled()
+    {
+        foreach (var item in Items.Where(i => i.State == DownloadState.Downloading && !i.StallReported
+                                             && DateTime.Now - i.LastActivity > StallAfter))
+        {
+            item.StallReported = true;
+            item.StatusText = L.Format("Status_Stalled", (int)StallAfter.TotalMinutes);
+            Log.Warn($"Download stalled: {item.Request.Url}");
+            if (AppSettings.Current.NotifyOnFailure && !App.MainWindow.IsForeground)
+                NotificationService.DownloadStalled(item.Title);
+        }
     }
 
     public ObservableCollection<DownloadItem> Items { get; } = [];
@@ -153,11 +175,21 @@ public sealed class DownloadManager
         Pump();
     }
 
+    /// <summary>"Download next": this queued item starts as soon as a slot is free.</summary>
+    public void Prioritize(DownloadItem item)
+    {
+        if (!item.CanPrioritize) return;
+        item.Record.PriorityAt = DateTime.Now;
+        item.StatusText = L.Get("Status_Next");
+        Changed();
+    }
+
     void Pump()
     {
         var running = Items.Count(i => i.IsRunning);
-        // Oldest first: the list is newest-on-top.
-        foreach (var item in Items.Reverse().Where(i => i.State == DownloadState.Queued).ToList())
+        // Prioritized items first (most recently prioritized first), then oldest first (the list is newest-on-top).
+        foreach (var item in Items.Reverse().Where(i => i.State == DownloadState.Queued)
+                     .OrderByDescending(i => i.Record.PriorityAt ?? DateTime.MinValue).ToList())
         {
             if (running >= Math.Max(1, AppSettings.Current.MaxConcurrent)) break;
             running++;
@@ -177,6 +209,8 @@ public sealed class DownloadManager
         item.State = DownloadState.Downloading;
         item.StatusText = L.Get("Status_Connecting");
         item.PauseRequested = false;
+        item.LastActivity = DateTime.Now;
+        item.StallReported = false;
         using var cts = new CancellationTokenSource();
         item.Cts = cts;
         Log.Info($"Download start: {item.Request.Url} ({item.Request.Mode}, {item.Request.MaxHeight})");
@@ -206,7 +240,8 @@ public sealed class DownloadManager
             item.StatusText = ex.Message.Replace('\n', ' ');
             item.ErrorDetail = ex is YtDlpException { Detail: { } d } ? d : ex.ToString();
             Log.Warn($"Download failed: {item.Request.Url}: {ex.Message}");
-            if (ShouldNotify()) NotificationService.DownloadFailed(item.Title, ex.Message);
+            if (AppSettings.Current.NotifyOnFailure && !App.MainWindow.IsForeground)
+                NotificationService.DownloadFailed(item.Title, ex.Message);
         }
         finally
         {
@@ -236,6 +271,8 @@ public sealed class DownloadManager
     void Apply(DownloadItem item, DownloadEvent e)
     {
         if (!item.IsRunning) return;
+        item.LastActivity = DateTime.Now;
+        item.StallReported = false;
         switch (e)
         {
             case StartedEvent s:

@@ -49,6 +49,7 @@ public static class InfoParser
 
         var duration = Num(root, "duration");
         var (qualities, audioBytes, codecs) = Qualities(root, duration);
+        var audioLanguages = AudioLanguages(root);
         return new VideoInfo
         {
             Url = url,
@@ -61,6 +62,7 @@ public static class InfoParser
             Qualities = qualities,
             AudioBytes = audioBytes,
             Codecs = codecs,
+            AudioLanguages = audioLanguages,
         };
     }
 
@@ -97,6 +99,21 @@ public static class InfoParser
             .Select(kv => new QualityOption(kv.Key, kv.Value.Fps, kv.Value.Bytes is > 0 ? kv.Value.Bytes + (audio ?? 0) : null))
             .ToList();
         return (list, audio, codecs);
+    }
+
+    /// <summary>Distinct audio track languages, the original (highest language_preference) first.
+    /// Only meaningful when there is more than one (YouTube multi-language audio).</summary>
+    static List<string> AudioLanguages(JsonElement root)
+    {
+        if (!root.TryGetProperty("formats", out var formats) || formats.ValueKind != JsonValueKind.Array) return [];
+        var best = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+        foreach (var f in formats.EnumerateArray())
+        {
+            if (Str(f, "acodec") is null or "none" || Str(f, "language") is not { Length: > 0 } language) continue;
+            var preference = Num(f, "language_preference") ?? 0;
+            best[language] = best.TryGetValue(language, out var p) ? Math.Max(p, preference) : preference;
+        }
+        return best.Count < 2 ? [] : best.OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key).Select(kv => kv.Key).ToList();
     }
 
     static long? Size(JsonElement f, double? duration)

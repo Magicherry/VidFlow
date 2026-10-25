@@ -22,20 +22,40 @@
   <data name="Action_OpenFolder" xml:space="preserve"><value>打开文件夹</value></data>
   <data name="Action_Pause" xml:space="preserve"><value>暂停</value></data>
   <data name="Action_Play" xml:space="preserve"><value>播放</value></data>
+  <data name="Action_Prioritize" xml:space="preserve"><value>优先下载</value></data>
   <data name="Action_Remove" xml:space="preserve"><value>从列表中移除</value></data>
   <data name="Action_Resume" xml:space="preserve"><value>继续</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>重试</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>在文件夹中显示</value></data>
   <data name="App_Subtitle" xml:space="preserve"><value>视频下载器</value></data>
+  <data name="AudioFormat_Auto" xml:space="preserve"><value>自动（按封装格式选择）</value></data>
+  <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC（无损）</value></data>
+  <data name="AudioQuality_Best" xml:space="preserve"><value>最高音质</value></data>
+  <data name="AudioTrack_Default" xml:space="preserve"><value>默认（原声）</value></data>
   <data name="Batch_Description" xml:space="preserve"><value>这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。</value></data>
+  <data name="Batch_ListName" xml:space="preserve"><value>要下载的链接</value></data>
+  <data name="Batch_Parsing" xml:space="preserve"><value>解析中…</value></data>
+  <data name="Batch_PlaylistMeta" xml:space="preserve"><value>播放列表 · {0} 个视频</value></data>
+  <data name="Batch_Status" xml:space="preserve"><value>已解析 {0} / {1}，勾选要下载的项目</value></data>
+  <data name="Batch_StatusFailed" xml:space="preserve"><value>已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>共 {0} 个链接</value></data>
   <data name="Batch_UnsupportedHint" xml:space="preserve"><value>部分链接不是 YouTube / 哔哩哔哩，yt-dlp 仍会尝试下载，但可能失败。</value></data>
   <data name="Codec_Auto" xml:space="preserve"><value>自动（画质优先）</value></data>
+  <data name="Codec_Unavailable" xml:space="preserve"><value>{0} · 此视频不提供</value></data>
   <data name="Codec_WithMax" xml:space="preserve"><value>{0} · 最高 {1}p</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>
   <data name="Common_Clear" xml:space="preserve"><value>清除</value></data>
   <data name="Common_Close" xml:space="preserve"><value>关闭</value></data>
   <data name="Common_Failed" xml:space="preserve"><value>操作失败</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Compat_Apply" xml:space="preserve"><value>改用推荐设置</value></data>
+  <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>FLAC / WAV 文件会大很多，但源音频本身是有损压缩的，音质不会因此提升。</value></data>
+  <data name="Compat_Mp4Opus" xml:space="preserve"><value>MP4 中的 Opus 音频在部分播放器和剪辑软件中无法播放，MP4 建议搭配 AAC（或改用 MKV）。</value></data>
+  <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM 只能封装 Opus / Vorbis 音频，请改用 Opus，或开启自动转换。</value></data>
+  <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM 只能封装 VP9 / AV1 视频。未开启自动转换时会改存为 MKV，建议直接选择 MKV。</value></data>
+  <data name="Container_Mkv" xml:space="preserve"><value>MKV（支持所有编码）</value></data>
+  <data name="Container_Mp4" xml:space="preserve"><value>MP4（兼容性最好）</value></data>
+  <data name="Container_Webm" xml:space="preserve"><value>WebM（VP9 / AV1 + Opus）</value></data>
   <data name="Download_Batch" xml:space="preserve"><value>添加 {0} 个链接到队列</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>下载选中的 {0} 个</value></data>
   <data name="Download_Start" xml:space="preserve"><value>开始下载</value></data>
@@ -64,6 +84,11 @@
   <data name="Error_UnexpectedExit" xml:space="preserve"><value>yt-dlp 意外退出。</value></data>
   <data name="Error_Unsupported" xml:space="preserve"><value>不支持该链接。</value></data>
   <data name="Error_ZipMissing" xml:space="preserve"><value>压缩包中缺少 {0}</value></data>
+  <data name="Folder_Month" xml:space="preserve"><value>按年月</value></data>
+  <data name="Folder_None" xml:space="preserve"><value>不分类</value></data>
+  <data name="Folder_Platform" xml:space="preserve"><value>按平台</value></data>
+  <data name="Folder_PlatformUploader" xml:space="preserve"><value>按平台和作者</value></data>
+  <data name="Folder_Uploader" xml:space="preserve"><value>按作者</value></data>
   <data name="Home_Added" xml:space="preserve"><value>已添加</value></data>
   <data name="Home_AddedMany" xml:space="preserve"><value>已将 {0} 个任务加入下载队列。</value></data>
   <data name="Home_AddedOne" xml:space="preserve"><value>「{0}」已加入下载队列。</value></data>
@@ -77,6 +102,8 @@
   <data name="Home_InvalidLink" xml:space="preserve"><value>请输入有效的视频链接。</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>正在获取视频信息…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>立即登录</value></data>
+  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube 的部分格式（常是较高画质）需要 Deno 脚本运行环境才能获取，可在「设置 → 组件」中一键安装。</value></data>
+  <data name="Home_NoDenoTitle" xml:space="preserve"><value>建议安装 Deno</value></data>
   <data name="Home_NoFfmpeg" xml:space="preserve"><value>未安装 ffmpeg：只能下载已合并的低画质文件，且无法提取音频。可在「设置 → 组件」中一键安装。</value></data>
   <data name="Home_NoFfmpegTitle" xml:space="preserve"><value>建议安装 ffmpeg</value></data>
   <data name="Home_NoLink" xml:space="preserve"><value>没有找到链接。</value></data>
@@ -91,6 +118,7 @@
   <data name="Home_UrlBoxName" xml:space="preserve"><value>视频链接</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴 YouTube / 哔哩哔哩链接，多个链接用空格分隔</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
+  <data name="Label_Audio" xml:space="preserve"><value>{0} 音频</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A 音频</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 音频</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · 最高画质</value></data>
@@ -103,6 +131,7 @@
   <data name="Login_TitleBili" xml:space="preserve"><value>登录哔哩哔哩</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>登录 YouTube（Google 账号）</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>无法启动内置浏览器（WebView2）：{0}</value></data>
+  <data name="Mode_Audio" xml:space="preserve"><value>仅音频</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>仅音频 (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>仅音频 (MP3)</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>视频 (MP4)</value></data>
@@ -115,13 +144,38 @@
   <data name="Notify_InTray" xml:space="preserve"><value>VidFlow 仍在后台运行</value></data>
   <data name="Notify_InTrayBody" xml:space="preserve"><value>下载会在后台继续。可通过任务栏通知区域的图标重新打开或退出。</value></data>
   <data name="Notify_LinkDetected" xml:space="preserve"><value>检测到视频链接，是否下载？</value></data>
+  <data name="Notify_Stalled" xml:space="preserve"><value>下载停滞</value></data>
+  <data name="Notify_UpdateAvailable" xml:space="preserve"><value>VidFlow {0} 已发布</value></data>
+  <data name="Notify_UpdateAvailableBody" xml:space="preserve"><value>可在设置中查看更新内容并更新。</value></data>
+  <data name="Notify_UpdateDone" xml:space="preserve"><value>已更新到 VidFlow {0}</value></data>
+  <data name="Notify_UpdateDoneBody" xml:space="preserve"><value>未完成的下载会自动继续。</value></data>
+  <data name="Notify_UpdateReady" xml:space="preserve"><value>VidFlow {0} 已下载，可以安装</value></data>
+  <data name="Notify_UpdateReadyBody" xml:space="preserve"><value>安装只需几秒，之后下载会自动继续。</value></data>
+  <data name="Notify_UpdateRolledBack" xml:space="preserve"><value>更新到 {0} 未完成</value></data>
+  <data name="Notify_UpdateRolledBackBody" xml:space="preserve"><value>已回滚，当前仍为 {0}。可在「设置 → 应用更新」中重试。</value></data>
+  <data name="Notify_ViewUpdate" xml:space="preserve"><value>查看</value></data>
+  <data name="Options_Audio" xml:space="preserve"><value>音频</value></data>
+  <data name="Options_AudioDescription" xml:space="preserve"><value>音频格式、音质与音轨</value></data>
+  <data name="Options_AudioFormat" xml:space="preserve"><value>音频格式</value></data>
+  <data name="Options_AudioQuality" xml:space="preserve"><value>音质</value></data>
+  <data name="Options_AudioTrack" xml:space="preserve"><value>音轨</value></data>
+  <data name="Options_AudioTrackDescription" xml:space="preserve"><value>适用于提供多种配音语言的视频</value></data>
   <data name="Options_Codec" xml:space="preserve"><value>视频编码</value></data>
   <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 兼容性最好；H.265 / AV1 体积更小，但老设备可能无法播放。所选编码不可用时自动改用最高画质</value></data>
+  <data name="Options_Container" xml:space="preserve"><value>封装格式</value></data>
+  <data name="Options_ContainerDescription" xml:space="preserve"><value>文件格式；MP4 几乎所有设备都能播放</value></data>
+  <data name="Options_FileName" xml:space="preserve"><value>文件名</value></data>
+  <data name="Options_FileNameDescription" xml:space="preserve"><value>可用变量：{title} {uploader} {date} {year} {month} {resolution} {id} {platform}</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>保存位置</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>下载内容</value></data>
   <data name="Options_ModeDescription" xml:space="preserve"><value>选择下载完整视频，或仅提取音频</value></data>
+  <data name="Options_Naming" xml:space="preserve"><value>命名与分类</value></data>
+  <data name="Options_NamingDescription" xml:space="preserve"><value>文件的命名方式，以及是否按平台 / 作者 / 日期放入子文件夹</value></data>
+  <data name="Options_Preview" xml:space="preserve"><value>示例：{0}</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>画质</value></data>
   <data name="Options_QualityDescription" xml:space="preserve"><value>列表中为实际可用的分辨率，大小为估算值</value></data>
+  <data name="Options_Recode" xml:space="preserve"><value>不兼容时自动转换</value></data>
+  <data name="Options_RecodeDescription" xml:space="preserve"><value>下载的编码与封装格式不兼容时重新编码（较慢）；关闭时会改存为 MKV</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>同时保存字幕文件（如果有），字幕语言可在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
@@ -135,6 +189,11 @@
   <data name="Playlist_SelectAll" xml:space="preserve"><value>全选</value></data>
   <data name="Playlist_Selected" xml:space="preserve"><value>已选择 {0} / {1}</value></data>
   <data name="Playlist_SelectNone" xml:space="preserve"><value>全不选</value></data>
+  <data name="Preset_AudioOnly" xml:space="preserve"><value>仅下载音频</value></data>
+  <data name="Preset_Best" xml:space="preserve"><value>最高画质</value></data>
+  <data name="Preset_Compatible" xml:space="preserve"><value>兼容优先</value></data>
+  <data name="Preset_HD" xml:space="preserve"><value>高清优先（1080P）</value></data>
+  <data name="Preset_SaveSpace" xml:space="preserve"><value>节省空间</value></data>
   <data name="Quality_Best" xml:space="preserve"><value>最高画质</value></data>
   <data name="Quality_FullHD" xml:space="preserve"><value>全高清</value></data>
   <data name="Quality_HD" xml:space="preserve"><value>高清</value></data>
@@ -157,6 +216,7 @@
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape 格式，可用浏览器扩展导出</value></data>
   <data name="Settings_Danmaku" xml:space="preserve"><value>保存 B 站弹幕</value></data>
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>开启字幕时，同时把弹幕保存为 XML 文件</value></data>
+  <data name="Settings_DenoMissing" xml:space="preserve"><value>未安装 · YouTube 部分格式需要（推荐）</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>下载</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>未安装 · 用于合并高清音视频、提取音频（推荐）</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>默认保存位置</value></data>
@@ -175,13 +235,16 @@
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>将标题、作者和封面写入文件（需要 ffmpeg）</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>网络</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>完成通知</value></data>
-  <data name="Settings_NotifyDescription" xml:space="preserve"><value>在后台时，下载完成或失败会发送系统通知</value></data>
+  <data name="Settings_NotifyDescription" xml:space="preserve"><value>在后台时，下载完成会发送系统通知</value></data>
+  <data name="Settings_NotifyFailure" xml:space="preserve"><value>失败与异常通知</value></data>
+  <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>在后台时，下载失败或长时间无进度会发送系统通知</value></data>
   <data name="Settings_OtherCookies" xml:space="preserve"><value>其他 Cookie 来源</value></data>
   <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>高级：改用外部浏览器或 cookies.txt 文件中的登录状态（会覆盖应用内登录）</value></data>
   <data name="Settings_Proxy" xml:space="preserve"><value>代理</value></data>
   <data name="Settings_ProxyDescription" xml:space="preserve"><value>例如 http://127.0.0.1:7890 或 socks5://127.0.0.1:1080；留空则使用系统代理</value></data>
   <data name="Settings_ProxyPlaceholder" xml:space="preserve"><value>使用系统代理</value></data>
   <data name="Settings_Reinstall" xml:space="preserve"><value>重新安装</value></data>
+  <data name="Settings_ReleaseNotes" xml:space="preserve"><value>更新日志</value></data>
   <data name="Settings_RestartMessage" xml:space="preserve"><value>新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。</value></data>
   <data name="Settings_RestartNow" xml:space="preserve"><value>立即重启</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>需要重启</value></data>
@@ -194,6 +257,8 @@
   <data name="Settings_SubLangsDescription" xml:space="preserve"><value>yt-dlp 语言代码，用逗号分隔（例如 zh-Hans,en）</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>要保存的字幕语言，以及 B 站弹幕</value></data>
+  <data name="Settings_Templates" xml:space="preserve"><value>下载模板</value></data>
+  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>保存好的下载选项组合。新建下载时自动套用默认模板；在新建下载页的修改只对当次任务生效</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>应用主题</value></data>
   <data name="Settings_ThemeDark" xml:space="preserve"><value>深色</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>浅色</value></data>
@@ -201,6 +266,9 @@
   <data name="Settings_ToolVersion" xml:space="preserve"><value>版本 {0} · {1}</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>关闭时最小化到托盘</value></data>
   <data name="Settings_TrayDescription" xml:space="preserve"><value>关闭窗口后下载继续进行，可从任务栏通知区域图标退出</value></data>
+  <data name="Settings_UpdateMode" xml:space="preserve"><value>更新方式</value></data>
+  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>自动更新会在后台下载更新包，安装前会先询问</value></data>
+  <data name="Settings_Updates" xml:space="preserve"><value>应用更新</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>更新到 {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>已是最新</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>未安装 · 用于解析和下载视频（必需）</value></data>
@@ -212,18 +280,67 @@
   <data name="Status_Connecting" xml:space="preserve"><value>正在连接…</value></data>
   <data name="Status_Converting" xml:space="preserve"><value>正在转换音频…</value></data>
   <data name="Status_Merging" xml:space="preserve"><value>正在合并音视频…</value></data>
+  <data name="Status_Next" xml:space="preserve"><value>已置顶，即将开始</value></data>
   <data name="Status_Paused" xml:space="preserve"><value>已暂停</value></data>
   <data name="Status_PausedAt" xml:space="preserve"><value>已暂停 · {0}%</value></data>
   <data name="Status_Remaining" xml:space="preserve"><value>剩余 {0}</value></data>
   <data name="Status_Resuming" xml:space="preserve"><value>即将继续…</value></data>
+  <data name="Status_Stalled" xml:space="preserve"><value>已 {0} 分钟没有进度，仍在尝试…</value></data>
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>视频流已完成，正在下载音频流…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>视频流</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>等待中…</value></data>
+  <data name="Template_BuiltInSuffix" xml:space="preserve"><value>{0}（内置）</value></data>
+  <data name="Template_CopyName" xml:space="preserve"><value>{0} 副本</value></data>
+  <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0}（默认）</value></data>
+  <data name="Template_Delete" xml:space="preserve"><value>删除</value></data>
+  <data name="Template_DeleteBody" xml:space="preserve"><value>已添加的下载任务不受影响。</value></data>
+  <data name="Template_DeleteTitle" xml:space="preserve"><value>删除「{0}」？</value></data>
+  <data name="Template_Duplicate" xml:space="preserve"><value>复制</value></data>
+  <data name="Template_Edit" xml:space="preserve"><value>编辑</value></data>
+  <data name="Template_EditTitle" xml:space="preserve"><value>编辑模板</value></data>
+  <data name="Template_Header" xml:space="preserve"><value>下载模板</value></data>
+  <data name="Template_IsDefault" xml:space="preserve"><value>默认</value></data>
+  <data name="Template_ModifiedHint" xml:space="preserve"><value>已针对本次下载修改（不影响模板）</value></data>
+  <data name="Template_Name" xml:space="preserve"><value>名称</value></data>
+  <data name="Template_New" xml:space="preserve"><value>新建模板</value></data>
+  <data name="Template_NewName" xml:space="preserve"><value>我的模板</value></data>
+  <data name="Template_NewTitle" xml:space="preserve"><value>新建模板</value></data>
+  <data name="Template_Rename" xml:space="preserve"><value>重命名</value></data>
+  <data name="Template_Reset" xml:space="preserve"><value>恢复模板设置</value></data>
+  <data name="Template_SaveAs" xml:space="preserve"><value>另存为模板</value></data>
+  <data name="Template_SaveAsTitle" xml:space="preserve"><value>另存为模板</value></data>
+  <data name="Template_SetDefault" xml:space="preserve"><value>设为默认</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>退出 VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>下载已复制的链接</value></data>
   <data name="Tray_Show" xml:space="preserve"><value>打开 VidFlow</value></data>
   <data name="Tray_Tooltip" xml:space="preserve"><value>VidFlow · {0} 个任务 · {1}%</value></data>
   <data name="Untitled" xml:space="preserve"><value>未命名视频</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>发现新版本 {0}（当前 {1}）</value></data>
+  <data name="Update_BadManifest" xml:space="preserve"><value>更新信息无效。</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>正在检查更新…</value></data>
+  <data name="Update_CheckingShort" xml:space="preserve"><value>正在检查…</value></data>
+  <data name="Update_ChecksumMismatch" xml:space="preserve"><value>下载的更新包已损坏（校验不一致）。</value></data>
+  <data name="Update_Current" xml:space="preserve"><value>当前版本 {0}</value></data>
+  <data name="Update_Download" xml:space="preserve"><value>下载更新</value></data>
+  <data name="Update_DownloadFailed" xml:space="preserve"><value>更新包下载失败。</value></data>
+  <data name="Update_Downloading" xml:space="preserve"><value>正在下载 {0}… {1}%</value></data>
+  <data name="Update_DownloadingShort" xml:space="preserve"><value>下载中…</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>更新失败：{0}</value></data>
+  <data name="Update_InstallBody" xml:space="preserve"><value>VidFlow 将关闭并在几秒内完成更新后自动重新打开。</value></data>
+  <data name="Update_InstallBodyActive" xml:space="preserve"><value>VidFlow 将关闭并在几秒内完成更新后自动重新打开。{0} 个正在进行的下载会暂停，更新后自动继续。</value></data>
+  <data name="Update_InstallNow" xml:space="preserve"><value>立即安装</value></data>
+  <data name="Update_InstallTitle" xml:space="preserve"><value>安装 VidFlow {0}？</value></data>
+  <data name="Update_Later" xml:space="preserve"><value>稍后</value></data>
+  <data name="Update_Network" xml:space="preserve"><value>无法连接更新服务器，请检查网络或代理。</value></data>
+  <data name="Update_NoManifest" xml:space="preserve"><value>暂未找到更新信息，请稍后再试。</value></data>
+  <data name="Update_NotesHeader" xml:space="preserve"><value>版本 {0} · 发布于 {1}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已下载，可以安装</value></data>
+  <data name="Update_Retry" xml:space="preserve"><value>重试</value></data>
+  <data name="Update_RolledBack" xml:space="preserve"><value>上次更新到 {0} 未完成，已回滚，当前为 {1}。</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>当前版本 {0} · 已是最新</value></data>
+  <data name="UpdateMode_Auto" xml:space="preserve"><value>自动更新</value></data>
+  <data name="UpdateMode_Manual" xml:space="preserve"><value>手动更新</value></data>
+  <data name="UpdateMode_Notify" xml:space="preserve"><value>仅检查并提醒</value></data>
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「设置 → 账号」中登录。</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码。</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>登录账号（可选）</value></data>
@@ -239,7 +356,7 @@
   <data name="Wizard_InstallAll" xml:space="preserve"><value>一键安装组件</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>下一步</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>跳过</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 需要两个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频。它们将从官方 GitHub 发布页下载（约 140 MB）。</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 需要三个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境。它们将从官方 GitHub 发布页下载（约 180 MB）。</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>欢迎使用 VidFlow</value></data>
   <data name="Wizard_YtDlpMissing" xml:space="preserve"><value>yt-dlp — 未安装（必需）</value></data>
   <data name="Wizard_YtDlpReady" xml:space="preserve"><value>yt-dlp — 已就绪</value></data>

@@ -25,6 +25,10 @@ public sealed class DownloadItem : INotifyPropertyChanged
     /// <summary>Set when the running process is being stopped for a pause rather than a cancel.</summary>
     internal bool PauseRequested { get; set; }
 
+    /// <summary>Last time yt-dlp reported anything; used to detect stalled downloads.</summary>
+    internal DateTime LastActivity { get; set; } = DateTime.Now;
+    internal bool StallReported { get; set; }
+
     public string Title
     {
         get => Record.Title;
@@ -56,7 +60,7 @@ public sealed class DownloadItem : INotifyPropertyChanged
             OnPropertyChanged();
             foreach (var name in new[] { nameof(IsActive), nameof(IsRunning), nameof(IsIndeterminate), nameof(IsCompleted),
                          nameof(IsFailed), nameof(IsPausedOrCanceled), nameof(CanPause), nameof(CanResume),
-                         nameof(CanRetry), nameof(CanRemove), nameof(CanCancel), nameof(ShowProgress) })
+                         nameof(CanRetry), nameof(CanRemove), nameof(CanCancel), nameof(CanPrioritize), nameof(ShowProgress) })
                 OnPropertyChanged(name);
         }
     }
@@ -73,6 +77,7 @@ public sealed class DownloadItem : INotifyPropertyChanged
     public bool CanRetry => State is DownloadState.Failed or DownloadState.Canceled;
     public bool CanRemove => !IsActive;
     public bool CanCancel => IsActive || State == DownloadState.Paused;
+    public bool CanPrioritize => State == DownloadState.Queued;
     public bool ShowProgress => State != DownloadState.Completed;
 
     public event PropertyChangedEventHandler? PropertyChanged;

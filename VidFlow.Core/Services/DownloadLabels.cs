@@ -9,15 +9,42 @@ public static class DownloadLabels
     /// <summary>"YouTube · MP4 · 1080p · P3".</summary>
     public static string Label(DownloadRequest r, int? partIndex)
     {
-        var mode = r.Mode switch
+        string mode;
+        if (r.IsAudio)
         {
-            "mp3" => L.Get("Label_Mp3"),
-            "m4a" => L.Get("Label_M4a"),
-            _ => r.MaxHeight > 0 ? $"MP4 · {r.MaxHeight}p" : L.Get("Label_Mp4Best"),
-        };
-        if (r.Mode == "video" && VideoCodecs.ShortName(r.Codec) is { Length: > 0 } codec) mode += $" · {codec}";
+            mode = L.Format("Label_Audio", r.AudioOutputFormat.ToUpperInvariant());
+        }
+        else
+        {
+            var container = (string.IsNullOrEmpty(r.Container) ? "mp4" : r.Container).ToUpperInvariant();
+            mode = r.MaxHeight > 0 ? $"{container} · {r.MaxHeight}p" : $"{container} · {L.Get("Quality_Best")}";
+            if (VideoCodecs.ShortName(r.Codec) is { Length: > 0 } codec) mode += $" · {codec}";
+        }
         var label = $"{UrlTools.DetectPlatform(r.Url).DisplayName()}  ·  {mode}";
         return partIndex is { } p ? $"{label}  ·  P{p}" : label;
+    }
+
+    /// <summary>One-line description of a template: "MP4 · 1080p · H.264 · AAC · Subtitles".</summary>
+    public static string Summary(DownloadTemplate t)
+    {
+        var parts = new List<string>();
+        if (t.Mode == "audio")
+        {
+            parts.Add(L.Format("Label_Audio", (t.AudioFormat is "auto" ? "mp3" : t.AudioFormat).ToUpperInvariant()));
+            if (t.AudioQuality > 0 && t.AudioFormat is not ("flac" or "wav")) parts.Add($"{t.AudioQuality} kbps");
+        }
+        else
+        {
+            parts.Add(t.Container.ToUpperInvariant());
+            parts.Add(t.MaxHeight > 0 ? $"{t.MaxHeight}p" : L.Get("Quality_Best"));
+            if (VideoCodecs.ShortName(t.Codec) is { Length: > 0 } codec) parts.Add(codec);
+            if (t.AudioFormat is "aac" or "opus") parts.Add(t.AudioFormat == "aac" ? "AAC" : "Opus");
+            if (t.AudioQuality > 0) parts.Add($"{t.AudioQuality} kbps");
+        }
+        if (t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
+        if (t.Subtitles) parts.Add(L.Get("Options_Subtitles"));
+        if (t.FolderTemplate.Length > 0) parts.Add(t.FolderTemplate.Replace('/', '\\'));
+        return string.Join(" · ", parts);
     }
 
     /// <summary>Status text for states that don't carry live progress; null for states whose text is specific

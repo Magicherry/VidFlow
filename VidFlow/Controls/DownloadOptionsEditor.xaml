@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="VidFlow.Controls.DownloadOptionsEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:VidFlow.Localization"
+    xmlns:tk="using:CommunityToolkit.WinUI.Controls">
+
+    <!--  Edits a DownloadTemplate (or a per-task copy of one). Used by the home page and the template editor.  -->
+    <StackPanel Spacing="4">
+        <tk:SettingsCard Description="{x:Bind l:L.Get('Options_ModeDescription')}" Header="{x:Bind l:L.Get('Options_Mode')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xE8B2;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ComboBox
+                x:Name="ModeCombo"
+                MinWidth="200"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Mode')}"
+                SelectionChanged="Option_Changed" />
+        </tk:SettingsCard>
+
+        <tk:SettingsCard
+            x:Name="QualityCard"
+            Description="{x:Bind l:L.Get('Options_QualityDescription')}"
+            Header="{x:Bind l:L.Get('Options_Quality')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xE7F4;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ComboBox
+                x:Name="QualityCombo"
+                MinWidth="200"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Quality')}"
+                SelectionChanged="Option_Changed" />
+        </tk:SettingsCard>
+
+        <tk:SettingsCard
+            x:Name="CodecCard"
+            Description="{x:Bind l:L.Get('Options_CodecDescription')}"
+            Header="{x:Bind l:L.Get('Options_Codec')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xE8B3;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ComboBox
+                x:Name="CodecCombo"
+                MinWidth="200"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Codec')}"
+                SelectionChanged="Option_Changed" />
+        </tk:SettingsCard>
+
+        <tk:SettingsCard
+            x:Name="ContainerCard"
+            Description="{x:Bind l:L.Get('Options_ContainerDescription')}"
+            Header="{x:Bind l:L.Get('Options_Container')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xE7C3;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ComboBox
+                x:Name="ContainerCombo"
+                MinWidth="200"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Container')}"
+                SelectionChanged="Option_Changed" />
+        </tk:SettingsCard>
+
+        <tk:SettingsExpander
+            x:Name="AudioExpander"
+            Description="{x:Bind l:L.Get('Options_AudioDescription')}"
+            Header="{x:Bind l:L.Get('Options_Audio')}">
+            <tk:SettingsExpander.HeaderIcon>
+                <FontIcon Glyph="&#xE8D6;" />
+            </tk:SettingsExpander.HeaderIcon>
+            <tk:SettingsExpander.Items>
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Options_AudioFormat')}">
+                    <ComboBox
+                        x:Name="AudioFormatCombo"
+                        MinWidth="200"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_AudioFormat')}"
+                        SelectionChanged="Option_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Options_AudioQuality')}">
+                    <ComboBox
+                        x:Name="AudioQualityCombo"
+                        MinWidth="200"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_AudioQuality')}"
+                        SelectionChanged="Option_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Options_AudioTrackDescription')}" Header="{x:Bind l:L.Get('Options_AudioTrack')}">
+                    <ComboBox
+                        x:Name="AudioTrackCombo"
+                        MinWidth="200"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_AudioTrack')}"
+                        SelectionChanged="Option_Changed" />
+                </tk:SettingsCard>
+            </tk:SettingsExpander.Items>
+        </tk:SettingsExpander>
+
+        <tk:SettingsCard Description="{x:Bind l:L.Get('Options_SubtitlesDescription')}" Header="{x:Bind l:L.Get('Options_Subtitles')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xED1E;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ToggleSwitch
+                x:Name="SubsToggle"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Subtitles')}"
+                Toggled="Option_Changed" />
+        </tk:SettingsCard>
+
+        <tk:SettingsCard
+            x:Name="RecodeCard"
+            Description="{x:Bind l:L.Get('Options_RecodeDescription')}"
+            Header="{x:Bind l:L.Get('Options_Recode')}">
+            <tk:SettingsCard.HeaderIcon>
+                <FontIcon Glyph="&#xE895;" />
+            </tk:SettingsCard.HeaderIcon>
+            <ToggleSwitch
+                x:Name="RecodeToggle"
+                AutomationProperties.Name="{x:Bind l:L.Get('Options_Recode')}"
+                Toggled="Option_Changed" />
+        </tk:SettingsCard>
+
+        <!--  Naming and folder rules (template editor only)  -->
+        <tk:SettingsExpander
+            x:Name="NamingExpander"
+            Description="{x:Bind l:L.Get('Options_NamingDescription')}"
+            Header="{x:Bind l:L.Get('Options_Naming')}"
+            IsExpanded="True"
+            Visibility="Collapsed">
+            <tk:SettingsExpander.HeaderIcon>
+                <FontIcon Glyph="&#xE8AC;" />
+            </tk:SettingsExpander.HeaderIcon>
+            <tk:SettingsExpander.Items>
+                <tk:SettingsCard
+                    HorizontalContentAlignment="Stretch"
+                    ContentAlignment="Vertical"
+                    Description="{x:Bind l:L.Get('Options_FileNameDescription')}"
+                    Header="{x:Bind l:L.Get('Options_FileName')}">
+                    <TextBox
+                        x:Name="FileNameBox"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_FileName')}"
+                        TextChanged="FileNameBox_TextChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Header="{x:Bind l:L.Get('Options_Folder')}">
+                    <ComboBox
+                        x:Name="FolderCombo"
+                        MinWidth="200"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_Folder')}"
+                        SelectionChanged="Option_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                    <TextBlock
+                        x:Name="PreviewText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        IsTextSelectionEnabled="True"
+                        TextWrapping="Wrap" />
+                </tk:SettingsCard>
+            </tk:SettingsExpander.Items>
+        </tk:SettingsExpander>
+
+        <!--  Compatibility advice  -->
+        <InfoBar
+            x:Name="CompatBar"
+            IsClosable="False"
+            Severity="Warning"
+            Visibility="{x:Bind CompatBar.IsOpen, Mode=OneWay}">
+            <InfoBar.ActionButton>
+                <Button
+                    x:Name="CompatFixButton"
+                    Click="CompatFix_Click"
+                    Content="{x:Bind l:L.Get('Compat_Apply')}" />
+            </InfoBar.ActionButton>
+        </InfoBar>
+    </StackPanel>
+</UserControl>

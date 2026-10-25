@@ -16,4 +16,7 @@ public sealed class DownloadRecord
     public string? StatusText { get; set; }
     public string? ErrorDetail { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    /// <summary>Set by "download next": queued items with a later value start first.</summary>
+    public DateTime? PriorityAt { get; set; }
 }

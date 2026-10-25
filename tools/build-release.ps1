@@ -27,4 +27,20 @@ Get-ChildItem (Join-Path $root 'dist') -Filter '*.exe' -ErrorAction SilentlyCont
 & $iscc "/DAppVersion=$version" (Join-Path $root 'installer\VidFlow.iss')
 if ($LASTEXITCODE -ne 0) { throw 'Installer build failed' }
 
+Write-Host "== Update manifest"
+# update.json is attached to the GitHub release next to the installer; the app reads
+# https://github.com/Magicherry/VidFlow/releases/latest/download/update.json to find updates.
+$setup = Get-Item (Join-Path $root "dist\VidFlow-Setup-$version-x64.exe")
+$notesFile = Join-Path $root "docs\release-notes\$version.md"
+$notes = if (Test-Path $notesFile) { Get-Content $notesFile -Raw -Encoding UTF8 } else { '' }
+$manifest = [ordered]@{
+    Version   = $version
+    Url       = "https://github.com/Magicherry/VidFlow/releases/download/v$version/$($setup.Name)"
+    Sha256    = (Get-FileHash $setup.FullName -Algorithm SHA256).Hash
+    Size      = $setup.Length
+    Notes     = $notes
+    Published = (Get-Date).ToUniversalTime().ToString('o')
+}
+$manifest | ConvertTo-Json | Set-Content (Join-Path $root 'dist\update.json') -Encoding utf8
+
 Get-ChildItem (Join-Path $root 'dist') | Select-Object Name, @{ n = 'MB'; e = { [math]::Round($_.Length / 1MB, 1) } }

@@ -26,7 +26,7 @@ public static class ErrorMapper
             _ when Has(line, "Private video") || Has(line, "members-only") || Has(line, "Join this channel") => L.Get("Error_Private"),
             _ when IsNoFormats(line) => L.Get("Error_NoFormats"),
             // Only the real "video is gone" messages; "Requested format is not available" is handled above.
-            _ when Has(line, "Video unavailable") || Has(line, "This video is not available") || Has(line, "啥都木有")
+            _ when Has(line, "Video unavailable") || Has(line, "video is unavailable") || Has(line, "This video is not available") || Has(line, "啥都木有")
                    || Has(line, "has been removed") => L.Get("Error_Unavailable"),
             _ when Has(line, "ffmpeg") && (Has(line, "not found") || Has(line, "not installed")) => L.Get("Error_NoFfmpeg"),
             _ when Has(line, "No space left") || Has(line, "Errno 28") => L.Get("Error_DiskFull"),

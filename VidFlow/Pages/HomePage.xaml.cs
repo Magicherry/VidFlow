@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using VidFlow.Controls;
 using VidFlow.Localization;
 using VidFlow.Models;
 using VidFlow.Services;
@@ -14,25 +15,28 @@ namespace VidFlow.Pages;
 
 public sealed partial class HomePage : Page
 {
-    /// <summary>Heights offered when the exact formats are not known (playlists, batches).</summary>
-    static readonly int[] GenericHeights = [2160, 1440, 1080, 720, 480, 360];
-
     VideoInfo? _video;
     PlaylistInfo? _playlist;
-    IReadOnlyList<string> _batch = [];
+    List<BatchEntry> _batch = [];
+    bool _batchSelectionTouched;  // once the user ticks / unticks, finished parses stop auto-selecting
+    bool _batchSelecting;          // selection changes made by code, not the user
     ImageSource? _thumb;
     CancellationTokenSource? _parseCts;
     volatile bool _browserCookiesFailed;
     Platform? _loginPlatform;
 
+    /// <summary>Template the current task started from; the editor works on a copy (per-task overrides).</summary>
+    DownloadTemplate _template = TemplateStore.Default;
+    bool _fillingTemplates;
+
     public HomePage()
     {
         InitializeComponent();
         YtDlpService.BrowserCookiesFailed += () => _browserCookiesFailed = true;
-        ModeCombo.Items.Add(new ComboBoxItem { Content = L.Get("Mode_Video"), Tag = "video" });
-        ModeCombo.Items.Add(new ComboBoxItem { Content = L.Get("Mode_Mp3"), Tag = "mp3" });
-        ModeCombo.Items.Add(new ComboBoxItem { Content = L.Get("Mode_M4a"), Tag = "m4a" });
-        ModeCombo.SelectedIndex = AppSettings.Current.DefaultMode switch { "mp3" => 1, "m4a" => 2, _ => 0 };
+        OptionsEditor.Changed += UpdateTemplateState;
+        TemplateStore.Changed += () => DispatcherQueue.TryEnqueue(FillTemplates);
+        FillTemplates();
+        UseTemplate(TemplateStore.Default);
     }
 
     public static string FormatDuration(double? seconds) => seconds is > 0 ? Format.Duration(seconds.Value) : "";
@@ -40,8 +44,7 @@ public sealed partial class HomePage : Page
     protected override async void OnNavigatedTo(NavigationEventArgs e)
     {
         ToolsInfoBar.IsOpen = ToolManager.YtDlpPath is null;
-        SubsToggle.IsOn = AppSettings.Current.WriteSubtitles;
-        FolderCard.Description = AppSettings.Current.DownloadFolder;
+        UpdateFolderDescription();
 
         // Pre-fill a supported link from the clipboard so a copy → switch → click flow needs no paste.
         if (UrlBox.Text.Length == 0)
@@ -51,6 +54,73 @@ public sealed partial class HomePage : Page
             if (UrlTools.IsSupported(url)) UrlBox.Text = url!;
         }
     }
+
+    // ---- Templates ---------------------------------------------------------------------------------------------
+
+    void FillTemplates()
+    {
+        _fillingTemplates = true;
+        TemplateCombo.Items.Clear();
+        var defaultId = TemplateStore.Default.Id;
+        foreach (var t in TemplateStore.All)
+            TemplateCombo.Items.Add(new ComboBoxItem
+            {
+                Content = t.Id == defaultId ? L.Format("Template_DefaultSuffix", t.DisplayName) : t.DisplayName,
+                Tag = t.Id,
+            });
+        TemplateCombo.SelectedItem = TemplateCombo.Items.Cast<ComboBoxItem>().FirstOrDefault(i => (Guid)i.Tag == _template.Id)
+                                     ?? TemplateCombo.Items[0];
+        _fillingTemplates = false;
+    }
+
+    void TemplateCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_fillingTemplates || TemplateCombo.SelectedItem is not ComboBoxItem { Tag: Guid id }) return;
+        if (TemplateStore.Find(id) is { } t) UseTemplate(t);
+    }
+
+    /// <summary>Starts this task from a template: the editor gets a copy, so edits don't touch the template.</summary>
+    void UseTemplate(DownloadTemplate t)
+    {
+        _template = t;
+        OptionsEditor.Load(t.Clone(), _video);
+        UpdateTemplateState();
+    }
+
+    void UpdateTemplateState()
+    {
+        var modified = !OptionsEditor.Options.SameOptionsAs(_template);
+        ResetTemplateButton.Visibility = modified ? Visibility.Visible : Visibility.Collapsed;
+        TemplateCard.Description = modified ? L.Get("Template_ModifiedHint") : DownloadLabels.Summary(_template);
+        UpdateFolderDescription();
+    }
+
+    void ResetTemplate_Click(object sender, RoutedEventArgs e) => UseTemplate(_template);
+
+    async void SaveAsTemplate_Click(object sender, RoutedEventArgs e)
+    {
+        var name = await TextPrompt.ShowAsync(XamlRoot, L.Get("Template_SaveAsTitle"), L.Get("Template_Name"),
+            TemplateStore.UniqueName(L.Get("Template_NewName")));
+        if (name is null) return;
+        var copy = OptionsEditor.Options.Clone();
+        copy.Id = Guid.NewGuid();
+        copy.NameKey = null;
+        copy.Name = name;
+        TemplateStore.Save(copy);
+        _template = copy;
+        FillTemplates();
+        UseTemplate(copy);
+    }
+
+    void UpdateFolderDescription()
+    {
+        var o = OptionsEditor.Options;
+        FolderCard.Description = string.IsNullOrEmpty(o.FolderTemplate)
+            ? AppSettings.Current.DownloadFolder
+            : Path.Combine(AppSettings.Current.DownloadFolder, o.FolderTemplate.Replace('/', '\\'));
+    }
+
+    // ---- Links -------------------------------------------------------------------------------------------------
 
     /// <summary>Entry point for links coming from drag-and-drop, notifications or the tray.</summary>
     public async void LoadText(string text)
@@ -146,15 +216,15 @@ public sealed partial class HomePage : Page
 
         _parseCts?.Cancel();
         ResetResults();
+        var cts = _parseCts = new CancellationTokenSource();
         if (urls.Count > 1)
         {
-            ShowBatch(urls);
+            await ParseBatchAsync(urls, cts.Token);
             return;
         }
 
         var url = urls[0];
         UrlBox.Text = url;
-        var cts = _parseCts = new CancellationTokenSource();
         LoadingCard.Visibility = Visibility.Visible;
         ParseButton.IsEnabled = false;
         _browserCookiesFailed = false;
@@ -193,6 +263,15 @@ public sealed partial class HomePage : Page
         PreviewCard.Visibility = PlaylistCard.Visibility = BatchCard.Visibility = OptionsPanel.Visibility = Visibility.Collapsed;
     }
 
+    /// <summary>Shows the options for what was parsed, keeping the user's current per-task choices.</summary>
+    void ShowOptions()
+    {
+        OptionsEditor.Load(OptionsEditor.Options, _video);
+        UpdateTemplateState();
+        OptionsPanel.Visibility = Visibility.Visible;
+        UpdateDownloadButton();
+    }
+
     async void ShowVideo(VideoInfo info)
     {
         _video = info;
@@ -209,20 +288,8 @@ public sealed partial class HomePage : Page
         DurationBadge.Visibility = info.Duration is > 0 ? Visibility.Visible : Visibility.Collapsed;
         DurationText.Text = FormatDuration(info.Duration);
 
-        QualityCombo.Items.Clear();
-        var best = info.Qualities.FirstOrDefault();
-        QualityCombo.Items.Add(new ComboBoxItem
-        {
-            Content = best is null ? L.Get("Quality_Best") : $"{L.Get("Quality_Best")}  ·  {Format.Quality(best)}",
-            Tag = 0,
-        });
-        foreach (var q in info.Qualities)
-            QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Quality(q), Tag = q.Height });
-        SelectPreferredQuality();
-        FillCodecs(info.Codecs);
-
-        PreviewCard.Visibility = OptionsPanel.Visibility = Visibility.Visible;
-        UpdateDownloadButton();
+        PreviewCard.Visibility = Visibility.Visible;
+        ShowOptions();
 
         var thumb = await ImageLoader.LoadAsync(info.ThumbnailUrl);
         if (_video == info) ThumbImage.Source = _thumb = thumb;
@@ -240,59 +307,108 @@ public sealed partial class HomePage : Page
 
         EntriesList.ItemsSource = info.Entries;
         EntriesList.SelectAll();
-        FillGenericQualities();
 
-        PlaylistCard.Visibility = OptionsPanel.Visibility = Visibility.Visible;
-        UpdateDownloadButton();
+        PlaylistCard.Visibility = Visibility.Visible;
+        ShowOptions();
 
         var thumb = await ImageLoader.LoadAsync(info.ThumbnailUrl);
         if (_playlist == info) PlaylistThumbImage.Source = thumb;
     }
 
-    void ShowBatch(IReadOnlyList<string> urls)
+    /// <summary>Several links: list them at once, parse them 3 at a time, and tick each one that parses so the
+    /// user can untick what they don't want. Failed links stay unticked with the reason shown.</summary>
+    async Task ParseBatchAsync(IReadOnlyList<string> urls, CancellationToken ct)
     {
-        _batch = urls;
+        _batch = urls.Select(u => new BatchEntry(u)).ToList();
+        _batchSelectionTouched = false;
+        BatchList.ItemsSource = _batch;
         BatchTitle.Text = L.Format("Batch_Title", urls.Count);
-        BatchList.ItemsSource = urls;
-        FillGenericQualities();
-        BatchCard.Visibility = OptionsPanel.Visibility = Visibility.Visible;
-        UpdateDownloadButton();
+        BatchProgress.Maximum = urls.Count;
+        BatchProgress.Value = 0;
+        BatchProgress.Visibility = Visibility.Visible;
+        BatchCard.Visibility = Visibility.Visible;
+        ShowOptions();
+        UpdateBatchStatus();
         if (urls.Any(u => !UrlTools.IsSupported(u)))
             ShowMessage(InfoBarSeverity.Informational, L.Get("Batch_UnsupportedHint"));
-    }
 
-    void FillGenericQualities()
-    {
-        QualityCombo.Items.Clear();
-        QualityCombo.Items.Add(new ComboBoxItem { Content = L.Get("Quality_Best"), Tag = 0 });
-        foreach (var h in GenericHeights)
-            QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Height(h), Tag = h });
-        SelectPreferredQuality();
-        FillCodecs(null);
-    }
-
-    /// <summary>Codec choices: for a single video only the codecs it offers, each with its highest resolution
-    /// (e.g. YouTube's H.264 stops at 1080p); for playlists / batches all of them.</summary>
-    void FillCodecs(IReadOnlyDictionary<string, int>? available)
-    {
-        CodecCombo.Items.Clear();
-        CodecCombo.Items.Add(new ComboBoxItem { Content = VideoCodecs.DisplayName(VideoCodecs.Auto), Tag = VideoCodecs.Auto });
-        foreach (var codec in VideoCodecs.All)
+        using var gate = new SemaphoreSlim(3);
+        var work = _batch.Select(async entry =>
         {
-            if (available is null)
-                CodecCombo.Items.Add(new ComboBoxItem { Content = VideoCodecs.DisplayName(codec), Tag = codec });
-            else if (available.TryGetValue(codec, out var maxHeight))
-                CodecCombo.Items.Add(new ComboBoxItem { Content = L.Format("Codec_WithMax", VideoCodecs.DisplayName(codec), maxHeight), Tag = codec });
-        }
-        var preferred = CodecCombo.Items.Cast<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == AppSettings.Current.DefaultCodec);
-        CodecCombo.SelectedItem = preferred ?? CodecCombo.Items[0];
+            try
+            {
+                await gate.WaitAsync(ct);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            try
+            {
+                var info = await Task.Run(() => YtDlpService.GetInfoAsync(entry.Url, ct));
+                if (ct.IsCancellationRequested) return;
+                entry.SetResult(info);
+                if (!_batchSelectionTouched) SelectBatchEntry(entry);
+                entry.Thumbnail = await ImageLoader.LoadAsync(info.ThumbnailUrl);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+                if (!ct.IsCancellationRequested) entry.SetError(ex.Message);
+            }
+            finally
+            {
+                gate.Release();
+                if (!ct.IsCancellationRequested)
+                {
+                    BatchProgress.Value++;
+                    UpdateBatchStatus();
+                }
+            }
+        }).ToList();
+        await Task.WhenAll(work);
+        if (!ct.IsCancellationRequested) BatchProgress.Visibility = Visibility.Collapsed;
     }
 
-    void SelectPreferredQuality()
+    void SelectBatchEntry(BatchEntry entry)
     {
-        var preferred = AppSettings.Current.DefaultHeight;
-        var items = QualityCombo.Items.Cast<ComboBoxItem>().ToList();
-        QualityCombo.SelectedIndex = preferred == 0 ? 0 : Math.Max(0, items.FindIndex(i => (int)i.Tag <= preferred && (int)i.Tag > 0));
+        _batchSelecting = true;
+        BatchList.SelectedItems.Add(entry);
+        _batchSelecting = false;
+    }
+
+    void UpdateBatchStatus()
+    {
+        var done = _batch.Count(e => !e.IsLoading);
+        var failed = _batch.Count(e => e.Failed);
+        BatchStatus.Text = failed > 0
+            ? L.Format("Batch_StatusFailed", done, _batch.Count, failed)
+            : L.Format("Batch_Status", done, _batch.Count);
+        UpdateDownloadButton();
+    }
+
+    /// <summary>Ticked rows that parsed successfully (the only ones that can be downloaded).</summary>
+    List<BatchEntry> SelectedBatchEntries() =>
+        BatchList.SelectedItems.Cast<BatchEntry>().Where(e => e.Info is not null).ToList();
+
+    void BatchList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_batchSelecting) _batchSelectionTouched = true;
+        UpdateDownloadButton();
+    }
+
+    void BatchSelectAll_Click(object sender, RoutedEventArgs e)
+    {
+        _batchSelectionTouched = true;
+        BatchList.SelectAll();
+    }
+
+    void BatchSelectNone_Click(object sender, RoutedEventArgs e)
+    {
+        _batchSelectionTouched = true;
+        BatchList.DeselectRange(new Microsoft.UI.Xaml.Data.ItemIndexRange(0, (uint)_batch.Count));
     }
 
     void ShowHints(Platform platform)
@@ -305,6 +421,10 @@ public sealed partial class HomePage : Page
         else if (ToolManager.FfmpegPath is null)
         {
             ShowMessage(InfoBarSeverity.Warning, L.Get("Home_NoFfmpeg"), L.Get("Home_NoFfmpegTitle"));
+        }
+        else if (platform == Platform.YouTube && ToolManager.DenoPath is null)
+        {
+            ShowMessage(InfoBarSeverity.Informational, L.Get("Home_NoDeno"), L.Get("Home_NoDenoTitle"));
         }
         else if (platform == Platform.Bilibili && !AccountStore.IsLoggedIn(Platform.Bilibili)
                  && AppSettings.Current.CookiesBrowser.Length == 0 && AppSettings.Current.CookiesFile.Length == 0)
@@ -332,8 +452,10 @@ public sealed partial class HomePage : Page
         }
         else if (_batch.Count > 0)
         {
-            DownloadButtonText.Text = L.Format("Download_Batch", _batch.Count);
-            DownloadButton.IsEnabled = true;
+            var selected = SelectedBatchEntries();
+            BatchSelectionText.Text = L.Format("Playlist_Selected", BatchList.SelectedItems.Count, _batch.Count);
+            DownloadButtonText.Text = L.Format("Download_Selected", selected.Count);
+            DownloadButton.IsEnabled = selected.Count > 0;
         }
         else
         {
@@ -342,26 +464,19 @@ public sealed partial class HomePage : Page
         }
     }
 
-    void ModeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
-        QualityCard.IsEnabled = CodecCard.IsEnabled = SelectedMode == "video";
-
-    string SelectedMode => (ModeCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? "video";
-    string SelectedCodec => SelectedMode == "video" ? (CodecCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? VideoCodecs.Auto : VideoCodecs.Auto;
-    int SelectedHeight => SelectedMode == "video" ? (QualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0 : 0;
-
     async void ChangeFolder_Click(object sender, RoutedEventArgs e)
     {
         var folder = await Pickers.PickFolderAsync();
         if (folder is null) return;
         AppSettings.Current.DownloadFolder = folder;
         AppSettings.Save();
-        FolderCard.Description = folder;
+        UpdateFolderDescription();
     }
 
     async void Download_Click(object sender, RoutedEventArgs e)
     {
         // Guard against queueing a huge playlist / multi-part video with one click.
-        var count = _playlist is not null ? EntriesList.SelectedItems.Count : _batch.Count;
+        var count = _playlist is not null ? EntriesList.SelectedItems.Count : SelectedBatchEntries().Sum(b => b.TaskCount);
         if (count > 50)
         {
             var confirm = new ContentDialog
@@ -376,9 +491,8 @@ public sealed partial class HomePage : Page
             if (await confirm.ShowAsync() != ContentDialogResult.Primary) return;
         }
 
-        var mode = SelectedMode;
-        var height = SelectedHeight;
-        var codec = SelectedCodec;
+        // The task's own copy of the options (template + any per-task changes).
+        var options = OptionsEditor.Options.Clone();
         var folder = AppSettings.Current.DownloadFolder;
 
         string added;
@@ -388,36 +502,39 @@ public sealed partial class HomePage : Page
             var sub = Path.Combine(folder, SafeFolderName(playlist.Title));
             var selected = EntriesList.SelectedItems.Cast<PlaylistEntry>().OrderBy(x => x.Index).ToList();
             foreach (var entry in selected)
-                App.Downloads.Enqueue(new DownloadRequest(entry.Url, mode, height, SubsToggle.IsOn, sub, codec), entry.Title,
-                    entry.ThumbnailUrl, entry.Index);
+                App.Downloads.Enqueue(options.ToRequest(entry.Url, sub), entry.Title, entry.ThumbnailUrl, entry.Index);
             added = L.Format("Home_AddedMany", selected.Count);
         }
         else if (_batch.Count > 0)
         {
-            foreach (var url in _batch)
-                App.Downloads.Enqueue(new DownloadRequest(url, mode, height, SubsToggle.IsOn, folder, codec), url, null);
-            added = L.Format("Home_AddedMany", _batch.Count);
+            var total = 0;
+            foreach (var entry in SelectedBatchEntries())
+            {
+                if (entry.Info is PlaylistInfo list)
+                {
+                    // A playlist among the links: all of its entries, in their own subfolder.
+                    var sub = Path.Combine(folder, SafeFolderName(list.Title));
+                    foreach (var item in list.Entries)
+                        App.Downloads.Enqueue(options.ToRequest(item.Url, sub), item.Title, item.ThumbnailUrl, item.Index);
+                    total += list.Entries.Count;
+                }
+                else if (entry.Info is { } info)
+                {
+                    App.Downloads.Enqueue(options.ToRequest(info.Url, folder), info.Title, info.ThumbnailUrl, thumbnail: entry.Thumbnail);
+                    total++;
+                }
+            }
+            added = L.Format("Home_AddedMany", total);
         }
         else if (_video is { } video)
         {
-            App.Downloads.Enqueue(new DownloadRequest(video.Url, mode, height, SubsToggle.IsOn, folder, codec), video.Title,
-                video.ThumbnailUrl, thumbnail: _thumb);
+            App.Downloads.Enqueue(options.ToRequest(video.Url, folder), video.Title, video.ThumbnailUrl, thumbnail: _thumb);
             added = L.Format("Home_AddedOne", video.Title);
         }
         else
         {
             return;
         }
-
-        // Remember the choices as the defaults for next time.
-        AppSettings.Current.DefaultMode = mode;
-        if (mode == "video")
-        {
-            AppSettings.Current.DefaultHeight = height;
-            AppSettings.Current.DefaultCodec = codec;
-        }
-        AppSettings.Current.WriteSubtitles = SubsToggle.IsOn;
-        AppSettings.Save();
 
         ShowMessage(InfoBarSeverity.Success, added, L.Get("Home_Added"), showViewButton: true);
         UrlBox.Text = "";

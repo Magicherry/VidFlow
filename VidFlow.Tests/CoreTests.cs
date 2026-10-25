@@ -109,6 +109,7 @@ public class ErrorMapperTests
             Assert.StartsWith(L.Get("Error_NoFormats"), ErrorMapper.Friendly(raw));
             Assert.DoesNotContain(L.Get("Error_Unavailable"), ErrorMapper.Friendly(raw));
             Assert.StartsWith(L.Get("Error_Unavailable"), ErrorMapper.Friendly("ERROR: [youtube] x: Video unavailable"));
+            Assert.StartsWith(L.Get("Error_Unavailable"), ErrorMapper.Friendly("ERROR: [youtube] zzzzzzzzzzz: This video is unavailable"));
         }
         finally
         {
@@ -272,8 +273,18 @@ public class YtDlpArgsTests
     {
         var args = YtDlpArgs.Download(Req(height: 1080), new AppSettings { PreferH264 = true }, WithFfmpeg);
         Assert.Contains("bv*+ba[ext=m4a]/bv*+ba/b", args);
-        Assert.Equal("res:1080,vcodec:h264,acodec:m4a", args[args.IndexOf("-S") + 1]);
+        Assert.Equal("res:1080,vcodec:h264,acodec:m4a,fps,vbr,tbr", args[args.IndexOf("-S") + 1]);
         Assert.Equal("https://www.youtube.com/watch?v=x", args[^1]);
+    }
+
+    [Fact]
+    public void AutoPrefersBitrateOverCodecAtTheSameResolution()
+    {
+        // yt-dlp's default would rank AV1 first and pick the lowest-bitrate stream; we sort by bitrate instead.
+        var args = YtDlpArgs.Download(Req(height: 1080), new AppSettings(), WithFfmpeg);
+        Assert.Equal("res:1080,fps,vbr,tbr", args[args.IndexOf("-S") + 1]);
+        var best = YtDlpArgs.Download(Req(), new AppSettings(), WithFfmpeg);
+        Assert.Equal("res,fps,vbr,tbr", best[best.IndexOf("-S") + 1]);
     }
 
     [Fact]
@@ -303,7 +314,7 @@ public class YtDlpArgsTests
 
         // An explicit codec overrides the global compatibility mode's codec preference.
         var hevc = YtDlpArgs.Download(Req() with { Codec = "h265" }, new AppSettings { PreferH264 = true }, WithFfmpeg);
-        Assert.DoesNotContain("-S", hevc);
+        Assert.Equal("res,fps,vbr,tbr", hevc[hevc.IndexOf("-S") + 1]);
 
         Assert.Equal("b[vcodec^=av01]/b", YtDlpArgs.Download(Req() with { Codec = "av1" }, new AppSettings(), WithFfmpeg with { FfmpegDir = null })
             .SkipWhile(a => a != "-f").Skip(1).First());

@@ -58,6 +58,33 @@ public static class NotificationService
             .AddText(url)
             .AddButton(new AppNotificationButton(L.Get("Action_Download")).AddArgument("action", "parse").AddArgument("url", url)));
 
+    public static void UpdateAvailable(string version) =>
+        Show(new AppNotificationBuilder()
+            .AddArgument("action", "showupdate")
+            .AddText(L.Format("Notify_UpdateAvailable", version))
+            .AddText(L.Get("Notify_UpdateAvailableBody"))
+            .AddButton(new AppNotificationButton(L.Get("Notify_ViewUpdate")).AddArgument("action", "showupdate")));
+
+    public static void UpdateReady(string version) =>
+        Show(new AppNotificationBuilder()
+            .AddArgument("action", "showupdate")
+            .AddText(L.Format("Notify_UpdateReady", version))
+            .AddText(L.Get("Notify_UpdateReadyBody"))
+            .AddButton(new AppNotificationButton(L.Get("Update_InstallNow")).AddArgument("action", "installupdate"))
+            .AddButton(new AppNotificationButton(L.Get("Update_Later")).AddArgument("action", "dismiss")));
+
+    public static void UpdateResult(bool succeeded, string version) =>
+        Show(new AppNotificationBuilder()
+            .AddArgument("action", "showupdate")
+            .AddText(succeeded ? L.Format("Notify_UpdateDone", version) : L.Format("Notify_UpdateRolledBack", version))
+            .AddText(succeeded ? L.Get("Notify_UpdateDoneBody") : L.Format("Notify_UpdateRolledBackBody", UpdateController.Current.ToString(3))));
+
+    public static void DownloadStalled(string title) =>
+        Show(new AppNotificationBuilder()
+            .AddArgument("action", "downloads")
+            .AddText(L.Get("Notify_Stalled"))
+            .AddText(title));
+
     public static void StillRunningInTray() =>
         Show(new AppNotificationBuilder()
             .AddArgument("action", "show")
@@ -101,6 +128,16 @@ public static class NotificationService
                 case "downloads":
                     App.MainWindow.BringToFront();
                     App.MainWindow.NavigateTo("downloads");
+                    break;
+                case "showupdate":
+                    App.MainWindow.BringToFront();
+                    App.MainWindow.NavigateTo("settings");
+                    break;
+                case "installupdate":
+                    App.MainWindow.BringToFront();
+                    _ = App.Updates.InstallAsync(App.MainWindow.Content.XamlRoot);
+                    break;
+                case "dismiss":
                     break;
                 default:
                     App.MainWindow.BringToFront();

@@ -79,7 +79,8 @@ public static class YtDlpService
                            && AccountStore.IsLoggedIn(Platform.YouTube);
         var env = new YtDlpArgs.Environment(ffmpegDir, loginFile,
             SkipBrowserCookies: _unreadableBrowser == browser,
-            SkipLoginCookies: youTubeLogin);
+            SkipLoginCookies: youTubeLogin,
+            DenoPath: ToolManager.DenoPath);
 
         var result = await RunAsync(buildArgs(env), onLine, ct);
 
@@ -117,6 +118,7 @@ public static class YtDlpService
         psi.Environment["PYTHONIOENCODING"] = "utf-8";
         psi.Environment["PYTHONUTF8"] = "1";
         foreach (var a in args) psi.ArgumentList.Add(a);
+        Log.Info("yt-dlp " + string.Join(' ', args.Select(a => a.Contains(' ') || a.Contains('|') ? $"\"{a}\"" : a)));
 
         using var p = new Process { StartInfo = psi };
         var errors = new StringBuilder();

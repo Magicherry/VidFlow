@@ -52,8 +52,17 @@ public sealed class AppSettings
     public string CookiesFile { get; set; } = "";
     public string Proxy { get; set; } = "";
 
+    /// <summary>Template new downloads start from (see TemplateStore).</summary>
+    public Guid DefaultTemplateId { get; set; }
+
+    /// <summary>App updates: auto (download, then ask to install), notify (only tell), manual (only when asked).</summary>
+    public string UpdateMode { get; set; } = "auto";
+    public DateTime LastUpdateCheck { get; set; }
+
     public bool WatchClipboard { get; set; }
     public bool NotifyOnFinish { get; set; } = true;
+    /// <summary>Notify about failed or stalled downloads.</summary>
+    public bool NotifyOnFailure { get; set; } = true;
     public bool MinimizeToTray { get; set; } = true;
     public bool AutoUpdateYtDlp { get; set; } = true;
     public DateTime LastYtDlpUpdateCheck { get; set; }
@@ -98,4 +107,7 @@ public sealed class AppSettings
 [JsonSourceGenerationOptions(WriteIndented = true, UseStringEnumConverter = true)]
 [JsonSerializable(typeof(AppSettings))]
 [JsonSerializable(typeof(List<DownloadRecord>))]
+[JsonSerializable(typeof(List<DownloadTemplate>))]
+[JsonSerializable(typeof(UpdateManifest))]
+[JsonSerializable(typeof(PendingUpdate))]
 internal sealed partial class VidFlowJson : JsonSerializerContext;

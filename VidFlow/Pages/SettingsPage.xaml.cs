@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using VidFlow.Controls;
 using VidFlow.Localization;
 using VidFlow.Models;
 using VidFlow.Services;
@@ -23,6 +24,19 @@ public sealed partial class SettingsPage : Page
         AddItems(ThemeCombo, ("System", L.Get("Settings_ThemeSystem")), ("Light", L.Get("Settings_ThemeLight")),
             ("Dark", L.Get("Settings_ThemeDark")));
         VersionText.Text = L.Format("About_Version", typeof(App).Assembly.GetName().Version?.ToString(3));
+        AddItems(UpdateModeCombo, ("auto", L.Get("UpdateMode_Auto")), ("notify", L.Get("UpdateMode_Notify")), ("manual", L.Get("UpdateMode_Manual")));
+
+        // The page is recreated on each visit: subscribe while shown, unsubscribe when it goes away.
+        Loaded += (_, _) =>
+        {
+            App.Updates.Changed += RefreshUpdate;
+            TemplateStore.Changed += BuildTemplateList;
+        };
+        Unloaded += (_, _) =>
+        {
+            App.Updates.Changed -= RefreshUpdate;
+            TemplateStore.Changed -= BuildTemplateList;
+        };
     }
 
     static void AddItems(ComboBox combo, params (string Tag, string Text)[] items)
@@ -54,9 +68,13 @@ public sealed partial class SettingsPage : Page
         AutoUpdateToggle.IsOn = s.AutoUpdateYtDlp;
         TrayToggle.IsOn = s.MinimizeToTray;
         NotifyToggle.IsOn = s.NotifyOnFinish;
+        NotifyFailureToggle.IsOn = s.NotifyOnFailure;
         ClipboardToggle.IsOn = s.WatchClipboard;
+        Select(UpdateModeCombo, s.UpdateMode);
         UpdateCookieFile();
         UpdateAccounts();
+        BuildTemplateList();
+        RefreshUpdate();
         _loading = false;
 
         _ = RefreshToolsAsync();
@@ -92,6 +110,33 @@ public sealed partial class SettingsPage : Page
             ShowUpdateState(FfmpegButton, latest is null ? null : ToolManager.IsFfmpegUpToDate(ffVer, latest),
                 latest?.ToString("yyyy-MM-dd"));
         }
+
+        // Deno: the JavaScript runtime yt-dlp needs for YouTube.
+        var deno = ToolManager.DenoPath;
+        DenoCard.Description = deno is null ? L.Get("Settings_DenoMissing") : L.Get("Settings_Checking");
+        ToolTipService.SetToolTip(DenoCard, deno);
+        ShowInitialState(DenoButton, deno);
+        if (deno is not null)
+        {
+            var denoVer = ToolManager.DenoVersion(await ToolManager.GetVersionAsync(deno, "--version"));
+            DenoCard.Description = L.Format("Settings_ToolVersion", denoVer ?? "?", Source(deno));
+            if (ToolManager.IsManaged(deno))
+            {
+                var latest = await ToolManager.GetLatestDenoVersionAsync();
+                ShowUpdateState(DenoButton, latest is null ? null : ToolManager.IsUpToDate(denoVer, latest), latest);
+            }
+        }
+    }
+
+    async void InstallDeno_Click(object sender, RoutedEventArgs e)
+    {
+        if (DenoButton.Content as string == L.Get("Settings_CheckUpdate"))
+        {
+            await ToolManager.GetLatestDenoVersionAsync(refresh: true);
+            await RefreshToolsAsync();
+            return;
+        }
+        await InstallAsync("deno", "--version", DenoProgress, ToolManager.InstallDenoAsync);
     }
 
     /// <summary>Before the version check: Install / Install app copy, or "Checking…" (disabled) for our own copy.</summary>
@@ -154,7 +199,7 @@ public sealed partial class SettingsPage : Page
         if (_installing) return;
         _installing = true;
         ToolErrorBar.IsOpen = false;
-        YtDlpButton.IsEnabled = FfmpegButton.IsEnabled = false;
+        YtDlpButton.IsEnabled = FfmpegButton.IsEnabled = DenoButton.IsEnabled = false;
         bar.Value = 0;
         bar.IsIndeterminate = true;
         bar.Visibility = Visibility.Visible;
@@ -167,11 +212,12 @@ public sealed partial class SettingsPage : Page
             });
             await Task.Run(() => install(progress, CancellationToken.None));
 
-            var exe = tool == "yt-dlp" ? ToolManager.YtDlpPath : ToolManager.FfmpegPath;
+            var exe = tool switch { "yt-dlp" => ToolManager.YtDlpPath, "deno" => ToolManager.DenoPath, _ => ToolManager.FfmpegPath };
             var version = await ToolManager.GetVersionAsync(exe, versionArg);
+            var shown = tool switch { "ffmpeg" => Shorten(version), "deno" => ToolManager.DenoVersion(version) ?? "?", _ => version ?? "?" };
             ToolErrorBar.Severity = InfoBarSeverity.Success;
             ToolErrorBar.Title = L.Get("Settings_InstallDone");
-            ToolErrorBar.Message = L.Format("Settings_InstallDoneMessage", tool, tool == "ffmpeg" ? Shorten(version) : version ?? "?");
+            ToolErrorBar.Message = L.Format("Settings_InstallDoneMessage", tool, shown);
             ToolErrorBar.IsOpen = true;
         }
         catch (Exception ex)
@@ -185,7 +231,7 @@ public sealed partial class SettingsPage : Page
         finally
         {
             bar.Visibility = Visibility.Collapsed;
-            YtDlpButton.IsEnabled = FfmpegButton.IsEnabled = true;
+            YtDlpButton.IsEnabled = FfmpegButton.IsEnabled = DenoButton.IsEnabled = true;
             _installing = false;
             await RefreshToolsAsync();
         }
@@ -228,6 +274,7 @@ public sealed partial class SettingsPage : Page
         s.AutoUpdateYtDlp = AutoUpdateToggle.IsOn;
         s.MinimizeToTray = TrayToggle.IsOn;
         s.NotifyOnFinish = NotifyToggle.IsOn;
+        s.NotifyOnFailure = NotifyFailureToggle.IsOn;
         s.WatchClipboard = ClipboardToggle.IsOn;
         AppSettings.Save();
     }
@@ -338,6 +385,170 @@ public sealed partial class SettingsPage : Page
     {
         await new FirstRunDialog { XamlRoot = XamlRoot }.ShowAsync();
         LoadValues();
+    }
+
+    // ---- Download templates ------------------------------------------------------------------------------------
+
+    /// <summary>One card per template: summary, "set as default", and a menu with edit / duplicate / rename / delete
+    /// (built-in presets can only be duplicated).</summary>
+    void BuildTemplateList()
+    {
+        TemplateList.Children.Clear();
+        var defaultId = TemplateStore.Default.Id;
+        foreach (var t in TemplateStore.All)
+        {
+            var isDefault = t.Id == defaultId;
+            var actions = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+            if (isDefault)
+                actions.Children.Add(new TextBlock
+                {
+                    Text = L.Get("Template_IsDefault"),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"],
+                });
+            else
+            {
+                var setDefault = new Button { Content = L.Get("Template_SetDefault") };
+                setDefault.Click += (_, _) => TemplateStore.SetDefault(t);
+                actions.Children.Add(setDefault);
+            }
+
+            var menu = new MenuFlyout();
+            if (!t.IsBuiltIn) menu.Items.Add(MenuItem(L.Get("Template_Edit"), "", async () => await EditTemplateAsync(t)));
+            menu.Items.Add(MenuItem(L.Get("Template_Duplicate"), "", async () => await DuplicateTemplateAsync(t)));
+            if (!t.IsBuiltIn)
+            {
+                menu.Items.Add(MenuItem(L.Get("Template_Rename"), "", async () => await RenameTemplateAsync(t)));
+                menu.Items.Add(new MenuFlyoutSeparator());
+                menu.Items.Add(MenuItem(L.Get("Template_Delete"), "", async () => await DeleteTemplateAsync(t)));
+            }
+            var more = new Button
+            {
+                Content = new FontIcon { Glyph = "", FontSize = 14 },
+                Width = 40,
+                Height = 32,
+                Padding = new Thickness(0),
+                Flyout = menu,
+            };
+            ToolTipService.SetToolTip(more, L.Get("Downloads_More"));
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(more, $"{t.DisplayName} {L.Get("Downloads_More")}");
+            actions.Children.Add(more);
+
+            TemplateList.Children.Add(new CommunityToolkit.WinUI.Controls.SettingsCard
+            {
+                Header = t.IsBuiltIn ? L.Format("Template_BuiltInSuffix", t.DisplayName) : t.DisplayName,
+                Description = DownloadLabels.Summary(t),
+                HeaderIcon = new FontIcon { Glyph = isDefault ? "" : "" },
+                Content = actions,
+            });
+        }
+    }
+
+    static MenuFlyoutItem MenuItem(string text, string glyph, Func<Task> action)
+    {
+        var item = new MenuFlyoutItem { Text = text, Icon = new FontIcon { Glyph = glyph } };
+        item.Click += async (_, _) => await action();
+        return item;
+    }
+
+    async void NewTemplate_Click(object sender, RoutedEventArgs e) => await EditTemplateAsync(null);
+
+    async Task EditTemplateAsync(DownloadTemplate? t)
+    {
+        await new TemplateEditorDialog(t) { XamlRoot = XamlRoot }.ShowAsync();
+        BuildTemplateList();
+    }
+
+    async Task DuplicateTemplateAsync(DownloadTemplate t)
+    {
+        var copy = TemplateStore.Duplicate(t, TemplateStore.UniqueName(L.Format("Template_CopyName", t.DisplayName)));
+        await EditTemplateAsync(copy);
+    }
+
+    async Task RenameTemplateAsync(DownloadTemplate t)
+    {
+        var name = await TextPrompt.ShowAsync(XamlRoot, L.Get("Template_Rename"), L.Get("Template_Name"), t.DisplayName);
+        if (name is not null) TemplateStore.Rename(t, name);
+    }
+
+    async Task DeleteTemplateAsync(DownloadTemplate t)
+    {
+        var confirm = new ContentDialog
+        {
+            XamlRoot = XamlRoot,
+            Title = L.Format("Template_DeleteTitle", t.DisplayName),
+            Content = L.Get("Template_DeleteBody"),
+            PrimaryButtonText = L.Get("Template_Delete"),
+            CloseButtonText = L.Get("Common_Cancel"),
+            DefaultButton = ContentDialogButton.Close,
+            Style = (Style)Application.Current.Resources["DefaultContentDialogStyle"],
+        };
+        if (await confirm.ShowAsync() == ContentDialogResult.Primary) TemplateStore.Delete(t);
+    }
+
+    // ---- App updates -------------------------------------------------------------------------------------------
+
+    void RefreshUpdate()
+    {
+        var u = App.Updates;
+        var current = UpdateController.Current.ToString(3);
+        var latest = u.Latest?.Version;
+        UpdateCard.Description = u.State switch
+        {
+            UpdateState.Checking => L.Get("Update_Checking"),
+            UpdateState.UpToDate => L.Format("Update_UpToDate", current),
+            UpdateState.Available => L.Format("Update_Available", latest, current),
+            UpdateState.Downloading => L.Format("Update_Downloading", latest, u.Progress.ToString("0")),
+            UpdateState.Ready => L.Format("Update_Ready", latest),
+            UpdateState.Failed => L.Format("Update_Failed", u.Error),
+            _ => L.Format("Update_Current", current),
+        };
+        if (u.LastResult is (UpdateOutcome.Failed, { } failed))
+            UpdateCard.Description += "\n" + L.Format("Update_RolledBack", failed, current);
+
+        var newer = u.Latest is { } m && UpdateService.IsNewer(m, UpdateController.Current);
+        UpdateButton.Content = u.State switch
+        {
+            UpdateState.Available => L.Get("Update_Download"),
+            UpdateState.Downloading => L.Get("Update_DownloadingShort"),
+            UpdateState.Ready => L.Get("Update_InstallNow"),
+            UpdateState.Failed when newer => L.Get("Update_Retry"),
+            UpdateState.Checking => L.Get("Update_CheckingShort"),
+            _ => L.Get("Settings_CheckUpdate"),
+        };
+        UpdateButton.IsEnabled = u.State is not (UpdateState.Checking or UpdateState.Downloading);
+        UpdateProgress.Visibility = u.State == UpdateState.Downloading ? Visibility.Visible : Visibility.Collapsed;
+        UpdateProgress.Value = u.Progress;
+
+        ReleaseNotesExpander.Visibility = u.Latest is null ? Visibility.Collapsed : Visibility.Visible;
+        if (u.Latest is { } notes)
+            ReleaseNotesText.Text = $"{L.Format("Update_NotesHeader", notes.Version, notes.Published.ToLocalTime().ToString("yyyy-MM-dd"))}\n\n{notes.Notes.Trim()}";
+    }
+
+    async void UpdateButton_Click(object sender, RoutedEventArgs e)
+    {
+        var u = App.Updates;
+        var newer = u.Latest is { } m && UpdateService.IsNewer(m, UpdateController.Current);
+        switch (u.State)
+        {
+            case UpdateState.Available:
+            case UpdateState.Failed when newer:
+                await u.DownloadAsync();
+                break;
+            case UpdateState.Ready:
+                await u.InstallAsync(XamlRoot);
+                break;
+            default:
+                await u.CheckAsync(userInitiated: true);
+                break;
+        }
+    }
+
+    void UpdateModeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || UpdateModeCombo.SelectedItem is not ComboBoxItem item) return;
+        AppSettings.Current.UpdateMode = (string)item.Tag;
+        AppSettings.Save();
     }
 
     void OpenLogs_Click(object sender, RoutedEventArgs e) => OpenFolder(Log.Dir);

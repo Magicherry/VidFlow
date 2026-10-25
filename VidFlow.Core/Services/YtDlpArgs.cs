@@ -12,7 +12,7 @@ public static class YtDlpArgs
 
     /// <summary>Where cookies and tools come from.</summary>
     public sealed record Environment(string? FfmpegDir, string? LoginCookieFile, bool SkipBrowserCookies,
-        bool SkipLoginCookies = false);
+        bool SkipLoginCookies = false, string? DenoPath = null);
 
     public static List<string> Info(string url, AppSettings s, Environment env)
     {
@@ -32,39 +32,49 @@ public static class YtDlpArgs
         {
             "--no-playlist", "--newline", "--progress", "--no-warnings", "--continue",
             "-P", req.OutputFolder,
-            "-o", OutputTemplate,
+            "-o", NamingTemplate.ToOutputTemplate(req.FileNameTemplate, req.FolderTemplate, platform.DisplayName()),
             "--print", "before_dl:VFS|%(format_id)s|%(thumbnail)s|%(title)s",
             "--print", "after_move:VFF|%(filepath)s",
             "--progress-template", ProgressTemplate,
         };
 
-        if (req.Mode == "video")
+        var lang = LanguageFilter(req.AudioLanguage);
+        if (!req.IsAudio)
         {
-            // A chosen codec is tried first; if the site doesn't offer it, fall back to the best of any codec
-            // rather than failing.
-            var codec = VideoCodecs.Filter(req.Codec);
+            var video = VideoFilter(req);
+            var audio = AudioFilter(req);
             if (hasFfmpeg)
             {
-                // Prefer AAC audio: Opus inside MP4 is rejected by many players and editors.
-                var best = "bv*+ba[ext=m4a]/bv*+ba/b";
-                args.AddRange(["-f", codec.Length > 0 ? $"bv*{codec}+ba[ext=m4a]/bv*{codec}+ba/{best}" : best,
-                    "--merge-output-format", "mp4"]);
+                args.AddRange(["-f", FormatChain(video, audio, lang), "--merge-output-format", FormatCompatibility.MergeFormats(req.Container)]);
+                // Re-encode when the streams don't fit the chosen container (only if needed; slow).
+                if (req.Recode) args.AddRange(["--recode-video", req.Container]);
             }
             else
             {
                 // Without ffmpeg separate streams cannot be merged; take the best single file.
-                args.AddRange(["-f", codec.Length > 0 ? $"b{codec}/b" : "b"]);
+                args.AddRange(["-f", video.Length > 0 ? $"b{video}/b" : "b"]);
             }
-            var sort = new List<string>();
-            if (req.MaxHeight > 0) sort.Add($"res:{req.MaxHeight}");
+            // Resolution, then frame rate, then bitrate. yt-dlp's default ranks codecs (AV1 > VP9 > HEVC > H.264)
+            // ahead of bitrate, which picks the smallest stream: e.g. Bilibili 1080p AV1 at ~600 kbps over H.264 at
+            // ~2600 kbps — visibly worse than the site.
+            var sort = new List<string> { req.MaxHeight > 0 ? $"res:{req.MaxHeight}" : "res" };
             // The global compatibility mode only steers "auto"; an explicit codec choice wins.
-            if (s.PreferH264 && codec.Length == 0) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
-            if (sort.Count > 0) args.AddRange(["-S", string.Join(',', sort)]);
+            if (s.PreferH264 && req.Codec == VideoCodecs.Auto) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
+            sort.AddRange(["fps", "vbr", "tbr"]);
+            if (req.AudioQuality > 0) sort.Add($"abr:{req.AudioQuality}");
+            args.AddRange(["-S", string.Join(',', sort)]);
         }
         else
         {
-            args.AddRange(["-f", req.Mode == "m4a" ? "ba[ext=m4a]/ba/b" : "ba/b",
-                "-x", "--audio-format", req.Mode, "--audio-quality", "0"]);
+            var fmt = req.AudioOutputFormat;
+            var preferred = fmt switch { "m4a" => "[ext=m4a]", "opus" => "[acodec=opus]", _ => "" };
+            var chain = new List<string>();
+            if (lang.Length > 0) chain.Add($"ba{preferred}{lang}");
+            if (preferred.Length > 0) chain.Add($"ba{preferred}");
+            if (lang.Length > 0) chain.Add($"ba{lang}");
+            chain.AddRange(["ba", "b"]);
+            args.AddRange(["-f", string.Join('/', chain.Distinct()), "-x", "--audio-format", fmt,
+                "--audio-quality", fmt is "flac" or "wav" || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
         }
 
         if (req.WriteSubtitles)
@@ -87,12 +97,57 @@ public static class YtDlpArgs
         return args;
     }
 
+    /// <summary>Video stream filter: the chosen codec, or for WebM (which only holds VP9 / AV1) those codecs.</summary>
+    static string VideoFilter(DownloadRequest r)
+    {
+        var codec = VideoCodecs.Filter(r.Codec);
+        if (codec.Length > 0) return codec;
+        return r.Container == "webm" ? "[vcodec~='^(vp0?9|av01)']" : "";
+    }
+
+    /// <summary>Audio stream filter for video downloads. MP4 prefers AAC (Opus in MP4 trips up many players and
+    /// editors), WebM needs Opus / Vorbis, MKV takes the best of anything.</summary>
+    static string AudioFilter(DownloadRequest r) => r.AudioFormat switch
+    {
+        "aac" => "[acodec^=mp4a]",
+        "opus" => "[acodec=opus]",
+        _ => r.Container switch
+        {
+            "webm" => "[acodec~='^(opus|vorbis)']",
+            "mkv" => "",
+            _ => "[ext=m4a]",
+        },
+    };
+
+    static string LanguageFilter(string language) =>
+        string.IsNullOrWhiteSpace(language) ? "" : $"[language^={language.Trim()}]";
+
+    /// <summary>Most specific first, then relax: language, then audio codec, then video codec, so a choice the
+    /// site can't satisfy degrades to the best available instead of failing.</summary>
+    internal static string FormatChain(string video, string audio, string lang)
+    {
+        var chain = new List<string>
+        {
+            $"bv*{video}+ba{audio}{lang}",
+            $"bv*{video}+ba{lang}",
+            $"bv*{video}+ba{audio}",
+            $"bv*{video}+ba",
+            $"bv*+ba{audio}",
+            "bv*+ba",
+            "b",
+        };
+        return string.Join('/', chain.Distinct());
+    }
+
     public static List<string> Common(AppSettings s, Environment env)
     {
         // --encoding: the standalone yt-dlp.exe otherwise prints in the legacy ANSI code page (e.g. GBK),
         // which garbles titles and file paths containing characters like "｜".
         var args = new List<string> { "--no-colors", "--encoding", "utf-8" };
         if (env.FfmpegDir is not null) args.AddRange(["--ffmpeg-location", env.FfmpegDir]);
+        // YouTube needs a JavaScript runtime to solve its player challenges; without one yt-dlp warns that
+        // "some formats may be missing" (often the higher-quality ones).
+        if (env.DenoPath is not null) args.AddRange(["--js-runtimes", $"deno:{env.DenoPath}"]);
         if (s.Proxy.Trim().Length > 0) args.AddRange(["--proxy", s.Proxy.Trim()]);
 
         // Cookie source priority: explicit cookies.txt > browser > in-app login.

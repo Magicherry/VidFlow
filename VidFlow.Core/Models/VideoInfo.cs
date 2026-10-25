@@ -1,4 +1,5 @@
 using VidFlow.Localization;
+using VidFlow.Services;
 
 namespace VidFlow.Models;
 
@@ -40,6 +41,9 @@ public sealed class VideoInfo : MediaInfo
 
     /// <summary>Video codecs offered (see <c>VideoCodecs</c>) and the highest resolution available in each.</summary>
     public IReadOnlyDictionary<string, int> Codecs { get; init; } = new Dictionary<string, int>();
+
+    /// <summary>Audio track languages offered (YouTube multi-language audio); the original track first.</summary>
+    public IReadOnlyList<string> AudioLanguages { get; init; } = [];
 }
 
 public sealed class PlaylistInfo : MediaInfo
@@ -56,11 +60,29 @@ public sealed class PlaylistEntry
     public string? ThumbnailUrl { get; init; }
 }
 
-/// <summary>What the user chose to download.</summary>
+/// <summary>What the user chose to download. Usually produced from a <see cref="DownloadTemplate"/>; the optional
+/// parameters have defaults so download lists saved by older versions still load.</summary>
 public sealed record DownloadRequest(
     string Url,
-    string Mode,          // video, mp3, m4a
-    int MaxHeight,        // 0 = best
+    string Mode,                      // video | audio (older lists may contain mp3 / m4a, meaning audio)
+    int MaxHeight,                    // 0 = best
     bool WriteSubtitles,
-    string OutputFolder,
-    string Codec = "auto"); // auto, h264, h265, av1, vp9 (see VideoCodecs)
+    string OutputFolder,              // base folder; FolderTemplate subfolders go inside it
+    string Codec = "auto",            // auto, h264, h265, av1, vp9 (see VideoCodecs)
+    string Container = "mp4",         // mp4, mkv, webm
+    string AudioFormat = "auto",      // video: auto / aac / opus;  audio: mp3 / m4a / opus / flac / wav
+    int AudioQuality = 0,             // kbps; 0 = best
+    string AudioLanguage = "",        // "" = default (original) track, else a language code
+    bool Recode = false,              // re-encode when the streams don't fit the container
+    string FileNameTemplate = NamingTemplate.DefaultFileName,
+    string FolderTemplate = "")
+{
+    public bool IsAudio => Mode is "audio" or "mp3" or "m4a";
+
+    /// <summary>Output format for audio-only downloads.</summary>
+    public string AudioOutputFormat => Mode switch
+    {
+        "mp3" or "m4a" => Mode,
+        _ => AudioFormat is "mp3" or "m4a" or "opus" or "flac" or "wav" ? AudioFormat : "mp3",
+    };
+}

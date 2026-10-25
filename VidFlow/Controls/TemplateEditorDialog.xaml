@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="VidFlow.Controls.TemplateEditorDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:VidFlow.Controls"
+    xmlns:l="using:VidFlow.Localization"
+    CloseButtonText="{x:Bind l:L.Get('Common_Cancel')}"
+    DefaultButton="Primary"
+    PrimaryButtonClick="Save_Click"
+    PrimaryButtonText="{x:Bind l:L.Get('Common_Save')}"
+    Style="{StaticResource DefaultContentDialogStyle}">
+
+    <ContentDialog.Resources>
+        <!--  Room for the option cards (the default dialog is narrow).  -->
+        <x:Double x:Key="ContentDialogMaxWidth">760</x:Double>
+    </ContentDialog.Resources>
+
+    <ScrollViewer
+        Width="680"
+        MaxHeight="560"
+        Padding="0,0,16,0"
+        HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Spacing="12">
+            <TextBox
+                x:Name="NameBox"
+                Header="{x:Bind l:L.Get('Template_Name')}"
+                TextChanged="NameBox_TextChanged" />
+            <controls:DownloadOptionsEditor x:Name="Editor" ShowNaming="True" />
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

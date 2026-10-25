@@ -207,6 +207,14 @@
                                     <FontIcon FontSize="16" Glyph="&#xE838;" />
                                 </Button>
                                 <Button
+                                    AutomationProperties.Name="{x:Bind l:L.Get('Action_Prioritize')}"
+                                    Click="Prioritize_Click"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    ToolTipService.ToolTip="{x:Bind l:L.Get('Action_Prioritize')}"
+                                    Visibility="{x:Bind CanPrioritize, Mode=OneWay}">
+                                    <FontIcon FontSize="16" Glyph="&#xE74A;" />
+                                </Button>
+                                <Button
                                     AutomationProperties.Name="{x:Bind l:L.Get('Action_Pause')}"
                                     Click="Pause_Click"
                                     Style="{StaticResource IconButtonStyle}"

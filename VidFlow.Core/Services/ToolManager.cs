@@ -15,6 +15,10 @@ public static class ToolManager
     /// <summary>The app's own copy wins over one found on PATH.</summary>
     public static string? YtDlpPath => Find("yt-dlp.exe");
     public static string? FfmpegPath => Find("ffmpeg.exe");
+    /// <summary>JavaScript runtime yt-dlp uses for YouTube.</summary>
+    public static string? DenoPath => Find("deno.exe");
+
+    const string DenoUrl = "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip";
 
     public static bool IsYtDlpManaged => File.Exists(Path.Combine(BinDir, "yt-dlp.exe"));
     public static bool IsManaged(string exe) => exe.StartsWith(BinDir, StringComparison.OrdinalIgnoreCase);
@@ -162,6 +166,51 @@ public static class ToolManager
         return Version.TryParse(installed.Trim(), out var a) && Version.TryParse(latest.Trim(), out var b)
             ? a >= b
             : string.Equals(installed.Trim(), latest.Trim(), StringComparison.OrdinalIgnoreCase);
+    }
+
+    static (string Version, DateTime At)? _latestDeno;
+
+    /// <summary>Latest deno release version ("2.5.4"), cached for 10 minutes; null if unreachable.</summary>
+    public static async Task<string?> GetLatestDenoVersionAsync(bool refresh = false)
+    {
+        if (!refresh && _latestDeno is { } c && DateTime.Now - c.At < TimeSpan.FromMinutes(10)) return c.Version;
+        try
+        {
+            using var resp = await Http.Client.GetAsync("https://github.com/denoland/deno/releases/latest",
+                HttpCompletionOption.ResponseHeadersRead);
+            resp.EnsureSuccessStatusCode();
+            var tag = TagFromReleaseUrl(resp.RequestMessage?.RequestUri)?.TrimStart('v');
+            if (tag is null) return null;
+            _latestDeno = (tag, DateTime.Now);
+            return tag;
+        }
+        catch (Exception ex)
+        {
+            Log.Info($"Latest deno check failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>"deno 2.5.4 (stable, release, x86_64-pc-windows-msvc)" → "2.5.4".</summary>
+    public static string? DenoVersion(string? versionLine) =>
+        versionLine?.StartsWith("deno ", StringComparison.Ordinal) == true ? versionLine.Split(' ')[1] : versionLine;
+
+    public static async Task InstallDenoAsync(IProgress<double>? progress, CancellationToken ct)
+    {
+        Directory.CreateDirectory(BinDir);
+        var zipPath = Path.Combine(BinDir, "deno.zip.download");
+        await DownloadFileAsync(DenoUrl, zipPath, progress, ct);
+        try
+        {
+            using var zip = ZipFile.OpenRead(zipPath);
+            var entry = zip.Entries.FirstOrDefault(e => e.Name.Equals("deno.exe", StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidDataException(L.Format("Error_ZipMissing", "deno.exe"));
+            entry.ExtractToFile(Path.Combine(BinDir, "deno.exe"), overwrite: true);
+        }
+        finally
+        {
+            File.Delete(zipPath);
+        }
     }
 
     public static async Task InstallYtDlpAsync(IProgress<double>? progress, CancellationToken ct)

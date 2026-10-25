@@ -161,7 +161,7 @@ Settings_Metadata	Embed cover and metadata	嵌入封面与元数据
 Settings_MetadataDescription	Write title, author and cover into the file (needs ffmpeg)	将标题、作者和封面写入文件（需要 ffmpeg）
 Settings_Network	Network	网络
 Settings_Notify	Notifications	完成通知
-Settings_NotifyDescription	Notify when downloads finish or fail while VidFlow is in the background	在后台时，下载完成或失败会发送系统通知
+Settings_NotifyDescription	Notify when downloads finish while VidFlow is in the background	在后台时，下载完成会发送系统通知
 Settings_OtherCookies	Other cookie sources	其他 Cookie 来源
 Settings_OtherCookiesDescription	Advanced: use cookies from a browser or a cookies.txt file instead of in-app sign-in	高级：改用外部浏览器或 cookies.txt 文件中的登录状态（会覆盖应用内登录）
 Settings_Proxy	Proxy	代理
@@ -228,7 +228,7 @@ Wizard_FolderTitle	Where to save	保存位置
 Wizard_InstallAll	Install components	一键安装组件
 Wizard_Next	Next	下一步
 Wizard_Skip	Skip	跳过
-Wizard_WelcomeBody	VidFlow uses two free tools: yt-dlp to download, and ffmpeg to merge high-quality video and audio. They're downloaded from their official GitHub releases (about 140 MB).	VidFlow 需要两个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频。它们将从官方 GitHub 发布页下载（约 140 MB）。
+Wizard_WelcomeBody	VidFlow uses three free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, and Deno, which YouTube needs for some formats. They're downloaded from their official GitHub releases (about 180 MB).	VidFlow 需要三个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境。它们将从官方 GitHub 发布页下载（约 180 MB）。
 Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
 Wizard_YtDlpMissing	yt-dlp — not installed (required)	yt-dlp — 未安装（必需）
 Wizard_YtDlpReady	yt-dlp — ready	yt-dlp — 已就绪
@@ -240,3 +240,120 @@ Codec_Auto	Auto (best quality)	自动（画质优先）
 Codec_WithMax	{0} · up to {1}p	{0} · 最高 {1}p
 Options_Codec	Video codec	视频编码
 Options_CodecDescription	H.264 plays everywhere; H.265 / AV1 are smaller but may not play on older devices. Falls back to the best quality if the codec isn't offered	H.264 兼容性最好；H.265 / AV1 体积更小，但老设备可能无法播放。所选编码不可用时自动改用最高画质
+Action_Prioritize	Download next	优先下载
+AudioFormat_Auto	Auto (best for the container)	自动（按封装格式选择）
+AudioFormat_Flac	FLAC (lossless)	FLAC（无损）
+AudioQuality_Best	Best available	最高音质
+AudioTrack_Default	Default (original)	默认（原声）
+Codec_Unavailable	{0} · not offered by this video	{0} · 此视频不提供
+Common_Save	Save	保存
+Compat_Apply	Use recommended	改用推荐设置
+Compat_LosslessFromLossy	FLAC / WAV files are much larger, but the source audio is already compressed, so quality does not improve.	FLAC / WAV 文件会大很多，但源音频本身是有损压缩的，音质不会因此提升。
+Compat_Mp4Opus	Opus audio in MP4 doesn't play in some players and editors. AAC is recommended for MP4 (or use MKV).	MP4 中的 Opus 音频在部分播放器和剪辑软件中无法播放，MP4 建议搭配 AAC（或改用 MKV）。
+Compat_WebmAudio	WebM can only hold Opus / Vorbis audio. Switch to Opus, or turn on automatic conversion.	WebM 只能封装 Opus / Vorbis 音频，请改用 Opus，或开启自动转换。
+Compat_WebmVideo	WebM can only hold VP9 / AV1 video. Without automatic conversion the file is saved as MKV instead; MKV is recommended.	WebM 只能封装 VP9 / AV1 视频。未开启自动转换时会改存为 MKV，建议直接选择 MKV。
+Container_Mkv	MKV (holds any codec)	MKV（支持所有编码）
+Container_Mp4	MP4 (most compatible)	MP4（兼容性最好）
+Container_Webm	WebM (VP9 / AV1 + Opus)	WebM（VP9 / AV1 + Opus）
+Folder_Month	By month	按年月
+Folder_None	Don't sort	不分类
+Folder_Platform	By platform	按平台
+Folder_PlatformUploader	By platform, then uploader	按平台和作者
+Folder_Uploader	By uploader	按作者
+Home_NoDeno	YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → Components.	YouTube 的部分格式（常是较高画质）需要 Deno 脚本运行环境才能获取，可在「设置 → 组件」中一键安装。
+Home_NoDenoTitle	Deno recommended	建议安装 Deno
+Label_Audio	{0} audio	{0} 音频
+Mode_Audio	Audio only	仅音频
+Notify_Stalled	Download stalled	下载停滞
+Notify_UpdateAvailable	VidFlow {0} is available	VidFlow {0} 已发布
+Notify_UpdateAvailableBody	See what's new and update in Settings.	可在设置中查看更新内容并更新。
+Notify_UpdateDone	Updated to VidFlow {0}	已更新到 VidFlow {0}
+Notify_UpdateDoneBody	Unfinished downloads continue automatically.	未完成的下载会自动继续。
+Notify_UpdateReady	VidFlow {0} is ready to install	VidFlow {0} 已下载，可以安装
+Notify_UpdateReadyBody	Installing takes a few seconds; downloads resume afterwards.	安装只需几秒，之后下载会自动继续。
+Notify_UpdateRolledBack	Update to {0} didn't complete	更新到 {0} 未完成
+Notify_UpdateRolledBackBody	Changes were rolled back; you're still on {0}. You can retry in Settings → Updates.	已回滚，当前仍为 {0}。可在「设置 → 应用更新」中重试。
+Notify_ViewUpdate	View	查看
+Options_Audio	Audio	音频
+Options_AudioDescription	Format, quality and language track	音频格式、音质与音轨
+Options_AudioFormat	Audio format	音频格式
+Options_AudioQuality	Audio quality	音质
+Options_AudioTrack	Audio track	音轨
+Options_AudioTrackDescription	For videos with several dubbed languages	适用于提供多种配音语言的视频
+Options_Container	Container	封装格式
+Options_ContainerDescription	The file type; MP4 plays almost everywhere	文件格式；MP4 几乎所有设备都能播放
+Options_FileName	File name	文件名
+Options_FileNameDescription	Variables: {title} {uploader} {date} {year} {month} {resolution} {id} {platform}	可用变量：{title} {uploader} {date} {year} {month} {resolution} {id} {platform}
+Options_Naming	Naming and folders	命名与分类
+Options_NamingDescription	How files are named and sorted into folders	文件的命名方式，以及是否按平台 / 作者 / 日期放入子文件夹
+Options_Preview	Example: {0}	示例：{0}
+Options_Recode	Convert automatically	不兼容时自动转换
+Options_RecodeDescription	Re-encode when the downloaded streams don't fit the container (slow); otherwise it is saved as MKV	下载的编码与封装格式不兼容时重新编码（较慢）；关闭时会改存为 MKV
+Preset_AudioOnly	Audio only	仅下载音频
+Preset_Best	Best quality	最高画质
+Preset_Compatible	Compatible	兼容优先
+Preset_HD	HD first (1080p)	高清优先（1080P）
+Preset_SaveSpace	Save space	节省空间
+Settings_DenoMissing	Not installed · needed for some YouTube formats (recommended)	未安装 · YouTube 部分格式需要（推荐）
+Settings_NotifyFailure	Failure notifications	失败与异常通知
+Settings_NotifyFailureDescription	Notify when a download fails or stalls while VidFlow is in the background	在后台时，下载失败或长时间无进度会发送系统通知
+Settings_ReleaseNotes	What's new	更新日志
+Settings_Templates	Download templates	下载模板
+Settings_TemplatesDescription	Saved sets of download options. New downloads start from the default template; changes on the New download page apply to that download only	保存好的下载选项组合。新建下载时自动套用默认模板；在新建下载页的修改只对当次任务生效
+Settings_UpdateMode	Update mode	更新方式
+Settings_UpdateModeDescription	Automatic downloads updates in the background and asks before installing	自动更新会在后台下载更新包，安装前会先询问
+Settings_Updates	App updates	应用更新
+Status_Next	Next in queue	已置顶，即将开始
+Status_Stalled	No progress for {0} minutes; still trying…	已 {0} 分钟没有进度，仍在尝试…
+Template_BuiltInSuffix	{0} (built-in)	{0}（内置）
+Template_CopyName	{0} copy	{0} 副本
+Template_DefaultSuffix	{0} (default)	{0}（默认）
+Template_Delete	Delete	删除
+Template_DeleteBody	Downloads already added are not affected.	已添加的下载任务不受影响。
+Template_DeleteTitle	Delete “{0}”?	删除「{0}」？
+Template_Duplicate	Duplicate	复制
+Template_Edit	Edit	编辑
+Template_EditTitle	Edit template	编辑模板
+Template_Header	Download template	下载模板
+Template_IsDefault	Default	默认
+Template_ModifiedHint	Changed for this download only (the template is unchanged)	已针对本次下载修改（不影响模板）
+Template_Name	Name	名称
+Template_New	New template	新建模板
+Template_NewName	My template	我的模板
+Template_NewTitle	New template	新建模板
+Template_Rename	Rename	重命名
+Template_Reset	Reset	恢复模板设置
+Template_SaveAs	Save as template	另存为模板
+Template_SaveAsTitle	Save as template	另存为模板
+Template_SetDefault	Set as default	设为默认
+Update_Available	Version {0} is available (you have {1})	发现新版本 {0}（当前 {1}）
+Update_Checking	Checking for updates…	正在检查更新…
+Update_CheckingShort	Checking…	正在检查…
+Update_ChecksumMismatch	The downloaded update is damaged (checksum mismatch).	下载的更新包已损坏（校验不一致）。
+Update_Current	Version {0}	当前版本 {0}
+Update_Download	Download update	下载更新
+Update_DownloadFailed	The update could not be downloaded.	更新包下载失败。
+Update_Downloading	Downloading {0}… {1}%	正在下载 {0}… {1}%
+Update_DownloadingShort	Downloading…	下载中…
+Update_Failed	Update failed: {0}	更新失败：{0}
+Update_InstallBody	VidFlow will close, update, and reopen in a few seconds.	VidFlow 将关闭并在几秒内完成更新后自动重新打开。
+Update_InstallBodyActive	VidFlow will close, update, and reopen in a few seconds. {0} downloads will pause and continue automatically afterwards.	VidFlow 将关闭并在几秒内完成更新后自动重新打开。{0} 个正在进行的下载会暂停，更新后自动继续。
+Update_InstallNow	Install now	立即安装
+Update_InstallTitle	Install VidFlow {0}?	安装 VidFlow {0}？
+Update_Later	Later	稍后
+Update_NotesHeader	Version {0} · released {1}	版本 {0} · 发布于 {1}
+Update_Ready	Version {0} is downloaded and ready to install	版本 {0} 已下载，可以安装
+Update_Retry	Retry	重试
+Update_RolledBack	The last update to {0} didn't complete and was rolled back; you're on {1}.	上次更新到 {0} 未完成，已回滚，当前为 {1}。
+Update_UpToDate	Version {0} · up to date	当前版本 {0} · 已是最新
+UpdateMode_Auto	Automatic	自动更新
+UpdateMode_Manual	Manual	手动更新
+UpdateMode_Notify	Check and notify only	仅检查并提醒
+Update_NoManifest	No update information was found yet. Try again later.	暂未找到更新信息，请稍后再试。
+Update_Network	Couldn't reach the update server. Check your network or proxy.	无法连接更新服务器，请检查网络或代理。
+Update_BadManifest	The update information is invalid.	更新信息无效。
+Batch_Parsing	Parsing…	解析中…
+Batch_PlaylistMeta	Playlist · {0} videos	播放列表 · {0} 个视频
+Batch_ListName	Links to download	要下载的链接
+Batch_Status	Parsed {0} of {1}. Tick the ones to download.	已解析 {0} / {1}，勾选要下载的项目
+Batch_StatusFailed	Parsed {0} of {1}, {2} failed. Tick the ones to download.	已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目

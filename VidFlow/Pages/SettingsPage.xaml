@@ -79,6 +79,22 @@
                             Click="InstallFfmpeg_Click" />
                     </StackPanel>
                 </tk:SettingsCard>
+                <tk:SettingsCard x:Name="DenoCard" Header="Deno">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE943;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressBar
+                            x:Name="DenoProgress"
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="DenoButton"
+                            MinWidth="96"
+                            Click="InstallDeno_Click" />
+                    </StackPanel>
+                </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_AutoUpdateDescription')}" Header="{x:Bind l:L.Get('Settings_AutoUpdate')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE895;" />
@@ -90,6 +106,22 @@
                     x:Name="ToolErrorBar"
                     Severity="Error"
                     Visibility="{x:Bind ToolErrorBar.IsOpen, Mode=OneWay}" />
+
+                <!--  Download templates  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Templates')}" />
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_TemplatesDescription')}" Header="{x:Bind l:L.Get('Template_Header')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A1;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <Button Click="NewTemplate_Click" Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="14" Glyph="&#xE710;" />
+                            <TextBlock Text="{x:Bind l:L.Get('Template_New')}" />
+                        </StackPanel>
+                    </Button>
+                </tk:SettingsCard>
+                <!--  One card per template, filled in code.  -->
+                <StackPanel x:Name="TemplateList" Spacing="4" />
 
                 <!--  Downloads  -->
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Downloads')}" />
@@ -263,6 +295,12 @@
                     </tk:SettingsCard.HeaderIcon>
                     <ToggleSwitch x:Name="NotifyToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7BA;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE77F;" />
@@ -271,6 +309,47 @@
                 </tk:SettingsCard>
 
                 <!--  About  -->
+                <!--  App updates  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Updates')}" />
+                <tk:SettingsCard x:Name="UpdateCard" Header="VidFlow">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE777;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressBar
+                            x:Name="UpdateProgress"
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="UpdateButton"
+                            MinWidth="120"
+                            Click="UpdateButton_Click" />
+                    </StackPanel>
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_UpdateModeDescription')}" Header="{x:Bind l:L.Get('Settings_UpdateMode')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE713;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox
+                        x:Name="UpdateModeCombo"
+                        MinWidth="200"
+                        SelectionChanged="UpdateModeCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsExpander x:Name="ReleaseNotesExpander" Header="{x:Bind l:L.Get('Settings_ReleaseNotes')}">
+                    <tk:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A5;" />
+                    </tk:SettingsExpander.HeaderIcon>
+                    <tk:SettingsExpander.Items>
+                        <tk:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                            <TextBlock
+                                x:Name="ReleaseNotesText"
+                                IsTextSelectionEnabled="True"
+                                TextWrapping="Wrap" />
+                        </tk:SettingsCard>
+                    </tk:SettingsExpander.Items>
+                </tk:SettingsExpander>
+
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_About')}" />
                 <tk:SettingsExpander Description="{x:Bind l:L.Get('About_Description')}" Header="VidFlow">
                     <tk:SettingsExpander.HeaderIcon>

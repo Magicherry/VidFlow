@@ -41,7 +41,8 @@ public sealed partial class FirstRunDialog : ContentDialog
         FfmpegIcon.Glyph = hasFf ? "" : "";
         YtDlpStatus.Text = hasYt ? L.Get("Wizard_YtDlpReady") : L.Get("Wizard_YtDlpMissing");
         FfmpegStatus.Text = hasFf ? L.Get("Wizard_FfmpegReady") : L.Get("Wizard_FfmpegMissing");
-        InstallButton.Visibility = hasYt && hasFf && ToolManager.IsYtDlpManaged ? Visibility.Collapsed : Visibility.Visible;
+        InstallButton.Visibility = hasYt && hasFf && ToolManager.IsYtDlpManaged && ToolManager.DenoPath is not null
+            ? Visibility.Collapsed : Visibility.Visible;
     }
 
     void UpdateAccounts()
@@ -69,6 +70,8 @@ public sealed partial class FirstRunDialog : ContentDialog
             if (!ToolManager.IsYtDlpManaged) await Task.Run(() => ToolManager.InstallYtDlpAsync(progress, CancellationToken.None));
             UpdateComponents();
             if (ToolManager.FfmpegPath is null) await Task.Run(() => ToolManager.InstallFfmpegAsync(progress, CancellationToken.None));
+            // JavaScript runtime yt-dlp needs for YouTube (without it some formats are missing).
+            if (ToolManager.DenoPath is null) await Task.Run(() => ToolManager.InstallDenoAsync(progress, CancellationToken.None));
         }
         catch (Exception ex)
         {

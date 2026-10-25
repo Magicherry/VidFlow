@@ -22,20 +22,40 @@
   <data name="Action_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
   <data name="Action_Pause" xml:space="preserve"><value>Pause</value></data>
   <data name="Action_Play" xml:space="preserve"><value>Play</value></data>
+  <data name="Action_Prioritize" xml:space="preserve"><value>Download next</value></data>
   <data name="Action_Remove" xml:space="preserve"><value>Remove from list</value></data>
   <data name="Action_Resume" xml:space="preserve"><value>Resume</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>Retry</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
   <data name="App_Subtitle" xml:space="preserve"><value>Video downloader</value></data>
+  <data name="AudioFormat_Auto" xml:space="preserve"><value>Auto (best for the container)</value></data>
+  <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC (lossless)</value></data>
+  <data name="AudioQuality_Best" xml:space="preserve"><value>Best available</value></data>
+  <data name="AudioTrack_Default" xml:space="preserve"><value>Default (original)</value></data>
   <data name="Batch_Description" xml:space="preserve"><value>These links are added with the options below; titles appear once each download starts.</value></data>
+  <data name="Batch_ListName" xml:space="preserve"><value>Links to download</value></data>
+  <data name="Batch_Parsing" xml:space="preserve"><value>Parsing…</value></data>
+  <data name="Batch_PlaylistMeta" xml:space="preserve"><value>Playlist · {0} videos</value></data>
+  <data name="Batch_Status" xml:space="preserve"><value>Parsed {0} of {1}. Tick the ones to download.</value></data>
+  <data name="Batch_StatusFailed" xml:space="preserve"><value>Parsed {0} of {1}, {2} failed. Tick the ones to download.</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>{0} links</value></data>
   <data name="Batch_UnsupportedHint" xml:space="preserve"><value>Some links are not YouTube / Bilibili. yt-dlp will still try them, but they may fail.</value></data>
   <data name="Codec_Auto" xml:space="preserve"><value>Auto (best quality)</value></data>
+  <data name="Codec_Unavailable" xml:space="preserve"><value>{0} · not offered by this video</value></data>
   <data name="Codec_WithMax" xml:space="preserve"><value>{0} · up to {1}p</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="Common_Clear" xml:space="preserve"><value>Clear</value></data>
   <data name="Common_Close" xml:space="preserve"><value>Close</value></data>
   <data name="Common_Failed" xml:space="preserve"><value>Something went wrong</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Compat_Apply" xml:space="preserve"><value>Use recommended</value></data>
+  <data name="Compat_LosslessFromLossy" xml:space="preserve"><value>FLAC / WAV files are much larger, but the source audio is already compressed, so quality does not improve.</value></data>
+  <data name="Compat_Mp4Opus" xml:space="preserve"><value>Opus audio in MP4 doesn&apos;t play in some players and editors. AAC is recommended for MP4 (or use MKV).</value></data>
+  <data name="Compat_WebmAudio" xml:space="preserve"><value>WebM can only hold Opus / Vorbis audio. Switch to Opus, or turn on automatic conversion.</value></data>
+  <data name="Compat_WebmVideo" xml:space="preserve"><value>WebM can only hold VP9 / AV1 video. Without automatic conversion the file is saved as MKV instead; MKV is recommended.</value></data>
+  <data name="Container_Mkv" xml:space="preserve"><value>MKV (holds any codec)</value></data>
+  <data name="Container_Mp4" xml:space="preserve"><value>MP4 (most compatible)</value></data>
+  <data name="Container_Webm" xml:space="preserve"><value>WebM (VP9 / AV1 + Opus)</value></data>
   <data name="Download_Batch" xml:space="preserve"><value>Add {0} links to queue</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>Download {0} selected</value></data>
   <data name="Download_Start" xml:space="preserve"><value>Start download</value></data>
@@ -64,6 +84,11 @@
   <data name="Error_UnexpectedExit" xml:space="preserve"><value>yt-dlp exited unexpectedly.</value></data>
   <data name="Error_Unsupported" xml:space="preserve"><value>This link is not supported.</value></data>
   <data name="Error_ZipMissing" xml:space="preserve"><value>{0} is missing from the archive</value></data>
+  <data name="Folder_Month" xml:space="preserve"><value>By month</value></data>
+  <data name="Folder_None" xml:space="preserve"><value>Don&apos;t sort</value></data>
+  <data name="Folder_Platform" xml:space="preserve"><value>By platform</value></data>
+  <data name="Folder_PlatformUploader" xml:space="preserve"><value>By platform, then uploader</value></data>
+  <data name="Folder_Uploader" xml:space="preserve"><value>By uploader</value></data>
   <data name="Home_Added" xml:space="preserve"><value>Added</value></data>
   <data name="Home_AddedMany" xml:space="preserve"><value>{0} downloads added to the queue.</value></data>
   <data name="Home_AddedOne" xml:space="preserve"><value>Added “{0}” to the queue.</value></data>
@@ -77,6 +102,8 @@
   <data name="Home_InvalidLink" xml:space="preserve"><value>Please enter a valid video link.</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>Fetching video info…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>Sign in now</value></data>
+  <data name="Home_NoDeno" xml:space="preserve"><value>YouTube needs the Deno JavaScript runtime for some formats (often the higher-quality ones). Install it in Settings → Components.</value></data>
+  <data name="Home_NoDenoTitle" xml:space="preserve"><value>Deno recommended</value></data>
   <data name="Home_NoFfmpeg" xml:space="preserve"><value>Without ffmpeg only pre-merged, lower-quality files can be downloaded and audio can&apos;t be extracted. Install it in Settings → Components.</value></data>
   <data name="Home_NoFfmpegTitle" xml:space="preserve"><value>ffmpeg recommended</value></data>
   <data name="Home_NoLink" xml:space="preserve"><value>No link found.</value></data>
@@ -91,6 +118,7 @@
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube or Bilibili link (separate several links with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
+  <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · best quality</value></data>
@@ -103,6 +131,7 @@
   <data name="Login_TitleBili" xml:space="preserve"><value>Sign in to Bilibili</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>Sign in to YouTube (Google account)</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>The built-in browser (WebView2) couldn&apos;t start: {0}</value></data>
+  <data name="Mode_Audio" xml:space="preserve"><value>Audio only</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>Audio only (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>Audio only (MP3)</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>Video (MP4)</value></data>
@@ -115,13 +144,38 @@
   <data name="Notify_InTray" xml:space="preserve"><value>VidFlow is still running</value></data>
   <data name="Notify_InTrayBody" xml:space="preserve"><value>Downloads continue in the background. Use the tray icon to reopen or exit.</value></data>
   <data name="Notify_LinkDetected" xml:space="preserve"><value>Video link copied — download it?</value></data>
+  <data name="Notify_Stalled" xml:space="preserve"><value>Download stalled</value></data>
+  <data name="Notify_UpdateAvailable" xml:space="preserve"><value>VidFlow {0} is available</value></data>
+  <data name="Notify_UpdateAvailableBody" xml:space="preserve"><value>See what&apos;s new and update in Settings.</value></data>
+  <data name="Notify_UpdateDone" xml:space="preserve"><value>Updated to VidFlow {0}</value></data>
+  <data name="Notify_UpdateDoneBody" xml:space="preserve"><value>Unfinished downloads continue automatically.</value></data>
+  <data name="Notify_UpdateReady" xml:space="preserve"><value>VidFlow {0} is ready to install</value></data>
+  <data name="Notify_UpdateReadyBody" xml:space="preserve"><value>Installing takes a few seconds; downloads resume afterwards.</value></data>
+  <data name="Notify_UpdateRolledBack" xml:space="preserve"><value>Update to {0} didn&apos;t complete</value></data>
+  <data name="Notify_UpdateRolledBackBody" xml:space="preserve"><value>Changes were rolled back; you&apos;re still on {0}. You can retry in Settings → Updates.</value></data>
+  <data name="Notify_ViewUpdate" xml:space="preserve"><value>View</value></data>
+  <data name="Options_Audio" xml:space="preserve"><value>Audio</value></data>
+  <data name="Options_AudioDescription" xml:space="preserve"><value>Format, quality and language track</value></data>
+  <data name="Options_AudioFormat" xml:space="preserve"><value>Audio format</value></data>
+  <data name="Options_AudioQuality" xml:space="preserve"><value>Audio quality</value></data>
+  <data name="Options_AudioTrack" xml:space="preserve"><value>Audio track</value></data>
+  <data name="Options_AudioTrackDescription" xml:space="preserve"><value>For videos with several dubbed languages</value></data>
   <data name="Options_Codec" xml:space="preserve"><value>Video codec</value></data>
   <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 plays everywhere; H.265 / AV1 are smaller but may not play on older devices. Falls back to the best quality if the codec isn&apos;t offered</value></data>
+  <data name="Options_Container" xml:space="preserve"><value>Container</value></data>
+  <data name="Options_ContainerDescription" xml:space="preserve"><value>The file type; MP4 plays almost everywhere</value></data>
+  <data name="Options_FileName" xml:space="preserve"><value>File name</value></data>
+  <data name="Options_FileNameDescription" xml:space="preserve"><value>Variables: {title} {uploader} {date} {year} {month} {resolution} {id} {platform}</value></data>
   <data name="Options_Folder" xml:space="preserve"><value>Save to</value></data>
   <data name="Options_Mode" xml:space="preserve"><value>Download</value></data>
   <data name="Options_ModeDescription" xml:space="preserve"><value>The full video, or just its audio</value></data>
+  <data name="Options_Naming" xml:space="preserve"><value>Naming and folders</value></data>
+  <data name="Options_NamingDescription" xml:space="preserve"><value>How files are named and sorted into folders</value></data>
+  <data name="Options_Preview" xml:space="preserve"><value>Example: {0}</value></data>
   <data name="Options_Quality" xml:space="preserve"><value>Quality</value></data>
   <data name="Options_QualityDescription" xml:space="preserve"><value>Resolutions actually available; sizes are estimates</value></data>
+  <data name="Options_Recode" xml:space="preserve"><value>Convert automatically</value></data>
+  <data name="Options_RecodeDescription" xml:space="preserve"><value>Re-encode when the downloaded streams don&apos;t fit the container (slow); otherwise it is saved as MKV</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Save subtitles (if any) as separate files; languages are set in Settings</value></data>
   <data name="Options_Title" xml:space="preserve"><value>Download options</value></data>
@@ -135,6 +189,11 @@
   <data name="Playlist_SelectAll" xml:space="preserve"><value>Select all</value></data>
   <data name="Playlist_Selected" xml:space="preserve"><value>{0} of {1} selected</value></data>
   <data name="Playlist_SelectNone" xml:space="preserve"><value>Select none</value></data>
+  <data name="Preset_AudioOnly" xml:space="preserve"><value>Audio only</value></data>
+  <data name="Preset_Best" xml:space="preserve"><value>Best quality</value></data>
+  <data name="Preset_Compatible" xml:space="preserve"><value>Compatible</value></data>
+  <data name="Preset_HD" xml:space="preserve"><value>HD first (1080p)</value></data>
+  <data name="Preset_SaveSpace" xml:space="preserve"><value>Save space</value></data>
   <data name="Quality_Best" xml:space="preserve"><value>Best quality</value></data>
   <data name="Quality_FullHD" xml:space="preserve"><value>Full HD</value></data>
   <data name="Quality_HD" xml:space="preserve"><value>HD</value></data>
@@ -157,6 +216,7 @@
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape format, exportable with a browser extension</value></data>
   <data name="Settings_Danmaku" xml:space="preserve"><value>Save Bilibili danmaku</value></data>
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>Also save bullet comments as an XML file when subtitles are on</value></data>
+  <data name="Settings_DenoMissing" xml:space="preserve"><value>Not installed · needed for some YouTube formats (recommended)</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>Not installed · merges high-quality streams and extracts audio (recommended)</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>Default save location</value></data>
@@ -175,13 +235,16 @@
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>Write title, author and cover into the file (needs ffmpeg)</value></data>
   <data name="Settings_Network" xml:space="preserve"><value>Network</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>Notifications</value></data>
-  <data name="Settings_NotifyDescription" xml:space="preserve"><value>Notify when downloads finish or fail while VidFlow is in the background</value></data>
+  <data name="Settings_NotifyDescription" xml:space="preserve"><value>Notify when downloads finish while VidFlow is in the background</value></data>
+  <data name="Settings_NotifyFailure" xml:space="preserve"><value>Failure notifications</value></data>
+  <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>Notify when a download fails or stalls while VidFlow is in the background</value></data>
   <data name="Settings_OtherCookies" xml:space="preserve"><value>Other cookie sources</value></data>
   <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>Advanced: use cookies from a browser or a cookies.txt file instead of in-app sign-in</value></data>
   <data name="Settings_Proxy" xml:space="preserve"><value>Proxy</value></data>
   <data name="Settings_ProxyDescription" xml:space="preserve"><value>e.g. http://127.0.0.1:7890 or socks5://127.0.0.1:1080; empty uses the system proxy</value></data>
   <data name="Settings_ProxyPlaceholder" xml:space="preserve"><value>System proxy</value></data>
   <data name="Settings_Reinstall" xml:space="preserve"><value>Reinstall</value></data>
+  <data name="Settings_ReleaseNotes" xml:space="preserve"><value>What&apos;s new</value></data>
   <data name="Settings_RestartMessage" xml:space="preserve"><value>The new language applies after VidFlow restarts. Unfinished downloads resume automatically.</value></data>
   <data name="Settings_RestartNow" xml:space="preserve"><value>Restart now</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>Restart required</value></data>
@@ -194,6 +257,8 @@
   <data name="Settings_SubLangsDescription" xml:space="preserve"><value>yt-dlp language codes, comma separated (e.g. zh-Hans,en)</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>Languages to save, and Bilibili danmaku</value></data>
+  <data name="Settings_Templates" xml:space="preserve"><value>Download templates</value></data>
+  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>Saved sets of download options. New downloads start from the default template; changes on the New download page apply to that download only</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>App theme</value></data>
   <data name="Settings_ThemeDark" xml:space="preserve"><value>Dark</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>Light</value></data>
@@ -201,6 +266,9 @@
   <data name="Settings_ToolVersion" xml:space="preserve"><value>Version {0} · {1}</value></data>
   <data name="Settings_Tray" xml:space="preserve"><value>Keep running in the notification area</value></data>
   <data name="Settings_TrayDescription" xml:space="preserve"><value>Closing the window keeps downloads going; exit from the tray icon</value></data>
+  <data name="Settings_UpdateMode" xml:space="preserve"><value>Update mode</value></data>
+  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>Automatic downloads updates in the background and asks before installing</value></data>
+  <data name="Settings_Updates" xml:space="preserve"><value>App updates</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>Update to {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>Up to date</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>Not installed · parses and downloads videos (required)</value></data>
@@ -212,18 +280,67 @@
   <data name="Status_Connecting" xml:space="preserve"><value>Connecting…</value></data>
   <data name="Status_Converting" xml:space="preserve"><value>Converting audio…</value></data>
   <data name="Status_Merging" xml:space="preserve"><value>Merging video and audio…</value></data>
+  <data name="Status_Next" xml:space="preserve"><value>Next in queue</value></data>
   <data name="Status_Paused" xml:space="preserve"><value>Paused</value></data>
   <data name="Status_PausedAt" xml:space="preserve"><value>Paused at {0}%</value></data>
   <data name="Status_Remaining" xml:space="preserve"><value>{0} left</value></data>
   <data name="Status_Resuming" xml:space="preserve"><value>Will resume…</value></data>
+  <data name="Status_Stalled" xml:space="preserve"><value>No progress for {0} minutes; still trying…</value></data>
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>Video done, downloading audio…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>Video</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>Waiting…</value></data>
+  <data name="Template_BuiltInSuffix" xml:space="preserve"><value>{0} (built-in)</value></data>
+  <data name="Template_CopyName" xml:space="preserve"><value>{0} copy</value></data>
+  <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0} (default)</value></data>
+  <data name="Template_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Template_DeleteBody" xml:space="preserve"><value>Downloads already added are not affected.</value></data>
+  <data name="Template_DeleteTitle" xml:space="preserve"><value>Delete “{0}”?</value></data>
+  <data name="Template_Duplicate" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="Template_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Template_EditTitle" xml:space="preserve"><value>Edit template</value></data>
+  <data name="Template_Header" xml:space="preserve"><value>Download template</value></data>
+  <data name="Template_IsDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="Template_ModifiedHint" xml:space="preserve"><value>Changed for this download only (the template is unchanged)</value></data>
+  <data name="Template_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Template_New" xml:space="preserve"><value>New template</value></data>
+  <data name="Template_NewName" xml:space="preserve"><value>My template</value></data>
+  <data name="Template_NewTitle" xml:space="preserve"><value>New template</value></data>
+  <data name="Template_Rename" xml:space="preserve"><value>Rename</value></data>
+  <data name="Template_Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="Template_SaveAs" xml:space="preserve"><value>Save as template</value></data>
+  <data name="Template_SaveAsTitle" xml:space="preserve"><value>Save as template</value></data>
+  <data name="Template_SetDefault" xml:space="preserve"><value>Set as default</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>Exit VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>Download copied link</value></data>
   <data name="Tray_Show" xml:space="preserve"><value>Open VidFlow</value></data>
   <data name="Tray_Tooltip" xml:space="preserve"><value>VidFlow · {0} downloading · {1}%</value></data>
   <data name="Untitled" xml:space="preserve"><value>Untitled video</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>Version {0} is available (you have {1})</value></data>
+  <data name="Update_BadManifest" xml:space="preserve"><value>The update information is invalid.</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>Checking for updates…</value></data>
+  <data name="Update_CheckingShort" xml:space="preserve"><value>Checking…</value></data>
+  <data name="Update_ChecksumMismatch" xml:space="preserve"><value>The downloaded update is damaged (checksum mismatch).</value></data>
+  <data name="Update_Current" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Update_Download" xml:space="preserve"><value>Download update</value></data>
+  <data name="Update_DownloadFailed" xml:space="preserve"><value>The update could not be downloaded.</value></data>
+  <data name="Update_Downloading" xml:space="preserve"><value>Downloading {0}… {1}%</value></data>
+  <data name="Update_DownloadingShort" xml:space="preserve"><value>Downloading…</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Update failed: {0}</value></data>
+  <data name="Update_InstallBody" xml:space="preserve"><value>VidFlow will close, update, and reopen in a few seconds.</value></data>
+  <data name="Update_InstallBodyActive" xml:space="preserve"><value>VidFlow will close, update, and reopen in a few seconds. {0} downloads will pause and continue automatically afterwards.</value></data>
+  <data name="Update_InstallNow" xml:space="preserve"><value>Install now</value></data>
+  <data name="Update_InstallTitle" xml:space="preserve"><value>Install VidFlow {0}?</value></data>
+  <data name="Update_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="Update_Network" xml:space="preserve"><value>Couldn&apos;t reach the update server. Check your network or proxy.</value></data>
+  <data name="Update_NoManifest" xml:space="preserve"><value>No update information was found yet. Try again later.</value></data>
+  <data name="Update_NotesHeader" xml:space="preserve"><value>Version {0} · released {1}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is downloaded and ready to install</value></data>
+  <data name="Update_Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="Update_RolledBack" xml:space="preserve"><value>The last update to {0} didn&apos;t complete and was rolled back; you&apos;re on {1}.</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>Version {0} · up to date</value></data>
+  <data name="UpdateMode_Auto" xml:space="preserve"><value>Automatic</value></data>
+  <data name="UpdateMode_Manual" xml:space="preserve"><value>Manual</value></data>
+  <data name="UpdateMode_Notify" xml:space="preserve"><value>Check and notify only</value></data>
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later in Settings → Accounts.</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>Accounts (optional)</value></data>
@@ -239,7 +356,7 @@
   <data name="Wizard_InstallAll" xml:space="preserve"><value>Install components</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>Next</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>Skip</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses two free tools: yt-dlp to download, and ffmpeg to merge high-quality video and audio. They&apos;re downloaded from their official GitHub releases (about 140 MB).</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses three free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, and Deno, which YouTube needs for some formats. They&apos;re downloaded from their official GitHub releases (about 180 MB).</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>Welcome to VidFlow</value></data>
   <data name="Wizard_YtDlpMissing" xml:space="preserve"><value>yt-dlp — not installed (required)</value></data>
   <data name="Wizard_YtDlpReady" xml:space="preserve"><value>yt-dlp — ready</value></data>
