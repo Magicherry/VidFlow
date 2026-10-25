@@ -79,15 +79,17 @@ public static class YtDlpArgs
             else
             {
                 // Without ffmpeg separate streams cannot be merged; take the best single file.
-                args.AddRange(["-f", video.Length > 0 ? $"b{video}/b" : "b"]);
+                args.AddRange(["-f", string.Join('/', new[] { $"b{NotImage}{video}", $"b{NotImage}", "b" }.Distinct())]);
             }
-            // Resolution, then frame rate, then bitrate. yt-dlp's default ranks codecs (AV1 > VP9 > HEVC > H.264)
-            // ahead of bitrate, which picks the smallest stream: e.g. Bilibili 1080p AV1 at ~600 kbps over H.264 at
-            // ~2600 kbps — visibly worse than the site.
+            // Resolution (yt-dlp's "res" is the shorter side, so portrait 1080×1920 counts as 1080p), then frame rate,
+            // then bitrate. yt-dlp's default ranks codecs (AV1 > VP9 > HEVC > H.264) ahead of bitrate, which picks
+            // the smallest stream: e.g. Bilibili 1080p AV1 at ~600 kbps over H.264 at ~2600 kbps. Total bitrate, not
+            // video bitrate: some sites' best file is one MP4 with sound and no separate video bitrate (X's 10 Mbps
+            // 1080p would otherwise lose to a 2.8 Mbps HLS stream).
             var sort = new List<string> { req.MaxHeight > 0 ? $"res:{req.MaxHeight}" : "res" };
             // The global compatibility mode only steers "auto"; an explicit codec choice wins.
             if (s.PreferH264 && req.Codec == VideoCodecs.Auto) sort.AddRange(["vcodec:h264", "acodec:m4a"]);
-            sort.AddRange(["fps", "vbr", "tbr"]);
+            sort.AddRange(["fps", "tbr"]);
             if (req.AudioQuality > 0) sort.Add($"abr:{req.AudioQuality}");
             args.AddRange(["-S", string.Join(',', sort)]);
         }
@@ -155,16 +157,21 @@ public static class YtDlpArgs
     {
         var chain = new List<string>
         {
-            $"bv*{video}+ba{audio}{lang}",
-            $"bv*{video}+ba{lang}",
-            $"bv*{video}+ba{audio}",
-            $"bv*{video}+ba",
-            $"bv*+ba{audio}",
-            "bv*+ba",
+            $"bv*{NotImage}{video}+ba{audio}{lang}",
+            $"bv*{NotImage}{video}+ba{lang}",
+            $"bv*{NotImage}{video}+ba{audio}",
+            $"bv*{NotImage}{video}+ba",
+            $"bv*{NotImage}+ba{audio}",
+            $"bv*{NotImage}+ba",
+            $"b{NotImage}",
             "b",
         };
         return string.Join('/', chain.Distinct());
     }
+
+    /// <summary>Some sites list preview images among the formats (Weibo's 180×320 "scrubber" JPEG). Their codec is
+    /// "unknown" rather than "none", so bv* would take them when a low resolution is asked for.</summary>
+    internal const string NotImage = "[ext!=jpg][ext!=png][ext!=webp]";
 
     public static List<string> Common(AppSettings s, Environment env)
     {

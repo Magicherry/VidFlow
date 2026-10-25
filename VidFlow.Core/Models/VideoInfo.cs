@@ -3,15 +3,22 @@ using VidFlow.Services;
 
 namespace VidFlow.Models;
 
-public enum Platform { YouTube, Bilibili, Douyin, Other }
+public enum Platform { YouTube, Bilibili, Douyin, Weibo, Xiaohongshu, X, Other }
 
 public static class PlatformExtensions
 {
+    /// <summary>The platforms VidFlow supports, in the order they are listed.</summary>
+    public static readonly Platform[] Supported =
+        [Platform.Bilibili, Platform.Douyin, Platform.Xiaohongshu, Platform.Weibo, Platform.YouTube, Platform.X];
+
     public static string DisplayName(this Platform p) => p switch
     {
         Platform.YouTube => "YouTube",
         Platform.Bilibili => L.Get("Platform_Bilibili"),
         Platform.Douyin => L.Get("Platform_Douyin"),
+        Platform.Weibo => L.Get("Platform_Weibo"),
+        Platform.Xiaohongshu => L.Get("Platform_Xiaohongshu"),
+        Platform.X => "X",
         _ => L.Get("Platform_Other"),
     };
 }

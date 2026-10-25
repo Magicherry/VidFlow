@@ -15,8 +15,9 @@ public class FormatSelectionTests
     {
         var req = new DownloadRequest("https://youtu.be/x", "video", 0, false, "o", Container: "webm");
         var args = YtDlpArgs.Download(req, new AppSettings(), Env);
-        Assert.StartsWith("bv*[vcodec~='^(vp0?9|av01)']+ba[acodec~='^(opus|vorbis)']", F(args));
-        Assert.EndsWith("/bv*+ba/b", F(args));
+        Assert.StartsWith("bv*[ext!=jpg][ext!=png][ext!=webp][vcodec~='^(vp0?9|av01)']+ba[acodec~='^(opus|vorbis)']", F(args));
+
+        Assert.EndsWith("/bv*[ext!=jpg][ext!=png][ext!=webp]+ba/b[ext!=jpg][ext!=png][ext!=webp]/b", F(args));
         Assert.Equal("webm/mkv", Arg(args, "--merge-output-format"));
     }
 
@@ -25,7 +26,7 @@ public class FormatSelectionTests
     {
         var req = new DownloadRequest("https://youtu.be/x", "video", 0, false, "o", Container: "mkv");
         var args = YtDlpArgs.Download(req, new AppSettings(), Env);
-        Assert.Equal("bv*+ba/b", F(args));
+        Assert.Equal("bv*[ext!=jpg][ext!=png][ext!=webp]+ba/b[ext!=jpg][ext!=png][ext!=webp]/b", F(args));
         Assert.Equal("mkv", Arg(args, "--merge-output-format"));
         Assert.DoesNotContain("--recode-video", args);
 
@@ -38,8 +39,8 @@ public class FormatSelectionTests
     {
         var req = new DownloadRequest("https://youtu.be/x", "video", 0, false, "o", AudioLanguage: "ja");
         var chain = F(YtDlpArgs.Download(req, new AppSettings(), Env)).Split('/');
-        Assert.Equal("bv*+ba[ext=m4a][language^=ja]", chain[0]);
-        Assert.Contains("bv*+ba[language^=ja]", chain);
+        Assert.Equal("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[ext=m4a][language^=ja]", chain[0]);
+        Assert.Contains("bv*[ext!=jpg][ext!=png][ext!=webp]+ba[language^=ja]", chain);
         Assert.Equal("b", chain[^1]);
     }
 
@@ -47,7 +48,7 @@ public class FormatSelectionTests
     public void AudioQualityLimitsAudioBitrateInVideoMode()
     {
         var req = new DownloadRequest("https://youtu.be/x", "video", 720, false, "o", AudioQuality: 128);
-        Assert.Equal("res:720,fps,vbr,tbr,abr:128", Arg(YtDlpArgs.Download(req, new AppSettings(), Env), "-S"));
+        Assert.Equal("res:720,fps,tbr,abr:128", Arg(YtDlpArgs.Download(req, new AppSettings(), Env), "-S"));
     }
 
     [Theory]
@@ -405,8 +406,8 @@ public class DouyinLinkTests
         var url = UrlTools.ExtractUrl(share);
         Assert.Equal("https://v.douyin.com/iABCdEf/", url);
         Assert.Equal(Platform.Douyin, UrlTools.DetectPlatform(url!));
-        Assert.True(UrlTools.IsDouyinShortLink(url!));
-        Assert.Null(UrlTools.CanonicalDouyinUrl(url!)); // resolved over the network by DouyinLinks
+        Assert.True(UrlTools.IsShortLink(url!));
+        Assert.Null(UrlTools.CanonicalDouyinUrl(url!)); // resolved over the network by ShortLinks
     }
 
     [Fact]
@@ -468,5 +469,78 @@ public class DouyinLinkTests
         var known = new Dictionary<string, string?> { ["title"] = "晚霞 #风景\n第二行", ["uploader"] = "某某", ["id"] = "7412" };
         var output = NamingTemplate.ToOutputTemplate("{uploader} - {title} [{id}]", "{platform}", "抖音", known);
         Assert.Equal("抖音/某某 - 晚霞 #风景 第二行 [7412].%(ext)s", output);
+    }
+}
+
+public class PlatformLinkTests
+{
+    [Theory]
+    [InlineData("https://weibo.com/tv/show/1034:5356122991951924", Platform.Weibo)]
+    [InlineData("https://m.weibo.cn/status/5123456789012345", Platform.Weibo)]
+    [InlineData("http://t.cn/AXlFHACG", Platform.Weibo)]
+    [InlineData("https://www.xiaohongshu.com/explore/6411cf99000000001300b6d9?xsec_token=AB", Platform.Xiaohongshu)]
+    [InlineData("http://xhslink.com/a/AbCdEf", Platform.Xiaohongshu)]
+    [InlineData("https://x.com/NASA/status/2113776971603689874", Platform.X)]
+    [InlineData("https://twitter.com/NASA/status/2113776971603689874", Platform.X)]
+    [InlineData("https://mobile.twitter.com/NASA/status/2113776971603689874", Platform.X)]
+    [InlineData("https://t.co/abc123", Platform.X)]
+    [InlineData("https://www.iesdouyin.com/share/video/7412345678901234567/", Platform.Douyin)]
+    [InlineData("https://www.netflix.com/title/1", Platform.Other)]   // not "x.com"
+    [InlineData("https://notweibo.com.example.org/", Platform.Other)]
+    [InlineData("not a link", Platform.Other)]
+    public void PlatformComesFromTheHost(string url, Platform expected) => Assert.Equal(expected, UrlTools.DetectPlatform(url));
+
+    [Theory]
+    [InlineData("https://video.weibo.com/show?fid=1034:5356122991951924", "https://weibo.com/tv/show/1034:5356122991951924")]
+    [InlineData("https://weibo.com/tv/show/1034:5356122991951924?from=old_pc_videoshow", "https://weibo.com/tv/show/1034:5356122991951924")]
+    [InlineData("https://video.weibo.com/show?fid=1034%3A5356122991951924", "https://weibo.com/tv/show/1034:5356122991951924")]
+    public void WeiboVideoLinksBecomeTvLinks(string url, string expected) => Assert.Equal(expected, UrlTools.CanonicalWeiboUrl(url));
+
+    [Fact]
+    public void WeiboPostLinksAreLeftForYtDlp() => Assert.Null(UrlTools.Canonical("https://m.weibo.cn/status/5123456789012345"));
+
+    [Theory]
+    [InlineData("http://t.cn/AXlFHACG", true)]
+    [InlineData("http://xhslink.com/a/AbCdEf", true)]
+    [InlineData("https://v.douyin.com/iABCdEf/", true)]
+    [InlineData("https://t.co/abc123", false)]          // yt-dlp follows these itself
+    [InlineData("https://weibo.com/tv/show/1034:1", false)]
+    public void ShortLinksAreRecognised(string url, bool expected) => Assert.Equal(expected, UrlTools.IsShortLink(url));
+
+    [Fact]
+    public void OnlySomePlatformsHaveSignIn()
+    {
+        Assert.True(AccountStore.HasSignIn(Platform.Bilibili));
+        Assert.False(AccountStore.HasSignIn(Platform.Weibo));
+        Assert.False(AccountStore.IsLoggedIn(Platform.X));
+    }
+}
+
+public class ImageFormatTests
+{
+    [Fact]
+    public void PreviewImagesAreNotQualitiesAndPortraitUsesTheShortSide()
+    {
+        // Weibo lists a 180x320 JPEG "scrubber" among its formats; its videos are portrait.
+        const string json = """
+            {"_type":"video","id":"5356127206245063","title":"t","webpage_url":"https://weibo.com/tv/show/1034:1","duration":132,
+             "formats":[
+               {"format_id":"scrubber_hd","ext":"jpg","width":180,"height":320,"vcodec":"unknown","acodec":"unknown"},
+               {"format_id":"mp4_hd","ext":"mp4","width":540,"height":820,"vcodec":"avc1.64001f","acodec":"mp4a.40.5","filesize":16230000},
+               {"format_id":"mp4_1080p","ext":"mp4","width":1080,"height":1644,"vcodec":"avc1.640032","acodec":"mp4a.40.5","filesize":43350000}]}
+            """;
+        var info = Assert.IsType<VideoInfo>(InfoParser.Parse(json, "https://weibo.com/tv/show/1034:1"));
+        Assert.Equal([1080, 540], info.Qualities.Select(q => q.Height));
+        Assert.Equal(1080, info.Codecs["h264"]);
+    }
+
+    [Fact]
+    public void FormatSelectionNeverPicksAnImage()
+    {
+        var req = new DownloadRequest("https://weibo.com/tv/show/1034:1", "video", 320, false, "o");
+        var args = YtDlpArgs.Download(req, new AppSettings(), new YtDlpArgs.Environment(@"C:\ff", null, false));
+        var chain = args[args.IndexOf("-f") + 1].Split('/');
+        Assert.All(chain[..^1], s => Assert.Contains("[ext!=jpg]", s));
+        Assert.Equal("res:320,fps,tbr", args[args.IndexOf("-S") + 1]);
     }
 }

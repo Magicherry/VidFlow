@@ -10,6 +10,11 @@ public static class AccountStore
 {
     public static string CookieFile => Path.Combine(AppSettings.DataDir, "cookies.txt");
 
+    /// <summary>Platforms with an in-app sign-in. The others work without an account.</summary>
+    public static readonly Platform[] SignInPlatforms = [Platform.Bilibili, Platform.YouTube, Platform.Douyin];
+
+    public static bool HasSignIn(Platform p) => SignInPlatforms.Contains(p);
+
     public static string Domain(Platform p) => p switch
     {
         Platform.Bilibili => "bilibili.com",
@@ -32,6 +37,7 @@ public static class AccountStore
 
     public static bool IsLoggedIn(Platform p)
     {
+        if (!HasSignIn(p)) return false;
         try
         {
             if (!File.Exists(CookieFile)) return false;

@@ -1,5 +1,5 @@
 key	en	zh
-About_Description	YouTube / Bilibili / Douyin video downloader powered by yt-dlp	基于 yt-dlp 的 YouTube / 哔哩哔哩 / 抖音视频下载器
+About_Description	Video downloader for Bilibili, Douyin, Xiaohongshu, Weibo, YouTube and X, powered by yt-dlp	基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X
 About_Disclaimer	Only download content you have the right to save, and follow each platform's terms of service and copyright rules.	请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。
 About_Licenses	Open-source licenses	开源许可
 About_OpenData	Open data folder	打开数据文件夹
@@ -80,7 +80,7 @@ Home_ToolsMissingAction	Install	前往安装
 Home_ToolsMissingMessage	VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.	VidFlow 使用开源的 yt-dlp 下载视频，ffmpeg 用于合并高清音视频。首次使用需要安装。
 Home_ToolsMissingTitle	Download components not installed	尚未安装下载组件
 Home_UrlBoxName	Video link	视频链接
-Home_UrlPlaceholder	Paste a YouTube, Bilibili or Douyin link (separate several links with spaces)	粘贴 YouTube / 哔哩哔哩 / 抖音链接，多个链接用空格分隔
+Home_UrlPlaceholder	Paste video links or share text (separate several with spaces)	粘贴视频链接或分享口令，多个链接用空格分隔
 Home_ViewDownloads	View downloads	查看下载列表
 Label_M4a	M4A audio	M4A 音频
 Label_Mp3	MP3 audio	MP3 音频
@@ -432,8 +432,13 @@ Home_TipDropBody	Drag a link from your browser onto the VidFlow window.	把浏�
 Home_TipBatchTitle	Several at once	一次多个
 Home_TipBatchBody	Paste several links: each is parsed, and you tick the ones to download.	粘贴多个链接，逐个解析后勾选要下载的项目。
 Home_PlatformsTitle	Supported platforms	支持的平台
-Home_BiliSupports	Videos, multi-part videos, collections	视频、多 P 视频、合集
-Home_YtSupports	Videos, Shorts, playlists	视频、Shorts、播放列表
-Home_DouyinSupports	Video links, share text, short links	作品链接、分享口令、短链接
 Home_SignedIn	Signed in	已登录
 Home_SignInForMore	Sign in for more	登录以解锁更多
+Platform_Weibo	Weibo	微博
+Platform_Xiaohongshu	Xiaohongshu	小红书
+Home_Supports_Bilibili	Videos, multi-part videos, collections	视频、多 P 视频、合集
+Home_Supports_Douyin	Video links, share text, short links	作品链接、分享口令、短链接
+Home_Supports_Xiaohongshu	Video notes, share links	视频笔记、分享链接
+Home_Supports_Weibo	Videos, posts with video, t.cn links	视频、带视频的微博、t.cn 短链接
+Home_Supports_YouTube	Videos, Shorts, playlists	视频、Shorts、播放列表
+Home_Supports_X	Videos and GIFs in posts	帖子里的视频与 GIF

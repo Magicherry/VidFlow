@@ -4,7 +4,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>YouTube / Bilibili / Douyin video downloader powered by yt-dlp</value></data>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>Video downloader for Bilibili, Douyin, Xiaohongshu, Weibo, YouTube and X, powered by yt-dlp</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>Only download content you have the right to save, and follow each platform&apos;s terms of service and copyright rules.</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>Open-source licenses</value></data>
   <data name="About_OpenData" xml:space="preserve"><value>Open data folder</value></data>
@@ -102,13 +102,11 @@
   <data name="Home_AddedOne" xml:space="preserve"><value>Added “{0}” to the queue.</value></data>
   <data name="Home_BiliLoginHint" xml:space="preserve"><value>Without signing in, Bilibili offers 480P / 720P at most. Sign in to get 1080P and above.</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>Sign in for higher quality</value></data>
-  <data name="Home_BiliSupports" xml:space="preserve"><value>Videos, multi-part videos, collections</value></data>
   <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>The selected browser&apos;s cookies couldn&apos;t be read (Chrome / Edge lock them while running), so they were skipped this time. In-app sign-in (the Accounts page) is more reliable.</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>Browser cookies unavailable</value></data>
   <data name="Home_ClipboardEmpty" xml:space="preserve"><value>No link found on the clipboard.</value></data>
   <data name="Home_ConfirmManyBody" xml:space="preserve"><value>You&apos;re about to queue {0} videos. They download a few at a time (see Settings → Simultaneous downloads), and you can pause or cancel them in Downloads.</value></data>
   <data name="Home_ConfirmManyTitle" xml:space="preserve"><value>Add this many downloads?</value></data>
-  <data name="Home_DouyinSupports" xml:space="preserve"><value>Video links, share text, short links</value></data>
   <data name="Home_InvalidLink" xml:space="preserve"><value>Please enter a valid video link.</value></data>
   <data name="Home_Loading" xml:space="preserve"><value>Fetching video info…</value></data>
   <data name="Home_LoginNow" xml:space="preserve"><value>Sign in now</value></data>
@@ -124,6 +122,12 @@
   <data name="Home_SignedIn" xml:space="preserve"><value>Signed in</value></data>
   <data name="Home_SignInForMore" xml:space="preserve"><value>Sign in for more</value></data>
   <data name="Home_Subtitle" xml:space="preserve"><value>Paste a video link, pick the quality and format, and download.</value></data>
+  <data name="Home_Supports_Bilibili" xml:space="preserve"><value>Videos, multi-part videos, collections</value></data>
+  <data name="Home_Supports_Douyin" xml:space="preserve"><value>Video links, share text, short links</value></data>
+  <data name="Home_Supports_Weibo" xml:space="preserve"><value>Videos, posts with video, t.cn links</value></data>
+  <data name="Home_Supports_X" xml:space="preserve"><value>Videos and GIFs in posts</value></data>
+  <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>Video notes, share links</value></data>
+  <data name="Home_Supports_YouTube" xml:space="preserve"><value>Videos, Shorts, playlists</value></data>
   <data name="Home_TipBatchBody" xml:space="preserve"><value>Paste several links: each is parsed, and you tick the ones to download.</value></data>
   <data name="Home_TipBatchTitle" xml:space="preserve"><value>Several at once</value></data>
   <data name="Home_TipDropBody" xml:space="preserve"><value>Drag a link from your browser onto the VidFlow window.</value></data>
@@ -136,9 +140,8 @@
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>VidFlow uses the open-source yt-dlp to download videos, and ffmpeg to merge high-quality streams. Install them once to get started.</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>Download components not installed</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste a YouTube, Bilibili or Douyin link (separate several links with spaces)</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links or share text (separate several with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
-  <data name="Home_YtSupports" xml:space="preserve"><value>Videos, Shorts, playlists</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>
@@ -227,6 +230,8 @@
   <data name="Platform_Bilibili" xml:space="preserve"><value>Bilibili</value></data>
   <data name="Platform_Douyin" xml:space="preserve"><value>Douyin</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>Video</value></data>
+  <data name="Platform_Weibo" xml:space="preserve"><value>Weibo</value></data>
+  <data name="Platform_Xiaohongshu" xml:space="preserve"><value>Xiaohongshu</value></data>
   <data name="Playlist_Count" xml:space="preserve"><value>{0} videos</value></data>
   <data name="Playlist_EntryFallback" xml:space="preserve"><value>Video {0}</value></data>
   <data name="Playlist_KindParts" xml:space="preserve"><value>Multi-part video</value></data>

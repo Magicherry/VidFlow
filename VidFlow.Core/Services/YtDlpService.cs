@@ -31,13 +31,13 @@ public static class YtDlpService
     static async Task<DouyinVideo> GetDouyinAsync(string url, CancellationToken ct)
     {
         if (FetchDouyinDetail is not { } fetch) throw new YtDlpException(L.Get("Error_DouyinUnavailable"));
-        url = await DouyinLinks.NormalizeAsync(url, ct);
         if (UrlTools.CanonicalDouyinUrl(url) is null) throw new YtDlpException(L.Get("Error_DouyinNotVideo"));
         return DouyinParser.Parse(await fetch(url, ct));
     }
 
     public static async Task<MediaInfo> GetInfoAsync(string url, CancellationToken ct)
     {
+        url = await ShortLinks.NormalizeAsync(url, ct);
         if (UrlTools.DetectPlatform(url) == Platform.Douyin) return DouyinParser.ToVideoInfo(await GetDouyinAsync(url, ct));
         var stdout = new StringBuilder();
         var (code, error) = await RunWithCookieFallbackAsync(url,
@@ -58,6 +58,7 @@ public static class YtDlpService
     {
         if (req.Mode != "video" && ToolManager.FfmpegPath is null)
             throw new YtDlpException(L.Get("Error_AudioNeedsFfmpeg"));
+        req = req with { Url = await ShortLinks.NormalizeAsync(req.Url, ct) };
         Directory.CreateDirectory(req.OutputFolder);
 
         string? filePath = null;

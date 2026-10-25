@@ -53,12 +53,9 @@ public sealed partial class HomePage : Page
             card.RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => UpdateEmptyState());
     }
 
-    void FillPlatforms() => PlatformsRepeater.ItemsSource = new[]
-    {
-        HomePlatform.Create(Platform.Bilibili, L.Get("Home_BiliSupports")),
-        HomePlatform.Create(Platform.YouTube, L.Get("Home_YtSupports")),
-        HomePlatform.Create(Platform.Douyin, L.Get("Home_DouyinSupports")),
-    };
+    void FillPlatforms() => PlatformsRepeater.ItemsSource = PlatformExtensions.Supported
+        .Select(p => HomePlatform.Create(p, L.Get($"Home_Supports_{p}")))
+        .ToList();
 
     void UpdateEmptyState() =>
         EmptyState.Visibility = new[] { LoadingCard, PreviewCard, PlaylistCard, BatchCard }.Any(c => c.Visibility == Visibility.Visible)

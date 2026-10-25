@@ -66,7 +66,7 @@ public static class InfoParser
         };
     }
 
-    /// <summary>One option per height (highest first), with the best fps seen and an approximate
+    /// <summary>One option per resolution (shorter side, highest first), with the best fps seen and an approximate
     /// size (largest video stream at that height + the best audio stream).</summary>
     static (List<QualityOption>, long?, Dictionary<string, int>) Qualities(JsonElement root, double? duration)
     {
@@ -86,8 +86,13 @@ public static class InfoParser
                 if (acodec is not "none" && size is > 0 && (audio is null || size > audio)) audio = size;
                 continue;
             }
+            // Preview images listed as formats (Weibo's scrubber JPEG, YouTube's storyboards) aren't qualities.
+            if (Str(f, "ext") is "jpg" or "jpeg" or "png" or "webp" || Str(f, "protocol") is "mhtml") continue;
+            // The shorter side, as yt-dlp's "res" sort counts it: portrait 1080×1920 is 1080p, not 1920p.
+            var width = (int)(Num(f, "width") ?? 0);
             var height = (int)(Num(f, "height") ?? 0);
             if (height <= 0) continue;
+            if (width > 0) height = Math.Min(width, height);
             var fps = (int)Math.Round(Num(f, "fps") ?? 0);
             byHeight.TryGetValue(height, out var cur);
             byHeight[height] = (Math.Max(cur.Fps, fps), Max(cur.Bytes, size));

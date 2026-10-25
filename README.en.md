@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>A good-looking, easy video downloader for Windows: paste a link, pick the quality, done.</b><br>
-  YouTube, Bilibili and Douyin · Native Windows 11 design · Powered by yt-dlp
+  Bilibili, Douyin, Xiaohongshu, Weibo, YouTube and X · Native Windows 11 design · Powered by yt-dlp
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 ## Features
 
 ### Downloading
-- Single videos, playlists, Bilibili multi-part videos (pick the parts you want), and Douyin videos (share text and short links work too)
+- Single videos, playlists, Bilibili multi-part videos (pick the parts you want), Douyin videos (share text and short links work too), Weibo videos, and videos in X posts
 - Paste several links at once: each is parsed and listed with its title, cover and length, and you tick the ones to download
 - The quality list shows the resolutions actually available, with estimated sizes
 - Video codec: H.264 / H.265 / AV1; container: MP4 / MKV / WebM; or audio only as MP3 / M4A / Opus / FLAC / WAV
@@ -116,7 +116,7 @@ Settings, download history, sign-ins and components live in `%LocalAppData%\VidF
 
 ## Disclaimer
 
-VidFlow is for personal use and backups. Only download content you have the right to save, and follow each platform's terms of service and copyright rules. YouTube, Bilibili and Douyin names and logos belong to their owners and are used only to identify those platforms.
+VidFlow is for personal use and backups. Only download content you have the right to save, and follow each platform's terms of service and copyright rules. Platform names and logos belong to their owners and are used only to identify those platforms.
 
 ## Thanks
 
