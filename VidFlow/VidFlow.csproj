@@ -22,7 +22,7 @@
     <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
     <!-- Only ship the languages the app is translated into. -->
     <SatelliteResourceLanguages>zh</SatelliteResourceLanguages>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <Product>VidFlow</Product>
     <Company>VidFlow</Company>
     <Description>VidFlow - YouTube / Bilibili video downloader</Description>
