@@ -53,7 +53,7 @@ public class FormatSelectionTests
 
     [Theory]
     [InlineData("mp3", 192, "192K", "ba/b")]
-    [InlineData("m4a", 0, "0", "ba[ext=m4a]/ba/b")]
+    [InlineData("m4a", 0, "0", "ba[acodec^=mp4a]/ba/b")]  // by codec: Bilibili's FLAC is ".m4a" too
     [InlineData("opus", 160, "160K", "ba[acodec=opus]/ba/b")]
     [InlineData("flac", 320, "0", "ba/b")] // lossless ignores a bitrate
     [InlineData("wav", 0, "0", "ba/b")]
