@@ -10,7 +10,11 @@ public static class DownloadLabels
     public static string Label(DownloadRequest r, int? partIndex)
     {
         string mode;
-        if (r.IsAudio)
+        if (r.IsCover)
+        {
+            mode = L.Get("Mode_Cover");
+        }
+        else if (r.IsAudio)
         {
             mode = AudioOutputLabel(r.AudioOutputFormat);
         }
@@ -30,7 +34,11 @@ public static class DownloadLabels
     public static string Summary(DownloadTemplate t)
     {
         var parts = new List<string>();
-        if (t.Mode == "audio")
+        if (t.Mode == "cover")
+        {
+            parts.Add(L.Get("Mode_Cover"));
+        }
+        else if (t.Mode == "audio")
         {
             parts.Add(AudioOutputLabel(t.AudioFormat is "auto" ? "mp3" : t.AudioFormat));
             if (t.AudioQuality > 0 && t.AudioFormat is not ("flac" or "wav" or MediaFeatures.Original)) parts.Add($"{t.AudioQuality} kbps");
@@ -46,7 +54,7 @@ public static class DownloadLabels
             if (t.AudioQuality > 0) parts.Add($"{t.AudioQuality} kbps");
         }
         if (t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
-        if (t.Subtitles) parts.Add(L.Get("Options_Subtitles"));
+        if (t.Subtitles && t.Mode != "cover") parts.Add(L.Get("Options_Subtitles"));
         if (t.FolderTemplate.Length > 0) parts.Add(t.FolderTemplate.Replace('/', '\\'));
         return string.Join(" · ", parts);
     }

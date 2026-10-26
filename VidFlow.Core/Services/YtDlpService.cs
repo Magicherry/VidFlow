@@ -56,7 +56,7 @@ public static class YtDlpService
     /// <summary>Runs the download, reporting events as they happen. Returns the final file path when yt-dlp reports one.</summary>
     public static async Task<string?> DownloadAsync(DownloadRequest req, Action<DownloadEvent> onEvent, CancellationToken ct)
     {
-        if (req.Mode != "video" && ToolManager.FfmpegPath is null)
+        if (req.IsAudio && ToolManager.FfmpegPath is null)
             throw new YtDlpException(L.Get("Error_AudioNeedsFfmpeg"));
         req = req with { Url = await ShortLinks.NormalizeAsync(req.Url, ct) };
         Directory.CreateDirectory(req.OutputFolder);
@@ -85,13 +85,15 @@ public static class YtDlpService
                 ["date"] = date ?? "unknown",
                 ["year"] = date?[..4] ?? "unknown",
                 ["month"] = date?[5..7] ?? "00",
-                ["resolution"] = req.IsAudio ? "audio" : $"{stream.Resolution}p",
+                ["resolution"] = req.IsCover ? "cover" : req.IsAudio ? "audio" : $"{stream.Resolution}p",
                 ["id"] = video.Id,
             };
             var ffmpegDir = ToolManager.FfmpegPath is { } ff ? Path.GetDirectoryName(ff) : null;
             // The media host needs no cookies; only the Referer.
             var env = new YtDlpArgs.Environment(ffmpegDir, null, SkipBrowserCookies: true);
-            var direct = new YtDlpArgs.DirectMedia(stream.Url, DouyinReferer, known);
+            // The cover is a plain image address too, downloaded the same way.
+            var media = req.IsCover ? video.Cover ?? throw new YtDlpException(L.Get("Error_NoCover")) : stream.Url;
+            var direct = new YtDlpArgs.DirectMedia(media, DouyinReferer, known);
             (code, error) = await RunAsync(YtDlpArgs.Download(req with { Url = $"https://www.douyin.com/video/{video.Id}" }, AppSettings.Current, env, direct), OnLine, ct);
         }
         else

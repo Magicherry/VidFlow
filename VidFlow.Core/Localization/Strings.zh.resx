@@ -90,6 +90,7 @@
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>这个播放列表中没有可下载的视频。</value></data>
   <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。</value></data>
+  <data name="Error_NoCover" xml:space="preserve"><value>这个作品没有封面图片。</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「账号」页面中退出 YouTube 登录后重试，或更新 yt-dlp。</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>未找到 yt-dlp，请先在「设置 → 关于与更新」中安装。</value></data>
@@ -172,6 +173,7 @@
   <data name="Login_UseWeb" xml:space="preserve"><value>使用账号密码或短信验证码登录</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>无法启动内置浏览器（WebView2）：{0}</value></data>
   <data name="Mode_Audio" xml:space="preserve"><value>仅音频</value></data>
+  <data name="Mode_Cover" xml:space="preserve"><value>封面</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>仅音频 (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>仅音频 (MP3)</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>视频</value></data>

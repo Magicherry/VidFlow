@@ -90,6 +90,7 @@
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>Couldn&apos;t get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
   <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network).</value></data>
+  <data name="Error_NoCover" xml:space="preserve"><value>This video has no cover image.</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube on the Accounts page, or update yt-dlp.</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>yt-dlp is not installed. Install it in Settings → About &amp; updates.</value></data>
@@ -172,6 +173,7 @@
   <data name="Login_UseWeb" xml:space="preserve"><value>Sign in with password or SMS instead</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>The built-in browser (WebView2) couldn&apos;t start: {0}</value></data>
   <data name="Mode_Audio" xml:space="preserve"><value>Audio only</value></data>
+  <data name="Mode_Cover" xml:space="preserve"><value>Cover</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>Audio only (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>Audio only (MP3)</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>Video</value></data>

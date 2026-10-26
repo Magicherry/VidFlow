@@ -21,7 +21,7 @@ public sealed class DownloadTemplate
     public bool IsBuiltIn => NameKey is not null;
     public string DisplayName => NameKey is null ? Name : L.Get(NameKey);
 
-    public string Mode { get; set; } = "video";            // video | audio
+    public string Mode { get; set; } = "video";            // video | audio | cover
     public int MaxHeight { get; set; }                     // 0 = best (original)
     public string Codec { get; set; } = VideoCodecs.Auto;
 
@@ -64,6 +64,6 @@ public sealed class DownloadTemplate
         && FolderTemplate == o.FolderTemplate;
 
     public DownloadRequest ToRequest(string url, string baseFolder) =>
-        new(url, Mode == "audio" ? "audio" : "video", Mode == "audio" ? 0 : MaxHeight, Subtitles, baseFolder,
+        new(url, Mode is "audio" or "cover" ? Mode : "video", Mode == "video" ? MaxHeight : 0, Subtitles && Mode != "cover", baseFolder,
             Codec, Container, AudioFormat, AudioQuality, AudioLanguage, Recode, FileNameTemplate, FolderTemplate, DynamicRange);
 }

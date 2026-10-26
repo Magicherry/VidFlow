@@ -96,6 +96,7 @@ Login_WebViewFailed	The built-in browser (WebView2) couldn't start: {0}	无法�
 Mode_M4a	Audio only (M4A)	仅音频 (M4A)
 Mode_Mp3	Audio only (MP3)	仅音频 (MP3)
 Mode_Video	Video	视频
+Mode_Cover	Cover	封面
 Nav_Downloads	Downloads	下载列表
 Nav_Home	New download	新建下载
 Nav_Settings	Settings	设置
@@ -448,3 +449,4 @@ Compat_HiResAvailable	This video has Hi-Res audio: choose FLAC or Original to ke
 Compat_UseMkv	Use MKV	改用 MKV
 Settings_MultiConnection	Multi-connection acceleration	多连接加速
 Settings_MultiConnectionNeedsAria2	Needs aria2 · install it in About & updates	需要 aria2 · 可在「关于与更新」中安装
+Error_NoCover	This video has no cover image.	这个作品没有封面图片。

@@ -88,7 +88,7 @@ public sealed class PlaylistEntry
 /// parameters have defaults so download lists saved by older versions still load.</summary>
 public sealed record DownloadRequest(
     string Url,
-    string Mode,                      // video | audio (older lists may contain mp3 / m4a, meaning audio)
+    string Mode,                      // video | audio | cover (older lists may contain mp3 / m4a, meaning audio)
     int MaxHeight,                    // 0 = best
     bool WriteSubtitles,
     string OutputFolder,              // base folder; FolderTemplate subfolders go inside it
@@ -104,6 +104,9 @@ public sealed record DownloadRequest(
 {
     public bool IsAudio => Mode is "audio" or "mp3" or "m4a";
 
+    /// <summary>Only the cover (thumbnail) image, saved as JPG when ffmpeg can convert it.</summary>
+    public bool IsCover => Mode == "cover";
+
     /// <summary>Output format for audio-only downloads ("best" keeps the source's own format).</summary>
     public string AudioOutputFormat => Mode switch
     {
@@ -112,5 +115,5 @@ public sealed record DownloadRequest(
     };
 
     /// <summary>The picture or sound chosen can't go in MP4 (yt-dlp would merge into MKV anyway): say MKV up front.</summary>
-    public bool NeedsMkv => !IsAudio && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
+    public bool NeedsMkv => !IsAudio && !IsCover && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
 }

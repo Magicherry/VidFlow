@@ -59,7 +59,8 @@ public static class YtDlpArgs
         {
             // One ready-made MP4 with picture and sound: nothing to choose or merge.
             args.AddRange(["--add-header", $"Referer:{direct.Referer}"]);
-            if (req.IsAudio)
+            if (req.IsCover) { }
+            else if (req.IsAudio)
                 args.AddRange(["-x", "--audio-format", req.AudioOutputFormat,
                     "--audio-quality", req.AudioOutputFormat is "flac" or "wav" || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
             else if (req.Container != "mp4" && hasFfmpeg)
@@ -68,6 +69,18 @@ public static class YtDlpArgs
             args.AddRange(Connections(s, env));
             args.AddRange(Common(s, env));
             args.Add(direct.Url);
+            return args;
+        }
+
+        if (req.IsCover)
+        {
+            // Just the thumbnail: yt-dlp picks the largest; WebP (YouTube's) becomes JPG, which everything opens.
+            args.AddRange(["--skip-download", "--write-thumbnail"]);
+            if (hasFfmpeg) args.AddRange(["--convert-thumbnails", "jpg"]);
+            // Nothing is downloaded, so "after_move" never comes: report the image (after conversion) instead.
+            args.AddRange(["--print", "after_video:VFF|%(thumbnails.-1.filepath)s"]);
+            args.AddRange(Common(s, env));
+            args.Add(req.Url);
             return args;
         }
 

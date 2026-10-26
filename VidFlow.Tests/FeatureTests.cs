@@ -750,3 +750,33 @@ public class MultiConnectionTests
     [Fact]
     public void Aria2VersionLine() => Assert.Equal("1.37.0", ToolManager.Aria2Version("aria2 version 1.37.0"));
 }
+
+public class CoverModeTests
+{
+    [Fact]
+    public void CoverDownloadsOnlyTheThumbnail()
+    {
+        var req = new DownloadTemplate { Mode = "cover", MaxHeight = 1080, Subtitles = true }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.True(req.IsCover);
+        Assert.False(req.WriteSubtitles);
+        Assert.Equal(0, req.MaxHeight);
+        Assert.False(req.NeedsMkv);
+
+        var args = YtDlpArgs.Download(req, new AppSettings(), new YtDlpArgs.Environment(@"C:\ff", null, false, Aria2Path: @"C:\aria2c.exe"));
+        Assert.Contains("--skip-download", args);
+        Assert.Contains("--write-thumbnail", args);
+        Assert.Equal("jpg", args[args.IndexOf("--convert-thumbnails") + 1]);
+        Assert.DoesNotContain("-f", args);
+        Assert.DoesNotContain("--downloader", args);
+        // Nothing is downloaded, so the image's path is printed once the video is done.
+        Assert.Contains("after_video:VFF|%(thumbnails.-1.filepath)s", args);
+
+        // Without ffmpeg the image is kept as the site serves it.
+        var plain = YtDlpArgs.Download(req, new AppSettings(), new YtDlpArgs.Environment(null, null, false));
+        Assert.DoesNotContain("--convert-thumbnails", plain);
+    }
+
+    [Fact]
+    public void CoverHasNoCompatibilityAdvice() =>
+        Assert.Null(FormatCompatibility.Check(new DownloadTemplate { Mode = "cover", Container = "webm", AudioFormat = MediaFeatures.HiRes }));
+}

@@ -24,7 +24,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
     public DownloadOptionsEditor()
     {
         InitializeComponent();
-        AddItems(ModeCombo, ("video", L.Get("Mode_Video")), ("audio", L.Get("Mode_Audio")));
+        AddItems(ModeCombo, ("video", L.Get("Mode_Video")), ("audio", L.Get("Mode_Audio")), ("cover", L.Get("Mode_Cover")));
         AddItems(ContainerCombo, ("mp4", L.Get("Container_Mp4")), ("mkv", L.Get("Container_Mkv")), ("webm", L.Get("Container_Webm")));
         foreach (var q in AudioQualities)
             AudioQualityCombo.Items.Add(new ComboBoxItem { Content = q == 0 ? L.Get("AudioQuality_Best") : $"{q} kbps", Tag = q });
@@ -86,7 +86,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
         _video = video;
         _loading = true;
 
-        Select(ModeCombo, options.Mode == "audio" ? "audio" : "video");
+        Select(ModeCombo, options.Mode is "audio" or "cover" ? options.Mode : "video");
         FillQualities();
         FillCodecs();
         FillPictures();
@@ -296,18 +296,22 @@ public sealed partial class DownloadOptionsEditor : UserControl
 
     void Refresh()
     {
-        var video = _options.Mode != "audio";
+        var video = _options.Mode == "video";
+        var cover = _options.Mode == "cover";
         QualityCard.Visibility = CodecCard.Visibility = ContainerCard.Visibility = RecodeCard.Visibility =
             video ? Visibility.Visible : Visibility.Collapsed;
+        // A cover is just the image: no sound or subtitles to choose.
+        AudioExpander.Visibility = SubtitlesCard.Visibility = cover ? Visibility.Collapsed : Visibility.Visible;
         // Nothing to choose for a video that is SDR only.
         PictureCard.Visibility = video && (_video is null || _video.HdrKinds.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
 
         var request = _options.ToRequest("", "");
-        var ext = video ? (request.NeedsMkv ? "mkv" : _options.Container)
+        var ext = cover ? "jpg"
+            : video ? (request.NeedsMkv ? "mkv" : _options.Container)
             : _options.AudioFormat == MediaFeatures.Original ? (_video?.HasHiRes == true ? "flac" : "m4a")
             : _options.AudioFormat;
         PreviewText.Text = $"{L.Get("Options_PreviewRoot")}\\{NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext)}";
-        PreviewIcon.Glyph = video ? "" : "";
+        PreviewIcon.Glyph = cover ? "" : video ? "" : "";
         var unknown = NamingTemplate.UnknownVariables(_options.FileNameTemplate);
         UnknownVariableText.Visibility = unknown.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         if (unknown.Count > 0)

@@ -108,7 +108,10 @@
             </tk:SettingsExpander.Items>
         </tk:SettingsExpander>
 
-        <tk:SettingsCard Description="{x:Bind l:L.Get('Options_SubtitlesDescription')}" Header="{x:Bind l:L.Get('Options_Subtitles')}">
+        <tk:SettingsCard
+            x:Name="SubtitlesCard"
+            Description="{x:Bind l:L.Get('Options_SubtitlesDescription')}"
+            Header="{x:Bind l:L.Get('Options_Subtitles')}">
             <tk:SettingsCard.HeaderIcon>
                 <FontIcon Glyph="&#xED1E;" />
             </tk:SettingsCard.HeaderIcon>

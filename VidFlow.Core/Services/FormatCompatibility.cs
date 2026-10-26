@@ -21,6 +21,7 @@ public static class FormatCompatibility
     /// <param name="video">The parsed video, when known: what it offers (HDR, Hi-Res) changes the advice.</param>
     public static CompatibilityIssue? Check(DownloadTemplate t, VideoInfo? video = null)
     {
+        if (t.Mode == "cover") return null;
         if (t.Mode == "audio")
         {
             var hiRes = video?.HasHiRes == true;
