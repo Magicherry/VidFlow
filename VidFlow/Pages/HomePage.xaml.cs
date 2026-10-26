@@ -38,17 +38,11 @@ public sealed partial class HomePage : Page
         FillTemplates();
         UseTemplate(TemplateStore.Default);
 
-        TipsRepeater.ItemsSource = new HomeTip[]
-        {
-            new("", L.Get("Home_TipPasteTitle"), L.Get("Home_TipPasteBody")),
-            new("", L.Get("Home_TipDropTitle"), L.Get("Home_TipDropBody")),
-            new("", L.Get("Home_TipBatchTitle"), L.Get("Home_TipBatchBody")),
-        };
         FillPlatforms();
         // The page is cached: follow sign-ins made elsewhere (Accounts page, wizard).
         AccountStore.Changed += () => DispatcherQueue.TryEnqueue(FillPlatforms);
 
-        // The getting-started cards show only while nothing else is: not loading, no results.
+        // The platform cards show only while nothing else is: not loading, no results.
         foreach (var card in new UIElement[] { LoadingCard, PreviewCard, PlaylistCard, BatchCard })
             card.RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => UpdateEmptyState());
     }

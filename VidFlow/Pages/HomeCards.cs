@@ -5,9 +5,6 @@ using VidFlow.Services;
 
 namespace VidFlow.Pages;
 
-/// <summary>A getting-started card on the New download page.</summary>
-public sealed record HomeTip(string Glyph, string Title, string Body);
-
 /// <summary>A supported-platform card on the New download page, with its sign-in state (for platforms that have one).</summary>
 public sealed record HomePlatform(Platform Platform, ImageSource? Logo, string Name, string Supports, bool CanSignIn, bool SignedIn)
 {

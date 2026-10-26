@@ -138,13 +138,6 @@
   <data name="Home_Supports_X" xml:space="preserve"><value>Videos and GIFs in posts</value></data>
   <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>Video notes, share links</value></data>
   <data name="Home_Supports_YouTube" xml:space="preserve"><value>Videos, Shorts, playlists</value></data>
-  <data name="Home_TipBatchBody" xml:space="preserve"><value>Each is parsed, then tick what to download</value></data>
-  <data name="Home_TipBatchTitle" xml:space="preserve"><value>Several at once</value></data>
-  <data name="Home_TipDropBody" xml:space="preserve"><value>From your browser onto the window</value></data>
-  <data name="Home_TipDropTitle" xml:space="preserve"><value>Drag it in</value></data>
-  <data name="Home_TipPasteBody" xml:space="preserve"><value>Links and app share text both work</value></data>
-  <data name="Home_TipPasteTitle" xml:space="preserve"><value>Paste a link</value></data>
-  <data name="Home_TipsTitle" xml:space="preserve"><value>Three ways to start</value></data>
   <data name="Home_Title" xml:space="preserve"><value>New download</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>Install</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>yt-dlp and ffmpeg need installing first.</value></data>

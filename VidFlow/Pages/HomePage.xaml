@@ -121,48 +121,10 @@
                     </InfoBar.ActionButton>
                 </InfoBar>
 
-                <!--  Before anything is parsed: how to start, and which platforms work (with sign-in status)  -->
+                <!--  Before anything is parsed: which platforms work (with sign-in status)  -->
                 <StackPanel x:Name="EmptyState" Spacing="8">
                     <TextBlock
                         Margin="1,8,0,0"
-                        Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="{x:Bind l:L.Get('Home_TipsTitle')}" />
-                    <ItemsControl x:Name="TipsRepeater" IsTabStop="False">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <controls:CardGridPanel MinColumnWidth="200" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="local:HomeTip">
-                                <Border Padding="16" Style="{StaticResource CardStyle}">
-                                    <StackPanel Spacing="10">
-                                        <Border
-                                            Width="36"
-                                            Height="36"
-                                            HorizontalAlignment="Left"
-                                            Background="{ThemeResource SubtleFillColorSecondaryBrush}"
-                                            CornerRadius="8">
-                                            <FontIcon
-                                                FontSize="18"
-                                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                                Glyph="{x:Bind Glyph}" />
-                                        </Border>
-                                        <StackPanel Spacing="2">
-                                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
-                                            <TextBlock
-                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                Text="{x:Bind Body}"
-                                                TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <TextBlock
-                        Margin="1,16,0,0"
                         Style="{StaticResource BodyStrongTextBlockStyle}"
                         Text="{x:Bind l:L.Get('Home_PlatformsTitle')}" />
                     <ItemsControl x:Name="PlatformsRepeater" IsTabStop="False">

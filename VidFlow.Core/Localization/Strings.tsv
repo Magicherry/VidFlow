@@ -420,13 +420,6 @@ Login_TitleDouyin	Sign in to Douyin	登录抖音
 Login_InstructionsDouyin	Click 登录 at the top right and scan with the Douyin app.	点击右上角「登录」，用抖音 App 扫码。
 Error_DouyinUnavailable	Couldn't get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).	无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。
 Error_DouyinNotVideo	This Douyin link isn't a video (photo posts and profiles aren't supported).	这个抖音链接不是视频（暂不支持图文作品和主页）。
-Home_TipsTitle	Three ways to start	三种开始方式
-Home_TipPasteTitle	Paste a link	粘贴链接
-Home_TipPasteBody	Links and app share text both work	链接和 App 分享口令都可以
-Home_TipDropTitle	Drag it in	拖进窗口
-Home_TipDropBody	From your browser onto the window	从浏览器拖入窗口
-Home_TipBatchTitle	Several at once	一次多个
-Home_TipBatchBody	Each is parsed, then tick what to download	解析后勾选要下载的
 Home_PlatformsTitle	Supported platforms	支持的平台
 Home_SignedIn	Signed in	已登录
 Home_SignInForMore	Sign in for more	登录以解锁更多

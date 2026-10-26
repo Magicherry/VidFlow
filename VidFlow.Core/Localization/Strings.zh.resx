@@ -138,13 +138,6 @@
   <data name="Home_Supports_X" xml:space="preserve"><value>帖子里的视频与 GIF</value></data>
   <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>视频笔记、分享链接</value></data>
   <data name="Home_Supports_YouTube" xml:space="preserve"><value>视频、Shorts、播放列表</value></data>
-  <data name="Home_TipBatchBody" xml:space="preserve"><value>解析后勾选要下载的</value></data>
-  <data name="Home_TipBatchTitle" xml:space="preserve"><value>一次多个</value></data>
-  <data name="Home_TipDropBody" xml:space="preserve"><value>从浏览器拖入窗口</value></data>
-  <data name="Home_TipDropTitle" xml:space="preserve"><value>拖进窗口</value></data>
-  <data name="Home_TipPasteBody" xml:space="preserve"><value>链接和 App 分享口令都可以</value></data>
-  <data name="Home_TipPasteTitle" xml:space="preserve"><value>粘贴链接</value></data>
-  <data name="Home_TipsTitle" xml:space="preserve"><value>三种开始方式</value></data>
   <data name="Home_Title" xml:space="preserve"><value>新建下载</value></data>
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>前往安装</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>首次使用需要安装 yt-dlp 和 ffmpeg。</value></data>
