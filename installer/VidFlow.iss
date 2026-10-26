@@ -3,7 +3,7 @@
 
 #define AppName "VidFlow"
 #ifndef AppVersion
-  #define AppVersion "1.3.2"
+  #define AppVersion "1.3.3"
 #endif
 #define SourceDir "..\VidFlow-Release"
 
