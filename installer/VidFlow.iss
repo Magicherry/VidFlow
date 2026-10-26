@@ -5,7 +5,15 @@
 #ifndef AppVersion
   #define AppVersion "1.3.4"
 #endif
-#define SourceDir "..\VidFlow-Release"
+; x64 or arm64 (build-release.ps1 builds both).
+#ifndef Arch
+  #define Arch "x64"
+#endif
+#if Arch == "arm64"
+  #define SourceDir "..\VidFlow-Release-arm64"
+#else
+  #define SourceDir "..\VidFlow-Release"
+#endif
 
 [Setup]
 AppId={{9C7E2C4B-6E7B-4E2D-9C1A-6A1F2B7D8E31}
@@ -19,11 +27,18 @@ DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
 DisableDirPage=auto
 PrivilegesRequired=lowest
+#if Arch == "arm64"
+ArchitecturesAllowed=arm64
+ArchitecturesInstallIn64BitMode=arm64
+; The components (yt-dlp, ffmpeg, Deno, aria2) are x64 programs; only Windows 11 runs those on ARM.
+MinVersion=10.0.22000
+#else
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0.19041
+#endif
 OutputDir=..\dist
-OutputBaseFilename={#AppName}-Setup-{#AppVersion}-x64
+OutputBaseFilename={#AppName}-Setup-{#AppVersion}-{#Arch}
 SetupIconFile=..\VidFlow\Assets\AppIcon.ico
 UninstallDisplayIcon={app}\VidFlow.exe
 ; Tell Explorer to refresh icons after installing: an update keeps the same path, so the old icon would stay cached.

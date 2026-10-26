@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 using VidFlow.Localization;
@@ -24,11 +25,17 @@ public enum UpdateOutcome { None, Succeeded, Failed }
 /// </summary>
 public static class UpdateService
 {
+    /// <summary>"x64" or "arm64": which installer this copy of VidFlow updates itself with.</summary>
+    public static string Arch => RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "arm64" : "x64";
+
+    /// <summary>Each architecture has its own manifest; x64 keeps the original name, which older versions read.</summary>
+    public static string ManifestName(string arch) => arch == "arm64" ? "update-arm64.json" : "update.json";
+
     /// <summary>VIDFLOW_UPDATE_MANIFEST overrides the source (an http(s) URL or a local file) for testing.</summary>
     public static string ManifestUrl =>
         Environment.GetEnvironmentVariable("VIDFLOW_UPDATE_MANIFEST") is { Length: > 0 } custom
             ? custom
-            : "https://github.com/Magicherry/VidFlow/releases/latest/download/update.json";
+            : $"https://github.com/Magicherry/VidFlow/releases/latest/download/{ManifestName(Arch)}";
 
     static string UpdatesDir => Path.Combine(AppSettings.DataDir, "updates");
     static string PendingFile => Path.Combine(UpdatesDir, "pending.json");
@@ -48,7 +55,7 @@ public static class UpdateService
     public static async Task<string> DownloadAsync(UpdateManifest m, IProgress<double>? progress, CancellationToken ct)
     {
         Directory.CreateDirectory(UpdatesDir);
-        var file = Path.Combine(UpdatesDir, $"VidFlow-Setup-{m.Version}-x64.exe");
+        var file = Path.Combine(UpdatesDir, $"VidFlow-Setup-{m.Version}-{Arch}.exe");
         if (File.Exists(file) && await VerifyAsync(file, m, ct)) return file;
 
         Exception? last = null;

@@ -76,11 +76,11 @@
 
 ## Download and install
 
-1. Download `VidFlow-Setup-<version>-x64.exe` from [Releases](https://github.com/Magicherry/VidFlow/releases/latest).
+1. Download the installer from [Releases](https://github.com/Magicherry/VidFlow/releases/latest): `VidFlow-Setup-<version>-x64.exe` for most PCs, `-arm64.exe` for ARM PCs (such as Snapdragon X).
 2. Run it. It installs for the current user, so no administrator rights are needed.
 3. Follow the setup wizard on first launch; VidFlow downloads the components it needs.
 
-**Requirements**: Windows 10 2004 (19041) or later, x64. Best on Windows 11.
+**Requirements**: x64: Windows 10 2004 (19041) or later; ARM64: Windows 11. Best on Windows 11.
 
 ## Getting started
 
@@ -158,6 +158,6 @@ Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSo
 pwsh tools/build-release.ps1
 ```
 
-It runs the tests, publishes a trimmed self-contained x64 build to `VidFlow-Release/`, and writes the installer plus the `update.json` used by auto-update to `dist/` (upload both to the GitHub release).
+It runs the tests, publishes trimmed self-contained x64 and ARM64 builds (`VidFlow-Release/`, `VidFlow-Release-arm64/`), and writes both installers plus the `update.json` / `update-arm64.json` manifests used by auto-update to `dist/` (upload them all to the GitHub release). Pass `-Arch x64` or `-Arch arm64` to build just one.
 
 </details>

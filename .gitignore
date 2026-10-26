@@ -5,6 +5,7 @@ TestResults/
 
 # Release artifacts (the installer is attached to GitHub Releases instead)
 VidFlow-Release/
+VidFlow-Release-arm64/
 dist/
 
 # IDE / user files

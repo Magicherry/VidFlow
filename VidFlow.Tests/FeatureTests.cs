@@ -213,6 +213,15 @@ public class AudioLanguageTests
 public class UpdateServiceTests
 {
     [Fact]
+    public void EachArchitectureHasItsOwnManifest()
+    {
+        // x64 keeps the name every earlier version reads.
+        Assert.Equal("update.json", UpdateService.ManifestName("x64"));
+        Assert.Equal("update-arm64.json", UpdateService.ManifestName("arm64"));
+        Assert.Equal("x64", UpdateService.Arch); // the tests run as x64
+    }
+
+    [Fact]
     public async Task VerifiesSizeAndChecksum()
     {
         var file = Path.GetTempFileName();

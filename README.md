@@ -76,11 +76,11 @@
 
 ## 下载与安装
 
-1. 前往 [Releases](https://github.com/Magicherry/VidFlow/releases/latest) 下载 `VidFlow-Setup-<版本>-x64.exe`。
+1. 前往 [Releases](https://github.com/Magicherry/VidFlow/releases/latest) 下载安装程序：大多数电脑选 `VidFlow-Setup-<版本>-x64.exe`，ARM 电脑（如骁龙 X）选 `-arm64.exe`。
 2. 运行安装程序（安装到当前用户，无需管理员权限）。
 3. 首次启动按向导完成设置，应用会自动下载所需组件。
 
-**系统要求**：Windows 10 2004（19041）或更高版本，x64。Windows 11 体验最佳。
+**系统要求**：x64 版需 Windows 10 2004（19041）或更高版本；ARM64 版需 Windows 11。Windows 11 体验最佳。
 
 ## 快速上手
 
@@ -158,6 +158,6 @@ dotnet test --project VidFlow.Tests/VidFlow.Tests.csproj
 pwsh tools/build-release.ps1
 ```
 
-脚本会运行测试，发布精简的 x64 独立版本到 `VidFlow-Release/`，并在 `dist/` 生成安装程序和自动更新使用的 `update.json`（与安装程序一起上传到 GitHub Release）。
+脚本会运行测试，发布精简的 x64 和 ARM64 独立版本（`VidFlow-Release/`、`VidFlow-Release-arm64/`），并在 `dist/` 生成两个安装程序和自动更新使用的 `update.json`、`update-arm64.json`（一起上传到 GitHub Release）。加 `-Arch x64` 或 `-Arch arm64` 只构建一种。
 
 </details>
