@@ -60,52 +60,50 @@
                     </InfoBar.ActionButton>
                 </InfoBar>
 
-                <!--  URL input (accepts several links, one per line)  -->
-                <Border Style="{StaticResource CardStyle}">
-                    <Grid ColumnSpacing="8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <!--  Single line so it always lines up with the buttons; pasted line breaks become spaces
-                              (several links still work, they are split on whitespace).  -->
-                        <TextBox
-                            x:Name="UrlBox"
-                            Height="40"
-                            Padding="12,9,8,0"
-                            VerticalAlignment="Center"
-                            AutomationProperties.Name="{x:Bind l:L.Get('Home_UrlBoxName')}"
-                            Paste="UrlBox_Paste"
-                            PlaceholderText="{x:Bind l:L.Get('Home_UrlPlaceholder')}"
-                            PreviewKeyDown="UrlBox_PreviewKeyDown"
-                            TextWrapping="NoWrap" />
-                        <Button
-                            Grid.Column="1"
-                            Width="40"
-                            Height="40"
-                            Padding="0"
-                            VerticalAlignment="Center"
-                            AutomationProperties.Name="{x:Bind l:L.Get('Home_Paste')}"
-                            Click="Paste_Click"
-                            ToolTipService.ToolTip="{x:Bind l:L.Get('Home_Paste')}">
-                            <FontIcon FontSize="16" Glyph="&#xE77F;" />
-                        </Button>
-                        <Button
-                            x:Name="ParseButton"
-                            Grid.Column="2"
-                            Height="40"
-                            MinWidth="104"
-                            VerticalAlignment="Center"
-                            Click="Parse_Click"
-                            Style="{StaticResource AccentButtonStyle}">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <FontIcon FontSize="14" Glyph="&#xE721;" />
-                                <TextBlock Text="{x:Bind l:L.Get('Home_Parse')}" />
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </Border>
+                <!--  URL input (accepts several links), sitting straight on the page  -->
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <!--  Single line so it always lines up with the buttons; pasted line breaks become spaces
+                          (several links still work, they are split on whitespace).  -->
+                    <TextBox
+                        x:Name="UrlBox"
+                        Height="40"
+                        Padding="12,9,8,0"
+                        VerticalAlignment="Center"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Home_UrlBoxName')}"
+                        Paste="UrlBox_Paste"
+                        PlaceholderText="{x:Bind l:L.Get('Home_UrlPlaceholder')}"
+                        PreviewKeyDown="UrlBox_PreviewKeyDown"
+                        TextWrapping="NoWrap" />
+                    <Button
+                        Grid.Column="1"
+                        Width="40"
+                        Height="40"
+                        Padding="0"
+                        VerticalAlignment="Center"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Home_Paste')}"
+                        Click="Paste_Click"
+                        ToolTipService.ToolTip="{x:Bind l:L.Get('Home_Paste')}">
+                        <FontIcon FontSize="16" Glyph="&#xE77F;" />
+                    </Button>
+                    <Button
+                        x:Name="ParseButton"
+                        Grid.Column="2"
+                        Height="40"
+                        MinWidth="104"
+                        VerticalAlignment="Center"
+                        Click="Parse_Click"
+                        Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="14" Glyph="&#xE721;" />
+                            <TextBlock Text="{x:Bind l:L.Get('Home_Parse')}" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
 
                 <!--  A closed InfoBar is still Visible (just zero height), so the StackPanel would add spacing for it;
                      collapsing it with IsOpen keeps the gaps even.  -->
