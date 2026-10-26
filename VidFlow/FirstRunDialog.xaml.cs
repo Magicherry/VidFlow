@@ -10,7 +10,8 @@ using VidFlow.Services;
 namespace VidFlow;
 
 /// <summary>First-run setup in three steps: install components, pick the download folder, optionally sign in. Each step
-/// has an icon and title in the header; components and accounts are card rows with an icon each.</summary>
+/// has an icon, title and one line of explanation; components and accounts are rows in one card; the footer has the
+/// step dots and skip / back / next.</summary>
 public sealed partial class FirstRunDialog : ContentDialog
 {
     int _step;
@@ -31,12 +32,12 @@ public sealed partial class FirstRunDialog : ContentDialog
         new("aria2", "", "Tools_Aria2Purpose", false, () => ToolManager.Aria2Path is not null, ToolManager.InstallAria2Async),
     ];
 
-    /// <summary>Header icon (none: VidFlow's own) and title of each step.</summary>
-    static readonly (string Glyph, string TitleKey)[] Steps =
+    /// <summary>Header icon (none: VidFlow's own), title and explanation of each step.</summary>
+    static readonly (string Glyph, string TitleKey, string BodyKey)[] Steps =
     [
-        ("", "Wizard_WelcomeTitle"),
-        ("", "Wizard_FolderTitle"),
-        ("", "Wizard_AccountsTitle"),
+        ("", "Wizard_WelcomeTitle", "Wizard_WelcomeBody"),
+        ("", "Wizard_FolderTitle", "Wizard_FolderBody"),
+        ("", "Wizard_AccountsTitle", "Wizard_AccountsBody"),
     ];
 
     static readonly (Platform Platform, string InKey, string OutKey)[] Accounts =
@@ -60,16 +61,18 @@ public sealed partial class FirstRunDialog : ContentDialog
     {
         _step = step;
         Pips.SelectedPageIndex = step;
-        StepCounter.Text = L.Format("Wizard_StepOf", step + 1, Steps.Length);
         StepTitle.Text = L.Get(Steps[step].TitleKey);
+        StepBody.Text = L.Get(Steps[step].BodyKey);
         StepImage.Visibility = step == 0 ? Visibility.Visible : Visibility.Collapsed;
         StepGlyph.Visibility = step == 0 ? Visibility.Collapsed : Visibility.Visible;
         StepGlyph.Glyph = Steps[step].Glyph;
         Step1.Visibility = step == 0 ? Visibility.Visible : Visibility.Collapsed;
         Step2.Visibility = step == 1 ? Visibility.Visible : Visibility.Collapsed;
         Step3.Visibility = step == 2 ? Visibility.Visible : Visibility.Collapsed;
-        PrimaryButtonText = step == Steps.Length - 1 ? L.Get("Wizard_Finish") : L.Get("Wizard_Next");
-        SecondaryButtonText = step > 0 ? L.Get("Wizard_Back") : "";
+        var last = step == Steps.Length - 1;
+        NextButton.Content = last ? L.Get("Wizard_Finish") : L.Get("Wizard_Next");
+        BackButton.Visibility = step > 0 ? Visibility.Visible : Visibility.Collapsed;
+        SkipButton.Visibility = last ? Visibility.Collapsed : Visibility.Visible;
     }
 
     void UpdateComponents()
@@ -77,6 +80,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         ComponentList.Children.Clear();
         foreach (var c in Components)
         {
+            if (ComponentList.Children.Count > 0) ComponentList.Children.Add(Divider());
             var ready = c.Ready();
             var (glyph, brush, text) = ready ? ("", "SystemFillColorSuccessBrush", L.Get("Wizard_Ready"))
                 : c.Required ? ("", "SystemFillColorCautionBrush", L.Get("Wizard_Required"))
@@ -87,9 +91,8 @@ public sealed partial class FirstRunDialog : ContentDialog
             var icon = new FontIcon { Glyph = c.Glyph, FontSize = 18, Foreground = Brush("AccentTextFillColorPrimaryBrush") };
             ComponentList.Children.Add(Row(icon, c.Name, L.Get(c.PurposeKey), status));
         }
-        var allReady = Components.All(c => c.Ready());
-        InstallButton.Visibility = allReady ? Visibility.Collapsed : Visibility.Visible;
-        AllReady.Visibility = allReady ? Visibility.Visible : Visibility.Collapsed;
+        // The rows already say "ready": only offer to install when something is missing (or still installing).
+        InstallRow.Visibility = _installing || Components.Any(c => !c.Ready()) ? Visibility.Visible : Visibility.Collapsed;
     }
 
     void UpdateAccounts()
@@ -97,6 +100,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         AccountList.Children.Clear();
         foreach (var (platform, inKey, outKey) in Accounts)
         {
+            if (AccountList.Children.Count > 0) AccountList.Children.Add(Divider());
             var signedIn = AccountStore.IsLoggedIn(platform);
             FrameworkElement action;
             if (signedIn)
@@ -118,15 +122,15 @@ public sealed partial class FirstRunDialog : ContentDialog
         }
     }
 
-    /// <summary>A card row: an icon tile, the name over a one-line description, and a status or button on the right.</summary>
-    static Border Row(FrameworkElement icon, string name, string description, FrameworkElement right)
+    /// <summary>A row in a card: an icon tile, the name over a one-line description, and a status or button on the right.</summary>
+    static Grid Row(FrameworkElement icon, string name, string description, FrameworkElement right)
     {
         icon.HorizontalAlignment = HorizontalAlignment.Center;
         icon.VerticalAlignment = VerticalAlignment.Center;
         var tile = new Border
         {
-            Width = 40,
-            Height = 40,
+            Width = 36,
+            Height = 36,
             CornerRadius = new CornerRadius(8),
             Background = Brush("SubtleFillColorSecondaryBrush"),
             Child = icon,
@@ -143,7 +147,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         ToolTipService.SetToolTip(text, description);
         right.VerticalAlignment = VerticalAlignment.Center;
 
-        var grid = new Grid { ColumnSpacing = 12 };
+        var grid = new Grid { ColumnSpacing = 12, Padding = new Thickness(14, 10, 16, 10), MinHeight = 60 };
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
@@ -152,13 +156,10 @@ public sealed partial class FirstRunDialog : ContentDialog
         grid.Children.Add(tile);
         grid.Children.Add(text);
         grid.Children.Add(right);
-        return new Border
-        {
-            Style = (Style)Application.Current.Resources["CardStyle"],
-            Padding = new Thickness(12, 10, 16, 10),
-            Child = grid,
-        };
+        return grid;
     }
+
+    static Border Divider() => new() { Height = 1, Background = Brush("CardStrokeColorDefaultBrush") };
 
     static Brush Brush(string key) => (Brush)Application.Current.Resources[key];
 
@@ -166,8 +167,7 @@ public sealed partial class FirstRunDialog : ContentDialog
     {
         if (_installing) return;
         _installing = true;
-        InstallButton.IsEnabled = false;
-        IsPrimaryButtonEnabled = false;
+        InstallButton.IsEnabled = NextButton.IsEnabled = SkipButton.IsEnabled = false;
         InstallError.IsOpen = false;
         InstallStatus.Visibility = Visibility.Visible;
         try
@@ -196,8 +196,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         finally
         {
             _installing = false;
-            InstallButton.IsEnabled = true;
-            IsPrimaryButtonEnabled = true;
+            InstallButton.IsEnabled = NextButton.IsEnabled = SkipButton.IsEnabled = true;
             InstallStatus.Visibility = Visibility.Collapsed;
             UpdateComponents();
         }
@@ -218,26 +217,21 @@ public sealed partial class FirstRunDialog : ContentDialog
         UpdateAccounts();
     }
 
-    void Next_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    void Next_Click(object sender, RoutedEventArgs e)
     {
-        if (_step < Steps.Length - 1)
-        {
-            args.Cancel = true; // stay open
-            ShowStep(_step + 1);
-            return;
-        }
-        Complete();
+        if (_step < Steps.Length - 1) ShowStep(_step + 1);
+        else Hide();
     }
 
-    void Back_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    void Back_Click(object sender, RoutedEventArgs e)
     {
-        args.Cancel = true;
         if (_step > 0) ShowStep(_step - 1);
     }
 
-    void Skip_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args) => Complete();
+    void Skip_Click(object sender, RoutedEventArgs e) => Hide();
 
-    static void Complete()
+    /// <summary>However it closes (finish, skip or Esc), the guide doesn't open by itself again.</summary>
+    void Dialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
     {
         AppSettings.Current.FirstRunCompleted = true;
         AppSettings.Save();

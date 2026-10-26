@@ -212,15 +212,13 @@ Wizard_FolderTitle	Where to save	保存位置
 Wizard_InstallAll	Install components	一键安装组件
 Wizard_Next	Next	下一步
 Wizard_Skip	Skip	跳过
-Wizard_WelcomeBody	VidFlow downloads and processes videos with these free tools. They're downloaded from their official GitHub releases (about 185 MB).	VidFlow 借助以下免费工具下载和处理视频，它们将从官方 GitHub 发布页下载（约 185 MB）。
+Wizard_WelcomeBody	VidFlow uses these free tools to download and process videos (about 185 MB, from their official GitHub releases).	VidFlow 用这些免费工具下载和处理视频（约 185 MB，来自官方 GitHub）。
 Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
 Wizard_Ready	Ready	已就绪
 Wizard_Required	Required	必需
 Wizard_Recommended	Recommended	推荐
 Wizard_Installing	Installing {0}…	正在安装 {0}…
-Wizard_AllReady	All components are ready	组件已全部就绪
 Wizard_SignedIn	Signed in	已登录
-Wizard_StepOf	Step {0} of {1}	第 {0} 步，共 {1} 步
 Home_ConfirmManyTitle	Add this many downloads?	要添加这么多下载任务吗？
 Home_ConfirmManyBody	{0} videos will be queued and downloaded a few at a time. You can pause or cancel any time.	将添加 {0} 个视频，按同时下载数依次进行，可随时暂停或取消。
 Codec_Auto	Auto (best quality)	自动（画质优先）

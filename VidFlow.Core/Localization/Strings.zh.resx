@@ -438,7 +438,6 @@
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。公开视频无需登录，也可以稍后在「账号」页面中登录。</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码。</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>登录账号（可选）</value></data>
-  <data name="Wizard_AllReady" xml:space="preserve"><value>组件已全部就绪</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>上一步</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>更改</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>开始使用</value></data>
@@ -452,7 +451,6 @@
   <data name="Wizard_Required" xml:space="preserve"><value>必需</value></data>
   <data name="Wizard_SignedIn" xml:space="preserve"><value>已登录</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>跳过</value></data>
-  <data name="Wizard_StepOf" xml:space="preserve"><value>第 {0} 步，共 {1} 步</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 借助以下免费工具下载和处理视频，它们将从官方 GitHub 发布页下载（约 185 MB）。</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 用这些免费工具下载和处理视频（约 185 MB，来自官方 GitHub）。</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>欢迎使用 VidFlow</value></data>
 </root>

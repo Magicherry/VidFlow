@@ -438,7 +438,6 @@
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional: public videos download without signing in. You can also sign in later on the Accounts page.</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>Accounts (optional)</value></data>
-  <data name="Wizard_AllReady" xml:space="preserve"><value>All components are ready</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>Back</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>Change</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>Get started</value></data>
@@ -452,7 +451,6 @@
   <data name="Wizard_Required" xml:space="preserve"><value>Required</value></data>
   <data name="Wizard_SignedIn" xml:space="preserve"><value>Signed in</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>Skip</value></data>
-  <data name="Wizard_StepOf" xml:space="preserve"><value>Step {0} of {1}</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow downloads and processes videos with these free tools. They&apos;re downloaded from their official GitHub releases (about 185 MB).</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses these free tools to download and process videos (about 185 MB, from their official GitHub releases).</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>Welcome to VidFlow</value></data>
 </root>
