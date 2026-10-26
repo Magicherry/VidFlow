@@ -95,7 +95,7 @@ Login_TitleYt	Sign in to YouTube (Google account)	登录 YouTube（Google 账号
 Login_WebViewFailed	The built-in browser (WebView2) couldn't start: {0}	无法启动内置浏览器（WebView2）：{0}
 Mode_M4a	Audio only (M4A)	仅音频 (M4A)
 Mode_Mp3	Audio only (MP3)	仅音频 (MP3)
-Mode_Video	Video (MP4)	视频 (MP4)
+Mode_Video	Video	视频
 Nav_Downloads	Downloads	下载列表
 Nav_Home	New download	新建下载
 Nav_Settings	Settings	设置

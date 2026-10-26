@@ -174,7 +174,7 @@
   <data name="Mode_Audio" xml:space="preserve"><value>仅音频</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>仅音频 (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>仅音频 (MP3)</value></data>
-  <data name="Mode_Video" xml:space="preserve"><value>视频 (MP4)</value></data>
+  <data name="Mode_Video" xml:space="preserve"><value>视频</value></data>
   <data name="Naming_Custom" xml:space="preserve"><value>自定义</value></data>
   <data name="Naming_InsertVariable" xml:space="preserve"><value>插入「{0}」</value></data>
   <data name="Naming_Recommended" xml:space="preserve"><value>{0}（推荐）</value></data>

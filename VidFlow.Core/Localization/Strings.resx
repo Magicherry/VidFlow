@@ -174,7 +174,7 @@
   <data name="Mode_Audio" xml:space="preserve"><value>Audio only</value></data>
   <data name="Mode_M4a" xml:space="preserve"><value>Audio only (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>Audio only (MP3)</value></data>
-  <data name="Mode_Video" xml:space="preserve"><value>Video (MP4)</value></data>
+  <data name="Mode_Video" xml:space="preserve"><value>Video</value></data>
   <data name="Naming_Custom" xml:space="preserve"><value>Custom</value></data>
   <data name="Naming_InsertVariable" xml:space="preserve"><value>Insert {0}</value></data>
   <data name="Naming_Recommended" xml:space="preserve"><value>{0} (recommended)</value></data>
