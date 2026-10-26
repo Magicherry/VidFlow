@@ -111,9 +111,9 @@ public sealed partial class DownloadOptionsEditor : UserControl
         QualityCombo.Items.Clear();
         if (_video is { Qualities.Count: > 0 } v)
         {
-            var best = v.Qualities[0];
-            QualityCombo.Items.Add(new ComboBoxItem { Content = $"{L.Get("Quality_Best")}  ·  {Format.Quality(best)}", Tag = 0 });
-            foreach (var q in v.Qualities)
+            // The top resolution is "best" (0) itself: listing both would show it twice.
+            QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Quality(v.Qualities[0]), Tag = 0 });
+            foreach (var q in v.Qualities.Skip(1))
                 QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Quality(q), Tag = q.Height });
         }
         else
@@ -124,9 +124,12 @@ public sealed partial class DownloadOptionsEditor : UserControl
         }
         // Closest choice not above the wanted height (a 1080p template on a 720p video shows 720p).
         var items = QualityCombo.Items.Cast<ComboBoxItem>().ToList();
-        QualityCombo.SelectedIndex = _options.MaxHeight == 0 ? 0
+        QualityCombo.SelectedIndex = _options.MaxHeight == 0 || _options.MaxHeight >= TopHeight ? 0
             : Math.Max(0, items.FindIndex(i => (int)i.Tag > 0 && (int)i.Tag <= _options.MaxHeight));
     }
+
+    /// <summary>The parsed video's highest resolution (the first, "best" entry); unknown before parsing.</summary>
+    int TopHeight => _video is { Qualities.Count: > 0 } v ? v.Qualities[0].Height : int.MaxValue;
 
     void FillCodecs()
     {
@@ -219,7 +222,9 @@ public sealed partial class DownloadOptionsEditor : UserControl
         if (_loading) return;
         var modeBefore = _options.Mode;
         _options.Mode = TagOf(ModeCombo) ?? "video";
-        _options.MaxHeight = (QualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
+        var height = (QualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
+        // The first entry stands for both "best" and the top resolution: a 1080p template on a 1080p video keeps its 1080.
+        if (height != 0 || _options.MaxHeight < TopHeight) _options.MaxHeight = height;
         _options.Codec = TagOf(CodecCombo) ?? VideoCodecs.Auto;
         _options.DynamicRange = TagOf(PictureCombo) ?? MediaFeatures.Auto;
         _options.Container = TagOf(ContainerCombo) ?? "mp4";
