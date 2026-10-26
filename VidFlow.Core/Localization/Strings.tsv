@@ -201,27 +201,26 @@ Tray_PasteLink	Download copied link	下载已复制的链接
 Tray_Show	Open VidFlow	打开 VidFlow
 Tray_Tooltip	VidFlow · {0} downloading · {1}%	VidFlow · {0} 个任务 · {1}%
 Untitled	Untitled video	未命名视频
-Wizard_AccountsBody	Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later on the Accounts page.	可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「账号」页面中登录。
+Wizard_AccountsBody	Optional: public videos download without signing in. You can also sign in later on the Accounts page.	可选。公开视频无需登录，也可以稍后在「账号」页面中登录。
 Wizard_AccountsNote	Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.	登录在官方网页中完成，VidFlow 不会读取或保存你的密码。
 Wizard_AccountsTitle	Accounts (optional)	登录账号（可选）
 Wizard_Back	Back	上一步
-Wizard_BiliDone	Bilibili ✓	哔哩哔哩 ✓
-Wizard_BiliLogin	Sign in to Bilibili	登录哔哩哔哩
 Wizard_Change	Change	更改
-Wizard_FfmpegMissing	ffmpeg — not installed (recommended)	ffmpeg — 未安装（推荐）
-Wizard_FfmpegReady	ffmpeg — ready	ffmpeg — 已就绪
 Wizard_Finish	Get started	开始使用
 Wizard_FolderBody	Downloaded videos are saved here. Playlists get their own subfolder.	下载的视频会保存到这里，播放列表会自动放进单独的子文件夹。
 Wizard_FolderTitle	Where to save	保存位置
 Wizard_InstallAll	Install components	一键安装组件
 Wizard_Next	Next	下一步
 Wizard_Skip	Skip	跳过
-Wizard_WelcomeBody	VidFlow uses four free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, Deno, which YouTube needs for some formats, and aria2 to download over several connections. They're downloaded from their official GitHub releases (about 185 MB).	VidFlow 需要四个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境，aria2 负责多连接加速下载。它们将从官方 GitHub 发布页下载（约 185 MB）。
+Wizard_WelcomeBody	VidFlow downloads and processes videos with these free tools. They're downloaded from their official GitHub releases (about 185 MB).	VidFlow 借助以下免费工具下载和处理视频，它们将从官方 GitHub 发布页下载（约 185 MB）。
 Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
-Wizard_YtDlpMissing	yt-dlp — not installed (required)	yt-dlp — 未安装（必需）
-Wizard_YtDlpReady	yt-dlp — ready	yt-dlp — 已就绪
-Wizard_YtDone	YouTube ✓	YouTube ✓
-Wizard_YtLogin	Sign in to YouTube	登录 YouTube
+Wizard_Ready	Ready	已就绪
+Wizard_Required	Required	必需
+Wizard_Recommended	Recommended	推荐
+Wizard_Installing	Installing {0}…	正在安装 {0}…
+Wizard_AllReady	All components are ready	组件已全部就绪
+Wizard_SignedIn	Signed in	已登录
+Wizard_StepOf	Step {0} of {1}	第 {0} 步，共 {1} 步
 Home_ConfirmManyTitle	Add this many downloads?	要添加这么多下载任务吗？
 Home_ConfirmManyBody	{0} videos will be queued and downloaded a few at a time. You can pause or cancel any time.	将添加 {0} 个视频，按同时下载数依次进行，可随时暂停或取消。
 Codec_Auto	Auto (best quality)	自动（画质优先）

@@ -442,25 +442,24 @@
   <data name="Var_title" xml:space="preserve"><value>标题</value></data>
   <data name="Var_uploader" xml:space="preserve"><value>作者</value></data>
   <data name="Var_year" xml:space="preserve"><value>年份</value></data>
-  <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。登录后可下载 B 站 1080P 以上画质和 YouTube 年龄限制视频，也可以稍后在「账号」页面中登录。</value></data>
+  <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。公开视频无需登录，也可以稍后在「账号」页面中登录。</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码。</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>登录账号（可选）</value></data>
+  <data name="Wizard_AllReady" xml:space="preserve"><value>组件已全部就绪</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>上一步</value></data>
-  <data name="Wizard_BiliDone" xml:space="preserve"><value>哔哩哔哩 ✓</value></data>
-  <data name="Wizard_BiliLogin" xml:space="preserve"><value>登录哔哩哔哩</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>更改</value></data>
-  <data name="Wizard_FfmpegMissing" xml:space="preserve"><value>ffmpeg — 未安装（推荐）</value></data>
-  <data name="Wizard_FfmpegReady" xml:space="preserve"><value>ffmpeg — 已就绪</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>开始使用</value></data>
   <data name="Wizard_FolderBody" xml:space="preserve"><value>下载的视频会保存到这里，播放列表会自动放进单独的子文件夹。</value></data>
   <data name="Wizard_FolderTitle" xml:space="preserve"><value>保存位置</value></data>
   <data name="Wizard_InstallAll" xml:space="preserve"><value>一键安装组件</value></data>
+  <data name="Wizard_Installing" xml:space="preserve"><value>正在安装 {0}…</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>下一步</value></data>
+  <data name="Wizard_Ready" xml:space="preserve"><value>已就绪</value></data>
+  <data name="Wizard_Recommended" xml:space="preserve"><value>推荐</value></data>
+  <data name="Wizard_Required" xml:space="preserve"><value>必需</value></data>
+  <data name="Wizard_SignedIn" xml:space="preserve"><value>已登录</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>跳过</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 需要四个免费工具：yt-dlp 负责下载，ffmpeg 负责合并高清音视频，Deno 是 YouTube 部分格式所需的脚本运行环境，aria2 负责多连接加速下载。它们将从官方 GitHub 发布页下载（约 185 MB）。</value></data>
+  <data name="Wizard_StepOf" xml:space="preserve"><value>第 {0} 步，共 {1} 步</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 借助以下免费工具下载和处理视频，它们将从官方 GitHub 发布页下载（约 185 MB）。</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>欢迎使用 VidFlow</value></data>
-  <data name="Wizard_YtDlpMissing" xml:space="preserve"><value>yt-dlp — 未安装（必需）</value></data>
-  <data name="Wizard_YtDlpReady" xml:space="preserve"><value>yt-dlp — 已就绪</value></data>
-  <data name="Wizard_YtDone" xml:space="preserve"><value>YouTube ✓</value></data>
-  <data name="Wizard_YtLogin" xml:space="preserve"><value>登录 YouTube</value></data>
 </root>

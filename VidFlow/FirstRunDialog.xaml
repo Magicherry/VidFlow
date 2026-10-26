@@ -12,50 +12,93 @@
     SecondaryButtonClick="Back_Click"
     Style="{StaticResource DefaultContentDialogStyle}">
 
-    <StackPanel Width="460" Spacing="16">
-        <!--  Step indicator  -->
-        <PipsPager
-            x:Name="Pips"
-            HorizontalAlignment="Center"
-            IsHitTestVisible="False"
-            NumberOfPages="3" />
-
-        <!--  Step 1: components  -->
-        <StackPanel x:Name="Step1" Spacing="12">
-            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind l:L.Get('Wizard_WelcomeTitle')}" />
-            <TextBlock Text="{x:Bind l:L.Get('Wizard_WelcomeBody')}" TextWrapping="Wrap" />
-            <Border Style="{StaticResource CardStyle}">
-                <StackPanel Spacing="8">
-                    <Grid ColumnSpacing="8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <FontIcon x:Name="YtDlpIcon" FontSize="16" />
-                        <TextBlock x:Name="YtDlpStatus" Grid.Column="1" TextWrapping="Wrap" />
-                    </Grid>
-                    <Grid ColumnSpacing="8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <FontIcon x:Name="FfmpegIcon" FontSize="16" />
-                        <TextBlock x:Name="FfmpegStatus" Grid.Column="1" TextWrapping="Wrap" />
-                    </Grid>
-                    <ProgressBar x:Name="InstallProgress" Visibility="Collapsed" />
-                    <Button
-                        x:Name="InstallButton"
-                        HorizontalAlignment="Left"
-                        Click="Install_Click"
-                        Content="{x:Bind l:L.Get('Wizard_InstallAll')}"
-                        Style="{StaticResource AccentButtonStyle}" />
-                    <TextBlock
-                        x:Name="InstallError"
-                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
-                        TextWrapping="Wrap"
+    <StackPanel Width="480" Spacing="16">
+        <!--  Header: the step's icon, title and position  -->
+        <Grid ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border
+                Width="56"
+                Height="56"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                CornerRadius="12">
+                <Grid>
+                    <Image
+                        x:Name="StepImage"
+                        Width="40"
+                        Height="40"
+                        Source="ms-appx:///Assets/AppIcon.png" />
+                    <FontIcon
+                        x:Name="StepGlyph"
+                        FontSize="26"
+                        Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
                         Visibility="Collapsed" />
-                </StackPanel>
+                </Grid>
             </Border>
+            <StackPanel
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Spacing="2">
+                <TextBlock
+                    x:Name="StepCounter"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}" />
+                <TextBlock x:Name="StepTitle" Style="{StaticResource SubtitleTextBlockStyle}" />
+            </StackPanel>
+        </Grid>
+
+        <!--  Step 1: components (rows built in code)  -->
+        <StackPanel x:Name="Step1" Spacing="12">
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind l:L.Get('Wizard_WelcomeBody')}"
+                TextWrapping="Wrap" />
+            <StackPanel x:Name="ComponentList" Spacing="4" />
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="InstallButton"
+                    Click="Install_Click"
+                    Style="{StaticResource AccentButtonStyle}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="14" Glyph="&#xE896;" />
+                        <TextBlock Text="{x:Bind l:L.Get('Wizard_InstallAll')}" />
+                    </StackPanel>
+                </Button>
+                <StackPanel
+                    x:Name="AllReady"
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    Visibility="Collapsed">
+                    <FontIcon
+                        FontSize="16"
+                        Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                        Glyph="&#xE930;" />
+                    <TextBlock Text="{x:Bind l:L.Get('Wizard_AllReady')}" />
+                </StackPanel>
+                <StackPanel
+                    x:Name="InstallStatus"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Spacing="4"
+                    Visibility="Collapsed">
+                    <TextBlock
+                        x:Name="InstallStatusText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}" />
+                    <ProgressBar x:Name="InstallProgress" />
+                </StackPanel>
+            </Grid>
+            <InfoBar
+                x:Name="InstallError"
+                IsClosable="False"
+                Severity="Error"
+                Visibility="{x:Bind InstallError.IsOpen, Mode=OneWay}" />
         </StackPanel>
 
         <!--  Step 2: folder  -->
@@ -63,42 +106,61 @@
             x:Name="Step2"
             Spacing="12"
             Visibility="Collapsed">
-            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind l:L.Get('Wizard_FolderTitle')}" />
-            <TextBlock Text="{x:Bind l:L.Get('Wizard_FolderBody')}" TextWrapping="Wrap" />
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind l:L.Get('Wizard_FolderBody')}"
+                TextWrapping="Wrap" />
             <Border Style="{StaticResource CardStyle}">
                 <Grid ColumnSpacing="12">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <FontIcon
+                        FontSize="20"
+                        Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                        Glyph="&#xE8B7;" />
                     <TextBlock
                         x:Name="FolderText"
+                        Grid.Column="1"
                         VerticalAlignment="Center"
                         TextTrimming="CharacterEllipsis" />
                     <Button
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Click="ChangeFolder_Click"
                         Content="{x:Bind l:L.Get('Wizard_Change')}" />
                 </Grid>
             </Border>
         </StackPanel>
 
-        <!--  Step 3: accounts  -->
+        <!--  Step 3: accounts (rows built in code)  -->
         <StackPanel
             x:Name="Step3"
             Spacing="12"
             Visibility="Collapsed">
-            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind l:L.Get('Wizard_AccountsTitle')}" />
-            <TextBlock Text="{x:Bind l:L.Get('Wizard_AccountsBody')}" TextWrapping="Wrap" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button x:Name="BiliLoginButton" Click="BiliLogin_Click" />
-                <Button x:Name="YtLoginButton" Click="YtLogin_Click" />
-            </StackPanel>
             <TextBlock
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="{x:Bind l:L.Get('Wizard_AccountsNote')}"
+                Text="{x:Bind l:L.Get('Wizard_AccountsBody')}"
                 TextWrapping="Wrap" />
+            <StackPanel x:Name="AccountList" Spacing="4" />
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <FontIcon
+                    FontSize="12"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Glyph="&#xE72E;" />
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind l:L.Get('Wizard_AccountsNote')}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
         </StackPanel>
+
+        <PipsPager
+            x:Name="Pips"
+            HorizontalAlignment="Center"
+            IsHitTestVisible="False"
+            NumberOfPages="3" />
     </StackPanel>
 </ContentDialog>

@@ -442,25 +442,24 @@
   <data name="Var_title" xml:space="preserve"><value>Title</value></data>
   <data name="Var_uploader" xml:space="preserve"><value>Uploader</value></data>
   <data name="Var_year" xml:space="preserve"><value>Year</value></data>
-  <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional. Signing in unlocks Bilibili 1080P+ and YouTube age-restricted videos. You can do this later on the Accounts page.</value></data>
+  <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional: public videos download without signing in. You can also sign in later on the Accounts page.</value></data>
   <data name="Wizard_AccountsNote" xml:space="preserve"><value>Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>Accounts (optional)</value></data>
+  <data name="Wizard_AllReady" xml:space="preserve"><value>All components are ready</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>Back</value></data>
-  <data name="Wizard_BiliDone" xml:space="preserve"><value>Bilibili ✓</value></data>
-  <data name="Wizard_BiliLogin" xml:space="preserve"><value>Sign in to Bilibili</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>Change</value></data>
-  <data name="Wizard_FfmpegMissing" xml:space="preserve"><value>ffmpeg — not installed (recommended)</value></data>
-  <data name="Wizard_FfmpegReady" xml:space="preserve"><value>ffmpeg — ready</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>Get started</value></data>
   <data name="Wizard_FolderBody" xml:space="preserve"><value>Downloaded videos are saved here. Playlists get their own subfolder.</value></data>
   <data name="Wizard_FolderTitle" xml:space="preserve"><value>Where to save</value></data>
   <data name="Wizard_InstallAll" xml:space="preserve"><value>Install components</value></data>
+  <data name="Wizard_Installing" xml:space="preserve"><value>Installing {0}…</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>Next</value></data>
+  <data name="Wizard_Ready" xml:space="preserve"><value>Ready</value></data>
+  <data name="Wizard_Recommended" xml:space="preserve"><value>Recommended</value></data>
+  <data name="Wizard_Required" xml:space="preserve"><value>Required</value></data>
+  <data name="Wizard_SignedIn" xml:space="preserve"><value>Signed in</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>Skip</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses four free tools: yt-dlp to download, ffmpeg to merge high-quality video and audio, Deno, which YouTube needs for some formats, and aria2 to download over several connections. They&apos;re downloaded from their official GitHub releases (about 185 MB).</value></data>
+  <data name="Wizard_StepOf" xml:space="preserve"><value>Step {0} of {1}</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow downloads and processes videos with these free tools. They&apos;re downloaded from their official GitHub releases (about 185 MB).</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>Welcome to VidFlow</value></data>
-  <data name="Wizard_YtDlpMissing" xml:space="preserve"><value>yt-dlp — not installed (required)</value></data>
-  <data name="Wizard_YtDlpReady" xml:space="preserve"><value>yt-dlp — ready</value></data>
-  <data name="Wizard_YtDone" xml:space="preserve"><value>YouTube ✓</value></data>
-  <data name="Wizard_YtLogin" xml:space="preserve"><value>Sign in to YouTube</value></data>
 </root>
