@@ -4,7 +4,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>Video downloader for Bilibili, Douyin, Xiaohongshu, Weibo, YouTube and X, powered by yt-dlp</value></data>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube and X, powered by yt-dlp</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>Only download content you have the right to save, and follow each platform&apos;s terms of service and copyright rules.</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>Open-source licenses</value></data>
   <data name="About_OpenData" xml:space="preserve"><value>Open data folder</value></data>
@@ -241,7 +241,7 @@
   <data name="Platform_Douyin" xml:space="preserve"><value>Douyin</value></data>
   <data name="Platform_Other" xml:space="preserve"><value>Video</value></data>
   <data name="Platform_Weibo" xml:space="preserve"><value>Weibo</value></data>
-  <data name="Platform_Xiaohongshu" xml:space="preserve"><value>Xiaohongshu</value></data>
+  <data name="Platform_Xiaohongshu" xml:space="preserve"><value>RedNote</value></data>
   <data name="Playlist_Count" xml:space="preserve"><value>{0} videos</value></data>
   <data name="Playlist_EntryFallback" xml:space="preserve"><value>Video {0}</value></data>
   <data name="Playlist_KindParts" xml:space="preserve"><value>Multi-part video</value></data>

@@ -1,92 +1,69 @@
-<p align="center">
-  <img src="VidFlow/Assets/AppIcon.png" width="128" alt="VidFlow">
+<div align="center">
+
+<img src="VidFlow/Assets/AppIcon.png" width="112" alt="VidFlow">
+
+<h1>VidFlow</h1>
+
+<p><b>A video downloader built for Windows 11</b></p>
+
+<p>Paste a link, pick the quality, download.<br>Works with Bilibili, Douyin, RedNote (Xiaohongshu), Weibo, YouTube and X.</p>
+
+<p>
+  <a href="https://github.com/Magicherry/VidFlow/releases/latest"><img src="https://img.shields.io/badge/Download-Windows%20x64-0078d4?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==" alt="Download for Windows x64"></a>
+  <a href="https://github.com/Magicherry/VidFlow/releases/latest"><img src="https://img.shields.io/badge/Download-ARM64-555555?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==" alt="Download for ARM64"></a>
 </p>
 
-<h1 align="center">VidFlow</h1>
-
-<p align="center">
-  <b>A good-looking, easy video downloader for Windows: paste a link, pick the quality, done.</b><br>
-  Bilibili, Douyin, Xiaohongshu, Weibo, YouTube and X · Native Windows 11 design · Powered by yt-dlp
-</p>
-
-<p align="center">
+<p>
   <a href="https://github.com/Magicherry/VidFlow/releases/latest"><img src="https://img.shields.io/github/v/release/Magicherry/VidFlow?label=release&color=6b5cf6" alt="Latest release"></a>
   <a href="https://github.com/Magicherry/VidFlow/releases"><img src="https://img.shields.io/github/downloads/Magicherry/VidFlow/total?label=downloads&color=1c8cf2" alt="Downloads"></a>
-  <img src="https://img.shields.io/badge/Windows-10%20%2F%2011-0078d4" alt="Windows 10 / 11">
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
 </p>
 
-<p align="center">
-  <a href="README.md">简体中文</a> · <b>English</b>
-</p>
+<p><a href="README.md">简体中文</a> · <b>English</b></p>
 
-<p align="center">
-  <a href="https://github.com/Magicherry/VidFlow/releases/latest"><b>⬇ Download VidFlow</b></a>
-</p>
+<br>
 
-<p align="center">
-  <img src="docs/images/home-en.png" width="820" alt="New download: a parsed video and its quality options">
-</p>
+<img src="docs/images/home-en.png" width="860" alt="VidFlow: a parsed video and its quality options">
 
-## Why VidFlow
+</div>
 
-- **Top quality in one go**: picks the highest-bitrate stream at the resolution you choose; 4K and 60 fps come down as published, with no re-encoding by default.
-- **Feels like part of Windows**: Mica, light and dark themes, notifications, taskbar progress and tray downloads, right at home on Windows 11.
-- **Ready out of the box**: yt-dlp, ffmpeg and Deno install with one click and check for updates in the app; yt-dlp also keeps itself current. No command line.
-- **Sign in for more**: scan a QR code with the Bilibili app to unlock 1080P and above; sign in to YouTube for age-restricted and members-only videos.
-- **Your data stays on your PC**: sign-ins and download history are stored locally, and the app collects no usage data.
+## Highlights
+
+- **Original quality**: picks the highest-bitrate stream at each resolution; 4K, 60 fps, HDR and Dolby Vision are saved as published, with no re-encoding by default.
+- **Native on Windows 11**: Mica, light and dark themes, notifications and taskbar progress; downloads keep going from the tray after you close the window.
+- **Ready out of the box**: yt-dlp, ffmpeg and the other components install with one click and keep themselves up to date. No command line.
+- **Faster downloads**: multi-connection acceleration (aria2) for YouTube and other overseas sites.
+- **Sign in for more**: scan a QR code with the Bilibili app for 1080P and above; sign in to YouTube for age-restricted and members-only videos.
+- **Your data stays on your PC**: sign-ins and download history are stored locally, and no usage data is collected.
 
 ## Features
 
-### Downloading
-- Single videos, playlists, Bilibili multi-part videos (pick the parts you want), Douyin videos (share text and short links work too), Weibo videos, and videos in X posts
-- Paste several links at once: each is parsed and listed with its title, cover and length, and you tick the ones to download
-- The quality list shows the resolutions actually available, with estimated sizes
-- Video codec: H.264 / H.265 / AV1; container: MP4 / MKV / WebM; or audio only as MP3 / M4A / Opus / FLAC / WAV
-- Choose the audio track on videos with several dubs; save subtitles and Bilibili danmaku
-- Warns about incompatible format combinations and fixes them in one click
-
-### Download templates
-- Five built-in presets: Best quality, HD first, Compatible, Save space, Audio only
-- Your own templates: save your usual quality, format and naming, and make one the default
-- Build file names from {title}, {uploader}, {upload date}, {resolution} and more, sort into subfolders by platform, uploader or date, and preview the resulting path as you type
-
-### Managing downloads
-- A queue with pause, resume (continues partial files), retry, download next, speed limit and parallel downloads
-- Smooth, accurate progress: video and audio share one bar that never jumps back
-- Keeps downloading from the tray after you close the window; notifies you when downloads finish or fail
-- The download list survives restarts, and unfinished downloads pick up where they left off
-
-### Thoughtful details
-- Drag a link onto the window to download it; optionally watch the clipboard for copied links
-- VidFlow updates itself: checks in the background, verifies the download, and rolls back if an update fails
-- Chinese and English UI, with a setup wizard on first launch
+- **Links**: single videos, playlists, Bilibili multi-part videos and collections, Douyin share text and short links; paste several links at once and tick the ones you want
+- **Content**: video, audio only (MP3 / M4A / Opus / FLAC / WAV) or just the cover image
+- **Formats**: qualities listed as actually available, with estimated sizes; H.264 / H.265 / AV1 in MP4 / MKV / WebM; incompatible combinations are flagged and fixed in one click
+- **Extras**: audio tracks in other languages, subtitles, Bilibili danmaku, embedded cover, metadata and chapters; SponsorBlock marks or cuts sponsor segments on YouTube
+- **Templates and naming**: five built-in presets plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date
+- **Queue**: pause and resume, retry, speed limit, parallel downloads; unfinished downloads continue after a restart
+- **Convenience**: drag a link onto the window or let VidFlow watch the clipboard; the app updates itself and rolls back if an update fails; Chinese and English UI
 
 ## Screenshots
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/images/batch-en.png" alt="Several links parsed at once, ready to tick"><br><sub>Paste several links and tick the ones to download</sub></td>
-    <td width="50%"><img src="docs/images/templates-en.png" alt="Download templates"><br><sub>Download templates: built-in presets and your own</sub></td>
-  </tr>
-  <tr>
-    <td width="50%"><img src="docs/images/updates-en.png" alt="About and updates"><br><sub>App and component updates, checked in one click</sub></td>
-    <td width="50%" align="center"><img src="docs/images/login-qr-zh.png" width="300" alt="Bilibili QR sign-in"><br><sub>Bilibili QR sign-in</sub></td>
+    <td width="33%"><img src="docs/images/platforms-en.png" alt="New download and supported platforms"><br><sub>Supported platforms</sub></td>
+    <td width="33%"><img src="docs/images/batch-en.png" alt="Several links parsed at once"><br><sub>Several links at once</sub></td>
+    <td width="33%"><img src="docs/images/templates-en.png" alt="Download templates"><br><sub>Download templates</sub></td>
   </tr>
 </table>
 
-## Download and install
+## Install
 
-1. Download the installer from [Releases](https://github.com/Magicherry/VidFlow/releases/latest): `VidFlow-Setup-<version>-x64.exe` for most PCs, `-arm64.exe` for ARM PCs (such as Snapdragon X).
-2. Run it. It installs for the current user, so no administrator rights are needed.
-3. Follow the setup wizard on first launch; VidFlow downloads the components it needs.
+Download the installer from [Releases](https://github.com/Magicherry/VidFlow/releases/latest), run it, and follow the setup wizard on first launch. It installs for the current user, so no administrator rights are needed.
 
-**Requirements**: x64: Windows 10 2004 (19041) or later; ARM64: Windows 11. Best on Windows 11.
-
-## Getting started
-
-1. Copy a video link and paste it into **New download**, or drag the link onto the window.
-2. Click **Parse**, then choose the quality and format, or just use a download template.
-3. Click **Download** and follow the progress under **Downloads**.
+| Installer | For | Requires |
+|---|---|---|
+| `VidFlow-Setup-<version>-x64.exe` | Most PCs | Windows 10 2004 (19041) or later |
+| `VidFlow-Setup-<version>-arm64.exe` | ARM PCs (such as Snapdragon X) | Windows 11 |
 
 ## FAQ
 
@@ -120,7 +97,7 @@ VidFlow is for personal use and backups. Only download content you have the righ
 
 ## Thanks
 
-VidFlow stands on the shoulders of these great projects: [yt-dlp](https://github.com/yt-dlp/yt-dlp) · [FFmpeg](https://ffmpeg.org/) · [Deno](https://deno.com/) · [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) · [Windows Community Toolkit](https://github.com/CommunityToolkit/Windows) · [H.NotifyIcon](https://github.com/HavenDV/H.NotifyIcon) · [QRCoder](https://github.com/codebude/QRCoder)
+[yt-dlp](https://github.com/yt-dlp/yt-dlp) · [FFmpeg](https://ffmpeg.org/) · [aria2](https://github.com/aria2/aria2) · [Deno](https://deno.com/) · [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) · [Windows Community Toolkit](https://github.com/CommunityToolkit/Windows) · [H.NotifyIcon](https://github.com/HavenDV/H.NotifyIcon) · [QRCoder](https://github.com/codebude/QRCoder)
 
 ---
 
@@ -158,6 +135,6 @@ Requires [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSo
 pwsh tools/build-release.ps1
 ```
 
-It runs the tests, publishes trimmed self-contained x64 and ARM64 builds (`VidFlow-Release/`, `VidFlow-Release-arm64/`), and writes both installers plus the `update.json` / `update-arm64.json` manifests used by auto-update to `dist/` (upload them all to the GitHub release). Pass `-Arch x64` or `-Arch arm64` to build just one.
+It runs the tests, publishes trimmed self-contained x64 and ARM64 builds, and writes both installers plus the `update.json` / `update-arm64.json` manifests used by auto-update to `dist/` (upload them all to the GitHub release). Pass `-Arch x64` or `-Arch arm64` to build just one.
 
 </details>

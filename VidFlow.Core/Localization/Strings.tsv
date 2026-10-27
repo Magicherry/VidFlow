@@ -1,5 +1,5 @@
 key	en	zh
-About_Description	Video downloader for Bilibili, Douyin, Xiaohongshu, Weibo, YouTube and X, powered by yt-dlp	基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X
+About_Description	Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube and X, powered by yt-dlp	基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X
 About_Disclaimer	Only download content you have the right to save, and follow each platform's terms of service and copyright rules.	请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。
 About_Licenses	Open-source licenses	开源许可
 About_OpenData	Open data folder	打开数据文件夹
@@ -430,7 +430,7 @@ Home_PlatformsTitle	Supported platforms	支持的平台
 Home_SignedIn	Signed in	已登录
 Home_SignInForMore	Sign in for more	登录以解锁更多
 Platform_Weibo	Weibo	微博
-Platform_Xiaohongshu	Xiaohongshu	小红书
+Platform_Xiaohongshu	RedNote	小红书
 Home_Supports_Bilibili	Videos, multi-part videos, collections	视频、多 P 视频、合集
 Home_Supports_Douyin	Video links, share text, short links	作品链接、分享口令、短链接
 Home_Supports_Xiaohongshu	Video notes, share links	视频笔记、分享链接
