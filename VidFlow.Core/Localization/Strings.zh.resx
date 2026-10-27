@@ -267,6 +267,8 @@
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 需先关闭浏览器</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
+  <data name="Settings_Chapters" xml:space="preserve"><value>嵌入章节</value></data>
+  <data name="Settings_ChaptersDescription" xml:space="preserve"><value>在播放器里按章节跳转</value></data>
   <data name="Settings_CheckUpdate" xml:space="preserve"><value>检查更新</value></data>
   <data name="Settings_ChooseFile" xml:space="preserve"><value>选择文件</value></data>
   <data name="Settings_Clipboard" xml:space="preserve"><value>监听剪贴板</value></data>
@@ -319,6 +321,11 @@
   <data name="Settings_SpeedMax" xml:space="preserve"><value>每个任务最高速度</value></data>
   <data name="Settings_SpeedOn" xml:space="preserve"><value>已开启 · 每个任务最高 {0}</value></data>
   <data name="Settings_SpeedUnit" xml:space="preserve"><value>单位</value></data>
+  <data name="Settings_SponsorBlock" xml:space="preserve"><value>SponsorBlock（YouTube）</value></data>
+  <data name="Settings_SponsorBlockDescription" xml:space="preserve"><value>SponsorBlock 社区标注的赞助、自我推广、片头和片尾</value></data>
+  <data name="Settings_SponsorBlockMark" xml:space="preserve"><value>标记为章节</value></data>
+  <data name="Settings_SponsorBlockOff" xml:space="preserve"><value>关闭</value></data>
+  <data name="Settings_SponsorBlockRemove" xml:space="preserve"><value>删除这些片段</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>字幕语言</value></data>
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>其他语言</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>语言代码，用逗号分隔</value></data>

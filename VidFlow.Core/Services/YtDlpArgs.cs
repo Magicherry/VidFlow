@@ -140,6 +140,7 @@ public static class YtDlpArgs
 
         if (s.EmbedMetadata && hasFfmpeg)
             args.AddRange(["--embed-metadata", "--embed-thumbnail"]);
+        args.AddRange(Chapters(s, platform, hasFfmpeg));
 
         if (s.SpeedLimitKBps > 0)
             args.AddRange(["-r", $"{s.SpeedLimitKBps}K"]);
@@ -149,6 +150,18 @@ public static class YtDlpArgs
         if (splitAudio) args.AddRange(["--extractor-args", "youtube:formats=duplicate"]);
         args.AddRange(Common(s, env));
         args.Add(req.Url);
+        return args;
+    }
+
+    /// <summary>Chapters and SponsorBlock. --embed-metadata embeds chapters too, so turning them off needs saying.
+    /// SponsorBlock only knows YouTube; marked segments show up as chapters, so marking embeds chapters regardless.</summary>
+    static List<string> Chapters(AppSettings s, Platform platform, bool hasFfmpeg)
+    {
+        if (!hasFfmpeg) return [];
+        var sponsorBlock = platform == Platform.YouTube ? s.SponsorBlock : SponsorBlockModes.Off;
+        var args = new List<string> { s.EmbedChapters || sponsorBlock == SponsorBlockModes.Mark ? "--embed-chapters" : "--no-embed-chapters" };
+        if (sponsorBlock == SponsorBlockModes.Mark) args.AddRange(["--sponsorblock-mark", "all"]);
+        else if (sponsorBlock == SponsorBlockModes.Remove) args.AddRange(["--sponsorblock-remove", SponsorBlockModes.RemovedCategories]);
         return args;
     }
 

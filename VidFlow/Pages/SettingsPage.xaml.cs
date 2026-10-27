@@ -16,6 +16,8 @@ public sealed partial class SettingsPage : Page
         InitializeComponent();
         for (var i = 1; i <= 5; i++) ConcurrencyCombo.Items.Add(i);
         AddItems(LanguageCombo, ("", L.Get("Settings_LanguageSystem")), ("zh", "简体中文"), ("en", "English"));
+        AddItems(SponsorBlockCombo, (SponsorBlockModes.Off, L.Get("Settings_SponsorBlockOff")),
+            (SponsorBlockModes.Mark, L.Get("Settings_SponsorBlockMark")), (SponsorBlockModes.Remove, L.Get("Settings_SponsorBlockRemove")));
         AddItems(ThemeCombo, ("System", L.Get("Settings_ThemeSystem")), ("Light", L.Get("Settings_ThemeLight")),
             ("Dark", L.Get("Settings_ThemeDark")));
 
@@ -51,6 +53,8 @@ public sealed partial class SettingsPage : Page
         LoadSubtitleLanguages();
         DanmakuToggle.IsOn = s.SaveDanmaku;
         MetadataToggle.IsOn = s.EmbedMetadata;
+        ChaptersToggle.IsOn = s.EmbedChapters;
+        Select(SponsorBlockCombo, s.SponsorBlock);
         H264Toggle.IsOn = s.PreferH264;
         ProxyBox.Text = s.Proxy;
         NotifyToggle.IsOn = s.NotifyOnFinish;
@@ -211,10 +215,18 @@ public sealed partial class SettingsPage : Page
         s.WatchClipboard = ClipboardToggle.IsOn;
         s.SaveDanmaku = DanmakuToggle.IsOn;
         s.EmbedMetadata = MetadataToggle.IsOn;
+        s.EmbedChapters = ChaptersToggle.IsOn;
         s.PreferH264 = H264Toggle.IsOn;
         s.MultiConnection = MultiConnectionToggle.IsOn;
         s.NotifyOnFinish = NotifyToggle.IsOn;
         s.NotifyOnFailure = NotifyFailureToggle.IsOn;
+        AppSettings.Save();
+    }
+
+    void SponsorBlockCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || SponsorBlockCombo.SelectedItem is not ComboBoxItem item) return;
+        AppSettings.Current.SponsorBlock = (string)item.Tag;
         AppSettings.Save();
     }
 

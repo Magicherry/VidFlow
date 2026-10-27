@@ -3,7 +3,7 @@
 
 #define AppName "VidFlow"
 #ifndef AppVersion
-  #define AppVersion "1.3.5"
+  #define AppVersion "1.3.6"
 #endif
 ; x64 or arm64 (build-release.ps1 builds both).
 #ifndef Arch

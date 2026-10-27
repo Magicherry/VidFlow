@@ -185,6 +185,15 @@
                         <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
                             <ToggleSwitch x:Name="MetadataToggle" Toggled="Toggle_Changed" />
                         </tk:SettingsCard>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ChaptersDescription')}" Header="{x:Bind l:L.Get('Settings_Chapters')}">
+                            <ToggleSwitch x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SponsorBlockDescription')}" Header="{x:Bind l:L.Get('Settings_SponsorBlock')}">
+                            <ComboBox
+                                x:Name="SponsorBlockCombo"
+                                MinWidth="160"
+                                SelectionChanged="SponsorBlockCombo_SelectionChanged" />
+                        </tk:SettingsCard>
                         <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
                             <ToggleSwitch x:Name="H264Toggle" Toggled="Toggle_Changed" />
                         </tk:SettingsCard>

@@ -780,3 +780,62 @@ public class CoverModeTests
     public void CoverHasNoCompatibilityAdvice() =>
         Assert.Null(FormatCompatibility.Check(new DownloadTemplate { Mode = "cover", Container = "webm", AudioFormat = MediaFeatures.HiRes }));
 }
+
+public class ChapterTests
+{
+    static readonly YtDlpArgs.Environment WithFfmpeg = new(@"C:\ff", null, false);
+
+    static List<string> Args(string url, AppSettings s, YtDlpArgs.Environment? env = null) =>
+        YtDlpArgs.Download(new DownloadTemplate().ToRequest(url, "o"), s, env ?? WithFfmpeg);
+
+    [Fact]
+    public void ChaptersAreEmbeddedByDefault()
+    {
+        var args = Args("https://www.youtube.com/watch?v=abc", new AppSettings());
+        Assert.Contains("--embed-chapters", args);
+        Assert.DoesNotContain(args, a => a.StartsWith("--sponsorblock"));
+    }
+
+    [Fact]
+    public void TurningChaptersOffOverridesEmbedMetadata()
+    {
+        // --embed-metadata embeds chapters too unless told not to.
+        var args = Args("https://www.youtube.com/watch?v=abc", new AppSettings { EmbedChapters = false });
+        Assert.Contains("--embed-metadata", args);
+        Assert.Contains("--no-embed-chapters", args);
+    }
+
+    [Fact]
+    public void SponsorBlockMarkAddsChapters()
+    {
+        var args = Args("https://youtu.be/abc", new AppSettings { EmbedChapters = false, SponsorBlock = SponsorBlockModes.Mark });
+        Assert.Equal("all", args[args.IndexOf("--sponsorblock-mark") + 1]);
+        Assert.Contains("--embed-chapters", args);
+    }
+
+    [Fact]
+    public void SponsorBlockRemoveCutsTheChosenCategories()
+    {
+        var args = Args("https://www.youtube.com/watch?v=abc", new AppSettings { SponsorBlock = SponsorBlockModes.Remove });
+        Assert.Equal(SponsorBlockModes.RemovedCategories, args[args.IndexOf("--sponsorblock-remove") + 1]);
+    }
+
+    [Fact]
+    public void SponsorBlockOnlyAppliesToYouTubeWithFfmpeg()
+    {
+        var s = new AppSettings { SponsorBlock = SponsorBlockModes.Remove };
+        Assert.DoesNotContain("--sponsorblock-remove", Args("https://www.bilibili.com/video/BV1GJ411x7h7", s));
+        var plain = Args("https://www.youtube.com/watch?v=abc", s, WithFfmpeg with { FfmpegDir = null });
+        Assert.DoesNotContain("--sponsorblock-remove", plain);
+        Assert.DoesNotContain("--embed-chapters", plain);
+    }
+
+    [Fact]
+    public void CoverModeHasNoChapters()
+    {
+        var req = new DownloadTemplate { Mode = "cover" }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        var args = YtDlpArgs.Download(req, new AppSettings { SponsorBlock = SponsorBlockModes.Mark }, WithFfmpeg);
+        Assert.DoesNotContain("--embed-chapters", args);
+        Assert.DoesNotContain("--sponsorblock-mark", args);
+    }
+}

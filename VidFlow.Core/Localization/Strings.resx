@@ -267,6 +267,8 @@
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Close Chrome / Edge first</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>Don&apos;t use</value></data>
+  <data name="Settings_Chapters" xml:space="preserve"><value>Embed chapters</value></data>
+  <data name="Settings_ChaptersDescription" xml:space="preserve"><value>Jump between a video&apos;s chapters in your player</value></data>
   <data name="Settings_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
   <data name="Settings_ChooseFile" xml:space="preserve"><value>Choose file</value></data>
   <data name="Settings_Clipboard" xml:space="preserve"><value>Watch the clipboard</value></data>
@@ -319,6 +321,11 @@
   <data name="Settings_SpeedMax" xml:space="preserve"><value>Maximum speed per download</value></data>
   <data name="Settings_SpeedOn" xml:space="preserve"><value>On · up to {0} per download</value></data>
   <data name="Settings_SpeedUnit" xml:space="preserve"><value>Unit</value></data>
+  <data name="Settings_SponsorBlock" xml:space="preserve"><value>SponsorBlock (YouTube)</value></data>
+  <data name="Settings_SponsorBlockDescription" xml:space="preserve"><value>Sponsor reads, self-promotion, intros and outros, as marked by the SponsorBlock community</value></data>
+  <data name="Settings_SponsorBlockMark" xml:space="preserve"><value>Mark as chapters</value></data>
+  <data name="Settings_SponsorBlockOff" xml:space="preserve"><value>Off</value></data>
+  <data name="Settings_SponsorBlockRemove" xml:space="preserve"><value>Cut out</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>Subtitle languages</value></data>
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>Other languages</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>Language codes, comma separated</value></data>

@@ -45,6 +45,12 @@ public sealed class AppSettings
 
     public bool PreferH264 { get; set; }
     public bool EmbedMetadata { get; set; } = true;
+
+    /// <summary>Embed the video's chapters (YouTube's, Bilibili's…) so players can jump between them.</summary>
+    public bool EmbedChapters { get; set; } = true;
+
+    /// <summary>SponsorBlock on YouTube videos (see SponsorBlockModes): off, mark segments as chapters, or cut them out.</summary>
+    public string SponsorBlock { get; set; } = "off";
     public bool WriteSubtitles { get; set; }
 
     /// <summary>yt-dlp --sub-langs value.</summary>

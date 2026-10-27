@@ -156,6 +156,13 @@ Settings_Language	Language	语言
 Settings_LanguageSystem	Same as Windows	跟随系统
 Settings_Metadata	Embed cover and metadata	嵌入封面与元数据
 Settings_MetadataDescription	Title, uploader and cover	写入标题、作者和封面
+Settings_Chapters	Embed chapters	嵌入章节
+Settings_ChaptersDescription	Jump between a video's chapters in your player	在播放器里按章节跳转
+Settings_SponsorBlock	SponsorBlock (YouTube)	SponsorBlock（YouTube）
+Settings_SponsorBlockDescription	Sponsor reads, self-promotion, intros and outros, as marked by the SponsorBlock community	SponsorBlock 社区标注的赞助、自我推广、片头和片尾
+Settings_SponsorBlockOff	Off	关闭
+Settings_SponsorBlockMark	Mark as chapters	标记为章节
+Settings_SponsorBlockRemove	Cut out	删除这些片段
 Settings_Network	Network	网络
 Settings_Notify	Notifications	完成通知
 Settings_OtherCookies	Other cookie sources	其他 Cookie 来源
