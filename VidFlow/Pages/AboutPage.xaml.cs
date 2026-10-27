@@ -44,8 +44,9 @@ public sealed partial class AboutPage : Page
         _loading = false;
         RefreshUpdate();
         BuildToolRows();
-        // Read the installed versions again (skipped while an install or check is under way).
-        _ = App.Tools.RefreshAsync(refresh: false);
+        // Checked once per run (here or by the background update); after that the page shows the last result,
+        // and "Check for updates" asks again.
+        if (App.Tools.LastCheck is null) _ = App.Tools.RefreshAsync(refresh: false);
     }
 
     void Breadcrumb_ItemClicked(BreadcrumbBar sender, BreadcrumbBarItemClickedEventArgs args)

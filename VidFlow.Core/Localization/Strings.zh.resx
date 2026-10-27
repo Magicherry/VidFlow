@@ -261,9 +261,11 @@
   <data name="Settings_About" xml:space="preserve"><value>关于</value></data>
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>外观</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>未安装 · 可大幅提升下载速度（推荐）</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新组件</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查，在没有下载任务时于后台更新；过旧的 yt-dlp 常导致下载失败</value></data>
+  <data name="Settings_Background" xml:space="preserve"><value>后台与通知</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 需先关闭浏览器</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
@@ -275,6 +277,7 @@
   <data name="Settings_ClipboardDescription" xml:space="preserve"><value>复制支持的链接时提示下载</value></data>
   <data name="Settings_Components" xml:space="preserve"><value>组件</value></data>
   <data name="Settings_Concurrency" xml:space="preserve"><value>同时下载</value></data>
+  <data name="Settings_Content" xml:space="preserve"><value>保存内容</value></data>
   <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt 文件</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape 格式，可用浏览器扩展导出</value></data>
   <data name="Settings_Danmaku" xml:space="preserve"><value>保存 B 站弹幕</value></data>
@@ -283,7 +286,6 @@
   <data name="Settings_Downloads" xml:space="preserve"><value>下载</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>未安装 · 用于合并高清音视频、提取音频（推荐）</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>默认保存位置</value></data>
-  <data name="Settings_General" xml:space="preserve"><value>通用</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>兼容模式</value></data>
   <data name="Settings_H264Description" xml:space="preserve"><value>优先 H.264 / AAC，适合旧设备，画质可能受限</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>安装</value></data>
@@ -295,17 +297,13 @@
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>跟随系统</value></data>
   <data name="Settings_Metadata" xml:space="preserve"><value>嵌入封面与元数据</value></data>
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>写入标题、作者和封面</value></data>
-  <data name="Settings_MoreDownload" xml:space="preserve"><value>文件与兼容性</value></data>
-  <data name="Settings_MoreDownloadDescription" xml:space="preserve"><value>封面与元数据、H.264 兼容模式</value></data>
   <data name="Settings_MultiConnection" xml:space="preserve"><value>多连接加速</value></data>
   <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>需要 aria2 · 可在「关于与更新」中安装</value></data>
-  <data name="Settings_Network" xml:space="preserve"><value>网络</value></data>
-  <data name="Settings_Notifications" xml:space="preserve"><value>通知</value></data>
-  <data name="Settings_Notify" xml:space="preserve"><value>完成通知</value></data>
+  <data name="Settings_NetworkSpeed" xml:space="preserve"><value>网络与速度</value></data>
+  <data name="Settings_Notify" xml:space="preserve"><value>下载完成通知</value></data>
+  <data name="Settings_NotifyDescription" xml:space="preserve"><value>VidFlow 在后台时提醒</value></data>
   <data name="Settings_NotifyFailure" xml:space="preserve"><value>失败与异常通知</value></data>
   <data name="Settings_NotifyFailureDescription" xml:space="preserve"><value>下载失败或长时间无进度时</value></data>
-  <data name="Settings_NotifyGroup" xml:space="preserve"><value>下载通知</value></data>
-  <data name="Settings_NotifyGroupDescription" xml:space="preserve"><value>在后台时提醒</value></data>
   <data name="Settings_OtherCookies" xml:space="preserve"><value>其他 Cookie 来源</value></data>
   <data name="Settings_OtherCookiesDescription" xml:space="preserve"><value>会覆盖应用内登录，一般无需设置</value></data>
   <data name="Settings_Proxy" xml:space="preserve"><value>代理</value></data>
@@ -342,7 +340,7 @@
   <data name="Settings_TrayDescription" xml:space="preserve"><value>关闭窗口后继续下载</value></data>
   <data name="Settings_UpdateBadge" xml:space="preserve"><value>有可用更新：{0}</value></data>
   <data name="Settings_UpdateMode" xml:space="preserve"><value>更新方式</value></data>
-  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>安装前都会先询问</value></data>
+  <data name="Settings_UpdateModeDescription" xml:space="preserve"><value>自动更新会在后台下载新版本，并在退出 VidFlow 时安装</value></data>
   <data name="Settings_Updates" xml:space="preserve"><value>应用更新</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>更新到 {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>已是最新</value></data>

@@ -145,7 +145,6 @@ Settings_DanmakuDescription	Saved as XML alongside subtitles	随字幕一起保�
 Settings_Downloads	Downloads	下载
 Settings_FfmpegMissing	Not installed · merges high-quality streams and extracts audio (recommended)	未安装 · 用于合并高清音视频、提取音频（推荐）
 Settings_Folder	Default save location	默认保存位置
-Settings_General	General	通用
 Settings_H264	Compatibility mode	兼容模式
 Settings_H264Description	Prefer H.264 / AAC for older devices; may limit quality	优先 H.264 / AAC，适合旧设备，画质可能受限
 Settings_Install	Install	安装
@@ -163,8 +162,7 @@ Settings_SponsorBlockDescription	Sponsor reads, self-promotion, intros and outro
 Settings_SponsorBlockOff	Off	关闭
 Settings_SponsorBlockMark	Mark as chapters	标记为章节
 Settings_SponsorBlockRemove	Cut out	删除这些片段
-Settings_Network	Network	网络
-Settings_Notify	Notifications	完成通知
+Settings_Notify	Download finished	下载完成通知
 Settings_OtherCookies	Other cookie sources	其他 Cookie 来源
 Settings_OtherCookiesDescription	Overrides in-app sign-in; usually not needed	会覆盖应用内登录，一般无需设置
 Settings_Proxy	Proxy	代理
@@ -294,7 +292,7 @@ Settings_ReleaseNotes	What's new	更新日志
 Settings_Templates	Download templates	下载模板
 Settings_TemplatesDescription	New downloads start from the default template	新建下载会套用默认模板
 Settings_UpdateMode	Update mode	更新方式
-Settings_UpdateModeDescription	Always asks before installing	安装前都会先询问
+Settings_UpdateModeDescription	Automatic downloads updates in the background and installs them when you exit VidFlow	自动更新会在后台下载新版本，并在退出 VidFlow 时安装
 Settings_Updates	App updates	应用更新
 Status_Next	Next in queue	已置顶，即将开始
 Status_Stalled	No progress for {0} minutes; still trying…	已 {0} 分钟没有进度，仍在尝试…
@@ -360,12 +358,12 @@ Batch_StatusFailed	Parsed {0} of {1}, {2} failed. Tick the ones to download.	已
 Nav_Templates	Templates	下载模板
 Nav_Accounts	Accounts	账号
 Settings_AboutUpdates	About & updates	关于与更新
+Settings_Appearance	Appearance	外观
+Settings_Content	Saved content	保存内容
+Settings_NetworkSpeed	Network and speed	网络与速度
+Settings_Background	Background and notifications	后台与通知
+Settings_NotifyDescription	When VidFlow is in the background	VidFlow 在后台时提醒
 Settings_UpdateBadge	Update available: {0}	有可用更新：{0}
-Settings_Notifications	Notifications	通知
-Settings_NotifyGroup	Download notifications	下载通知
-Settings_NotifyGroupDescription	While VidFlow is in the background	在后台时提醒
-Settings_MoreDownload	Files and compatibility	文件与兼容性
-Settings_MoreDownloadDescription	Cover and metadata, H.264 compatibility mode	封面与元数据、H.264 兼容模式
 Templates_Mine	My templates	我的模板
 Templates_BuiltIn	Built-in presets	内置预设
 Templates_Empty	No custom templates yet	还没有自定义模板

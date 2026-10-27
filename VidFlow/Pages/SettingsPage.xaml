@@ -36,8 +36,8 @@
                     Style="{StaticResource TitleTextBlockStyle}"
                     Text="{x:Bind l:L.Get('Nav_Settings')}" />
 
-                <!--  General: look and window behaviour  -->
-                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_General')}" />
+                <!--  Appearance  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Appearance')}" />
                 <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Language')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xF2B7;" />
@@ -66,20 +66,8 @@
                         MinWidth="160"
                         SelectionChanged="ThemeCombo_SelectionChanged" />
                 </tk:SettingsCard>
-                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_TrayDescription')}" Header="{x:Bind l:L.Get('Settings_Tray')}">
-                    <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE737;" />
-                    </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="TrayToggle" Toggled="Toggle_Changed" />
-                </tk:SettingsCard>
-                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
-                    <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE77F;" />
-                    </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
-                </tk:SettingsCard>
 
-                <!--  Downloads: where, how many, how fast; the rarely changed options sit in expanders  -->
+                <!--  Downloads: where they go, how many at once, and where links come from  -->
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Downloads')}" />
                 <tk:SettingsCard
                     x:Name="FolderCard"
@@ -102,49 +90,15 @@
                         MinWidth="160"
                         SelectionChanged="ConcurrencyCombo_SelectionChanged" />
                 </tk:SettingsCard>
-                <tk:SettingsCard x:Name="MultiConnectionCard" Header="{x:Bind l:L.Get('Settings_MultiConnection')}">
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xEC4A;" />
+                        <FontIcon Glyph="&#xE77F;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="MultiConnectionToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
-                <!--  Speed limit: a switch, and the value (with its unit) once it's on  -->
-                <tk:SettingsExpander
-                    x:Name="SpeedExpander"
-                    Header="{x:Bind l:L.Get('Settings_SpeedLimit')}">
-                    <tk:SettingsExpander.HeaderIcon>
-                        <FontIcon Glyph="&#xEC4A;" />
-                    </tk:SettingsExpander.HeaderIcon>
-                    <ToggleSwitch
-                        x:Name="SpeedToggle"
-                        AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedLimit')}"
-                        Toggled="SpeedToggle_Toggled" />
-                    <tk:SettingsExpander.Items>
-                        <tk:SettingsCard x:Name="SpeedValueCard" Header="{x:Bind l:L.Get('Settings_SpeedMax')}">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <NumberBox
-                                    x:Name="SpeedBox"
-                                    Width="140"
-                                    VerticalAlignment="Center"
-                                    AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedMax')}"
-                                    Minimum="0.1"
-                                    SmallChange="1"
-                                    SpinButtonPlacementMode="Compact"
-                                    ValueChanged="SpeedBox_ValueChanged" />
-                                <ComboBox
-                                    x:Name="SpeedUnitCombo"
-                                    Width="96"
-                                    VerticalAlignment="Center"
-                                    AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedUnit')}"
-                                    SelectionChanged="SpeedUnitCombo_SelectionChanged">
-                                    <ComboBoxItem Content="KB/s" Tag="KB" />
-                                    <ComboBoxItem Content="MB/s" Tag="MB" />
-                                </ComboBox>
-                            </StackPanel>
-                        </tk:SettingsCard>
-                    </tk:SettingsExpander.Items>
-                </tk:SettingsExpander>
 
+                <!--  Saved content: what goes into (or next to) each downloaded file  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Content')}" />
                 <!--  Subtitles: tick languages; other codes for anything not listed  -->
                 <tk:SettingsExpander
                     x:Name="SubtitlesExpander"
@@ -177,31 +131,36 @@
                         </tk:SettingsCard>
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
-                <tk:SettingsExpander Description="{x:Bind l:L.Get('Settings_MoreDownloadDescription')}" Header="{x:Bind l:L.Get('Settings_MoreDownload')}">
-                    <tk:SettingsExpander.HeaderIcon>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
+                    <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8EC;" />
-                    </tk:SettingsExpander.HeaderIcon>
-                    <tk:SettingsExpander.Items>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
-                            <ToggleSwitch x:Name="MetadataToggle" Toggled="Toggle_Changed" />
-                        </tk:SettingsCard>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ChaptersDescription')}" Header="{x:Bind l:L.Get('Settings_Chapters')}">
-                            <ToggleSwitch x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
-                        </tk:SettingsCard>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SponsorBlockDescription')}" Header="{x:Bind l:L.Get('Settings_SponsorBlock')}">
-                            <ComboBox
-                                x:Name="SponsorBlockCombo"
-                                MinWidth="160"
-                                SelectionChanged="SponsorBlockCombo_SelectionChanged" />
-                        </tk:SettingsCard>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
-                            <ToggleSwitch x:Name="H264Toggle" Toggled="Toggle_Changed" />
-                        </tk:SettingsCard>
-                    </tk:SettingsExpander.Items>
-                </tk:SettingsExpander>
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="MetadataToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ChaptersDescription')}" Header="{x:Bind l:L.Get('Settings_Chapters')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A4;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SponsorBlockDescription')}" Header="{x:Bind l:L.Get('Settings_SponsorBlock')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE893;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox
+                        x:Name="SponsorBlockCombo"
+                        MinWidth="160"
+                        SelectionChanged="SponsorBlockCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7F4;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="H264Toggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
 
-                <!--  Network  -->
-                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Network')}" />
+                <!--  Network and speed  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_NetworkSpeed')}" />
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ProxyDescription')}" Header="{x:Bind l:L.Get('Settings_Proxy')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE774;" />
@@ -213,22 +172,69 @@
                         LostFocus="ProxyBox_LostFocus"
                         PlaceholderText="{x:Bind l:L.Get('Settings_ProxyPlaceholder')}" />
                 </tk:SettingsCard>
-
-                <!--  Notifications  -->
-                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Notifications')}" />
-                <tk:SettingsExpander Description="{x:Bind l:L.Get('Settings_NotifyGroupDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyGroup')}">
+                <tk:SettingsCard x:Name="MultiConnectionCard" Header="{x:Bind l:L.Get('Settings_MultiConnection')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xEC4A;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="MultiConnectionToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <!--  Speed limit: a switch, and the value (with its unit) once it is on  -->
+                <tk:SettingsExpander
+                    x:Name="SpeedExpander"
+                    Header="{x:Bind l:L.Get('Settings_SpeedLimit')}">
                     <tk:SettingsExpander.HeaderIcon>
-                        <FontIcon Glyph="&#xEA8F;" />
+                        <FontIcon Glyph="&#xEC48;" />
                     </tk:SettingsExpander.HeaderIcon>
+                    <ToggleSwitch
+                        x:Name="SpeedToggle"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedLimit')}"
+                        Toggled="SpeedToggle_Toggled" />
                     <tk:SettingsExpander.Items>
-                        <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Notify')}">
-                            <ToggleSwitch x:Name="NotifyToggle" Toggled="Toggle_Changed" />
-                        </tk:SettingsCard>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">
-                            <ToggleSwitch x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
+                        <tk:SettingsCard x:Name="SpeedValueCard" Header="{x:Bind l:L.Get('Settings_SpeedMax')}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <NumberBox
+                                    x:Name="SpeedBox"
+                                    Width="140"
+                                    VerticalAlignment="Center"
+                                    AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedMax')}"
+                                    Minimum="0.1"
+                                    SmallChange="1"
+                                    SpinButtonPlacementMode="Compact"
+                                    ValueChanged="SpeedBox_ValueChanged" />
+                                <ComboBox
+                                    x:Name="SpeedUnitCombo"
+                                    Width="96"
+                                    VerticalAlignment="Center"
+                                    AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedUnit')}"
+                                    SelectionChanged="SpeedUnitCombo_SelectionChanged">
+                                    <ComboBoxItem Content="KB/s" Tag="KB" />
+                                    <ComboBoxItem Content="MB/s" Tag="MB" />
+                                </ComboBox>
+                            </StackPanel>
                         </tk:SettingsCard>
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
+
+                <!--  Background and notifications: what happens while the window is closed  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Background')}" />
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_TrayDescription')}" Header="{x:Bind l:L.Get('Settings_Tray')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE737;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="TrayToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyDescription')}" Header="{x:Bind l:L.Get('Settings_Notify')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xEA8F;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="NotifyToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7BA;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
 
                 <!--  About & updates lives on its own page  -->
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_About')}" />

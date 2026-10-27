@@ -63,7 +63,7 @@
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_UpdateModeDescription')}" Header="{x:Bind l:L.Get('Settings_UpdateMode')}">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE895;" />
+                        <FontIcon Glyph="&#xE823;" />
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox
                         x:Name="UpdateModeCombo"
