@@ -89,6 +89,7 @@
                 <!--  Collapsed while closed so the StackPanel doesn't add spacing for it.  -->
                 <InfoBar
                     x:Name="ToolErrorBar"
+                    Closed="ToolErrorBar_Closed"
                     Severity="Error"
                     Visibility="{x:Bind ToolErrorBar.IsOpen, Mode=OneWay}" />
                 <!--  The overall state and the buttons in the header; one row per component inside (built in code).  -->

@@ -262,8 +262,8 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>未安装 · 可大幅提升下载速度（推荐）</value></data>
-  <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新 yt-dlp</value></data>
-  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查；过旧的 yt-dlp 常导致下载失败</value></data>
+  <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新组件</value></data>
+  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查，在没有下载任务时于后台更新；过旧的 yt-dlp 常导致下载失败</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 需先关闭浏览器</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
@@ -389,6 +389,13 @@
   <data name="Templates_Empty" xml:space="preserve"><value>还没有自定义模板</value></data>
   <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」，或复制一个内置预设</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>我的模板</value></data>
+  <data name="Title_UpdateAvailable" xml:space="preserve"><value>新版本 {0}</value></data>
+  <data name="Title_UpdateAvailableTip" xml:space="preserve"><value>下载 VidFlow {0}</value></data>
+  <data name="Title_UpdateDownloading" xml:space="preserve"><value>正在更新 {0}%</value></data>
+  <data name="Title_UpdateDownloadingTip" xml:space="preserve"><value>正在下载 VidFlow {0}</value></data>
+  <data name="Title_UpdateFailed" xml:space="preserve"><value>更新失败</value></data>
+  <data name="Title_UpdateReady" xml:space="preserve"><value>重启以更新</value></data>
+  <data name="Title_UpdateReadyTip" xml:space="preserve"><value>立即安装 VidFlow {0}。退出 VidFlow 时也会自动安装。</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>有 {0} 项可以安装或更新</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>所有组件均为最新</value></data>
   <data name="Tools_Aria2Purpose" xml:space="preserve"><value>加速 YouTube、X 等海外视频下载</value></data>
@@ -429,7 +436,7 @@
   <data name="Update_Network" xml:space="preserve"><value>无法连接更新服务器，请检查网络或代理。</value></data>
   <data name="Update_NoManifest" xml:space="preserve"><value>暂未找到更新信息，请稍后再试。</value></data>
   <data name="Update_NotesHeader" xml:space="preserve"><value>版本 {0} · 发布于 {1}</value></data>
-  <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已下载，可以安装</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已下载：可立即安装，退出 VidFlow 时也会自动安装</value></data>
   <data name="Update_Retry" xml:space="preserve"><value>重试</value></data>
   <data name="Update_RolledBack" xml:space="preserve"><value>上次更新到 {0} 未完成，已回滚，当前为 {1}。</value></data>
   <data name="Update_UpToDate" xml:space="preserve"><value>当前版本 {0} · 已是最新</value></data>

@@ -56,41 +56,6 @@ public static class ToolManager
         return line;
     }
 
-    /// <summary>
-    /// Keeps yt-dlp current, since sites change often and an outdated yt-dlp is the most common cause of failures.
-    /// At most once a day: self-updates the app's own copy, or installs one if only a PATH copy exists.
-    /// </summary>
-    public static async Task AutoUpdateYtDlpAsync(CancellationToken ct = default)
-    {
-        var s = AppSettings.Current;
-        if (!s.AutoUpdateYtDlp || DateTime.Now - s.LastYtDlpUpdateCheck < TimeSpan.FromDays(1)) return;
-        try
-        {
-            if (IsYtDlpManaged)
-            {
-                var args = new List<string> { "-U" };
-                if (s.Proxy.Trim().Length > 0) args.AddRange(["--proxy", s.Proxy.Trim()]);
-                var output = await RunAsync(Path.Combine(BinDir, "yt-dlp.exe"), args, ct);
-                Log.Info($"yt-dlp -U: {output?.Trim()}");
-            }
-            else if (YtDlpPath is not null)
-            {
-                await InstallYtDlpAsync(null, ct);
-                Log.Info("Installed managed yt-dlp copy (replacing PATH copy).");
-            }
-            else
-            {
-                return; // Nothing installed yet: the first-run wizard / settings page handles that with consent.
-            }
-            s.LastYtDlpUpdateCheck = DateTime.Now;
-            AppSettings.Save();
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            Log.Warn($"yt-dlp auto-update failed: {ex.Message}");
-        }
-    }
-
     static (string Version, DateTime At)? _latestYtDlp;
 
     /// <summary>Latest yt-dlp release tag from GitHub (e.g. "2026.10.21"), cached for 10 minutes; null if unreachable.</summary>
@@ -237,7 +202,7 @@ public static class ToolManager
 
         Directory.CreateDirectory(BinDir);
         var zipPath = Path.Combine(BinDir, "aria2.zip.download");
-        await DownloadFileAsync("https://github.com" + href.Groups[1].Value, zipPath, progress, ct);
+        await FileDownloader.DownloadAsync("https://github.com" + href.Groups[1].Value, zipPath, progress, ct);
         try
         {
             using var zip = ZipFile.OpenRead(zipPath);
@@ -259,7 +224,7 @@ public static class ToolManager
     {
         Directory.CreateDirectory(BinDir);
         var zipPath = Path.Combine(BinDir, "deno.zip.download");
-        await DownloadFileAsync(DenoUrl, zipPath, progress, ct);
+        await FileDownloader.DownloadAsync(DenoUrl, zipPath, progress, ct);
         try
         {
             using var zip = ZipFile.OpenRead(zipPath);
@@ -277,7 +242,7 @@ public static class ToolManager
     {
         Directory.CreateDirectory(BinDir);
         var tmp = Path.Combine(BinDir, "yt-dlp.exe.download");
-        await DownloadFileAsync(YtDlpUrl, tmp, progress, ct);
+        await FileDownloader.DownloadAsync(YtDlpUrl, tmp, progress, ct);
         File.Move(tmp, Path.Combine(BinDir, "yt-dlp.exe"), overwrite: true);
     }
 
@@ -285,7 +250,7 @@ public static class ToolManager
     {
         Directory.CreateDirectory(BinDir);
         var zipPath = Path.Combine(BinDir, "ffmpeg.zip.download");
-        await DownloadFileAsync(FfmpegUrl, zipPath, progress, ct);
+        await FileDownloader.DownloadAsync(FfmpegUrl, zipPath, progress, ct);
         try
         {
             using var zip = ZipFile.OpenRead(zipPath);
@@ -326,26 +291,6 @@ public static class ToolManager
         {
             Log.Warn($"Running {Path.GetFileName(exe)} failed: {ex.Message}");
             return null;
-        }
-    }
-
-    static async Task DownloadFileAsync(string url, string dest, IProgress<double>? progress, CancellationToken ct)
-    {
-        using var resp = await Http.Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct);
-        resp.EnsureSuccessStatusCode();
-        var total = resp.Content.Headers.ContentLength ?? 0;
-        await using var src = await resp.Content.ReadAsStreamAsync(ct);
-        await using (var dst = File.Create(dest))
-        {
-            var buffer = new byte[81920];
-            long done = 0;
-            int read;
-            while ((read = await src.ReadAsync(buffer, ct)) > 0)
-            {
-                await dst.WriteAsync(buffer.AsMemory(0, read), ct);
-                done += read;
-                if (total > 0) progress?.Report(done * 100.0 / total);
-            }
         }
     }
 }

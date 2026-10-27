@@ -12,6 +12,7 @@ public partial class App : Application
     public static MainWindow MainWindow { get; private set; } = null!;
     public static DownloadManager Downloads { get; private set; } = null!;
     public static UpdateController Updates { get; private set; } = null!;
+    public static ComponentUpdater Tools { get; private set; } = null!;
     public static DispatcherQueue UiQueue { get; private set; } = null!;
 
     public App()
@@ -49,7 +50,8 @@ public partial class App : Application
         if (activation.Kind == ExtendedActivationKind.AppNotification && activation.Data is AppNotificationActivatedEventArgs n)
             NotificationService.HandleActivation(n);
 
-        _ = Task.Run(() => ToolManager.AutoUpdateYtDlpAsync());
+        Tools = new ComponentUpdater(UiQueue);
+        Tools.Start();
 
         // Parsing and downloads run on background threads; the hidden WebView2 that reads Douyin's video details
         // needs the UI thread.
@@ -71,7 +73,7 @@ public partial class App : Application
         };
 
         Updates = new UpdateController(UiQueue);
-        Updates.Changed += MainWindow.UpdateSettingsBadge;
+        Updates.Changed += MainWindow.ShowUpdateState;
         Updates.Start();
     }
 
@@ -99,6 +101,7 @@ public partial class App : Application
     public static void Quit()
     {
         Downloads.Shutdown();
+        Updates.InstallOnExit();
         TrayIcon.Dispose();
         MainWindow.CloseForReal();
         Current.Exit();

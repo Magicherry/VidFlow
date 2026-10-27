@@ -76,7 +76,10 @@ public sealed class AppSettings
     /// <summary>Notify about failed or stalled downloads.</summary>
     public bool NotifyOnFailure { get; set; } = true;
     public bool MinimizeToTray { get; set; } = true;
+    /// <summary>Update VidFlow's own copies of the components in the background (the name is from when only
+    /// yt-dlp was kept current; kept so existing settings carry over).</summary>
     public bool AutoUpdateYtDlp { get; set; } = true;
+    /// <summary>Last completed automatic component update check.</summary>
     public DateTime LastYtDlpUpdateCheck { get; set; }
     public bool FirstRunCompleted { get; set; }
 

@@ -65,7 +65,7 @@ public static class UpdateService
             {
                 var tmp = file + ".download";
                 if (File.Exists(m.Url)) File.Copy(m.Url, tmp, overwrite: true); // local manifest (testing)
-                else await DownloadFileAsync(m.Url, tmp, progress, ct);
+                else await FileDownloader.DownloadAsync(m.Url, tmp, progress, ct);
                 if (!await VerifyAsync(tmp, m, ct))
                 {
                     File.Delete(tmp);
@@ -95,15 +95,16 @@ public static class UpdateService
         return hash.Equals(m.Sha256.Trim(), StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>Starts the installer silently. It closes VidFlow, installs, and relaunches it (/UPDATE=1).
-    /// The caller must exit right after.</summary>
-    public static void LaunchInstaller(string installer, UpdateManifest m)
+    /// <summary>Starts the installer silently. It closes VidFlow, installs, and relaunches it (/UPDATE=1) unless
+    /// <paramref name="relaunch"/> is false (installing as the user quits). The caller must exit right after.</summary>
+    public static void LaunchInstaller(string installer, UpdateManifest m, bool relaunch = true)
     {
         Directory.CreateDirectory(UpdatesDir);
         File.WriteAllText(PendingFile, JsonSerializer.Serialize(new PendingUpdate(m.Version, DateTime.Now), VidFlowJson.Default.PendingUpdate));
-        Log.Info($"Starting update installer for {m.Version}");
+        Log.Info($"Starting update installer for {m.Version}{(relaunch ? "" : " (on exit)")}");
         // /CLOSEAPPLICATIONS: if VidFlow hasn't finished exiting yet, the installer closes it instead of waiting.
-        Process.Start(new ProcessStartInfo(installer, "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /UPDATE=1") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo(installer,
+            "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS" + (relaunch ? " /UPDATE=1" : "")) { UseShellExecute = true });
     }
 
     /// <summary>Call at startup: did the last update install? (Inno Setup rolls back a failed install, leaving the
@@ -132,23 +133,5 @@ public static class UpdateService
         foreach (var f in Directory.GetFiles(UpdatesDir, "VidFlow-Setup-*.exe"))
             if (!f.Equals(keep, StringComparison.OrdinalIgnoreCase))
                 try { File.Delete(f); } catch (IOException) { }
-    }
-
-    static async Task DownloadFileAsync(string url, string dest, IProgress<double>? progress, CancellationToken ct)
-    {
-        using var resp = await Http.Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct);
-        resp.EnsureSuccessStatusCode();
-        var total = resp.Content.Headers.ContentLength ?? 0;
-        await using var src = await resp.Content.ReadAsStreamAsync(ct);
-        await using var dst = File.Create(dest);
-        var buffer = new byte[81920];
-        long done = 0;
-        int read;
-        while ((read = await src.ReadAsync(buffer, ct)) > 0)
-        {
-            await dst.WriteAsync(buffer.AsMemory(0, read), ct);
-            done += read;
-            if (total > 0) progress?.Report(done * 100.0 / total);
-        }
     }
 }

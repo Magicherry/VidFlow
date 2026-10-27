@@ -262,8 +262,8 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>About &amp; updates</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>Accounts</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>Not installed · makes downloads much faster (recommended)</value></data>
-  <data name="Settings_AutoUpdate" xml:space="preserve"><value>Keep yt-dlp up to date</value></data>
-  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checked daily; an outdated yt-dlp is the usual cause of failed downloads</value></data>
+  <data name="Settings_AutoUpdate" xml:space="preserve"><value>Update components automatically</value></data>
+  <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checked daily and updated in the background when nothing is downloading; an outdated yt-dlp is the usual cause of failed downloads</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Close Chrome / Edge first</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>Don&apos;t use</value></data>
@@ -389,6 +389,13 @@
   <data name="Templates_Empty" xml:space="preserve"><value>No custom templates yet</value></data>
   <data name="Templates_EmptyDescription" xml:space="preserve"><value>Use New template, or duplicate a preset</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
+  <data name="Title_UpdateAvailable" xml:space="preserve"><value>Update {0}</value></data>
+  <data name="Title_UpdateAvailableTip" xml:space="preserve"><value>Download VidFlow {0}</value></data>
+  <data name="Title_UpdateDownloading" xml:space="preserve"><value>Updating {0}%</value></data>
+  <data name="Title_UpdateDownloadingTip" xml:space="preserve"><value>Downloading VidFlow {0}</value></data>
+  <data name="Title_UpdateFailed" xml:space="preserve"><value>Update failed</value></data>
+  <data name="Title_UpdateReady" xml:space="preserve"><value>Restart to update</value></data>
+  <data name="Title_UpdateReadyTip" xml:space="preserve"><value>Install VidFlow {0} now. It also installs by itself when you exit VidFlow.</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>{0} to install or update</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>All components are up to date</value></data>
   <data name="Tools_Aria2Purpose" xml:space="preserve"><value>Faster YouTube and X downloads</value></data>
@@ -429,7 +436,7 @@
   <data name="Update_Network" xml:space="preserve"><value>Couldn&apos;t reach the update server. Check your network or proxy.</value></data>
   <data name="Update_NoManifest" xml:space="preserve"><value>No update information was found yet. Try again later.</value></data>
   <data name="Update_NotesHeader" xml:space="preserve"><value>Version {0} · released {1}</value></data>
-  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is downloaded and ready to install</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is downloaded: install now, or it installs by itself when you exit VidFlow</value></data>
   <data name="Update_Retry" xml:space="preserve"><value>Retry</value></data>
   <data name="Update_RolledBack" xml:space="preserve"><value>The last update to {0} didn&apos;t complete and was rolled back; you&apos;re on {1}.</value></data>
   <data name="Update_UpToDate" xml:space="preserve"><value>Version {0} · up to date</value></data>

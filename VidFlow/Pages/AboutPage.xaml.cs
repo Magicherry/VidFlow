@@ -22,8 +22,16 @@ public sealed partial class AboutPage : Page
             ("manual", L.Get("UpdateMode_Manual")));
 
         // The page is recreated on each visit: subscribe while shown, unsubscribe when it goes away.
-        Loaded += (_, _) => App.Updates.Changed += RefreshUpdate;
-        Unloaded += (_, _) => App.Updates.Changed -= RefreshUpdate;
+        Loaded += (_, _) =>
+        {
+            App.Updates.Changed += RefreshUpdate;
+            App.Tools.Changed += ShowTools;
+        };
+        Unloaded += (_, _) =>
+        {
+            App.Updates.Changed -= RefreshUpdate;
+            App.Tools.Changed -= ShowTools;
+        };
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e) => LoadValues();
@@ -36,7 +44,8 @@ public sealed partial class AboutPage : Page
         _loading = false;
         RefreshUpdate();
         BuildToolRows();
-        _ = RefreshToolsAsync(refresh: false);
+        // Read the installed versions again (skipped while an install or check is under way).
+        _ = App.Tools.RefreshAsync(refresh: false);
     }
 
     void Breadcrumb_ItemClicked(BreadcrumbBar sender, BreadcrumbBarItemClickedEventArgs args)

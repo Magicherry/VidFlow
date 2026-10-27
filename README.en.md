@@ -82,7 +82,7 @@ Reaching YouTube may need a proxy: enter it under **Settings → Network** (leav
 <details>
 <summary><b>A download fails with "format not available"?</b></summary>
 
-Sites change often. Check for component updates under **Settings → About & updates** (keeping **Keep yt-dlp up to date** on is recommended).
+Sites change often. Check for component updates under **Settings → About & updates** (keeping **Update components automatically** on is recommended).
 </details>
 
 <details>

@@ -839,3 +839,134 @@ public class ChapterTests
         Assert.DoesNotContain("--sponsorblock-mark", args);
     }
 }
+
+public class FileDownloaderTests
+{
+    /// <summary>A local server for one file: answers range requests (or ignores them), and can cut the first few
+    /// responses short to test retries.</summary>
+    sealed class FileServer : IDisposable
+    {
+        readonly System.Net.HttpListener _listener = new();
+        public readonly byte[] Data;
+        public int Requests;
+        public int RangeRequests;
+        public int CutFirst;
+
+        public FileServer(int size, bool ranges)
+        {
+            Data = new byte[size];
+            new Random(42).NextBytes(Data);
+            var port = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners().Max(e => e.Port) % 20000 + 30000;
+            for (; ; port++)
+            {
+                try
+                {
+                    _listener.Prefixes.Clear();
+                    _listener.Prefixes.Add($"http://localhost:{port}/");
+                    _listener.Start();
+                    Url = $"http://localhost:{port}/file";
+                    break;
+                }
+                catch (System.Net.HttpListenerException) { }
+            }
+            _ = Task.Run(async () =>
+            {
+                while (_listener.IsListening)
+                {
+                    System.Net.HttpListenerContext ctx;
+                    try { ctx = await _listener.GetContextAsync(); } catch { return; }
+                    _ = Task.Run(() => Serve(ctx, ranges));
+                }
+            });
+        }
+
+        public string Url { get; private set; } = "";
+
+        void Serve(System.Net.HttpListenerContext ctx, bool ranges)
+        {
+            Interlocked.Increment(ref Requests);
+            var range = ctx.Request.Headers["Range"];
+            long from = 0, to = Data.Length - 1;
+            if (ranges && range is not null)
+            {
+                Interlocked.Increment(ref RangeRequests);
+                var parts = range["bytes=".Length..].Split('-');
+                from = long.Parse(parts[0]);
+                if (parts[1].Length > 0) to = Math.Min(long.Parse(parts[1]), Data.Length - 1);
+                ctx.Response.StatusCode = 206;
+                ctx.Response.AddHeader("Content-Range", $"bytes {from}-{to}/{Data.Length}");
+            }
+            var length = (int)(to - from + 1);
+            ctx.Response.ContentLength64 = length;
+            try
+            {
+                // Cut short: send half, then drop the connection.
+                if (from > 0 && Interlocked.Decrement(ref CutFirst) >= 0)
+                {
+                    ctx.Response.OutputStream.Write(Data, (int)from, length / 2);
+                    ctx.Response.Abort();
+                    return;
+                }
+                ctx.Response.OutputStream.Write(Data, (int)from, length);
+                ctx.Response.Close();
+            }
+            catch { }
+        }
+
+        public void Dispose() => _listener.Close();
+    }
+
+    static string TempFile() => Path.Combine(Path.GetTempPath(), $"vf-dl-{Guid.NewGuid():N}");
+
+    [Fact]
+    public async Task SplitsALargeFileOverSeveralConnections()
+    {
+        using var server = new FileServer(21 << 20, ranges: true);
+        var dest = TempFile();
+        var reports = new List<double>();
+        try
+        {
+            await FileDownloader.DownloadAsync(server.Url, dest, new SyncProgress(reports.Add), default, client: new HttpClient());
+            Assert.Equal(server.Data, await File.ReadAllBytesAsync(dest));
+            // 21 MB in 1 MB chunks, plus the first request that finds out the size.
+            Assert.Equal(1 + 21, server.RangeRequests);
+            Assert.Equal(100, reports[^1]);
+        }
+        finally { File.Delete(dest); }
+    }
+
+    [Fact]
+    public async Task RetriesAChunkWhoseConnectionDrops()
+    {
+        using var server = new FileServer(12 << 20, ranges: true) { CutFirst = 2 };
+        var dest = TempFile();
+        try
+        {
+            await FileDownloader.DownloadAsync(server.Url, dest, null, default, client: new HttpClient());
+            Assert.Equal(server.Data, await File.ReadAllBytesAsync(dest));
+        }
+        finally { File.Delete(dest); }
+    }
+
+    [Theory]
+    [InlineData(false, 12 << 20)] // no range support
+    [InlineData(true, 3 << 20)]   // too small to be worth splitting
+    public async Task FallsBackToOneConnection(bool ranges, int size)
+    {
+        using var server = new FileServer(size, ranges);
+        var dest = TempFile();
+        try
+        {
+            await FileDownloader.DownloadAsync(server.Url, dest, null, default, client: new HttpClient());
+            Assert.Equal(server.Data, await File.ReadAllBytesAsync(dest));
+            Assert.Equal(1, server.Requests);
+        }
+        finally { File.Delete(dest); }
+    }
+
+    /// <summary>Progress&lt;T&gt; posts to the thread pool; this reports straight away so the test sees every value.</summary>
+    sealed class SyncProgress(Action<double> report) : IProgress<double>
+    {
+        public void Report(double value) { lock (this) report(value); }
+    }
+}

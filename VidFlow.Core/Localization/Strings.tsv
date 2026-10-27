@@ -128,8 +128,8 @@ Quality_FullHD	Full HD	全高清
 Quality_HD	HD	高清
 Settings_About	About	关于
 Settings_Accounts	Accounts	账号
-Settings_AutoUpdate	Keep yt-dlp up to date	自动更新 yt-dlp
-Settings_AutoUpdateDescription	Checked daily; an outdated yt-dlp is the usual cause of failed downloads	每天检查；过旧的 yt-dlp 常导致下载失败
+Settings_AutoUpdate	Update components automatically	自动更新组件
+Settings_AutoUpdateDescription	Checked daily and updated in the background when nothing is downloading; an outdated yt-dlp is the usual cause of failed downloads	每天检查，在没有下载任务时于后台更新；过旧的 yt-dlp 常导致下载失败
 Settings_BrowserCookies	Read from browser	从浏览器读取
 Settings_BrowserCookiesDescription	Close Chrome / Edge first	Chrome / Edge 需先关闭浏览器
 Settings_BrowserNone	Don't use	不使用
@@ -335,10 +335,17 @@ Update_InstallNow	Install now	立即安装
 Update_InstallTitle	Install VidFlow {0}?	安装 VidFlow {0}？
 Update_Later	Later	稍后
 Update_NotesHeader	Version {0} · released {1}	版本 {0} · 发布于 {1}
-Update_Ready	Version {0} is downloaded and ready to install	版本 {0} 已下载，可以安装
+Update_Ready	Version {0} is downloaded: install now, or it installs by itself when you exit VidFlow	版本 {0} 已下载：可立即安装，退出 VidFlow 时也会自动安装
 Update_Retry	Retry	重试
 Update_RolledBack	The last update to {0} didn't complete and was rolled back; you're on {1}.	上次更新到 {0} 未完成，已回滚，当前为 {1}。
 Update_UpToDate	Version {0} · up to date	当前版本 {0} · 已是最新
+Title_UpdateAvailable	Update {0}	新版本 {0}
+Title_UpdateAvailableTip	Download VidFlow {0}	下载 VidFlow {0}
+Title_UpdateDownloading	Updating {0}%	正在更新 {0}%
+Title_UpdateDownloadingTip	Downloading VidFlow {0}	正在下载 VidFlow {0}
+Title_UpdateReady	Restart to update	重启以更新
+Title_UpdateReadyTip	Install VidFlow {0} now. It also installs by itself when you exit VidFlow.	立即安装 VidFlow {0}。退出 VidFlow 时也会自动安装。
+Title_UpdateFailed	Update failed	更新失败
 UpdateMode_Auto	Automatic	自动更新
 UpdateMode_Manual	Manual	手动更新
 UpdateMode_Notify	Check and notify only	仅检查并提醒

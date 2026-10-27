@@ -3,6 +3,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
+using VidFlow.Localization;
 using VidFlow.Pages;
 using VidFlow.Services;
 using Windows.ApplicationModel.DataTransfer;
@@ -64,8 +65,53 @@ public sealed partial class MainWindow : Window
         Show(tag == "about" ? typeof(AboutPage) : PageFor(tag));
     }
 
-    public void UpdateSettingsBadge() =>
-        SettingsBadge.Visibility = App.Updates.HasNewer ? Visibility.Visible : Visibility.Collapsed;
+    /// <summary>App update state: a dot on Settings, and in the title bar a button for the next step (download,
+    /// progress, restart to install, retry).</summary>
+    public void ShowUpdateState()
+    {
+        var u = App.Updates;
+        SettingsBadge.Visibility = u.HasNewer ? Visibility.Visible : Visibility.Collapsed;
+
+        var version = u.Latest?.Version;
+        (string Glyph, string Text, string Tip)? look = u.HasNewer ? u.State switch
+        {
+            UpdateState.Available => ("", L.Format("Title_UpdateAvailable", version), L.Format("Title_UpdateAvailableTip", version)),
+            UpdateState.Downloading => ("", L.Format("Title_UpdateDownloading", u.Progress.ToString("0")), L.Format("Title_UpdateDownloadingTip", version)),
+            UpdateState.Ready => ("", L.Get("Title_UpdateReady"), L.Format("Title_UpdateReadyTip", version)),
+            UpdateState.Failed => ("", L.Get("Title_UpdateFailed"), L.Format("Update_Failed", u.Error)),
+            _ => null,
+        } : null;
+        TitleUpdateButton.Visibility = look is null ? Visibility.Collapsed : Visibility.Visible;
+        if (look is not { } l) return;
+        var downloading = u.State == UpdateState.Downloading;
+        TitleUpdateIcon.Glyph = l.Glyph;
+        TitleUpdateIcon.Visibility = downloading ? Visibility.Collapsed : Visibility.Visible;
+        TitleUpdateRing.Visibility = downloading ? Visibility.Visible : Visibility.Collapsed;
+        TitleUpdateRing.IsActive = downloading;
+        TitleUpdateRing.Value = u.Progress;
+        TitleUpdateText.Text = l.Text;
+        ToolTipService.SetToolTip(TitleUpdateButton, l.Tip);
+        // Ready to install is the one that asks to be clicked.
+        TitleUpdateButton.Style = (Style)Application.Current.Resources[
+            u.State == UpdateState.Ready ? "AccentButtonStyle" : "DefaultButtonStyle"];
+    }
+
+    async void TitleUpdateButton_Click(object sender, RoutedEventArgs e)
+    {
+        switch (App.Updates.State)
+        {
+            case UpdateState.Available:
+            case UpdateState.Failed:
+                await App.Updates.DownloadAsync();
+                break;
+            case UpdateState.Ready:
+                await App.Updates.InstallAsync(Content.XamlRoot);
+                break;
+            default:
+                NavigateTo("about");
+                break;
+        }
+    }
 
     /// <summary>Opens one or more links (from drag-and-drop, a notification or the tray) on the home page.</summary>
     public void OpenLinks(string text)

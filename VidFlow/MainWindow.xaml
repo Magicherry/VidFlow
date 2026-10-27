@@ -32,6 +32,32 @@
             <TitleBar.IconSource>
                 <ImageIconSource ImageSource="ms-appx:///Assets/AppIcon.png" />
             </TitleBar.IconSource>
+            <!--  App update state next to the caption buttons: available, downloading, ready to install  -->
+            <TitleBar.RightHeader>
+                <Button
+                    x:Name="TitleUpdateButton"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Padding="10,0"
+                    Click="TitleUpdateButton_Click"
+                    Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Grid Width="16" Height="16">
+                            <FontIcon x:Name="TitleUpdateIcon" FontSize="14" />
+                            <ProgressRing
+                                x:Name="TitleUpdateRing"
+                                Width="16"
+                                Height="16"
+                                IsIndeterminate="False"
+                                Visibility="Collapsed" />
+                        </Grid>
+                        <TextBlock
+                            x:Name="TitleUpdateText"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource CaptionTextBlockStyle}" />
+                    </StackPanel>
+                </Button>
+            </TitleBar.RightHeader>
         </TitleBar>
 
         <NavigationView

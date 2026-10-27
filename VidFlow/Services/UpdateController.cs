@@ -19,6 +19,8 @@ public sealed class UpdateController
     readonly DispatcherQueueTimer _timer;
     string? _notifiedVersion;
     bool _busy;
+    /// <summary>The verified installer once <see cref="State"/> is <see cref="UpdateState.Ready"/>.</summary>
+    string? _installer;
 
     public UpdateController(DispatcherQueue dispatcher)
     {
@@ -115,7 +117,7 @@ public sealed class UpdateController
                 Changed?.Invoke();
             });
             var manifest = Latest;
-            await Task.Run(() => UpdateService.DownloadAsync(manifest, progress, CancellationToken.None));
+            _installer = await Task.Run(() => UpdateService.DownloadAsync(manifest, progress, CancellationToken.None));
             Set(UpdateState.Ready);
             if (_notifiedVersion != manifest.Version)
             {
@@ -157,6 +159,21 @@ public sealed class UpdateController
 
         UpdateService.LaunchInstaller(installer, Latest);
         App.QuitForUpdate();
+    }
+
+    /// <summary>Called as VidFlow quits: a downloaded update installs now, silently, so the next start is the new
+    /// version without asking. Unfinished downloads resume after it.</summary>
+    public void InstallOnExit()
+    {
+        if (State != UpdateState.Ready || Latest is null || _installer is null || !File.Exists(_installer)) return;
+        try
+        {
+            UpdateService.LaunchInstaller(_installer, Latest, relaunch: false);
+        }
+        catch (Exception ex)
+        {
+            Log.Warn($"Install on exit failed: {ex.Message}");
+        }
     }
 
     /// <summary>No raw HTTP messages in the UI.</summary>
