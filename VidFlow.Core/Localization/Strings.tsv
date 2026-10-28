@@ -21,7 +21,6 @@ Action_Remove	Remove from list	从列表中移除
 Action_Resume	Resume	继续
 Action_Retry	Retry	重试
 Action_ShowInFolder	Show in folder	在文件夹中显示
-App_Subtitle	Video downloader	视频下载器
 Batch_Description	These links are added with the options below; titles appear once each download starts.	这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。
 Batch_Title	{0} links	共 {0} 个链接
 Batch_UnsupportedHint	Some links aren't from a supported platform and may fail.	部分链接不在支持的平台中，可能下载失败。
@@ -40,6 +39,15 @@ Downloads_OpenFolder	Open folder	打开文件夹
 Downloads_PauseAll	Pause all	全部暂停
 Downloads_ResumeAll	Resume all	全部继续
 Downloads_Title	Downloads	下载列表
+Downloads_FilterAll	All	全部
+Downloads_FilterActive	In progress	进行中
+Downloads_FilterCompleted	Completed	已完成
+Downloads_FilterFailed	Failed	失败
+Downloads_Platform	Platform	平台
+Downloads_AllPlatforms	All platforms	全部平台
+Downloads_Search	Search titles and links	搜索标题或链接
+Downloads_NoMatchTitle	No matching downloads	没有符合条件的下载
+Downloads_NoMatchBody	Try another status, platform or search	换个状态、平台或关键词试试
 Drop_Caption	Download with VidFlow	用 VidFlow 下载
 Drop_Hint	Drop the link to start	松开以解析链接
 Error_AudioNeedsFfmpeg	Extracting audio needs ffmpeg. Install it in Settings → About & updates.	提取音频需要 ffmpeg，请先在「设置 → 关于与更新」中安装。

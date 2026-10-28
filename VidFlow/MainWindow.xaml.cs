@@ -231,7 +231,13 @@ public sealed partial class MainWindow : Window
             Show(typeof(SettingsPage));
     }
 
-    void AppTitleBar_PaneToggleRequested(TitleBar sender, object args) => NavView.IsPaneOpen = !NavView.IsPaneOpen;
+    /// <summary>Narrow windows keep the icon strip (with the pane button on top) rather than hiding the pane, which
+    /// would leave the button over the page title; widening again brings the full pane back, which WinUI only does
+    /// by itself coming from the hidden pane.</summary>
+    void NavView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args)
+    {
+        if (args.DisplayMode == NavigationViewDisplayMode.Expanded) sender.IsPaneOpen = true;
+    }
 
     void Root_DragOver(object sender, DragEventArgs e)
     {

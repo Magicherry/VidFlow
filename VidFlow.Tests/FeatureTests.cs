@@ -970,3 +970,51 @@ public class FileDownloaderTests
         public void Report(double value) { lock (this) report(value); }
     }
 }
+
+public class DownloadFilterTests
+{
+    static DownloadRecord Record(string title, string url, DownloadState state) =>
+        new() { Request = new(url, "video", 0, false, "o"), Title = title, State = state };
+
+    static readonly DownloadRecord YtDone = Record("Big Buck Bunny", "https://www.youtube.com/watch?v=aqz-KE-bpKQ", DownloadState.Completed);
+    static readonly DownloadRecord BiliPaused = Record("【官方 MV】Never Gonna Give You Up", "https://www.bilibili.com/video/BV1GJ411x7h7", DownloadState.Paused);
+    static readonly DownloadRecord XCanceled = Record("A post", "https://x.com/user/status/1", DownloadState.Canceled);
+    static readonly DownloadRecord[] All = [YtDone, BiliPaused, XCanceled];
+
+    static DownloadRecord[] Shown(DownloadFilter f) => All.Where(f.Matches).ToArray();
+
+    [Fact]
+    public void GroupsByStatus()
+    {
+        Assert.Equal(All, Shown(new()));
+        Assert.Equal([BiliPaused], Shown(new(DownloadStatusFilter.Active)));
+        Assert.Equal([YtDone], Shown(new(DownloadStatusFilter.Completed)));
+        Assert.Equal([XCanceled], Shown(new(DownloadStatusFilter.Failed)));
+    }
+
+    [Fact]
+    public void FiltersByPlatformAndText()
+    {
+        Assert.Equal([BiliPaused], Shown(new(Platform: Platform.Bilibili)));
+        Assert.Equal([YtDone], Shown(new(Query: "  bunny ")));
+        Assert.Equal([BiliPaused], Shown(new(Query: "官方")));
+        Assert.Equal([BiliPaused], Shown(new(Query: "BV1GJ411")));
+        Assert.Empty(Shown(new(DownloadStatusFilter.Completed, Query: "never")));
+        // The counts on the status choices follow the platform and text, not the status.
+        Assert.True(new DownloadFilter(DownloadStatusFilter.Completed, Platform.Bilibili).MatchesExceptStatus(BiliPaused));
+    }
+
+    [Fact]
+    public void SyncKeepsRowsThatStay()
+    {
+        object a = new(), b = new(), c = new(), d = new();
+        var shown = new System.Collections.ObjectModel.ObservableCollection<object> { a, b, c };
+        var changes = 0;
+        shown.CollectionChanged += (_, _) => changes++;
+        DownloadFilter.Sync(shown, [d, a, c]);
+        Assert.Equal([d, a, c], shown);
+        Assert.Equal(2, changes); // b removed, d inserted; a and c untouched
+        DownloadFilter.Sync(shown, [c, a]);
+        Assert.Equal([c, a], shown);
+    }
+}

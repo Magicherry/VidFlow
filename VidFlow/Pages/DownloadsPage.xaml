@@ -25,11 +25,16 @@
                     <VisualState.Setters>
                         <Setter Target="RootPanel.Padding" Value="16,16,16,0" />
                         <Setter Target="OpenFolderLabel.Visibility" Value="Collapsed" />
+                        <!--  Search goes under the status choices instead of beside them  -->
+                        <Setter Target="SearchPanel.(Grid.Row)" Value="1" />
+                        <Setter Target="SearchPanel.(Grid.Column)" Value="0" />
+                        <Setter Target="SearchPanel.HorizontalAlignment" Value="Stretch" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -85,33 +90,79 @@
             </Button>
         </Grid>
 
-        <!--  Empty state  -->
+        <!--  Filters: status (with counts), platform, and text in the title or link  -->
+        <Grid
+            x:Name="FilterBar"
+            Grid.Row="1"
+            Margin="0,0,0,12"
+            ColumnSpacing="8"
+            RowSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <SelectorBar
+                x:Name="StatusBar"
+                Margin="-12,0,0,0"
+                SelectionChanged="StatusBar_SelectionChanged">
+                <SelectorBarItem Tag="All" />
+                <SelectorBarItem Tag="Active" />
+                <SelectorBarItem Tag="Completed" />
+                <SelectorBarItem Tag="Failed" />
+            </SelectorBar>
+            <StackPanel
+                x:Name="SearchPanel"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="8">
+                <ComboBox
+                    x:Name="PlatformCombo"
+                    MinWidth="132"
+                    AutomationProperties.Name="{x:Bind l:L.Get('Downloads_Platform')}"
+                    SelectionChanged="PlatformCombo_SelectionChanged" />
+                <AutoSuggestBox
+                    x:Name="SearchBox"
+                    Width="220"
+                    AutomationProperties.Name="{x:Bind l:L.Get('Downloads_Search')}"
+                    PlaceholderText="{x:Bind l:L.Get('Downloads_Search')}"
+                    QueryIcon="Find"
+                    TextChanged="SearchBox_TextChanged" />
+            </StackPanel>
+        </Grid>
+
+        <!--  Empty state: nothing downloaded yet, or nothing matches the filters  -->
         <StackPanel
             x:Name="EmptyState"
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="0,0,0,80"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="12">
             <FontIcon
+                x:Name="EmptyIcon"
                 FontSize="48"
                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                 Glyph="&#xE896;" />
             <TextBlock
+                x:Name="EmptyTitle"
                 HorizontalAlignment="Center"
-                Style="{StaticResource BodyStrongTextBlockStyle}"
-                Text="{x:Bind l:L.Get('Downloads_EmptyTitle')}" />
+                Style="{StaticResource BodyStrongTextBlockStyle}" />
             <TextBlock
+                x:Name="EmptyBody"
                 HorizontalAlignment="Center"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="{x:Bind l:L.Get('Downloads_EmptyBody')}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
         </StackPanel>
 
         <ListView
             x:Name="DownloadList"
-            Grid.Row="1"
+            Grid.Row="2"
             Padding="0,0,0,24"
             AutomationProperties.Name="{x:Bind l:L.Get('Downloads_Title')}"
             SelectionMode="None">

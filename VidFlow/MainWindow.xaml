@@ -25,10 +25,7 @@
             x:Name="AppTitleBar"
             Title="VidFlow"
             Height="48"
-            IsBackButtonVisible="False"
-            IsPaneToggleButtonVisible="True"
-            PaneToggleRequested="AppTitleBar_PaneToggleRequested"
-            Subtitle="{x:Bind l:L.Get('App_Subtitle')}">
+            IsBackButtonVisible="False">
             <TitleBar.IconSource>
                 <ImageIconSource ImageSource="ms-appx:///Assets/AppIcon.png" />
             </TitleBar.IconSource>
@@ -63,8 +60,10 @@
         <NavigationView
             x:Name="NavView"
             Grid.Row="1"
+            CompactModeThresholdWidth="0"
+            DisplayModeChanged="NavView_DisplayModeChanged"
             IsBackButtonVisible="Collapsed"
-            IsPaneToggleButtonVisible="False"
+            IsPaneToggleButtonVisible="True"
             IsSettingsVisible="False"
             IsTitleBarAutoPaddingEnabled="False"
             OpenPaneLength="240"

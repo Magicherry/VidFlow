@@ -33,7 +33,6 @@
   <data name="Action_Resume" xml:space="preserve"><value>继续</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>重试</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>在文件夹中显示</value></data>
-  <data name="App_Subtitle" xml:space="preserve"><value>视频下载器</value></data>
   <data name="AudioFormat_Atmos" xml:space="preserve"><value>杜比全景声（E-AC-3）</value></data>
   <data name="AudioFormat_Auto" xml:space="preserve"><value>自动（按封装格式选择）</value></data>
   <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC（无损）</value></data>
@@ -72,13 +71,22 @@
   <data name="Download_Batch" xml:space="preserve"><value>添加 {0} 个链接到队列</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>下载选中的 {0} 个</value></data>
   <data name="Download_Start" xml:space="preserve"><value>开始下载</value></data>
+  <data name="Downloads_AllPlatforms" xml:space="preserve"><value>全部平台</value></data>
   <data name="Downloads_ClearFinished" xml:space="preserve"><value>清除已结束</value></data>
   <data name="Downloads_EmptyBody" xml:space="preserve"><value>在「新建下载」中粘贴链接即可开始</value></data>
   <data name="Downloads_EmptyTitle" xml:space="preserve"><value>暂无下载任务</value></data>
+  <data name="Downloads_FilterActive" xml:space="preserve"><value>进行中</value></data>
+  <data name="Downloads_FilterAll" xml:space="preserve"><value>全部</value></data>
+  <data name="Downloads_FilterCompleted" xml:space="preserve"><value>已完成</value></data>
+  <data name="Downloads_FilterFailed" xml:space="preserve"><value>失败</value></data>
   <data name="Downloads_More" xml:space="preserve"><value>更多操作</value></data>
+  <data name="Downloads_NoMatchBody" xml:space="preserve"><value>换个状态、平台或关键词试试</value></data>
+  <data name="Downloads_NoMatchTitle" xml:space="preserve"><value>没有符合条件的下载</value></data>
   <data name="Downloads_OpenFolder" xml:space="preserve"><value>打开文件夹</value></data>
   <data name="Downloads_PauseAll" xml:space="preserve"><value>全部暂停</value></data>
+  <data name="Downloads_Platform" xml:space="preserve"><value>平台</value></data>
   <data name="Downloads_ResumeAll" xml:space="preserve"><value>全部继续</value></data>
+  <data name="Downloads_Search" xml:space="preserve"><value>搜索标题或链接</value></data>
   <data name="Downloads_Title" xml:space="preserve"><value>下载列表</value></data>
   <data name="Drop_Caption" xml:space="preserve"><value>用 VidFlow 下载</value></data>
   <data name="Drop_Hint" xml:space="preserve"><value>松开以解析链接</value></data>

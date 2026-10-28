@@ -33,7 +33,6 @@
   <data name="Action_Resume" xml:space="preserve"><value>Resume</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>Retry</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
-  <data name="App_Subtitle" xml:space="preserve"><value>Video downloader</value></data>
   <data name="AudioFormat_Atmos" xml:space="preserve"><value>Dolby Atmos (E-AC-3)</value></data>
   <data name="AudioFormat_Auto" xml:space="preserve"><value>Auto (best for the container)</value></data>
   <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC (lossless)</value></data>
@@ -72,13 +71,22 @@
   <data name="Download_Batch" xml:space="preserve"><value>Add {0} links to queue</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>Download {0} selected</value></data>
   <data name="Download_Start" xml:space="preserve"><value>Start download</value></data>
+  <data name="Downloads_AllPlatforms" xml:space="preserve"><value>All platforms</value></data>
   <data name="Downloads_ClearFinished" xml:space="preserve"><value>Clear finished</value></data>
   <data name="Downloads_EmptyBody" xml:space="preserve"><value>Paste a link on the New download page to get started</value></data>
   <data name="Downloads_EmptyTitle" xml:space="preserve"><value>No downloads yet</value></data>
+  <data name="Downloads_FilterActive" xml:space="preserve"><value>In progress</value></data>
+  <data name="Downloads_FilterAll" xml:space="preserve"><value>All</value></data>
+  <data name="Downloads_FilterCompleted" xml:space="preserve"><value>Completed</value></data>
+  <data name="Downloads_FilterFailed" xml:space="preserve"><value>Failed</value></data>
   <data name="Downloads_More" xml:space="preserve"><value>More options</value></data>
+  <data name="Downloads_NoMatchBody" xml:space="preserve"><value>Try another status, platform or search</value></data>
+  <data name="Downloads_NoMatchTitle" xml:space="preserve"><value>No matching downloads</value></data>
   <data name="Downloads_OpenFolder" xml:space="preserve"><value>Open folder</value></data>
   <data name="Downloads_PauseAll" xml:space="preserve"><value>Pause all</value></data>
+  <data name="Downloads_Platform" xml:space="preserve"><value>Platform</value></data>
   <data name="Downloads_ResumeAll" xml:space="preserve"><value>Resume all</value></data>
+  <data name="Downloads_Search" xml:space="preserve"><value>Search titles and links</value></data>
   <data name="Downloads_Title" xml:space="preserve"><value>Downloads</value></data>
   <data name="Drop_Caption" xml:space="preserve"><value>Download with VidFlow</value></data>
   <data name="Drop_Hint" xml:space="preserve"><value>Drop the link to start</value></data>
