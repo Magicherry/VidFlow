@@ -5,13 +5,17 @@ using VidFlow.Services;
 
 namespace VidFlow.Pages;
 
-/// <summary>A supported-platform card on the New download page, with its sign-in state (for platforms that have one).</summary>
-public sealed record HomePlatform(Platform Platform, ImageSource? Logo, string Name, string Supports, bool CanSignIn, bool SignedIn)
+/// <summary>A supported-platform card on the New download page, with its sign-in state (for platforms that have one)
+/// and, for platforms that need a proxy, whether the last connection check failed.</summary>
+public sealed record HomePlatform(Platform Platform, ImageSource? Logo, string Name, string Supports, bool CanSignIn, bool SignedIn,
+    bool Unreachable)
 {
-    public bool SignedOut => CanSignIn && !SignedIn;
+    /// <summary>Signing in doesn't help while the site can't be reached: the connection warning shows instead.</summary>
+    public bool SignedOut => CanSignIn && !SignedIn && !Unreachable;
 
     public static HomePlatform Create(Platform p, string supports) =>
-        new(p, LogoFor(p), p.DisplayName(), supports, AccountStore.HasSignIn(p), AccountStore.IsLoggedIn(p));
+        new(p, LogoFor(p), p.DisplayName(), supports, AccountStore.HasSignIn(p), AccountStore.IsLoggedIn(p),
+            Connectivity.NeedsProxy(p) && Connectivity.YouTubeUnreachable);
 
     public static ImageSource? LogoFor(Platform p) => p switch
     {

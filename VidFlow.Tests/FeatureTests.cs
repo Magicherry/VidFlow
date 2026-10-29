@@ -1018,3 +1018,58 @@ public class DownloadFilterTests
         Assert.Equal([c, a], shown);
     }
 }
+
+public class ConnectivityTests
+{
+    [Fact]
+    public async Task AnyAnswerCountsAsReachable()
+    {
+        using var listener = new System.Net.HttpListener();
+        var port = 0;
+        for (port = 31000; ; port++)
+        {
+            try
+            {
+                listener.Prefixes.Clear();
+                listener.Prefixes.Add($"http://localhost:{port}/");
+                listener.Start();
+                break;
+            }
+            catch (System.Net.HttpListenerException) { }
+        }
+        _ = Task.Run(async () =>
+        {
+            var ctx = await listener.GetContextAsync();
+            ctx.Response.StatusCode = 204;
+            ctx.Response.Close();
+        });
+        var result = await Connectivity.CheckAsync(new Uri($"http://localhost:{port}/generate_204"), new HttpClient(), TimeSpan.FromSeconds(5));
+        Assert.True(result.Reachable);
+        Assert.Null(result.Error);
+    }
+
+    [Fact]
+    public async Task NoConnectionIsUnreachable()
+    {
+        // Nothing listens on port 9 (discard) locally: the connection is refused straight away.
+        var result = await Connectivity.CheckAsync(new Uri("http://127.0.0.1:9/"), new HttpClient(), TimeSpan.FromSeconds(5));
+        Assert.False(result.Reachable);
+        Assert.NotNull(result.Error);
+    }
+
+    [Fact]
+    public async Task NoAnswerInTimeIsUnreachable()
+    {
+        // Accepts the connection but never answers.
+        var tcp = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
+        tcp.Start();
+        try
+        {
+            var port = ((System.Net.IPEndPoint)tcp.LocalEndpoint).Port;
+            var result = await Connectivity.CheckAsync(new Uri($"http://127.0.0.1:{port}/"), new HttpClient(), TimeSpan.FromMilliseconds(300));
+            Assert.False(result.Reachable);
+            Assert.Contains("no answer", result.Error);
+        }
+        finally { tcp.Stop(); }
+    }
+}

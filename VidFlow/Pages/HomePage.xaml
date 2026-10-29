@@ -172,6 +172,24 @@
                                                 Content="{x:Bind l:L.Get('Home_SignInForMore')}"
                                                 FontSize="12"
                                                 Visibility="{x:Bind SignedOut}" />
+                                            <!--  The connection check failed: likely needs a proxy  -->
+                                            <StackPanel
+                                                Margin="0,4,0,-4"
+                                                Orientation="Horizontal"
+                                                Spacing="6"
+                                                Visibility="{x:Bind Unreachable}">
+                                                <FontIcon
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                                    Glyph="&#xE7BA;" />
+                                                <HyperlinkButton
+                                                    Margin="-6,0,0,0"
+                                                    Padding="6,2"
+                                                    Click="PlatformUnreachable_Click"
+                                                    Content="{x:Bind l:L.Get('Home_Unreachable')}"
+                                                    FontSize="12"
+                                                    ToolTipService.ToolTip="{x:Bind l:L.Get('Home_UnreachableTip')}" />
+                                            </StackPanel>
                                         </StackPanel>
                                     </Grid>
                                 </Border>

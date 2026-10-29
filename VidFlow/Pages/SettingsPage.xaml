@@ -160,7 +160,10 @@
                 </tk:SettingsCard>
 
                 <!--  Network and speed  -->
-                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_NetworkSpeed')}" />
+                <TextBlock
+                    x:Name="NetworkHeader"
+                    Style="{StaticResource SectionHeaderStyle}"
+                    Text="{x:Bind l:L.Get('Settings_NetworkSpeed')}" />
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ProxyDescription')}" Header="{x:Bind l:L.Get('Settings_Proxy')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE774;" />
@@ -171,6 +174,25 @@
                         AutomationProperties.Name="{x:Bind l:L.Get('Settings_Proxy')}"
                         LostFocus="ProxyBox_LostFocus"
                         PlaceholderText="{x:Bind l:L.Get('Settings_ProxyPlaceholder')}" />
+                </tk:SettingsCard>
+                <!--  Can YouTube be reached with the proxy above (or the system proxy)?  -->
+                <tk:SettingsCard x:Name="ConnectivityCard" Header="{x:Bind l:L.Get('Settings_Connectivity')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon x:Name="ConnectivityIcon" Glyph="&#xE9D9;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressRing
+                            x:Name="ConnectivityRing"
+                            Width="20"
+                            Height="20"
+                            IsActive="False"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="ConnectivityButton"
+                            MinWidth="96"
+                            Click="TestConnectivity_Click"
+                            Content="{x:Bind l:L.Get('Settings_ConnectivityTest')}" />
+                    </StackPanel>
                 </tk:SettingsCard>
                 <tk:SettingsCard x:Name="MultiConnectionCard" Header="{x:Bind l:L.Get('Settings_MultiConnection')}">
                     <tk:SettingsCard.HeaderIcon>

@@ -65,6 +65,9 @@ public sealed partial class MainWindow : Window
         Show(tag == "about" ? typeof(AboutPage) : PageFor(tag));
     }
 
+    /// <summary>The page on show.</summary>
+    public object? CurrentPage => ContentFrame.Content;
+
     /// <summary>App update state: a dot on Settings, and in the title bar a button for the next step (download,
     /// progress, restart to install, retry).</summary>
     public void ShowUpdateState()

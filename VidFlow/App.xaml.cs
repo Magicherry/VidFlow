@@ -44,6 +44,7 @@ public partial class App : Application
 
         MainWindow.Activate();
         Downloads.LoadPersisted();
+        _ = Task.Run(() => Connectivity.CheckYouTubeAsync());
 
         // Launched by clicking a notification while the app was not running.
         var activation = AppInstance.GetCurrent().GetActivatedEventArgs();

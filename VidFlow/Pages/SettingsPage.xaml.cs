@@ -22,8 +22,16 @@ public sealed partial class SettingsPage : Page
             ("Dark", L.Get("Settings_ThemeDark")));
 
         // The page is recreated on each visit: subscribe while shown, unsubscribe when it goes away.
-        Loaded += (_, _) => App.Updates.Changed += RefreshAbout;
-        Unloaded += (_, _) => App.Updates.Changed -= RefreshAbout;
+        Loaded += (_, _) =>
+        {
+            App.Updates.Changed += RefreshAbout;
+            Connectivity.Changed += OnConnectivityChanged;
+        };
+        Unloaded += (_, _) =>
+        {
+            App.Updates.Changed -= RefreshAbout;
+            Connectivity.Changed -= OnConnectivityChanged;
+        };
     }
 
     internal static void AddItems(ComboBox combo, params (string Tag, string Text)[] items)
@@ -59,6 +67,7 @@ public sealed partial class SettingsPage : Page
         ProxyBox.Text = s.Proxy;
         NotifyToggle.IsOn = s.NotifyOnFinish;
         NotifyFailureToggle.IsOn = s.NotifyOnFailure;
+        ShowConnectivity();
         _loading = false;
         UpdateSpeedSummary();
         RefreshAbout();
@@ -232,8 +241,47 @@ public sealed partial class SettingsPage : Page
 
     void ProxyBox_LostFocus(object sender, RoutedEventArgs e)
     {
-        AppSettings.Current.Proxy = ProxyBox.Text.Trim();
+        var proxy = ProxyBox.Text.Trim();
+        if (proxy == AppSettings.Current.Proxy) return;
+        AppSettings.Current.Proxy = proxy;
         AppSettings.Save();
+        // A new proxy: does YouTube work with it?
+        _ = Task.Run(() => Connectivity.CheckYouTubeAsync());
+    }
+
+    // ---- Connection test ---------------------------------------------------------------------------------------
+
+    /// <summary>Scrolls to the network section (proxy and connection test), once the page is laid out.</summary>
+    public void ShowNetwork()
+    {
+        void Scroll() => DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+            NetworkHeader.StartBringIntoView(new BringIntoViewOptions { VerticalAlignmentRatio = 0, AnimationDesired = false }));
+        if (IsLoaded) Scroll();
+        else Loaded += (_, _) => Scroll();
+    }
+
+    async void TestConnectivity_Click(object sender, RoutedEventArgs e) =>
+        await Task.Run(() => Connectivity.CheckYouTubeAsync());
+
+    void OnConnectivityChanged() => DispatcherQueue.TryEnqueue(ShowConnectivity);
+
+    /// <summary>The last result (or that a check is running) in the card's description.</summary>
+    void ShowConnectivity()
+    {
+        var checking = Connectivity.Checking;
+        ConnectivityRing.IsActive = checking;
+        ConnectivityRing.Visibility = checking ? Visibility.Visible : Visibility.Collapsed;
+        ConnectivityButton.IsEnabled = !checking;
+        var last = Connectivity.YouTube;
+        ConnectivityCard.Description = checking ? L.Get("Settings_ConnectivityChecking")
+            : last is null ? L.Get("Settings_ConnectivityIdle")
+            : last.Reachable ? L.Format("Settings_ConnectivityOk", last.Latency.TotalMilliseconds.ToString("0"))
+            : L.Get("Settings_ConnectivityFailed");
+        (ConnectivityIcon.Glyph, ConnectivityIcon.Foreground) = checking || last is null
+            ? ("\uE9D9", (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorPrimaryBrush"])
+            : last.Reachable
+                ? ("\uE73E", (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["SystemFillColorSuccessBrush"])
+                : ("\uE7BA", (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["SystemFillColorCautionBrush"]);
     }
 
     void LanguageCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

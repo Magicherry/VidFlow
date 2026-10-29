@@ -41,6 +41,7 @@ public sealed partial class HomePage : Page
         FillPlatforms();
         // The page is cached: follow sign-ins made elsewhere (Accounts page, wizard).
         AccountStore.Changed += () => DispatcherQueue.TryEnqueue(FillPlatforms);
+        Connectivity.Changed += () => DispatcherQueue.TryEnqueue(FillPlatforms);
 
         // The platform cards show only while nothing else is: not loading, no results.
         foreach (var card in new UIElement[] { LoadingCard, PreviewCard, PlaylistCard, BatchCard })
@@ -63,11 +64,21 @@ public sealed partial class HomePage : Page
         FillPlatforms();
     }
 
+    /// <summary>Straight to the proxy setting and the connection test.</summary>
+    void PlatformUnreachable_Click(object sender, RoutedEventArgs e)
+    {
+        App.MainWindow.NavigateTo("settings");
+        (App.MainWindow.CurrentPage as SettingsPage)?.ShowNetwork();
+    }
+
     public static string FormatDuration(double? seconds) => seconds is > 0 ? Format.Duration(seconds.Value) : "";
 
     protected override async void OnNavigatedTo(NavigationEventArgs e)
     {
         ToolsInfoBar.IsOpen = ToolManager.YtDlpPath is null;
+        // Still unreachable from a while ago? The proxy may be on by now: look again.
+        if (Connectivity.YouTube is { Reachable: false } last && DateTime.Now - last.CheckedAt > TimeSpan.FromMinutes(1) && !Connectivity.Checking)
+            _ = Task.Run(() => Connectivity.CheckYouTubeAsync());
         UpdateFolderDescription();
 
         // Pre-fill a supported link from the clipboard so a copy → switch → click flow needs no paste.

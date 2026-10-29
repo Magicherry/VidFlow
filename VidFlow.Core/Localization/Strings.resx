@@ -151,6 +151,8 @@
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>Install</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>yt-dlp and ffmpeg need installing first.</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>Download components not installed</value></data>
+  <data name="Home_Unreachable" xml:space="preserve"><value>Can&apos;t connect · may need a proxy</value></data>
+  <data name="Home_UnreachableTip" xml:space="preserve"><value>YouTube could not be reached on this network. Set a proxy in Settings.</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links or share text (separate several with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
@@ -285,6 +287,12 @@
   <data name="Settings_ClipboardDescription" xml:space="preserve"><value>Offer to download when you copy a supported link</value></data>
   <data name="Settings_Components" xml:space="preserve"><value>Components</value></data>
   <data name="Settings_Concurrency" xml:space="preserve"><value>Simultaneous downloads</value></data>
+  <data name="Settings_Connectivity" xml:space="preserve"><value>Connection test</value></data>
+  <data name="Settings_ConnectivityChecking" xml:space="preserve"><value>Checking…</value></data>
+  <data name="Settings_ConnectivityFailed" xml:space="preserve"><value>Can&apos;t reach YouTube. Enter a proxy above, or turn on your system proxy (for example in Clash), then test again.</value></data>
+  <data name="Settings_ConnectivityIdle" xml:space="preserve"><value>Checks whether YouTube can be reached with the proxy setting above</value></data>
+  <data name="Settings_ConnectivityOk" xml:space="preserve"><value>YouTube is reachable · {0} ms</value></data>
+  <data name="Settings_ConnectivityTest" xml:space="preserve"><value>Test</value></data>
   <data name="Settings_Content" xml:space="preserve"><value>Saved content</value></data>
   <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt file</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape format, exportable with a browser extension</value></data>

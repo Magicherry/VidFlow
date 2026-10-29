@@ -176,6 +176,14 @@ Settings_OtherCookiesDescription	Overrides in-app sign-in; usually not needed	�
 Settings_Proxy	Proxy	代理
 Settings_ProxyDescription	e.g. http://127.0.0.1:7890	例如 http://127.0.0.1:7890
 Settings_ProxyPlaceholder	System proxy	使用系统代理
+Settings_Connectivity	Connection test	连接测试
+Settings_ConnectivityIdle	Checks whether YouTube can be reached with the proxy setting above	检查在上方代理设置下能否访问 YouTube
+Settings_ConnectivityChecking	Checking…	正在检测…
+Settings_ConnectivityOk	YouTube is reachable · {0} ms	可以访问 YouTube · {0} 毫秒
+Settings_ConnectivityFailed	Can't reach YouTube. Enter a proxy above, or turn on your system proxy (for example in Clash), then test again.	无法访问 YouTube。请在上方填写代理，或开启系统代理（例如 Clash），然后重新测试。
+Settings_ConnectivityTest	Test	测试
+Home_Unreachable	Can't connect · may need a proxy	无法连接，可能需要代理
+Home_UnreachableTip	YouTube could not be reached on this network. Set a proxy in Settings.	当前网络无法访问 YouTube，请在设置中配置代理
 Settings_Reinstall	Reinstall	重新安装
 Settings_RestartMessage	The new language applies after VidFlow restarts. Unfinished downloads resume automatically.	新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。
 Settings_RestartNow	Restart now	立即重启

@@ -151,6 +151,8 @@
   <data name="Home_ToolsMissingAction" xml:space="preserve"><value>前往安装</value></data>
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>首次使用需要安装 yt-dlp 和 ffmpeg。</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>尚未安装下载组件</value></data>
+  <data name="Home_Unreachable" xml:space="preserve"><value>无法连接，可能需要代理</value></data>
+  <data name="Home_UnreachableTip" xml:space="preserve"><value>当前网络无法访问 YouTube，请在设置中配置代理</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>视频链接</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴视频链接或分享口令，多个链接用空格分隔</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
@@ -285,6 +287,12 @@
   <data name="Settings_ClipboardDescription" xml:space="preserve"><value>复制支持的链接时提示下载</value></data>
   <data name="Settings_Components" xml:space="preserve"><value>组件</value></data>
   <data name="Settings_Concurrency" xml:space="preserve"><value>同时下载</value></data>
+  <data name="Settings_Connectivity" xml:space="preserve"><value>连接测试</value></data>
+  <data name="Settings_ConnectivityChecking" xml:space="preserve"><value>正在检测…</value></data>
+  <data name="Settings_ConnectivityFailed" xml:space="preserve"><value>无法访问 YouTube。请在上方填写代理，或开启系统代理（例如 Clash），然后重新测试。</value></data>
+  <data name="Settings_ConnectivityIdle" xml:space="preserve"><value>检查在上方代理设置下能否访问 YouTube</value></data>
+  <data name="Settings_ConnectivityOk" xml:space="preserve"><value>可以访问 YouTube · {0} 毫秒</value></data>
+  <data name="Settings_ConnectivityTest" xml:space="preserve"><value>测试</value></data>
   <data name="Settings_Content" xml:space="preserve"><value>保存内容</value></data>
   <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt 文件</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape 格式，可用浏览器扩展导出</value></data>
