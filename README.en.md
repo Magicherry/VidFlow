@@ -33,7 +33,7 @@
 - **Native on Windows 11**: Mica, light and dark themes, notifications and taskbar progress; downloads keep going from the tray after you close the window.
 - **Ready out of the box**: yt-dlp, ffmpeg and the other components install with one click and keep themselves up to date. No command line.
 - **Faster downloads**: multi-connection acceleration (aria2) for YouTube and other overseas sites.
-- **Sign in for more**: scan a QR code with the Bilibili app for 1080P and above; sign in to YouTube for age-restricted and members-only videos.
+- **Sign in for more**: scan a QR code with the Bilibili app for 1080p and above; sign in to YouTube for age-restricted and members-only videos.
 - **Your data stays on your PC**: sign-ins and download history are stored locally, and no usage data is collected.
 
 ## Features
@@ -42,7 +42,7 @@
 - **Content**: video, audio only (MP3 / M4A / Opus / FLAC / WAV) or just the cover image
 - **Formats**: qualities listed as actually available, with estimated sizes; H.264 / H.265 / AV1 in MP4 / MKV / WebM; incompatible combinations are flagged and fixed in one click
 - **Extras**: audio tracks in other languages, subtitles, Bilibili danmaku, embedded cover, metadata and chapters; SponsorBlock marks or cuts sponsor segments on YouTube
-- **Templates and naming**: five built-in presets plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date
+- **Templates and naming**: five built-in templates plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date
 - **Queue**: pause and resume, retry, speed limit, parallel downloads; unfinished downloads continue after a restart
 - **Convenience**: drag a link onto the window or let VidFlow watch the clipboard; the app updates itself and rolls back if an update fails; Chinese and English UI
 
@@ -68,15 +68,15 @@ Download the installer from [Releases](https://github.com/Magicherry/VidFlow/rel
 ## FAQ
 
 <details>
-<summary><b>Bilibili only offers 480P / 720P?</b></summary>
+<summary><b>Bilibili only offers 480p / 720p?</b></summary>
 
-Without signing in, Bilibili serves lower qualities only. Sign in on the **Accounts** page by scanning the QR code with the Bilibili app to get 1080P and above (4K / HDR need a premium membership).
+Without signing in, Bilibili serves lower qualities only. Sign in on the **Accounts** page by scanning the QR code with the Bilibili app to get 1080p and above (4K / HDR need a premium membership).
 </details>
 
 <details>
 <summary><b>YouTube fails to parse, or is very slow?</b></summary>
 
-Reaching YouTube may need a proxy: enter it under **Settings → Network** (leave it empty to use the system proxy). If YouTube asks to confirm you're not a bot, sign in on the **Accounts** page.
+Reaching YouTube may need a proxy: enter it under **Settings → Network and speed** (leave it empty to use the system proxy). If YouTube asks to confirm you're not a bot, sign in on the **Accounts** page.
 </details>
 
 <details>

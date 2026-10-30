@@ -311,7 +311,7 @@
                                     Style="{StaticResource IconButtonStyle}"
                                     ToolTipService.ToolTip="{x:Bind l:L.Get('Action_Remove')}"
                                     Visibility="{x:Bind CanRemove, Mode=OneWay}">
-                                    <FontIcon FontSize="16" Glyph="&#xE74D;" />
+                                    <FontIcon FontSize="16" Glyph="&#xE894;" />
                                 </Button>
                             </StackPanel>
                         </Grid>

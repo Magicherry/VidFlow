@@ -139,7 +139,10 @@ public static class YtDlpArgs
         }
 
         if (s.EmbedMetadata && hasFfmpeg)
-            args.AddRange(["--embed-metadata", "--embed-thumbnail"]);
+        {
+            args.Add("--embed-metadata");
+            if (CanEmbedCover(req)) args.Add("--embed-thumbnail");
+        }
         args.AddRange(Chapters(s, platform, hasFfmpeg));
 
         if (s.SpeedLimitKBps > 0)
@@ -152,6 +155,10 @@ public static class YtDlpArgs
         args.Add(req.Url);
         return args;
     }
+
+    /// <summary>yt-dlp fails the whole download, after it has finished, when asked to embed a cover in WebM or WAV.</summary>
+    static bool CanEmbedCover(DownloadRequest req) =>
+        req.IsAudio ? req.AudioOutputFormat != "wav" : req.NeedsMkv || req.Container != "webm";
 
     /// <summary>Chapters and SponsorBlock. --embed-metadata embeds chapters too, so turning them off needs saying.
     /// SponsorBlock only knows YouTube; marked segments show up as chapters, so marking embeds chapters regardless.</summary>
@@ -170,7 +177,9 @@ public static class YtDlpArgs
     /// fragments (HLS / DASH) stay with yt-dlp, which fetches 8 fragments at a time.</summary>
     static List<string> Connections(AppSettings s, Environment env)
     {
-        var args = new List<string> { "-N", "8" };
+        // yt-dlp applies -r to each fragment thread separately, so 8 threads would download at 8 times the limit.
+        // aria2c needs no such care: yt-dlp hands it the limit for the whole download.
+        var args = s.SpeedLimitKBps > 0 ? new List<string>() : ["-N", "8"];
         if (env.Aria2Path is null) return args;
         args.AddRange(["--downloader", env.Aria2Path, "--downloader", "m3u8:native", "--downloader", "dash:native",
             "--downloader-args", Aria2Args]);

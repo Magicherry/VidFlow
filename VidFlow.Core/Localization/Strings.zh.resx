@@ -13,15 +13,15 @@
   <data name="About_Troubleshoot" xml:space="preserve"><value>故障排查</value></data>
   <data name="About_TroubleshootDescription" xml:space="preserve"><value>日志、数据文件夹与首次设置向导</value></data>
   <data name="About_Version" xml:space="preserve"><value>版本 {0}</value></data>
-  <data name="Account_BiliIn" xml:space="preserve"><value>已登录 · 1080P 及以上（4K / HDR 需大会员）</value></data>
-  <data name="Account_BiliOut" xml:space="preserve"><value>未登录 · 最高 720P</value></data>
+  <data name="Account_BiliIn" xml:space="preserve"><value>已登录 · 1080p 及以上（4K / HDR 需大会员）</value></data>
+  <data name="Account_BiliOut" xml:space="preserve"><value>未登录 · 最高 720p</value></data>
   <data name="Account_DouyinIn" xml:space="preserve"><value>已登录 · 可下载需登录的作品</value></data>
   <data name="Account_DouyinOut" xml:space="preserve"><value>未登录 · 公开作品无需登录</value></data>
   <data name="Account_Login" xml:space="preserve"><value>登录</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>退出登录</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制、会员视频</value></data>
   <data name="Account_YtOut" xml:space="preserve"><value>未登录 · 年龄限制、会员视频需登录</value></data>
-  <data name="Accounts_Description" xml:space="preserve"><value>登录后可下载更高画质和受限内容，登录信息仅保存在本机。</value></data>
+  <data name="Accounts_Description" xml:space="preserve"><value>登录后可下载更高画质和受限内容，登录信息仅保存在本机</value></data>
   <data name="Accounts_Platforms" xml:space="preserve"><value>平台账号</value></data>
   <data name="Action_CopyError" xml:space="preserve"><value>复制错误详情</value></data>
   <data name="Action_Download" xml:space="preserve"><value>下载</value></data>
@@ -40,7 +40,7 @@
   <data name="AudioFormat_Original" xml:space="preserve"><value>原始格式（不转码，音质最佳）</value></data>
   <data name="AudioQuality_Best" xml:space="preserve"><value>最高音质</value></data>
   <data name="AudioTrack_Default" xml:space="preserve"><value>默认（原声）</value></data>
-  <data name="Batch_Description" xml:space="preserve"><value>这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。</value></data>
+  <data name="Batch_Description" xml:space="preserve"><value>这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示</value></data>
   <data name="Batch_ListName" xml:space="preserve"><value>要下载的链接</value></data>
   <data name="Batch_Parsing" xml:space="preserve"><value>解析中…</value></data>
   <data name="Batch_PlaylistMeta" xml:space="preserve"><value>播放列表 · {0} 个视频</value></data>
@@ -55,6 +55,8 @@
   <data name="Common_Clear" xml:space="preserve"><value>清除</value></data>
   <data name="Common_Close" xml:space="preserve"><value>关闭</value></data>
   <data name="Common_Failed" xml:space="preserve"><value>操作失败</value></data>
+  <data name="Common_Off" xml:space="preserve"><value>关</value></data>
+  <data name="Common_On" xml:space="preserve"><value>开</value></data>
   <data name="Common_Save" xml:space="preserve"><value>保存</value></data>
   <data name="Compat_Apply" xml:space="preserve"><value>改用推荐设置</value></data>
   <data name="Compat_HdrMkv" xml:space="preserve"><value>HDR 视频将保存为 MKV。</value></data>
@@ -72,7 +74,10 @@
   <data name="Download_Selected" xml:space="preserve"><value>下载选中的 {0} 个</value></data>
   <data name="Download_Start" xml:space="preserve"><value>开始下载</value></data>
   <data name="Downloads_AllPlatforms" xml:space="preserve"><value>全部平台</value></data>
-  <data name="Downloads_ClearFinished" xml:space="preserve"><value>清除已结束</value></data>
+  <data name="Downloads_ClearBody" xml:space="preserve"><value>已下载的文件不受影响。</value></data>
+  <data name="Downloads_ClearConfirm" xml:space="preserve"><value>移除</value></data>
+  <data name="Downloads_ClearFinished" xml:space="preserve"><value>移除已结束</value></data>
+  <data name="Downloads_ClearTitle" xml:space="preserve"><value>从列表中移除 {0} 条已结束的记录？</value></data>
   <data name="Downloads_EmptyBody" xml:space="preserve"><value>在「新建下载」中粘贴链接即可开始</value></data>
   <data name="Downloads_EmptyTitle" xml:space="preserve"><value>暂无下载任务</value></data>
   <data name="Downloads_FilterActive" xml:space="preserve"><value>进行中</value></data>
@@ -97,7 +102,7 @@
   <data name="Error_DouyinNotVideo" xml:space="preserve"><value>这个抖音链接不是视频（暂不支持图文作品和主页）。</value></data>
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>这个播放列表中没有可下载的视频。</value></data>
-  <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。</value></data>
+  <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络与速度」中配置代理。</value></data>
   <data name="Error_NoCover" xml:space="preserve"><value>这个作品没有封面图片。</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「账号」页面中退出 YouTube 登录后重试，或更新 yt-dlp。</value></data>
@@ -119,7 +124,7 @@
   <data name="Home_Added" xml:space="preserve"><value>已添加</value></data>
   <data name="Home_AddedMany" xml:space="preserve"><value>已将 {0} 个任务加入下载队列。</value></data>
   <data name="Home_AddedOne" xml:space="preserve"><value>「{0}」已加入下载队列。</value></data>
-  <data name="Home_BiliLoginHint" xml:space="preserve"><value>登录 B 站后可下载 1080P 及以上画质。</value></data>
+  <data name="Home_BiliLoginHint" xml:space="preserve"><value>登录 哔哩哔哩后可下载 1080p 及以上画质。</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>登录解锁更高画质</value></data>
   <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>无法读取浏览器 Cookie（Chrome / Edge 运行时会锁定），本次已跳过。建议改用「账号」页登录。</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>浏览器 Cookie 读取失败</value></data>
@@ -140,7 +145,6 @@
   <data name="Home_PlatformsTitle" xml:space="preserve"><value>支持的平台</value></data>
   <data name="Home_SignedIn" xml:space="preserve"><value>已登录</value></data>
   <data name="Home_SignInForMore" xml:space="preserve"><value>登录以解锁更多</value></data>
-  <data name="Home_Subtitle" xml:space="preserve"><value>粘贴视频链接，选好画质与格式，一键下载。</value></data>
   <data name="Home_Supports_Bilibili" xml:space="preserve"><value>视频、多 P 视频、合集</value></data>
   <data name="Home_Supports_Douyin" xml:space="preserve"><value>作品链接、分享口令、短链接</value></data>
   <data name="Home_Supports_Weibo" xml:space="preserve"><value>视频、带视频的微博、t.cn 短链接</value></data>
@@ -158,15 +162,17 @@
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} 音频</value></data>
   <data name="Label_AudioOriginal" xml:space="preserve"><value>原始格式音频</value></data>
+  <data name="Label_CodecAuto" xml:space="preserve"><value>自动编码</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A 音频</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 音频</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · 最高画质</value></data>
+  <data name="Label_NoSubtitles" xml:space="preserve"><value>不下载字幕</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
-  <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新。</value></data>
+  <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新</value></data>
   <data name="Login_Done" xml:space="preserve"><value>完成</value></data>
-  <data name="Login_Instructions" xml:space="preserve"><value>在下方登录，完成后窗口自动关闭。</value></data>
-  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>点击右上角「登录」，用抖音 App 扫码。</value></data>
+  <data name="Login_Instructions" xml:space="preserve"><value>在下方登录，完成后窗口自动关闭</value></data>
+  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>点击右上角「登录」，用抖音 App 扫码</value></data>
   <data name="Login_QrExpired" xml:space="preserve"><value>二维码已过期</value></data>
   <data name="Login_QrFailed" xml:space="preserve"><value>无法获取二维码，请检查网络或代理设置</value></data>
   <data name="Login_QrHint" xml:space="preserve"><value>打开哔哩哔哩 App，扫码登录</value></data>
@@ -260,10 +266,10 @@
   <data name="Playlist_SelectAll" xml:space="preserve"><value>全选</value></data>
   <data name="Playlist_Selected" xml:space="preserve"><value>已选择 {0} / {1}</value></data>
   <data name="Playlist_SelectNone" xml:space="preserve"><value>全不选</value></data>
-  <data name="Preset_AudioOnly" xml:space="preserve"><value>仅下载音频</value></data>
+  <data name="Preset_AudioOnly" xml:space="preserve"><value>仅音频</value></data>
   <data name="Preset_Best" xml:space="preserve"><value>最高画质</value></data>
   <data name="Preset_Compatible" xml:space="preserve"><value>兼容优先</value></data>
-  <data name="Preset_HD" xml:space="preserve"><value>高清优先（1080P）</value></data>
+  <data name="Preset_HD" xml:space="preserve"><value>高清优先（1080p）</value></data>
   <data name="Preset_SaveSpace" xml:space="preserve"><value>节省空间</value></data>
   <data name="Quality_Best" xml:space="preserve"><value>最高画质</value></data>
   <data name="Quality_FullHD" xml:space="preserve"><value>全高清</value></data>
@@ -296,7 +302,7 @@
   <data name="Settings_Content" xml:space="preserve"><value>保存内容</value></data>
   <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt 文件</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape 格式，可用浏览器扩展导出</value></data>
-  <data name="Settings_Danmaku" xml:space="preserve"><value>保存 B 站弹幕</value></data>
+  <data name="Settings_Danmaku" xml:space="preserve"><value>保存 哔哩哔哩弹幕</value></data>
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>随字幕一起保存为 XML</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>未安装 · YouTube 部分格式需要（推荐）</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>下载</value></data>
@@ -307,7 +313,7 @@
   <data name="Settings_Install" xml:space="preserve"><value>安装</value></data>
   <data name="Settings_InstallDone" xml:space="preserve"><value>完成</value></data>
   <data name="Settings_InstallFailed" xml:space="preserve"><value>安装失败</value></data>
-  <data name="Settings_InstallFailedMessage" xml:space="preserve"><value>{0}  下载源位于 GitHub，如无法访问请先在「设置 → 网络」中设置代理。</value></data>
+  <data name="Settings_InstallFailedMessage" xml:space="preserve"><value>{0}  下载源位于 GitHub，如无法访问请先在「设置 → 网络与速度」中设置代理。</value></data>
   <data name="Settings_InstallManaged" xml:space="preserve"><value>安装独立版本</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>语言</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>跟随系统</value></data>
@@ -383,8 +389,10 @@
   <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0}（默认）</value></data>
   <data name="Template_Delete" xml:space="preserve"><value>删除</value></data>
   <data name="Template_DeleteBody" xml:space="preserve"><value>已添加的下载任务不受影响。</value></data>
+  <data name="Template_DeletePresetBody" xml:space="preserve"><value>之后可通过「还原内置模板」恢复。</value></data>
   <data name="Template_DeleteTitle" xml:space="preserve"><value>删除「{0}」？</value></data>
   <data name="Template_Duplicate" xml:space="preserve"><value>复制</value></data>
+  <data name="Template_DuplicateToEdit" xml:space="preserve"><value>复制后编辑</value></data>
   <data name="Template_Edit" xml:space="preserve"><value>编辑</value></data>
   <data name="Template_EditTitle" xml:space="preserve"><value>编辑模板</value></data>
   <data name="Template_Header" xml:space="preserve"><value>下载模板</value></data>
@@ -399,17 +407,19 @@
   <data name="Template_SaveAs" xml:space="preserve"><value>另存为模板</value></data>
   <data name="Template_SaveAsTitle" xml:space="preserve"><value>另存为模板</value></data>
   <data name="Template_SetDefault" xml:space="preserve"><value>设为默认</value></data>
-  <data name="Templates_BuiltIn" xml:space="preserve"><value>内置预设</value></data>
+  <data name="Template_View" xml:space="preserve"><value>查看设置</value></data>
+  <data name="Templates_BuiltIn" xml:space="preserve"><value>内置模板</value></data>
   <data name="Templates_Empty" xml:space="preserve"><value>还没有自定义模板</value></data>
-  <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」，或复制一个内置预设</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」，或复制一个内置模板</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>我的模板</value></data>
+  <data name="Templates_RestorePresets" xml:space="preserve"><value>还原内置模板</value></data>
   <data name="Title_UpdateAvailable" xml:space="preserve"><value>新版本 {0}</value></data>
   <data name="Title_UpdateAvailableTip" xml:space="preserve"><value>下载 VidFlow {0}</value></data>
   <data name="Title_UpdateDownloading" xml:space="preserve"><value>正在更新 {0}%</value></data>
   <data name="Title_UpdateDownloadingTip" xml:space="preserve"><value>正在下载 VidFlow {0}</value></data>
   <data name="Title_UpdateFailed" xml:space="preserve"><value>更新失败</value></data>
   <data name="Title_UpdateReady" xml:space="preserve"><value>重启以更新</value></data>
-  <data name="Title_UpdateReadyTip" xml:space="preserve"><value>立即安装 VidFlow {0}。退出 VidFlow 时也会自动安装。</value></data>
+  <data name="Title_UpdateReadyTip" xml:space="preserve"><value>重启并安装 VidFlow {0}。退出 VidFlow 时也会自动安装。</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>有 {0} 项可以安装或更新</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>所有组件均为最新</value></data>
   <data name="Tools_Aria2Purpose" xml:space="preserve"><value>加速 YouTube、X 等海外视频下载</value></data>
@@ -421,7 +431,7 @@
   <data name="Tools_InstallDoneMessage" xml:space="preserve"><value>已安装，可以使用：{0}</value></data>
   <data name="Tools_Installed" xml:space="preserve"><value>{0} · 版本 {1}</value></data>
   <data name="Tools_LastChecked" xml:space="preserve"><value>上次检查：{0}</value></data>
-  <data name="Tools_ManagedNote" xml:space="preserve"><value>这些工具由 VidFlow 下载并保持更新</value></data>
+  <data name="Tools_ManagedNote" xml:space="preserve"><value>这些组件由 VidFlow 下载并保持更新</value></data>
   <data name="Tools_MissingRequired" xml:space="preserve"><value>缺少必需组件 {0}，安装后才能下载</value></data>
   <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · 版本 {1} · 系统中的版本</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>全部更新</value></data>
@@ -444,13 +454,13 @@
   <data name="Update_Failed" xml:space="preserve"><value>更新失败：{0}</value></data>
   <data name="Update_InstallBody" xml:space="preserve"><value>VidFlow 将关闭并在几秒内完成更新后自动重新打开。</value></data>
   <data name="Update_InstallBodyActive" xml:space="preserve"><value>VidFlow 将关闭并在几秒内完成更新后自动重新打开。{0} 个正在进行的下载会暂停，更新后自动继续。</value></data>
-  <data name="Update_InstallNow" xml:space="preserve"><value>立即安装</value></data>
+  <data name="Update_InstallNow" xml:space="preserve"><value>重启以更新</value></data>
   <data name="Update_InstallTitle" xml:space="preserve"><value>安装 VidFlow {0}？</value></data>
   <data name="Update_Later" xml:space="preserve"><value>稍后</value></data>
   <data name="Update_Network" xml:space="preserve"><value>无法连接更新服务器，请检查网络或代理。</value></data>
   <data name="Update_NoManifest" xml:space="preserve"><value>暂未找到更新信息，请稍后再试。</value></data>
   <data name="Update_NotesHeader" xml:space="preserve"><value>版本 {0} · 发布于 {1}</value></data>
-  <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已下载：可立即安装，退出 VidFlow 时也会自动安装</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>版本 {0} 已下载：可重启以更新，退出 VidFlow 时也会自动安装</value></data>
   <data name="Update_Retry" xml:space="preserve"><value>重试</value></data>
   <data name="Update_RolledBack" xml:space="preserve"><value>上次更新到 {0} 未完成，已回滚，当前为 {1}。</value></data>
   <data name="Update_UpToDate" xml:space="preserve"><value>当前版本 {0} · 已是最新</value></data>
@@ -466,12 +476,12 @@
   <data name="Var_uploader" xml:space="preserve"><value>作者</value></data>
   <data name="Var_year" xml:space="preserve"><value>年份</value></data>
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。公开视频无需登录，也可以稍后在「账号」页面中登录。</value></data>
-  <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码。</value></data>
+  <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>登录账号（可选）</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>上一步</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>更改</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>开始使用</value></data>
-  <data name="Wizard_FolderBody" xml:space="preserve"><value>下载的视频会保存到这里，播放列表会自动放进单独的子文件夹。</value></data>
+  <data name="Wizard_FolderBody" xml:space="preserve"><value>下载的视频会保存到这里，播放列表会自动放进单独的子文件夹</value></data>
   <data name="Wizard_FolderTitle" xml:space="preserve"><value>保存位置</value></data>
   <data name="Wizard_InstallAll" xml:space="preserve"><value>一键安装组件</value></data>
   <data name="Wizard_Installing" xml:space="preserve"><value>正在安装 {0}…</value></data>
@@ -481,6 +491,6 @@
   <data name="Wizard_Required" xml:space="preserve"><value>必需</value></data>
   <data name="Wizard_SignedIn" xml:space="preserve"><value>已登录</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>跳过</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 用这些免费工具下载和处理视频（约 185 MB，来自官方 GitHub）。</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 用这些免费组件下载和处理视频（约 185 MB，来自官方 GitHub）</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>欢迎使用 VidFlow</value></data>
 </root>

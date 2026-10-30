@@ -21,14 +21,21 @@ public static class TemplateStore
 
     public static IReadOnlyList<DownloadTemplate> Custom => _custom ??= Load();
 
-    public static IEnumerable<DownloadTemplate> All => BuiltIns.Concat(Custom);
+    /// <summary>Everything on offer: the presets the user hasn't deleted, then their own.</summary>
+    public static IEnumerable<DownloadTemplate> All =>
+        BuiltIns.Where(t => !AppSettings.Current.DeletedPresets.Contains(t.Id)).Concat(Custom);
+
+    /// <summary>The last template stays: new downloads always need one to start from.</summary>
+    public static bool CanDelete => All.Skip(1).Any();
+
+    public static bool HasDeletedPresets => AppSettings.Current.DeletedPresets.Count > 0;
 
     public static event Action? Changed;
 
     public static DownloadTemplate? Find(Guid id) => All.FirstOrDefault(t => t.Id == id);
 
-    /// <summary>The template new downloads start from (falls back to "Best quality").</summary>
-    public static DownloadTemplate Default => Find(AppSettings.Current.DefaultTemplateId) ?? BuiltIns[0];
+    /// <summary>The template new downloads start from (falls back to the first one there is).</summary>
+    public static DownloadTemplate Default => Find(AppSettings.Current.DefaultTemplateId) ?? All.First();
 
     public static void SetDefault(DownloadTemplate t)
     {
@@ -64,16 +71,23 @@ public static class TemplateStore
         Persist();
     }
 
+    /// <summary>Removes a user template for good, or hides a preset until <see cref="RestorePresets"/>.</summary>
     public static void Delete(DownloadTemplate t)
     {
-        if (t.IsBuiltIn) return;
-        ((List<DownloadTemplate>)Custom).RemoveAll(x => x.Id == t.Id);
-        if (AppSettings.Current.DefaultTemplateId == t.Id)
-        {
-            AppSettings.Current.DefaultTemplateId = BuiltIns[0].Id;
-            AppSettings.Save();
-        }
+        if (!CanDelete) return;
+        if (t.IsBuiltIn) AppSettings.Current.DeletedPresets.Add(t.Id);
+        else ((List<DownloadTemplate>)Custom).RemoveAll(x => x.Id == t.Id);
+        if (AppSettings.Current.DefaultTemplateId == t.Id) AppSettings.Current.DefaultTemplateId = All.First().Id;
+        AppSettings.Save();
         Persist();
+    }
+
+    /// <summary>Brings back every deleted preset. The user's own templates and the default stay as they are.</summary>
+    public static void RestorePresets()
+    {
+        AppSettings.Current.DeletedPresets.Clear();
+        AppSettings.Save();
+        Changed?.Invoke();
     }
 
     /// <summary>"Name", "Name (2)", ... avoiding names already used.</summary>

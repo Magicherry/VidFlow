@@ -383,6 +383,8 @@ public class YtDlpArgsTests
     {
         var args = YtDlpArgs.Download(Req(), new AppSettings { SpeedLimitKBps = 2048 }, WithFfmpeg);
         Assert.Equal("2048K", args[args.IndexOf("-r") + 1]);
+        // The limit is per fragment thread: more than one would multiply it.
+        Assert.DoesNotContain("-N", args);
     }
 
     [Fact]

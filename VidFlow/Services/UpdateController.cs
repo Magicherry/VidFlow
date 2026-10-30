@@ -62,7 +62,8 @@ public sealed class UpdateController
 
     public async Task CheckAsync(bool userInitiated)
     {
-        if (_busy) return;
+        // Already downloaded: it stays ready to install (now or on exit). A newer release is found after that.
+        if (_busy || State == UpdateState.Ready) return;
         _busy = true;
         Set(UpdateState.Checking);
         try
@@ -95,7 +96,8 @@ public sealed class UpdateController
         {
             Log.Warn($"Update check failed: {ex.Message}");
             Error = Friendly(ex);
-            Set(UpdateState.Failed);
+            // A periodic check that can't connect changes nothing about an update already known to be available.
+            Set(!userInitiated && HasNewer ? UpdateState.Available : UpdateState.Failed);
         }
         finally
         {

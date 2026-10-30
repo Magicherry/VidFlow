@@ -30,7 +30,8 @@ public static class DownloadLabels
         return partIndex is { } p ? $"{label}  ·  P{p}" : label;
     }
 
-    /// <summary>One-line description of a template: "MP4 · 1080p · H.264 · AAC · Subtitles".</summary>
+    /// <summary>One-line description of a template that spells out its choices, defaults included:
+    /// "Video · MP4 · 1080p · H.264 · AAC · No subtitles", "Audio only · MP3 · Best available".</summary>
     public static string Summary(DownloadTemplate t)
     {
         var parts = new List<string>();
@@ -40,21 +41,33 @@ public static class DownloadLabels
         }
         else if (t.Mode == "audio")
         {
-            parts.Add(AudioOutputLabel(t.AudioFormat is "auto" ? "mp3" : t.AudioFormat));
-            if (t.AudioQuality > 0 && t.AudioFormat is not ("flac" or "wav" or MediaFeatures.Original)) parts.Add($"{t.AudioQuality} kbps");
+            var format = t.AudioFormat is "auto" ? "mp3" : t.AudioFormat;
+            if (format == MediaFeatures.Original)
+            {
+                parts.Add(L.Get("Label_AudioOriginal"));
+            }
+            else
+            {
+                parts.Add(L.Get("Mode_Audio"));
+                parts.Add(format.ToUpperInvariant());
+                if (format is not ("flac" or "wav"))
+                    parts.Add(t.AudioQuality > 0 ? $"{t.AudioQuality} kbps" : L.Get("AudioQuality_Best"));
+            }
+            if (t.Subtitles) parts.Add(L.Get("Options_Subtitles"));
         }
         else
         {
+            parts.Add(L.Get("Mode_Video"));
             parts.Add(t.Container.ToUpperInvariant());
             parts.Add(t.MaxHeight > 0 ? $"{t.MaxHeight}p" : L.Get("Quality_Best"));
-            if (VideoCodecs.ShortName(t.Codec) is { Length: > 0 } codec) parts.Add(codec);
+            parts.Add(VideoCodecs.ShortName(t.Codec) is { Length: > 0 } codec ? codec : L.Get("Label_CodecAuto"));
             if (PictureLabel(t.DynamicRange) is { } picture) parts.Add(picture);
             if (t.AudioFormat is "aac" or "opus") parts.Add(t.AudioFormat == "aac" ? "AAC" : "Opus");
             if (SoundLabel(t.AudioFormat) is { } sound) parts.Add(sound);
             if (t.AudioQuality > 0) parts.Add($"{t.AudioQuality} kbps");
+            parts.Add(L.Get(t.Subtitles ? "Options_Subtitles" : "Label_NoSubtitles"));
         }
-        if (t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
-        if (t.Subtitles && t.Mode != "cover") parts.Add(L.Get("Options_Subtitles"));
+        if (t.Mode != "cover" && t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
         if (t.FolderTemplate.Length > 0) parts.Add(t.FolderTemplate.Replace('/', '\\'));
         return string.Join(" · ", parts);
     }

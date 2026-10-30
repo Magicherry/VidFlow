@@ -10,7 +10,7 @@ using VidFlow.Services;
 namespace VidFlow.Pages;
 
 /// <summary>Download templates: the user's own (edit / duplicate / rename / delete) and the built-in presets
-/// (duplicate only), each of which can be made the default.</summary>
+/// (view / duplicate / delete, restorable), each of which can be made the default.</summary>
 public sealed partial class TemplatesPage : Page
 {
     public TemplatesPage()
@@ -33,6 +33,7 @@ public sealed partial class TemplatesPage : Page
         foreach (var t in TemplateStore.All)
             (t.IsBuiltIn ? BuiltInList : CustomList).Children.Add(BuildCard(t, t.Id == defaultId));
         EmptyCard.Visibility = CustomList.Children.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        RestorePresetsLink.Visibility = TemplateStore.HasDeletedPresets ? Visibility.Visible : Visibility.Collapsed;
     }
 
     /// <summary>Summary, "set as default", and a menu with the actions the template allows.</summary>
@@ -49,16 +50,18 @@ public sealed partial class TemplatesPage : Page
         else
         {
             var setDefault = new Button { Content = L.Get("Template_SetDefault") };
+            ToolTipService.SetToolTip(setDefault, L.Get("Settings_TemplatesDescription"));
             setDefault.Click += (_, _) => TemplateStore.SetDefault(t);
             actions.Children.Add(setDefault);
         }
 
         var menu = new MenuFlyout { Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.BottomEdgeAlignedRight };
-        if (!t.IsBuiltIn) menu.Items.Add(MenuItem(L.Get("Template_Edit"), "", async () => await EditTemplateAsync(t)));
+        if (t.IsBuiltIn) menu.Items.Add(MenuItem(L.Get("Template_View"), "\uE7B3", async () => await EditTemplateAsync(t)));
+        else menu.Items.Add(MenuItem(L.Get("Template_Edit"), "", async () => await EditTemplateAsync(t)));
         menu.Items.Add(MenuItem(L.Get("Template_Duplicate"), "", async () => await DuplicateTemplateAsync(t)));
-        if (!t.IsBuiltIn)
+        if (!t.IsBuiltIn) menu.Items.Add(MenuItem(L.Get("Template_Rename"), "", async () => await RenameTemplateAsync(t)));
+        if (TemplateStore.CanDelete)
         {
-            menu.Items.Add(MenuItem(L.Get("Template_Rename"), "", async () => await RenameTemplateAsync(t)));
             menu.Items.Add(new MenuFlyoutSeparator());
             menu.Items.Add(MenuItem(L.Get("Template_Delete"), "", async () => await DeleteTemplateAsync(t)));
         }
@@ -81,13 +84,10 @@ public sealed partial class TemplatesPage : Page
             HeaderIcon = new FontIcon { Glyph = isDefault ? "" : t.IsBuiltIn ? "" : "" },
             Content = actions,
         };
-        // Custom templates open the editor on click, like a file in a list.
-        if (!t.IsBuiltIn)
-        {
-            card.IsClickEnabled = true;
-            card.ActionIcon = new FontIcon { Glyph = "" };
-            card.Click += async (_, _) => await EditTemplateAsync(t);
-        }
+        // Open on click, like a file in a list: the editor, or a read-only view for a preset.
+        card.IsClickEnabled = true;
+        card.ActionIcon = new FontIcon { Glyph = t.IsBuiltIn ? "" : "" };
+        card.Click += async (_, _) => await EditTemplateAsync(t);
         return card;
     }
 
@@ -98,12 +98,15 @@ public sealed partial class TemplatesPage : Page
         return item;
     }
 
+    void RestorePresets_Click(object sender, RoutedEventArgs e) => TemplateStore.RestorePresets();
+
     async void NewTemplate_Click(object sender, RoutedEventArgs e) => await EditTemplateAsync(null);
 
     async Task EditTemplateAsync(DownloadTemplate? t)
     {
-        await new TemplateEditorDialog(t) { XamlRoot = XamlRoot }.ShowAsync();
+        var result = await new TemplateEditorDialog(t) { XamlRoot = XamlRoot }.ShowAsync();
         BuildLists();
+        if (t is { IsBuiltIn: true } && result == ContentDialogResult.Primary) await DuplicateTemplateAsync(t);
     }
 
     async Task DuplicateTemplateAsync(DownloadTemplate t)
@@ -124,7 +127,7 @@ public sealed partial class TemplatesPage : Page
         {
             XamlRoot = XamlRoot,
             Title = L.Format("Template_DeleteTitle", t.DisplayName),
-            Content = L.Get("Template_DeleteBody"),
+            Content = L.Get(t.IsBuiltIn ? "Template_DeletePresetBody" : "Template_DeleteBody"),
             PrimaryButtonText = L.Get("Template_Delete"),
             CloseButtonText = L.Get("Common_Cancel"),
             DefaultButton = ContentDialogButton.Close,

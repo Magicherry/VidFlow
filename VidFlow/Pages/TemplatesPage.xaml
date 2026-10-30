@@ -52,10 +52,6 @@
                         </StackPanel>
                     </Button>
                 </Grid>
-                <TextBlock
-                    Margin="0,4,0,0"
-                    Style="{StaticResource PageDescriptionStyle}"
-                    Text="{x:Bind l:L.Get('Settings_TemplatesDescription')}" />
 
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Templates_Mine')}" />
                 <!--  Shown instead of the list while there are no custom templates.  -->
@@ -70,7 +66,19 @@
                 <!--  One card per template, filled in code.  -->
                 <StackPanel x:Name="CustomList" Spacing="4" />
 
-                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Templates_BuiltIn')}" />
+                <Grid>
+                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Templates_BuiltIn')}" />
+                    <!--  Only once a preset has been deleted  -->
+                    <HyperlinkButton
+                        x:Name="RestorePresetsLink"
+                        Margin="0,0,0,-2"
+                        Padding="6,2"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Click="RestorePresets_Click"
+                        Content="{x:Bind l:L.Get('Templates_RestorePresets')}"
+                        Visibility="Collapsed" />
+                </Grid>
                 <StackPanel x:Name="BuiltInList" Spacing="4" />
             </StackPanel>
         </Grid>

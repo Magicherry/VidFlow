@@ -5,10 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:VidFlow.Controls"
     xmlns:l="using:VidFlow.Localization"
-    CloseButtonText="{x:Bind l:L.Get('Common_Cancel')}"
     DefaultButton="Primary"
     PrimaryButtonClick="Save_Click"
-    PrimaryButtonText="{x:Bind l:L.Get('Common_Save')}"
     Style="{StaticResource DefaultContentDialogStyle}">
 
     <ContentDialog.Resources>

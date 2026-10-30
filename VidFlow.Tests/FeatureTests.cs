@@ -135,6 +135,50 @@ public class CompatibilityTests
 public class TemplateStoreTests
 {
     [Fact]
+    public void PresetsCanBeDeletedAndRestored()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "vidflow-test-" + Guid.NewGuid());
+        var old = AppSettings.DataDir;
+        var oldDefault = AppSettings.Current.DefaultTemplateId;
+        AppSettings.DataDir = dir;
+        AppSettings.Current.DefaultTemplateId = default;
+        TemplateStore.ResetCache();
+        try
+        {
+            var best = TemplateStore.BuiltIns[0];
+            TemplateStore.SetDefault(best);
+            Assert.False(TemplateStore.HasDeletedPresets);
+
+            // Deleting the default moves it to the next one.
+            TemplateStore.Delete(best);
+            Assert.Null(TemplateStore.Find(best.Id));
+            Assert.DoesNotContain(TemplateStore.All, t => t.Id == best.Id);
+            Assert.Equal(TemplateStore.BuiltIns[1].Id, TemplateStore.Default.Id);
+            Assert.True(TemplateStore.HasDeletedPresets);
+
+            // The last template can't go.
+            foreach (var t in TemplateStore.All.ToList()) TemplateStore.Delete(t);
+            Assert.Single(TemplateStore.All);
+            Assert.False(TemplateStore.CanDelete);
+
+            // Restoring keeps the default.
+            var remaining = TemplateStore.Default.Id;
+            TemplateStore.RestorePresets();
+            Assert.Equal(TemplateStore.BuiltIns.Select(t => t.Id), TemplateStore.All.Select(t => t.Id));
+            Assert.Equal(remaining, TemplateStore.Default.Id);
+            Assert.False(TemplateStore.HasDeletedPresets);
+        }
+        finally
+        {
+            AppSettings.Current.DeletedPresets.Clear();
+            AppSettings.Current.DefaultTemplateId = oldDefault;
+            AppSettings.DataDir = old;
+            TemplateStore.ResetCache();
+            if (Directory.Exists(dir)) Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    [Fact]
     public void CreateEditDuplicateRenameDeleteAndDefault()
     {
         var dir = Path.Combine(Path.GetTempPath(), "vidflow-test-" + Guid.NewGuid());
@@ -644,6 +688,19 @@ public class MediaFeatureTests
     }
 
     [Fact]
+    public void SummaryNamesEveryChoiceIncludingDefaults()
+    {
+        string T(string key) => VidFlow.Localization.L.Get(key);
+        Assert.Equal($"{T("Mode_Video")} · MP4 · {T("Quality_Best")} · {T("Label_CodecAuto")} · {T("Label_NoSubtitles")}",
+            DownloadLabels.Summary(new DownloadTemplate()));
+        Assert.Equal($"{T("Mode_Video")} · MP4 · 1080p · H.264 · AAC · {T("Label_NoSubtitles")}",
+            DownloadLabels.Summary(new DownloadTemplate { MaxHeight = 1080, Codec = "h264", AudioFormat = "aac" }));
+        Assert.Equal($"{T("Mode_Audio")} · MP3 · {T("AudioQuality_Best")}", DownloadLabels.Summary(new DownloadTemplate { Mode = "audio", AudioFormat = "mp3" }));
+        Assert.Equal($"{T("Mode_Audio")} · FLAC", DownloadLabels.Summary(new DownloadTemplate { Mode = "audio", AudioFormat = "flac" }));
+        Assert.Equal(T("Mode_Cover"), DownloadLabels.Summary(new DownloadTemplate { Mode = "cover", Subtitles = true }));
+    }
+
+    [Fact]
     public void LabelsMentionTheChoices()
     {
         var t = new DownloadTemplate { DynamicRange = MediaFeatures.DolbyVision, AudioFormat = MediaFeatures.HiRes };
@@ -787,6 +844,22 @@ public class ChapterTests
 
     static List<string> Args(string url, AppSettings s, YtDlpArgs.Environment? env = null) =>
         YtDlpArgs.Download(new DownloadTemplate().ToRequest(url, "o"), s, env ?? WithFfmpeg);
+
+    [Theory]
+    [InlineData("video", "mp4", null, true)]
+    [InlineData("video", "mkv", null, true)]
+    [InlineData("video", "webm", null, false)]
+    [InlineData("audio", "mp4", "mp3", true)]
+    [InlineData("audio", "mp4", "flac", true)]
+    [InlineData("audio", "mp4", "wav", false)]
+    public void CoverIsOnlyEmbeddedWhereSupported(string mode, string container, string? audio, bool embeds)
+    {
+        var req = new DownloadTemplate { Mode = mode, Container = container, AudioFormat = audio ?? "auto" }
+            .ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        var args = YtDlpArgs.Download(req, new AppSettings(), WithFfmpeg);
+        Assert.Contains("--embed-metadata", args);
+        Assert.Equal(embeds, args.Contains("--embed-thumbnail"));
+    }
 
     [Fact]
     public void ChaptersAreEmbeddedByDefault()
@@ -943,6 +1016,20 @@ public class FileDownloaderTests
         try
         {
             await FileDownloader.DownloadAsync(server.Url, dest, null, default, client: new HttpClient());
+            Assert.Equal(server.Data, await File.ReadAllBytesAsync(dest));
+        }
+        finally { File.Delete(dest); }
+    }
+
+    [Fact]
+    public async Task KeepsRetryingWhileDataArrives()
+    {
+        // More drops than attempts allowed in a row, but each one brings in part of a chunk.
+        using var server = new FileServer(5 << 20, ranges: true) { CutFirst = 10 };
+        var dest = TempFile();
+        try
+        {
+            await FileDownloader.DownloadAsync(server.Url, dest, null, default, connections: 2, client: new HttpClient());
             Assert.Equal(server.Data, await File.ReadAllBytesAsync(dest));
         }
         finally { File.Delete(dest); }

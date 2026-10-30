@@ -13,15 +13,15 @@
   <data name="About_Troubleshoot" xml:space="preserve"><value>Troubleshooting</value></data>
   <data name="About_TroubleshootDescription" xml:space="preserve"><value>Logs, data folder and the setup wizard</value></data>
   <data name="About_Version" xml:space="preserve"><value>Version {0}</value></data>
-  <data name="Account_BiliIn" xml:space="preserve"><value>Signed in · 1080P and above (4K / HDR need premium)</value></data>
-  <data name="Account_BiliOut" xml:space="preserve"><value>Not signed in · up to 720P</value></data>
+  <data name="Account_BiliIn" xml:space="preserve"><value>Signed in · 1080p and above (4K / HDR need premium)</value></data>
+  <data name="Account_BiliOut" xml:space="preserve"><value>Not signed in · up to 720p</value></data>
   <data name="Account_DouyinIn" xml:space="preserve"><value>Signed in · account-only videos available</value></data>
   <data name="Account_DouyinOut" xml:space="preserve"><value>Not signed in · public videos work without it</value></data>
   <data name="Account_Login" xml:space="preserve"><value>Sign in</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>Sign out</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>Signed in · age-restricted / members-only videos available</value></data>
   <data name="Account_YtOut" xml:space="preserve"><value>Not signed in · needed for age-restricted / members-only videos</value></data>
-  <data name="Accounts_Description" xml:space="preserve"><value>Sign in for higher quality and restricted videos. Your sign-in stays on this PC.</value></data>
+  <data name="Accounts_Description" xml:space="preserve"><value>Sign in for higher quality and restricted videos. Your sign-in stays on this PC</value></data>
   <data name="Accounts_Platforms" xml:space="preserve"><value>Platform accounts</value></data>
   <data name="Action_CopyError" xml:space="preserve"><value>Copy error details</value></data>
   <data name="Action_Download" xml:space="preserve"><value>Download</value></data>
@@ -40,12 +40,12 @@
   <data name="AudioFormat_Original" xml:space="preserve"><value>Original (no conversion, best quality)</value></data>
   <data name="AudioQuality_Best" xml:space="preserve"><value>Best available</value></data>
   <data name="AudioTrack_Default" xml:space="preserve"><value>Default (original)</value></data>
-  <data name="Batch_Description" xml:space="preserve"><value>These links are added with the options below; titles appear once each download starts.</value></data>
+  <data name="Batch_Description" xml:space="preserve"><value>These links are added with the options below; titles appear once each download starts</value></data>
   <data name="Batch_ListName" xml:space="preserve"><value>Links to download</value></data>
   <data name="Batch_Parsing" xml:space="preserve"><value>Parsing…</value></data>
   <data name="Batch_PlaylistMeta" xml:space="preserve"><value>Playlist · {0} videos</value></data>
-  <data name="Batch_Status" xml:space="preserve"><value>Parsed {0} of {1}. Tick the ones to download.</value></data>
-  <data name="Batch_StatusFailed" xml:space="preserve"><value>Parsed {0} of {1}, {2} failed. Tick the ones to download.</value></data>
+  <data name="Batch_Status" xml:space="preserve"><value>Parsed {0} of {1}. Tick the ones to download</value></data>
+  <data name="Batch_StatusFailed" xml:space="preserve"><value>Parsed {0} of {1}, {2} failed. Tick the ones to download</value></data>
   <data name="Batch_Title" xml:space="preserve"><value>{0} links</value></data>
   <data name="Batch_UnsupportedHint" xml:space="preserve"><value>Some links aren&apos;t from a supported platform and may fail.</value></data>
   <data name="Codec_Auto" xml:space="preserve"><value>Auto (best quality)</value></data>
@@ -55,6 +55,8 @@
   <data name="Common_Clear" xml:space="preserve"><value>Clear</value></data>
   <data name="Common_Close" xml:space="preserve"><value>Close</value></data>
   <data name="Common_Failed" xml:space="preserve"><value>Something went wrong</value></data>
+  <data name="Common_Off" xml:space="preserve"><value>Off</value></data>
+  <data name="Common_On" xml:space="preserve"><value>On</value></data>
   <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
   <data name="Compat_Apply" xml:space="preserve"><value>Use recommended</value></data>
   <data name="Compat_HdrMkv" xml:space="preserve"><value>HDR video will be saved as MKV.</value></data>
@@ -72,7 +74,10 @@
   <data name="Download_Selected" xml:space="preserve"><value>Download {0} selected</value></data>
   <data name="Download_Start" xml:space="preserve"><value>Start download</value></data>
   <data name="Downloads_AllPlatforms" xml:space="preserve"><value>All platforms</value></data>
-  <data name="Downloads_ClearFinished" xml:space="preserve"><value>Clear finished</value></data>
+  <data name="Downloads_ClearBody" xml:space="preserve"><value>Downloaded files stay where they are.</value></data>
+  <data name="Downloads_ClearConfirm" xml:space="preserve"><value>Remove</value></data>
+  <data name="Downloads_ClearFinished" xml:space="preserve"><value>Remove finished</value></data>
+  <data name="Downloads_ClearTitle" xml:space="preserve"><value>Remove {0} finished downloads from the list?</value></data>
   <data name="Downloads_EmptyBody" xml:space="preserve"><value>Paste a link on the New download page to get started</value></data>
   <data name="Downloads_EmptyTitle" xml:space="preserve"><value>No downloads yet</value></data>
   <data name="Downloads_FilterActive" xml:space="preserve"><value>In progress</value></data>
@@ -97,7 +102,7 @@
   <data name="Error_DouyinNotVideo" xml:space="preserve"><value>This Douyin link isn&apos;t a video (photo posts and profiles aren&apos;t supported).</value></data>
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>Couldn&apos;t get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
-  <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network).</value></data>
+  <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network and speed).</value></data>
   <data name="Error_NoCover" xml:space="preserve"><value>This video has no cover image.</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube on the Accounts page, or update yt-dlp.</value></data>
@@ -119,7 +124,7 @@
   <data name="Home_Added" xml:space="preserve"><value>Added</value></data>
   <data name="Home_AddedMany" xml:space="preserve"><value>{0} downloads added to the queue.</value></data>
   <data name="Home_AddedOne" xml:space="preserve"><value>Added “{0}” to the queue.</value></data>
-  <data name="Home_BiliLoginHint" xml:space="preserve"><value>Sign in to Bilibili for 1080P and above.</value></data>
+  <data name="Home_BiliLoginHint" xml:space="preserve"><value>Sign in to Bilibili for 1080p and above.</value></data>
   <data name="Home_BiliLoginHintTitle" xml:space="preserve"><value>Sign in for higher quality</value></data>
   <data name="Home_BrowserCookiesFailed" xml:space="preserve"><value>Couldn&apos;t read the browser&apos;s cookies (Chrome / Edge lock them while running), so they were skipped. In-app sign-in is more reliable.</value></data>
   <data name="Home_BrowserCookiesFailedTitle" xml:space="preserve"><value>Browser cookies unavailable</value></data>
@@ -140,7 +145,6 @@
   <data name="Home_PlatformsTitle" xml:space="preserve"><value>Supported platforms</value></data>
   <data name="Home_SignedIn" xml:space="preserve"><value>Signed in</value></data>
   <data name="Home_SignInForMore" xml:space="preserve"><value>Sign in for more</value></data>
-  <data name="Home_Subtitle" xml:space="preserve"><value>Paste a video link, pick the quality and format, and download.</value></data>
   <data name="Home_Supports_Bilibili" xml:space="preserve"><value>Videos, multi-part videos, collections</value></data>
   <data name="Home_Supports_Douyin" xml:space="preserve"><value>Video links, share text, short links</value></data>
   <data name="Home_Supports_Weibo" xml:space="preserve"><value>Videos, posts with video, t.cn links</value></data>
@@ -152,21 +156,23 @@
   <data name="Home_ToolsMissingMessage" xml:space="preserve"><value>yt-dlp and ffmpeg need installing first.</value></data>
   <data name="Home_ToolsMissingTitle" xml:space="preserve"><value>Download components not installed</value></data>
   <data name="Home_Unreachable" xml:space="preserve"><value>Can&apos;t connect · may need a proxy</value></data>
-  <data name="Home_UnreachableTip" xml:space="preserve"><value>YouTube could not be reached on this network. Set a proxy in Settings.</value></data>
+  <data name="Home_UnreachableTip" xml:space="preserve"><value>YouTube could not be reached on this network. Set a proxy in Settings</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
   <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links or share text (separate several with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
   <data name="Label_AudioOriginal" xml:space="preserve"><value>Original audio</value></data>
+  <data name="Label_CodecAuto" xml:space="preserve"><value>Auto codec</value></data>
   <data name="Label_M4a" xml:space="preserve"><value>M4A audio</value></data>
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · best quality</value></data>
+  <data name="Label_NoSubtitles" xml:space="preserve"><value>No subtitles</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>Downloaded from the official yt-dlp builds when you choose to install it; not bundled with VidFlow. Source code: ffmpeg.org.</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow is built on these open-source components. Click a license to read it.</value></data>
-  <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically.</value></data>
+  <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically</value></data>
   <data name="Login_Done" xml:space="preserve"><value>Done</value></data>
-  <data name="Login_Instructions" xml:space="preserve"><value>Sign in below; the window closes when you&apos;re done.</value></data>
-  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>Click 登录 at the top right and scan with the Douyin app.</value></data>
+  <data name="Login_Instructions" xml:space="preserve"><value>Sign in below; the window closes when you&apos;re done</value></data>
+  <data name="Login_InstructionsDouyin" xml:space="preserve"><value>Click 登录 at the top right and scan with the Douyin app</value></data>
   <data name="Login_QrExpired" xml:space="preserve"><value>This code has expired</value></data>
   <data name="Login_QrFailed" xml:space="preserve"><value>Couldn&apos;t get a code: check your network or proxy</value></data>
   <data name="Login_QrHint" xml:space="preserve"><value>Scan with the Bilibili app to sign in</value></data>
@@ -307,7 +313,7 @@
   <data name="Settings_Install" xml:space="preserve"><value>Install</value></data>
   <data name="Settings_InstallDone" xml:space="preserve"><value>Done</value></data>
   <data name="Settings_InstallFailed" xml:space="preserve"><value>Installation failed</value></data>
-  <data name="Settings_InstallFailedMessage" xml:space="preserve"><value>{0}  Downloads come from GitHub; if it can&apos;t be reached, set a proxy under Settings → Network.</value></data>
+  <data name="Settings_InstallFailedMessage" xml:space="preserve"><value>{0}  Downloads come from GitHub; if it can&apos;t be reached, set a proxy under Settings → Network and speed.</value></data>
   <data name="Settings_InstallManaged" xml:space="preserve"><value>Install app copy</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>Same as Windows</value></data>
@@ -383,8 +389,10 @@
   <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0} (default)</value></data>
   <data name="Template_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Template_DeleteBody" xml:space="preserve"><value>Downloads already added are not affected.</value></data>
+  <data name="Template_DeletePresetBody" xml:space="preserve"><value>You can bring it back with Restore built-in templates.</value></data>
   <data name="Template_DeleteTitle" xml:space="preserve"><value>Delete “{0}”?</value></data>
   <data name="Template_Duplicate" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="Template_DuplicateToEdit" xml:space="preserve"><value>Duplicate to edit</value></data>
   <data name="Template_Edit" xml:space="preserve"><value>Edit</value></data>
   <data name="Template_EditTitle" xml:space="preserve"><value>Edit template</value></data>
   <data name="Template_Header" xml:space="preserve"><value>Download template</value></data>
@@ -399,17 +407,19 @@
   <data name="Template_SaveAs" xml:space="preserve"><value>Save as template</value></data>
   <data name="Template_SaveAsTitle" xml:space="preserve"><value>Save as template</value></data>
   <data name="Template_SetDefault" xml:space="preserve"><value>Set as default</value></data>
-  <data name="Templates_BuiltIn" xml:space="preserve"><value>Built-in presets</value></data>
+  <data name="Template_View" xml:space="preserve"><value>View settings</value></data>
+  <data name="Templates_BuiltIn" xml:space="preserve"><value>Built-in templates</value></data>
   <data name="Templates_Empty" xml:space="preserve"><value>No custom templates yet</value></data>
-  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Use New template, or duplicate a preset</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Use New template, or duplicate a built-in one</value></data>
   <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
+  <data name="Templates_RestorePresets" xml:space="preserve"><value>Restore built-in templates</value></data>
   <data name="Title_UpdateAvailable" xml:space="preserve"><value>Update {0}</value></data>
   <data name="Title_UpdateAvailableTip" xml:space="preserve"><value>Download VidFlow {0}</value></data>
   <data name="Title_UpdateDownloading" xml:space="preserve"><value>Updating {0}%</value></data>
   <data name="Title_UpdateDownloadingTip" xml:space="preserve"><value>Downloading VidFlow {0}</value></data>
   <data name="Title_UpdateFailed" xml:space="preserve"><value>Update failed</value></data>
   <data name="Title_UpdateReady" xml:space="preserve"><value>Restart to update</value></data>
-  <data name="Title_UpdateReadyTip" xml:space="preserve"><value>Install VidFlow {0} now. It also installs by itself when you exit VidFlow.</value></data>
+  <data name="Title_UpdateReadyTip" xml:space="preserve"><value>Restarts and installs VidFlow {0}. It also installs by itself when you exit VidFlow.</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>{0} to install or update</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>All components are up to date</value></data>
   <data name="Tools_Aria2Purpose" xml:space="preserve"><value>Faster YouTube and X downloads</value></data>
@@ -421,7 +431,7 @@
   <data name="Tools_InstallDoneMessage" xml:space="preserve"><value>Ready to use: {0}</value></data>
   <data name="Tools_Installed" xml:space="preserve"><value>{0} · version {1}</value></data>
   <data name="Tools_LastChecked" xml:space="preserve"><value>Last checked {0}</value></data>
-  <data name="Tools_ManagedNote" xml:space="preserve"><value>VidFlow downloads and keeps these tools up to date</value></data>
+  <data name="Tools_ManagedNote" xml:space="preserve"><value>VidFlow downloads and keeps these components up to date</value></data>
   <data name="Tools_MissingRequired" xml:space="preserve"><value>{0} is required: install it to download videos</value></data>
   <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · version {1} · system copy</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>Update all</value></data>
@@ -444,13 +454,13 @@
   <data name="Update_Failed" xml:space="preserve"><value>Update failed: {0}</value></data>
   <data name="Update_InstallBody" xml:space="preserve"><value>VidFlow will close, update, and reopen in a few seconds.</value></data>
   <data name="Update_InstallBodyActive" xml:space="preserve"><value>VidFlow will close, update, and reopen in a few seconds. {0} downloads will pause and continue automatically afterwards.</value></data>
-  <data name="Update_InstallNow" xml:space="preserve"><value>Install now</value></data>
+  <data name="Update_InstallNow" xml:space="preserve"><value>Restart to update</value></data>
   <data name="Update_InstallTitle" xml:space="preserve"><value>Install VidFlow {0}?</value></data>
   <data name="Update_Later" xml:space="preserve"><value>Later</value></data>
   <data name="Update_Network" xml:space="preserve"><value>Couldn&apos;t reach the update server. Check your network or proxy.</value></data>
   <data name="Update_NoManifest" xml:space="preserve"><value>No update information was found yet. Try again later.</value></data>
   <data name="Update_NotesHeader" xml:space="preserve"><value>Version {0} · released {1}</value></data>
-  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is downloaded: install now, or it installs by itself when you exit VidFlow</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is downloaded: restart to update, or it installs by itself when you exit VidFlow</value></data>
   <data name="Update_Retry" xml:space="preserve"><value>Retry</value></data>
   <data name="Update_RolledBack" xml:space="preserve"><value>The last update to {0} didn&apos;t complete and was rolled back; you&apos;re on {1}.</value></data>
   <data name="Update_UpToDate" xml:space="preserve"><value>Version {0} · up to date</value></data>
@@ -466,12 +476,12 @@
   <data name="Var_uploader" xml:space="preserve"><value>Uploader</value></data>
   <data name="Var_year" xml:space="preserve"><value>Year</value></data>
   <data name="Wizard_AccountsBody" xml:space="preserve"><value>Optional: public videos download without signing in. You can also sign in later on the Accounts page.</value></data>
-  <data name="Wizard_AccountsNote" xml:space="preserve"><value>Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.</value></data>
+  <data name="Wizard_AccountsNote" xml:space="preserve"><value>Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>Accounts (optional)</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>Back</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>Change</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>Get started</value></data>
-  <data name="Wizard_FolderBody" xml:space="preserve"><value>Downloaded videos are saved here. Playlists get their own subfolder.</value></data>
+  <data name="Wizard_FolderBody" xml:space="preserve"><value>Downloaded videos are saved here. Playlists get their own subfolder</value></data>
   <data name="Wizard_FolderTitle" xml:space="preserve"><value>Where to save</value></data>
   <data name="Wizard_InstallAll" xml:space="preserve"><value>Install components</value></data>
   <data name="Wizard_Installing" xml:space="preserve"><value>Installing {0}…</value></data>
@@ -481,6 +491,6 @@
   <data name="Wizard_Required" xml:space="preserve"><value>Required</value></data>
   <data name="Wizard_SignedIn" xml:space="preserve"><value>Signed in</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>Skip</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses these free tools to download and process videos (about 185 MB, from their official GitHub releases).</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow uses these free components to download and process videos (about 185 MB, from their official GitHub releases)</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>Welcome to VidFlow</value></data>
 </root>

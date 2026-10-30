@@ -94,6 +94,8 @@ public sealed partial class HomePage : Page
 
     void FillTemplates()
     {
+        // The template in use may just have been deleted: start over from the default.
+        if (TemplateStore.Find(_template.Id) is null) UseTemplate(TemplateStore.Default);
         _fillingTemplates = true;
         TemplateCombo.Items.Clear();
         var defaultId = TemplateStore.Default.Id;

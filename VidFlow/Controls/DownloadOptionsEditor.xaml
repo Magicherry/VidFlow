@@ -115,7 +115,7 @@
             <tk:SettingsCard.HeaderIcon>
                 <FontIcon Glyph="&#xED1E;" />
             </tk:SettingsCard.HeaderIcon>
-            <ToggleSwitch
+            <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}"
                 x:Name="SubsToggle"
                 AutomationProperties.Name="{x:Bind l:L.Get('Options_Subtitles')}"
                 Toggled="Option_Changed" />
@@ -128,7 +128,7 @@
             <tk:SettingsCard.HeaderIcon>
                 <FontIcon Glyph="&#xE895;" />
             </tk:SettingsCard.HeaderIcon>
-            <ToggleSwitch
+            <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}"
                 x:Name="RecodeToggle"
                 AutomationProperties.Name="{x:Bind l:L.Get('Options_Recode')}"
                 Toggled="Option_Changed" />

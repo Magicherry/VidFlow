@@ -44,7 +44,7 @@
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox
                         x:Name="LanguageCombo"
-                        MinWidth="160"
+                        MinWidth="200"
                         SelectionChanged="LanguageCombo_SelectionChanged" />
                 </tk:SettingsCard>
                 <InfoBar
@@ -63,7 +63,7 @@
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox
                         x:Name="ThemeCombo"
-                        MinWidth="160"
+                        MinWidth="200"
                         SelectionChanged="ThemeCombo_SelectionChanged" />
                 </tk:SettingsCard>
 
@@ -87,14 +87,14 @@
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox
                         x:Name="ConcurrencyCombo"
-                        MinWidth="160"
+                        MinWidth="200"
                         SelectionChanged="ConcurrencyCombo_SelectionChanged" />
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE77F;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
 
                 <!--  Saved content: what goes into (or next to) each downloaded file  -->
@@ -127,7 +127,7 @@
                                 PlaceholderText="fr, de, es" />
                         </tk:SettingsCard>
                         <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_DanmakuDescription')}" Header="{x:Bind l:L.Get('Settings_Danmaku')}">
-                            <ToggleSwitch x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
+                            <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
                         </tk:SettingsCard>
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
@@ -135,13 +135,13 @@
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8EC;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="MetadataToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="MetadataToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ChaptersDescription')}" Header="{x:Bind l:L.Get('Settings_Chapters')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8A4;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SponsorBlockDescription')}" Header="{x:Bind l:L.Get('Settings_SponsorBlock')}">
                     <tk:SettingsCard.HeaderIcon>
@@ -149,14 +149,14 @@
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox
                         x:Name="SponsorBlockCombo"
-                        MinWidth="160"
+                        MinWidth="200"
                         SelectionChanged="SponsorBlockCombo_SelectionChanged" />
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE7F4;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="H264Toggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="H264Toggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
 
                 <!--  Network and speed  -->
@@ -198,7 +198,7 @@
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEC4A;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="MultiConnectionToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="MultiConnectionToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
                 <!--  Speed limit: a switch, and the value (with its unit) once it is on  -->
                 <tk:SettingsExpander
@@ -207,7 +207,7 @@
                     <tk:SettingsExpander.HeaderIcon>
                         <FontIcon Glyph="&#xEC48;" />
                     </tk:SettingsExpander.HeaderIcon>
-                    <ToggleSwitch
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}"
                         x:Name="SpeedToggle"
                         AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedLimit')}"
                         Toggled="SpeedToggle_Toggled" />
@@ -243,19 +243,19 @@
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE737;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="TrayToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="TrayToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyDescription')}" Header="{x:Bind l:L.Get('Settings_Notify')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xEA8F;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="NotifyToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="NotifyToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE7BA;" />
                     </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
 
                 <!--  About & updates lives on its own page  -->

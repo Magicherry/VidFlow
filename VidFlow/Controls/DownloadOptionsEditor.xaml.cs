@@ -80,6 +80,17 @@ public sealed partial class DownloadOptionsEditor : UserControl
         set => NamingExpander.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
     }
 
+    /// <summary>For looking only: every choice is shown (audio opened up) but can't be changed. Not the whole control
+    /// disabled, because an expander that is disabled can't be opened to read what is inside.</summary>
+    public void MakeReadOnly()
+    {
+        foreach (var input in new Control[] { ModeCombo, QualityCombo, CodecCombo, PictureCombo, ContainerCombo, AudioFormatCombo,
+                     AudioQualityCombo, AudioTrackCombo, SubsToggle, RecodeToggle, FileNamePresetCombo, FileNameBox, FolderCombo, CompatFixButton })
+            input.IsEnabled = false;
+        VariablePanel.Visibility = Visibility.Collapsed;
+        AudioExpander.IsExpanded = true;
+    }
+
     public void Load(DownloadTemplate options, VideoInfo? video = null)
     {
         _options = options;

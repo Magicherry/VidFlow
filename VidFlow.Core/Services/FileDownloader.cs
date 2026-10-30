@@ -14,8 +14,9 @@ public static class FileDownloader
     public const int DefaultConnections = 8;
     /// <summary>Below this, one connection is as quick as setting up several.</summary>
     const long MinSplitSize = 4 << 20;
+    /// <summary>Attempts in a row that bring in nothing before a chunk gives up.</summary>
     const int ChunkAttempts = 4;
-    /// <summary>A chunk that takes longer than this is retried on a fresh connection (it has stalled).</summary>
+    /// <summary>A chunk that takes longer than this carries on from where it got to on a fresh connection.</summary>
     static readonly TimeSpan ChunkTimeout = TimeSpan.FromMinutes(2);
 
     public static async Task DownloadAsync(string url, string dest, IProgress<double>? progress, CancellationToken ct,
@@ -89,6 +90,7 @@ public static class FileDownloader
                 var pos = chunk.From;
                 for (var attempt = 1; ; attempt++)
                 {
+                    var started = pos;
                     using var chunkCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
                     chunkCts.CancelAfter(ChunkTimeout);
                     try
@@ -111,30 +113,35 @@ public static class FileDownloader
                         break;
                     }
                     catch (Exception ex) when (ex is HttpRequestException or IOException or OperationCanceledException
-                                               && attempt < ChunkAttempts && !cts.IsCancellationRequested)
+                                               && (pos > started || attempt < ChunkAttempts) && !cts.IsCancellationRequested)
                     {
+                        // Slow is not stuck: as long as data arrives, keep going.
+                        if (pos > started) attempt = 0;
                         Log.Info($"Chunk {chunk.From}-{chunk.To} attempt {attempt} failed: {ex.Message}");
                         // Signed CDN addresses expire after a few minutes: ask the original address again.
                         if (ex is HttpRequestException { StatusCode: HttpStatusCode.Forbidden or HttpStatusCode.Gone or HttpStatusCode.NotFound })
                             target = await ResolveAsync(client, url, cts.Token) ?? target;
-                        await Task.Delay(TimeSpan.FromSeconds(attempt), cts.Token);
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Max(1, attempt)), cts.Token);
                     }
                 }
             }
         }
 
-        var workers = Enumerable.Range(0, (int)Math.Min(connections, chunks.Count)).Select(_ => Worker()).ToList();
-        try
+        // One chunk giving up fails the download: stop the others rather than fetch the rest for nothing.
+        async Task Guarded()
         {
-            await Task.WhenAll(workers);
+            try
+            {
+                await Worker();
+            }
+            catch
+            {
+                cts.Cancel();
+                throw;
+            }
         }
-        catch
-        {
-            // One worker gave up: stop the others before the file handle closes under them.
-            cts.Cancel();
-            try { await Task.WhenAll(workers); } catch { }
-            throw;
-        }
+
+        await Task.WhenAll(Enumerable.Range(0, (int)Math.Min(connections, chunks.Count)).Select(_ => Guarded()).ToList());
         report.Done();
     }
 

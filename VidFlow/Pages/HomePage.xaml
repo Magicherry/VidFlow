@@ -43,10 +43,7 @@
                 Padding="{StaticResource PagePadding}"
                 Spacing="16">
 
-                <StackPanel Spacing="4">
-                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind l:L.Get('Home_Title')}" />
-                    <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind l:L.Get('Home_Subtitle')}" TextWrapping="Wrap" />
-                </StackPanel>
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind l:L.Get('Home_Title')}" />
 
                 <InfoBar
                     x:Name="ToolsInfoBar"

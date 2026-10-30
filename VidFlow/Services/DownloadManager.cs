@@ -148,9 +148,13 @@ public sealed class DownloadManager
         if (item.CanRemove) Items.Remove(item);
     }
 
+    static bool IsFinished(DownloadItem i) => i.State is DownloadState.Completed or DownloadState.Failed or DownloadState.Canceled;
+
+    public int FinishedCount => Items.Count(IsFinished);
+
     public void ClearFinished()
     {
-        foreach (var item in Items.Where(i => i.State is DownloadState.Completed or DownloadState.Failed or DownloadState.Canceled).ToList())
+        foreach (var item in Items.Where(IsFinished).ToList())
             Items.Remove(item);
     }
 

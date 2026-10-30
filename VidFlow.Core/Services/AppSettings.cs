@@ -67,6 +67,9 @@ public sealed class AppSettings
     /// <summary>Template new downloads start from (see TemplateStore).</summary>
     public Guid DefaultTemplateId { get; set; }
 
+    /// <summary>Built-in presets the user has deleted (see TemplateStore.RestorePresets).</summary>
+    public List<Guid> DeletedPresets { get; set; } = [];
+
     /// <summary>App updates: auto (download, then ask to install), notify (only tell), manual (only when asked).</summary>
     public string UpdateMode { get; set; } = "auto";
     public DateTime LastUpdateCheck { get; set; }

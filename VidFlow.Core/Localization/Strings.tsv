@@ -6,8 +6,8 @@ About_OpenData	Open data folder	打开数据文件夹
 About_OpenLogs	Open log folder	打开日志文件夹
 About_RunWizard	Run the setup wizard again	重新运行首次设置向导
 About_Version	Version {0}	版本 {0}
-Account_BiliIn	Signed in · 1080P and above (4K / HDR need premium)	已登录 · 1080P 及以上（4K / HDR 需大会员）
-Account_BiliOut	Not signed in · up to 720P	未登录 · 最高 720P
+Account_BiliIn	Signed in · 1080p and above (4K / HDR need premium)	已登录 · 1080p 及以上（4K / HDR 需大会员）
+Account_BiliOut	Not signed in · up to 720p	未登录 · 最高 720p
 Account_Login	Sign in	登录
 Account_Logout	Sign out	退出登录
 Account_YtIn	Signed in · age-restricted / members-only videos available	已登录 · 可下载年龄限制、会员视频
@@ -21,7 +21,7 @@ Action_Remove	Remove from list	从列表中移除
 Action_Resume	Resume	继续
 Action_Retry	Retry	重试
 Action_ShowInFolder	Show in folder	在文件夹中显示
-Batch_Description	These links are added with the options below; titles appear once each download starts.	这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示。
+Batch_Description	These links are added with the options below; titles appear once each download starts	这些链接将使用下方选项直接加入队列，标题会在开始下载后自动显示
 Batch_Title	{0} links	共 {0} 个链接
 Batch_UnsupportedHint	Some links aren't from a supported platform and may fail.	部分链接不在支持的平台中，可能下载失败。
 Common_Cancel	Cancel	取消
@@ -31,7 +31,7 @@ Common_Failed	Something went wrong	操作失败
 Download_Batch	Add {0} links to queue	添加 {0} 个链接到队列
 Download_Selected	Download {0} selected	下载选中的 {0} 个
 Download_Start	Start download	开始下载
-Downloads_ClearFinished	Clear finished	清除已结束
+Downloads_ClearFinished	Remove finished	移除已结束
 Downloads_EmptyBody	Paste a link on the New download page to get started	在「新建下载」中粘贴链接即可开始
 Downloads_EmptyTitle	No downloads yet	暂无下载任务
 Downloads_More	More options	更多操作
@@ -55,7 +55,7 @@ Error_BotCheck	YouTube wants to confirm you're not a bot. Sign in on the Account
 Error_Cookies	Couldn't read browser cookies. Close that browser and retry, or use in-app sign-in instead.	读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。
 Error_DiskFull	Not enough disk space.	磁盘空间不足。
 Error_EmptyPlaylist	This playlist has no downloadable videos.	这个播放列表中没有可下载的视频。
-Error_Network	Network error. Reaching YouTube may require a proxy (Settings → Network).	网络连接失败。访问 YouTube 可能需要在「设置 → 网络」中配置代理。
+Error_Network	Network error. Reaching YouTube may require a proxy (Settings → Network and speed).	网络连接失败。访问 YouTube 可能需要在「设置 → 网络与速度」中配置代理。
 Error_NoFfmpeg	ffmpeg is required for this. Install it in Settings → About & updates.	此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。
 Error_NoYtDlp	yt-dlp is not installed. Install it in Settings → About & updates.	未找到 yt-dlp，请先在「设置 → 关于与更新」中安装。
 Error_NoFormats	The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube on the Accounts page, or update yt-dlp.	网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「账号」页面中退出 YouTube 登录后重试，或更新 yt-dlp。
@@ -68,7 +68,7 @@ Error_ZipMissing	{0} is missing from the archive	压缩包中缺少 {0}
 Home_Added	Added	已添加
 Home_AddedMany	{0} downloads added to the queue.	已将 {0} 个任务加入下载队列。
 Home_AddedOne	Added “{0}” to the queue.	「{0}」已加入下载队列。
-Home_BiliLoginHint	Sign in to Bilibili for 1080P and above.	登录 B 站后可下载 1080P 及以上画质。
+Home_BiliLoginHint	Sign in to Bilibili for 1080p and above.	登录 哔哩哔哩后可下载 1080p 及以上画质。
 Home_BiliLoginHintTitle	Sign in for higher quality	登录解锁更高画质
 Home_BrowserCookiesFailed	Couldn't read the browser's cookies (Chrome / Edge lock them while running), so they were skipped. In-app sign-in is more reliable.	无法读取浏览器 Cookie（Chrome / Edge 运行时会锁定），本次已跳过。建议改用「账号」页登录。
 Home_BrowserCookiesFailedTitle	Browser cookies unavailable	浏览器 Cookie 读取失败
@@ -82,7 +82,6 @@ Home_NoLink	No link found.	没有找到链接。
 Home_Parse	Parse	解析
 Home_ParseFailed	Couldn't parse the link	解析失败
 Home_Paste	Paste from clipboard	从剪贴板粘贴
-Home_Subtitle	Paste a video link, pick the quality and format, and download.	粘贴视频链接，选好画质与格式，一键下载。
 Home_Title	New download	新建下载
 Home_ToolsMissingAction	Install	前往安装
 Home_ToolsMissingMessage	yt-dlp and ffmpeg need installing first.	首次使用需要安装 yt-dlp 和 ffmpeg。
@@ -95,9 +94,9 @@ Label_Mp3	MP3 audio	MP3 音频
 Label_Mp4Best	MP4 · best quality	MP4 · 最高画质
 Licenses_FfmpegNote	Downloaded from the official yt-dlp builds when you choose to install it; not bundled with VidFlow. Source code: ffmpeg.org.	仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。
 Licenses_Intro	VidFlow is built on these open-source components. Click a license to read it.	VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。
-Licenses_YtDlpNote	Downloaded on demand and kept up to date automatically.	按需下载，并自动保持最新。
+Licenses_YtDlpNote	Downloaded on demand and kept up to date automatically	按需下载，并自动保持最新
 Login_Done	Done	完成
-Login_Instructions	Sign in below; the window closes when you're done.	在下方登录，完成后窗口自动关闭。
+Login_Instructions	Sign in below; the window closes when you're done	在下方登录，完成后窗口自动关闭
 Login_TitleBili	Sign in to Bilibili	登录哔哩哔哩
 Login_TitleYt	Sign in to YouTube (Google account)	登录 YouTube（Google 账号）
 Login_WebViewFailed	The built-in browser (WebView2) couldn't start: {0}	无法启动内置浏览器（WebView2）：{0}
@@ -148,7 +147,7 @@ Settings_Components	Components	组件
 Settings_Concurrency	Simultaneous downloads	同时下载
 Settings_CookieFile	cookies.txt file	cookies.txt 文件
 Settings_CookieFileDescription	Netscape format, exportable with a browser extension	Netscape 格式，可用浏览器扩展导出
-Settings_Danmaku	Save Bilibili danmaku	保存 B 站弹幕
+Settings_Danmaku	Save Bilibili danmaku	保存 哔哩哔哩弹幕
 Settings_DanmakuDescription	Saved as XML alongside subtitles	随字幕一起保存为 XML
 Settings_Downloads	Downloads	下载
 Settings_FfmpegMissing	Not installed · merges high-quality streams and extracts audio (recommended)	未安装 · 用于合并高清音视频、提取音频（推荐）
@@ -157,7 +156,7 @@ Settings_H264	Compatibility mode	兼容模式
 Settings_H264Description	Prefer H.264 / AAC for older devices; may limit quality	优先 H.264 / AAC，适合旧设备，画质可能受限
 Settings_Install	Install	安装
 Settings_InstallFailed	Installation failed	安装失败
-Settings_InstallFailedMessage	{0}  Downloads come from GitHub; if it can't be reached, set a proxy under Settings → Network.	{0}  下载源位于 GitHub，如无法访问请先在「设置 → 网络」中设置代理。
+Settings_InstallFailedMessage	{0}  Downloads come from GitHub; if it can't be reached, set a proxy under Settings → Network and speed.	{0}  下载源位于 GitHub，如无法访问请先在「设置 → 网络与速度」中设置代理。
 Settings_InstallManaged	Install app copy	安装独立版本
 Settings_Language	Language	语言
 Settings_LanguageSystem	Same as Windows	跟随系统
@@ -183,7 +182,7 @@ Settings_ConnectivityOk	YouTube is reachable · {0} ms	可以访问 YouTube · {
 Settings_ConnectivityFailed	Can't reach YouTube. Enter a proxy above, or turn on your system proxy (for example in Clash), then test again.	无法访问 YouTube。请在上方填写代理，或开启系统代理（例如 Clash），然后重新测试。
 Settings_ConnectivityTest	Test	测试
 Home_Unreachable	Can't connect · may need a proxy	无法连接，可能需要代理
-Home_UnreachableTip	YouTube could not be reached on this network. Set a proxy in Settings.	当前网络无法访问 YouTube，请在设置中配置代理
+Home_UnreachableTip	YouTube could not be reached on this network. Set a proxy in Settings	当前网络无法访问 YouTube，请在设置中配置代理
 Settings_Reinstall	Reinstall	重新安装
 Settings_RestartMessage	The new language applies after VidFlow restarts. Unfinished downloads resume automatically.	新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。
 Settings_RestartNow	Restart now	立即重启
@@ -224,17 +223,17 @@ Tray_Show	Open VidFlow	打开 VidFlow
 Tray_Tooltip	VidFlow · {0} downloading · {1}%	VidFlow · {0} 个任务 · {1}%
 Untitled	Untitled video	未命名视频
 Wizard_AccountsBody	Optional: public videos download without signing in. You can also sign in later on the Accounts page.	可选。公开视频无需登录，也可以稍后在「账号」页面中登录。
-Wizard_AccountsNote	Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow.	登录在官方网页中完成，VidFlow 不会读取或保存你的密码。
+Wizard_AccountsNote	Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow	登录在官方网页中完成，VidFlow 不会读取或保存你的密码
 Wizard_AccountsTitle	Accounts (optional)	登录账号（可选）
 Wizard_Back	Back	上一步
 Wizard_Change	Change	更改
 Wizard_Finish	Get started	开始使用
-Wizard_FolderBody	Downloaded videos are saved here. Playlists get their own subfolder.	下载的视频会保存到这里，播放列表会自动放进单独的子文件夹。
+Wizard_FolderBody	Downloaded videos are saved here. Playlists get their own subfolder	下载的视频会保存到这里，播放列表会自动放进单独的子文件夹
 Wizard_FolderTitle	Where to save	保存位置
 Wizard_InstallAll	Install components	一键安装组件
 Wizard_Next	Next	下一步
 Wizard_Skip	Skip	跳过
-Wizard_WelcomeBody	VidFlow uses these free tools to download and process videos (about 185 MB, from their official GitHub releases).	VidFlow 用这些免费工具下载和处理视频（约 185 MB，来自官方 GitHub）。
+Wizard_WelcomeBody	VidFlow uses these free components to download and process videos (about 185 MB, from their official GitHub releases)	VidFlow 用这些免费组件下载和处理视频（约 185 MB，来自官方 GitHub）
 Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
 Wizard_Ready	Ready	已就绪
 Wizard_Required	Required	必需
@@ -253,6 +252,11 @@ AudioFormat_Flac	FLAC (lossless)	FLAC（无损）
 AudioQuality_Best	Best available	最高音质
 AudioTrack_Default	Default (original)	默认（原声）
 Codec_Unavailable	{0} · not offered by this video	{0} · 此视频不提供
+Downloads_ClearTitle	Remove {0} finished downloads from the list?	从列表中移除 {0} 条已结束的记录？
+Downloads_ClearBody	Downloaded files stay where they are.	已下载的文件不受影响。
+Downloads_ClearConfirm	Remove	移除
+Common_On	On	开
+Common_Off	Off	关
 Common_Save	Save	保存
 Compat_Apply	Use recommended	改用推荐设置
 Compat_LosslessFromLossy	The source is lossy: FLAC / WAV only makes the file bigger.	源音频是有损的，转成 FLAC / WAV 只会更大，音质不会提升。
@@ -269,6 +273,8 @@ Folder_PlatformUploader	By platform, then uploader	按平台和作者
 Folder_Uploader	By uploader	按作者
 Home_NoDeno	Some higher-quality YouTube formats need Deno. Install it in Settings › About & updates.	YouTube 部分高画质格式需要 Deno，可在「设置 › 关于与更新」安装。
 Home_NoDenoTitle	Deno recommended	建议安装 Deno
+Label_CodecAuto	Auto codec	自动编码
+Label_NoSubtitles	No subtitles	不下载字幕
 Label_Audio	{0} audio	{0} 音频
 Mode_Audio	Audio only	仅音频
 Notify_Stalled	Download stalled	下载停滞
@@ -295,10 +301,10 @@ Options_Naming	Naming and folders	命名与分类
 Options_NamingDescription	File names and subfolders	文件名与子文件夹
 Options_Recode	Convert automatically	不兼容时自动转换
 Options_RecodeDescription	Re-encode when the format doesn't fit (slow); otherwise saved as MKV	格式不兼容时重新编码（较慢），否则存为 MKV
-Preset_AudioOnly	Audio only	仅下载音频
+Preset_AudioOnly	Audio only	仅音频
 Preset_Best	Best quality	最高画质
 Preset_Compatible	Compatible	兼容优先
-Preset_HD	HD first (1080p)	高清优先（1080P）
+Preset_HD	HD first (1080p)	高清优先（1080p）
 Preset_SaveSpace	Save space	节省空间
 Settings_DenoMissing	Not installed · needed for some YouTube formats (recommended)	未安装 · YouTube 部分格式需要（推荐）
 Settings_Aria2Missing	Not installed · makes downloads much faster (recommended)	未安装 · 可大幅提升下载速度（推荐）
@@ -317,6 +323,7 @@ Template_CopyName	{0} copy	{0} 副本
 Template_DefaultSuffix	{0} (default)	{0}（默认）
 Template_Delete	Delete	删除
 Template_DeleteBody	Downloads already added are not affected.	已添加的下载任务不受影响。
+Template_DeletePresetBody	You can bring it back with Restore built-in templates.	之后可通过「还原内置模板」恢复。
 Template_DeleteTitle	Delete “{0}”?	删除「{0}」？
 Template_Duplicate	Duplicate	复制
 Template_Edit	Edit	编辑
@@ -333,6 +340,8 @@ Template_Reset	Reset	恢复模板设置
 Template_SaveAs	Save as template	另存为模板
 Template_SaveAsTitle	Save as template	另存为模板
 Template_SetDefault	Set as default	设为默认
+Template_View	View settings	查看设置
+Template_DuplicateToEdit	Duplicate to edit	复制后编辑
 Update_Available	Version {0} is available (you have {1})	发现新版本 {0}（当前 {1}）
 Update_Checking	Checking for updates…	正在检查更新…
 Update_CheckingShort	Checking…	正在检查…
@@ -345,11 +354,11 @@ Update_DownloadingShort	Downloading…	下载中…
 Update_Failed	Update failed: {0}	更新失败：{0}
 Update_InstallBody	VidFlow will close, update, and reopen in a few seconds.	VidFlow 将关闭并在几秒内完成更新后自动重新打开。
 Update_InstallBodyActive	VidFlow will close, update, and reopen in a few seconds. {0} downloads will pause and continue automatically afterwards.	VidFlow 将关闭并在几秒内完成更新后自动重新打开。{0} 个正在进行的下载会暂停，更新后自动继续。
-Update_InstallNow	Install now	立即安装
+Update_InstallNow	Restart to update	重启以更新
 Update_InstallTitle	Install VidFlow {0}?	安装 VidFlow {0}？
 Update_Later	Later	稍后
 Update_NotesHeader	Version {0} · released {1}	版本 {0} · 发布于 {1}
-Update_Ready	Version {0} is downloaded: install now, or it installs by itself when you exit VidFlow	版本 {0} 已下载：可立即安装，退出 VidFlow 时也会自动安装
+Update_Ready	Version {0} is downloaded: restart to update, or it installs by itself when you exit VidFlow	版本 {0} 已下载：可重启以更新，退出 VidFlow 时也会自动安装
 Update_Retry	Retry	重试
 Update_RolledBack	The last update to {0} didn't complete and was rolled back; you're on {1}.	上次更新到 {0} 未完成，已回滚，当前为 {1}。
 Update_UpToDate	Version {0} · up to date	当前版本 {0} · 已是最新
@@ -358,7 +367,7 @@ Title_UpdateAvailableTip	Download VidFlow {0}	下载 VidFlow {0}
 Title_UpdateDownloading	Updating {0}%	正在更新 {0}%
 Title_UpdateDownloadingTip	Downloading VidFlow {0}	正在下载 VidFlow {0}
 Title_UpdateReady	Restart to update	重启以更新
-Title_UpdateReadyTip	Install VidFlow {0} now. It also installs by itself when you exit VidFlow.	立即安装 VidFlow {0}。退出 VidFlow 时也会自动安装。
+Title_UpdateReadyTip	Restarts and installs VidFlow {0}. It also installs by itself when you exit VidFlow.	重启并安装 VidFlow {0}。退出 VidFlow 时也会自动安装。
 Title_UpdateFailed	Update failed	更新失败
 UpdateMode_Auto	Automatic	自动更新
 UpdateMode_Manual	Manual	手动更新
@@ -369,8 +378,8 @@ Update_BadManifest	The update information is invalid.	更新信息无效。
 Batch_Parsing	Parsing…	解析中…
 Batch_PlaylistMeta	Playlist · {0} videos	播放列表 · {0} 个视频
 Batch_ListName	Links to download	要下载的链接
-Batch_Status	Parsed {0} of {1}. Tick the ones to download.	已解析 {0} / {1}，勾选要下载的项目
-Batch_StatusFailed	Parsed {0} of {1}, {2} failed. Tick the ones to download.	已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目
+Batch_Status	Parsed {0} of {1}. Tick the ones to download	已解析 {0} / {1}，勾选要下载的项目
+Batch_StatusFailed	Parsed {0} of {1}, {2} failed. Tick the ones to download	已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目
 Nav_Templates	Templates	下载模板
 Nav_Accounts	Accounts	账号
 Settings_AboutUpdates	About & updates	关于与更新
@@ -381,10 +390,11 @@ Settings_Background	Background and notifications	后台与通知
 Settings_NotifyDescription	When VidFlow is in the background	VidFlow 在后台时提醒
 Settings_UpdateBadge	Update available: {0}	有可用更新：{0}
 Templates_Mine	My templates	我的模板
-Templates_BuiltIn	Built-in presets	内置预设
+Templates_BuiltIn	Built-in templates	内置模板
+Templates_RestorePresets	Restore built-in templates	还原内置模板
 Templates_Empty	No custom templates yet	还没有自定义模板
-Templates_EmptyDescription	Use New template, or duplicate a preset	点击「新建模板」，或复制一个内置预设
-Accounts_Description	Sign in for higher quality and restricted videos. Your sign-in stays on this PC.	登录后可下载更高画质和受限内容，登录信息仅保存在本机。
+Templates_EmptyDescription	Use New template, or duplicate a built-in one	点击「新建模板」，或复制一个内置模板
+Accounts_Description	Sign in for higher quality and restricted videos. Your sign-in stays on this PC	登录后可下载更高画质和受限内容，登录信息仅保存在本机
 Accounts_Platforms	Platform accounts	平台账号
 About_Troubleshoot	Troubleshooting	故障排查
 About_TroubleshootDescription	Logs, data folder and the setup wizard	日志、数据文件夹与首次设置向导
@@ -426,7 +436,7 @@ Tools_ActionsNeeded	{0} to install or update	有 {0} 项可以安装或更新
 Tools_CheckFailedSummary	Couldn't check for updates: check your network or proxy	无法检查更新，请检查网络或代理设置
 Tools_AllUpToDate	All components are up to date	所有组件均为最新
 Tools_LastChecked	Last checked {0}	上次检查：{0}
-Tools_ManagedNote	VidFlow downloads and keeps these tools up to date	这些工具由 VidFlow 下载并保持更新
+Tools_ManagedNote	VidFlow downloads and keeps these components up to date	这些组件由 VidFlow 下载并保持更新
 Tools_UpdateAll	Update all	全部更新
 Tools_InstallDoneMessage	Ready to use: {0}	已安装，可以使用：{0}
 Login_QrTitle	Scan to sign in	扫码登录
@@ -444,7 +454,7 @@ Platform_Douyin	Douyin	抖音
 Account_DouyinIn	Signed in · account-only videos available	已登录 · 可下载需登录的作品
 Account_DouyinOut	Not signed in · public videos work without it	未登录 · 公开作品无需登录
 Login_TitleDouyin	Sign in to Douyin	登录抖音
-Login_InstructionsDouyin	Click 登录 at the top right and scan with the Douyin app.	点击右上角「登录」，用抖音 App 扫码。
+Login_InstructionsDouyin	Click 登录 at the top right and scan with the Douyin app	点击右上角「登录」，用抖音 App 扫码
 Error_DouyinUnavailable	Couldn't get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).	无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。
 Error_DouyinNotVideo	This Douyin link isn't a video (photo posts and profiles aren't supported).	这个抖音链接不是视频（暂不支持图文作品和主页）。
 Home_PlatformsTitle	Supported platforms	支持的平台

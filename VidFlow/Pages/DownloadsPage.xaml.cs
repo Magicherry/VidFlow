@@ -103,7 +103,23 @@ public sealed partial class DownloadsPage : Page
     void Remove_Click(object sender, RoutedEventArgs e) => App.Downloads.Remove(ItemOf(sender));
     void PauseAll_Click(object sender, RoutedEventArgs e) => App.Downloads.PauseAll();
     void ResumeAll_Click(object sender, RoutedEventArgs e) => App.Downloads.ResumeAll();
-    void ClearFinished_Click(object sender, RoutedEventArgs e) => App.Downloads.ClearFinished();
+
+    async void ClearFinished_Click(object sender, RoutedEventArgs e)
+    {
+        var count = App.Downloads.FinishedCount;
+        if (count == 0) return;
+        var confirm = new ContentDialog
+        {
+            XamlRoot = XamlRoot,
+            Title = L.Format("Downloads_ClearTitle", count),
+            Content = L.Get("Downloads_ClearBody"),
+            PrimaryButtonText = L.Get("Downloads_ClearConfirm"),
+            CloseButtonText = L.Get("Common_Cancel"),
+            DefaultButton = ContentDialogButton.Close,
+            Style = (Style)Application.Current.Resources["DefaultContentDialogStyle"],
+        };
+        if (await confirm.ShowAsync() == ContentDialogResult.Primary) App.Downloads.ClearFinished();
+    }
 
     void CopyError_Click(object sender, RoutedEventArgs e)
     {
