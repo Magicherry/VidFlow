@@ -74,7 +74,7 @@ public sealed partial class AboutPage
     {
         foreach (var row in _rows) ShowTool(row);
         ShowSummary();
-        CheckToolsButton.IsEnabled = !Tools.Checking && !Tools.Installing;
+        CheckToolsButton.IsEnabled = !Tools.Checking && !Tools.Installing && !Tools.Loading;
         if (Tools.LastResult is { } result)
         {
             ToolErrorBar.Severity = result.Succeeded ? InfoBarSeverity.Success : InfoBarSeverity.Error;
@@ -129,7 +129,7 @@ public sealed partial class AboutPage
         };
         row.Button.Visibility = action is null ? Visibility.Collapsed : Visibility.Visible;
         if (action is not null) row.Button.Content = action;
-        row.Button.IsEnabled = !Tools.Installing && !Tools.Checking;
+        row.Button.IsEnabled = !Tools.Installing && !Tools.Checking && !Tools.Loading;
         // The things that need doing stand out; installing a separate copy is optional.
         row.Button.Style = (Style)Application.Current.Resources[
             c.State is ToolState.Missing or ToolState.UpdateAvailable ? "AccentButtonStyle" : "DefaultButtonStyle"];
@@ -144,6 +144,7 @@ public sealed partial class AboutPage
         var missingRequired = components.Where(c => c.State == ToolState.Missing && c.Required).Select(c => c.Name).ToList();
         var missing = components.Count(c => c.State == ToolState.Missing);
         var failed = components.Any(c => c.State == ToolState.CheckFailed);
+        var notChecked = components.Any(c => c.State == ToolState.Unknown);
         (ToolsSummaryCard.Header, ToolsSummaryIcon.Glyph) = (installing, Tools.Checking, missingRequired.Count, updates + missing, failed) switch
         {
             ({ } c, _, _, _, _) => (L.Format("Wizard_Installing", c.Name), ""),
@@ -151,13 +152,15 @@ public sealed partial class AboutPage
             (_, _, > 0, _, _) => (L.Format("Tools_MissingRequired", string.Join(", ", missingRequired)), ""),
             (_, _, _, > 0, _) => (L.Format("Tools_ActionsNeeded", updates + missing), ""),
             (_, _, _, _, true) => (L.Get("Tools_CheckFailedSummary"), ""),
+            _ when Tools.Loading => (L.Get("Settings_Components"), "\uE895"),
+            _ when notChecked => (L.Get("Tools_NotChecked"), "\uE895"),
             _ => (L.Get("Tools_AllUpToDate"), ""),
         };
         ToolsSummaryCard.Description = Tools.LastCheck is { } at
             // 24-hour numbers read the same in either UI language (the system's "4:46 PM" wouldn't match Chinese text).
             ? L.Format("Tools_LastChecked", at.ToString(at.Date == DateTime.Today ? "HH:mm" : "yyyy-MM-dd HH:mm"))
             : L.Get("Tools_ManagedNote");
-        var idle = !Tools.Checking && installing is null;
+        var idle = !Tools.Checking && !Tools.Loading && installing is null;
         UpdateAllToolsButton.Visibility = idle && updates + missing > 1 ? Visibility.Visible : Visibility.Collapsed;
         UpdateAllToolsButton.IsEnabled = idle;
         // Open by itself when a component needs something done (so its button is in view) or is installing.

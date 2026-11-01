@@ -3,7 +3,7 @@ using VidFlow.Localization;
 
 namespace VidFlow.Services;
 
-public enum ToolState { Checking, UpToDate, UpdateAvailable, Missing, SystemCopy, CheckFailed, Installing }
+public enum ToolState { Unknown, Checking, UpToDate, UpdateAvailable, Missing, SystemCopy, CheckFailed, Installing }
 
 /// <summary>One external component: how to find, version, check and install it, and where it stands.</summary>
 public sealed class Component
@@ -38,6 +38,7 @@ public sealed class ComponentUpdater
     static readonly TimeSpan AutoInterval = TimeSpan.FromDays(1);
 
     readonly DispatcherQueueTimer _timer;
+    bool _loaded;
 
     public ComponentUpdater(DispatcherQueue dispatcher)
     {
@@ -52,9 +53,11 @@ public sealed class ComponentUpdater
 
     public IReadOnlyList<Component> Components { get; } = Create();
     public bool Checking { get; private set; }
+    /// <summary>Reading the installed versions (no network).</summary>
+    public bool Loading { get; private set; }
     public bool Installing { get; private set; }
-    /// <summary>When the latest versions were last fetched this session.</summary>
-    public DateTime? LastCheck { get; private set; }
+    /// <summary>When the latest versions were last fetched.</summary>
+    public DateTime? LastCheck => AppSettings.Current.LastToolCheck;
     /// <summary>Outcome of the last install, shown on the About page until dismissed.</summary>
     public (bool Succeeded, string Message)? LastResult { get; set; }
 
@@ -68,7 +71,31 @@ public sealed class ComponentUpdater
         _timer.Start();
     }
 
-    /// <summary>Reads the installed versions and compares VidFlow's own copies with the latest releases
+    /// <summary>Reads the installed versions and compares them with what the last check found, without going online.
+    /// Once per run unless <paramref name="again"/> (after an install): the state stays for later visits to the page.</summary>
+    public async Task LoadKnownAsync(bool again = false)
+    {
+        if (Loading || Installing || Checking || (_loaded && !again)) return;
+        _loaded = true;
+        Loading = true;
+        Changed?.Invoke();
+        await Task.WhenAll(Components.Select(async c =>
+        {
+            var exe = c.Path();
+            c.Version = exe is null ? null : await c.GetVersion(exe);
+            AppSettings.Current.LatestToolVersions.TryGetValue(c.Name, out var latest);
+            c.Latest = latest;
+            c.State = exe is null ? ToolState.Missing
+                : !ToolManager.IsManaged(exe) ? ToolState.SystemCopy
+                : latest is null ? ToolState.Unknown
+                : c.IsUpToDate(c.Version, latest) ? ToolState.UpToDate
+                : ToolState.UpdateAvailable;
+        }));
+        Loading = false;
+        Changed?.Invoke();
+    }
+
+    /// <summary>Asks whether there is anything newer: reads the installed versions and compares VidFlow's own copies with the latest releases
     /// (<paramref name="refresh"/>: ask GitHub again instead of using the cached answer).</summary>
     public async Task RefreshAsync(bool refresh)
     {
@@ -81,7 +108,13 @@ public sealed class ComponentUpdater
         }
         Changed?.Invoke();
         await Task.WhenAll(Components.Select(c => CheckAsync(c, refresh)));
-        if (refresh || LastCheck is null) LastCheck = DateTime.Now;
+        _loaded = true;
+        // Components that couldn't be checked keep what is known about them.
+        foreach (var c in Components.Where(c => c.Latest is not null))
+            AppSettings.Current.LatestToolVersions[c.Name] = c.Latest!;
+        if (Components.Any(c => c.State != ToolState.CheckFailed && c.Latest is not null))
+            AppSettings.Current.LastToolCheck = DateTime.Now;
+        AppSettings.Save();
         Checking = false;
         Changed?.Invoke();
     }
@@ -153,7 +186,7 @@ public sealed class ComponentUpdater
         finally
         {
             Installing = false;
-            await RefreshAsync(refresh: false);
+            await LoadKnownAsync(again: true);
         }
         return ok;
     }
@@ -196,7 +229,8 @@ public sealed class ComponentUpdater
             Path = () => ToolManager.YtDlpPath,
             GetVersion = async exe => await ToolManager.GetVersionAsync(exe, "--version"),
             GetLatest = refresh => ToolManager.GetLatestYtDlpVersionAsync(refresh),
-            IsUpToDate = ToolManager.IsUpToDate,
+            // An older VidFlow's single-file build counts as out of date whatever its version: it starts much slower.
+            IsUpToDate = (installed, latest) => !ToolManager.IsYtDlpSingleFile && ToolManager.IsUpToDate(installed, latest),
             Install = ToolManager.InstallYtDlpAsync,
         },
         new()

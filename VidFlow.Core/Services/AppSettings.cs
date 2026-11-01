@@ -82,6 +82,11 @@ public sealed class AppSettings
     /// <summary>Update VidFlow's own copies of the components in the background (the name is from when only
     /// yt-dlp was kept current; kept so existing settings carry over).</summary>
     public bool AutoUpdateYtDlp { get; set; } = true;
+    /// <summary>The latest component versions found by the last check, by name, and when that was: the About page
+    /// shows them without going online.</summary>
+    public Dictionary<string, string> LatestToolVersions { get; set; } = [];
+    public DateTime? LastToolCheck { get; set; }
+
     /// <summary>Last completed automatic component update check.</summary>
     public DateTime LastYtDlpUpdateCheck { get; set; }
     public bool FirstRunCompleted { get; set; }

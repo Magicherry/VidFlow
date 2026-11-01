@@ -6,9 +6,12 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。</value></data>
+  <data name="About_Issues" xml:space="preserve"><value>反馈问题</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>开源许可</value></data>
   <data name="About_OpenData" xml:space="preserve"><value>打开数据文件夹</value></data>
   <data name="About_OpenLogs" xml:space="preserve"><value>打开日志文件夹</value></data>
+  <data name="About_Project" xml:space="preserve"><value>项目主页</value></data>
+  <data name="About_Releases" xml:space="preserve"><value>所有版本</value></data>
   <data name="About_RunWizard" xml:space="preserve"><value>重新运行首次设置向导</value></data>
   <data name="About_Troubleshoot" xml:space="preserve"><value>故障排查</value></data>
   <data name="About_TroubleshootDescription" xml:space="preserve"><value>日志、数据文件夹与首次设置向导</value></data>
@@ -433,6 +436,7 @@
   <data name="Tools_LastChecked" xml:space="preserve"><value>上次检查：{0}</value></data>
   <data name="Tools_ManagedNote" xml:space="preserve"><value>这些组件由 VidFlow 下载并保持更新</value></data>
   <data name="Tools_MissingRequired" xml:space="preserve"><value>缺少必需组件 {0}，安装后才能下载</value></data>
+  <data name="Tools_NotChecked" xml:space="preserve"><value>尚未检查组件更新</value></data>
   <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · 版本 {1} · 系统中的版本</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>全部更新</value></data>
   <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>解析和下载视频</value></data>

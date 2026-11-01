@@ -236,6 +236,6 @@ public sealed partial class FirstRunDialog : ContentDialog
         AppSettings.Current.FirstRunCompleted = true;
         AppSettings.Save();
         // It may have installed components: the About page shows the last check otherwise.
-        _ = App.Tools.RefreshAsync(refresh: false);
+        _ = App.Tools.LoadKnownAsync(again: true);
     }
 }

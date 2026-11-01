@@ -25,6 +25,8 @@ public enum UpdateOutcome { None, Succeeded, Failed }
 /// </summary>
 public static class UpdateService
 {
+    public const string ProjectUrl = "https://github.com/Magicherry/VidFlow";
+
     /// <summary>"x64" or "arm64": which installer this copy of VidFlow updates itself with.</summary>
     public static string Arch => RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "arm64" : "x64";
 
@@ -35,7 +37,7 @@ public static class UpdateService
     public static string ManifestUrl =>
         Environment.GetEnvironmentVariable("VIDFLOW_UPDATE_MANIFEST") is { Length: > 0 } custom
             ? custom
-            : $"https://github.com/Magicherry/VidFlow/releases/latest/download/{ManifestName(Arch)}";
+            : $"{ProjectUrl}/releases/latest/download/{ManifestName(Arch)}";
 
     static string UpdatesDir => Path.Combine(AppSettings.DataDir, "updates");
     static string PendingFile => Path.Combine(UpdatesDir, "pending.json");

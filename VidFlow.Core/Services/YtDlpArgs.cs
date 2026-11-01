@@ -55,6 +55,8 @@ public static class YtDlpArgs
             "--print", StartTemplate,
             "--print", "after_move:VFF|%(filepath)s",
             "--progress-template", ProgressTemplate,
+            // Four updates a second is smooth to the eye; left alone, yt-dlp reports every block it receives.
+            "--progress-delta", "0.25",
         };
 
         if (direct is not null)
@@ -277,7 +279,7 @@ public static class YtDlpArgs
 
     public static List<string> Common(AppSettings s, Environment env)
     {
-        // --encoding: the standalone yt-dlp.exe otherwise prints in the legacy ANSI code page (e.g. GBK),
+        // --encoding: yt-dlp.exe otherwise prints in the legacy ANSI code page (e.g. GBK),
         // which garbles titles and file paths containing characters like "｜".
         var args = new List<string> { "--no-colors", "--encoding", "utf-8" };
         if (env.FfmpegDir is not null) args.AddRange(["--ffmpeg-location", env.FfmpegDir]);

@@ -711,6 +711,93 @@ public class MediaFeatureTests
     }
 }
 
+public class YtDlpInstallTests
+{
+    [Fact]
+    public void EachArchitectureGetsItsOwnDownload()
+    {
+        Assert.Equal("yt-dlp_win.zip", ToolManager.YtDlpZipName("x64"));
+        Assert.Equal("yt-dlp_win_arm64.zip", ToolManager.YtDlpZipName("arm64"));
+    }
+
+    [Fact]
+    public void TheUnpackedBuildWinsOverAnOlderSingleFile()
+    {
+        var old = AppSettings.DataDir;
+        var dir = Path.Combine(Path.GetTempPath(), "vidflow-test-" + Guid.NewGuid());
+        AppSettings.DataDir = dir;
+        try
+        {
+            Directory.CreateDirectory(Path.Combine(ToolManager.BinDir, "yt-dlp"));
+            var single = Path.Combine(ToolManager.BinDir, "yt-dlp.exe");
+            var unpacked = Path.Combine(ToolManager.BinDir, "yt-dlp", "yt-dlp.exe");
+
+            File.WriteAllText(single, "");
+            Assert.Equal(single, ToolManager.YtDlpPath);
+            Assert.True(ToolManager.IsYtDlpSingleFile);
+            Assert.True(ToolManager.IsYtDlpManaged);
+
+            File.WriteAllText(unpacked, "");
+            Assert.Equal(unpacked, ToolManager.YtDlpPath);
+            Assert.False(ToolManager.IsYtDlpSingleFile);
+            Assert.True(ToolManager.IsManaged(unpacked));
+        }
+        finally
+        {
+            AppSettings.DataDir = old;
+            if (Directory.Exists(dir)) Directory.Delete(dir, recursive: true);
+        }
+    }
+}
+
+public class MarkdownLiteTests
+{
+    [Fact]
+    public void ReadsTheBlocksReleaseNotesUse()
+    {
+        var blocks = MarkdownLite.Parse("""
+            ## 新功能
+
+            - **封面模式**：保存图片
+              - 嵌套项
+            1. 第一步
+
+            一段话
+            继续这段
+            ### 小标题
+            """);
+        Assert.Equal([MdBlockKind.Heading, MdBlockKind.Bullet, MdBlockKind.Bullet, MdBlockKind.Numbered, MdBlockKind.Paragraph, MdBlockKind.Heading],
+            blocks.Select(b => b.Kind));
+        Assert.Equal(2, blocks[0].Level);
+        Assert.Equal("新功能", blocks[0].Inlines.Single().Text);
+        Assert.Equal(0, blocks[1].Level);
+        Assert.Equal(1, blocks[2].Level);
+        Assert.Equal(1, blocks[3].Number);
+        Assert.Equal("一段话 继续这段", blocks[4].Inlines.Single().Text);
+        Assert.Equal(3, blocks[5].Level);
+    }
+
+    [Fact]
+    public void ReadsBoldCodeAndLinks()
+    {
+        var i = MarkdownLite.Inlines("**粗体**：用 `-N 8` 和 [主页](https://github.com/a/b) 结束");
+        Assert.Equal(new MdInline("粗体", Bold: true), i[0]);
+        Assert.Equal(new MdInline("-N 8", Code: true), i[2]);
+        Assert.Equal(new MdInline("主页", Url: "https://github.com/a/b"), i[4]);
+        Assert.Equal("结束", i[^1].Text.Trim());
+        Assert.Equal(new MdInline("链接", Bold: true, Url: "https://a.b/"), MarkdownLite.Inlines("**[链接](https://a.b/)**").Single());
+    }
+
+    [Theory]
+    [InlineData("**没闭合")]
+    [InlineData("[不安全](javascript:alert)")]
+    [InlineData("2 * 3 * 4")]
+    public void AnythingElseStaysAsPlainText(string text) => Assert.Equal(text, MarkdownLite.Inlines(text).Single().Text);
+
+    [Fact]
+    public void NothingToRead() => Assert.Empty(MarkdownLite.Parse(null));
+}
+
 public class SizeEstimatorTests
 {
     // The real list for one YouTube video (sizes in MB): HLS streams state only a peak bitrate.
@@ -926,6 +1013,13 @@ public class ChapterTests
 
     static List<string> Args(string url, AppSettings s, YtDlpArgs.Environment? env = null) =>
         YtDlpArgs.Download(new DownloadTemplate().ToRequest(url, "o"), s, env ?? WithFfmpeg);
+
+    [Fact]
+    public void ProgressIsReportedFourTimesASecond()
+    {
+        var args = Args("https://www.youtube.com/watch?v=abc", new AppSettings());
+        Assert.Equal("0.25", args[args.IndexOf("--progress-delta") + 1]);
+    }
 
     [Theory]
     [InlineData("video", "mp4", null, true)]

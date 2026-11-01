@@ -7,20 +7,30 @@ namespace VidFlow.Services;
 /// <summary>Locates, installs and updates the external tools (yt-dlp, ffmpeg, Deno, aria2).</summary>
 public static class ToolManager
 {
-    const string YtDlpUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe";
+    /// <summary>The unpacked build: the single-file yt-dlp.exe unpacks itself on every run, which takes over a second
+    /// each time it starts (measured: 1.3 s against 0.56 s).</summary>
+    public static string YtDlpZipName(string arch) => arch == "arm64" ? "yt-dlp_win_arm64.zip" : "yt-dlp_win.zip";
     const string FfmpegUrl = "https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip";
 
     public static string BinDir => Path.Combine(AppSettings.DataDir, "bin");
 
     /// <summary>The app's own copy wins over one found on PATH.</summary>
-    public static string? YtDlpPath => Find("yt-dlp.exe");
+    public static string? YtDlpPath => File.Exists(YtDlpUnpackedPath) ? YtDlpUnpackedPath : Find("yt-dlp.exe");
     public static string? FfmpegPath => Find("ffmpeg.exe");
     /// <summary>JavaScript runtime yt-dlp uses for YouTube.</summary>
     public static string? DenoPath => Find("deno.exe");
 
     const string DenoUrl = "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip";
 
-    public static bool IsYtDlpManaged => File.Exists(Path.Combine(BinDir, "yt-dlp.exe"));
+    /// <summary>The unpacked build keeps its files together in a folder of its own.</summary>
+    static string YtDlpDir => Path.Combine(BinDir, "yt-dlp");
+    static string YtDlpUnpackedPath => Path.Combine(YtDlpDir, "yt-dlp.exe");
+    static string YtDlpSingleFilePath => Path.Combine(BinDir, "yt-dlp.exe");
+
+    public static bool IsYtDlpManaged => File.Exists(YtDlpUnpackedPath) || File.Exists(YtDlpSingleFilePath);
+
+    /// <summary>Still the single-file build from an older VidFlow: the next update replaces it.</summary>
+    public static bool IsYtDlpSingleFile => !File.Exists(YtDlpUnpackedPath) && File.Exists(YtDlpSingleFilePath);
     public static bool IsManaged(string exe) => exe.StartsWith(BinDir, StringComparison.OrdinalIgnoreCase);
 
     static string? Find(string exe)
@@ -241,9 +251,50 @@ public static class ToolManager
     public static async Task InstallYtDlpAsync(IProgress<double>? progress, CancellationToken ct)
     {
         Directory.CreateDirectory(BinDir);
-        var tmp = Path.Combine(BinDir, "yt-dlp.exe.download");
-        await FileDownloader.DownloadAsync(YtDlpUrl, tmp, progress, ct);
-        File.Move(tmp, Path.Combine(BinDir, "yt-dlp.exe"), overwrite: true);
+        var zipPath = Path.Combine(BinDir, "yt-dlp.zip.download");
+        var fresh = YtDlpDir + ".new";
+        var old = YtDlpDir + ".old";
+        try
+        {
+            await FileDownloader.DownloadAsync(
+                $"https://github.com/yt-dlp/yt-dlp/releases/latest/download/{YtDlpZipName(UpdateService.Arch)}", zipPath, progress, ct);
+            DeleteDirectory(fresh);
+            ZipFile.ExtractToDirectory(zipPath, fresh);
+            if (!File.Exists(Path.Combine(fresh, "yt-dlp.exe"))) throw new InvalidDataException("yt-dlp.exe not found in the download");
+
+            // Swap the whole folder, so a failure (yt-dlp is running) leaves the old copy working.
+            DeleteDirectory(old);
+            if (Directory.Exists(YtDlpDir)) Directory.Move(YtDlpDir, old);
+            try
+            {
+                Directory.Move(fresh, YtDlpDir);
+            }
+            catch
+            {
+                if (Directory.Exists(old) && !Directory.Exists(YtDlpDir)) Directory.Move(old, YtDlpDir);
+                throw;
+            }
+            DeleteDirectory(old);
+            // The single-file build this replaces; still running means it goes next time.
+            try { File.Delete(YtDlpSingleFilePath); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
+        }
+        finally
+        {
+            try
+            {
+                File.Delete(zipPath);
+                DeleteDirectory(fresh);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                Log.Info($"yt-dlp install left files behind: {ex.Message}");
+            }
+        }
+    }
+
+    static void DeleteDirectory(string dir)
+    {
+        if (Directory.Exists(dir)) Directory.Delete(dir, recursive: true);
     }
 
     public static async Task InstallFfmpegAsync(IProgress<double>? progress, CancellationToken ct)

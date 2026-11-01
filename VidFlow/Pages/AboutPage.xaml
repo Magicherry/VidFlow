@@ -76,10 +76,10 @@
                     </tk:SettingsExpander.HeaderIcon>
                     <tk:SettingsExpander.Items>
                         <tk:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                            <TextBlock
-                                x:Name="ReleaseNotesText"
-                                IsTextSelectionEnabled="True"
-                                TextWrapping="Wrap" />
+                            <StackPanel Spacing="12">
+                                <TextBlock x:Name="ReleaseNotesHeader" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <RichTextBlock x:Name="ReleaseNotesText" IsTextSelectionEnabled="True" />
+                            </StackPanel>
                         </tk:SettingsCard>
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
@@ -134,6 +134,34 @@
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 Text="{x:Bind l:L.Get('About_Disclaimer')}"
                                 TextWrapping="Wrap" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard
+                            Click="ProjectLink_Click"
+                            Description="github.com/Magicherry/VidFlow"
+                            Header="{x:Bind l:L.Get('About_Project')}"
+                            IsClickEnabled="True"
+                            Tag="">
+                            <tk:SettingsCard.ActionIcon>
+                                <FontIcon Glyph="&#xE8A7;" />
+                            </tk:SettingsCard.ActionIcon>
+                        </tk:SettingsCard>
+                        <tk:SettingsCard
+                            Click="ProjectLink_Click"
+                            Header="{x:Bind l:L.Get('About_Issues')}"
+                            IsClickEnabled="True"
+                            Tag="/issues">
+                            <tk:SettingsCard.ActionIcon>
+                                <FontIcon Glyph="&#xE8A7;" />
+                            </tk:SettingsCard.ActionIcon>
+                        </tk:SettingsCard>
+                        <tk:SettingsCard
+                            Click="ProjectLink_Click"
+                            Header="{x:Bind l:L.Get('About_Releases')}"
+                            IsClickEnabled="True"
+                            Tag="/releases">
+                            <tk:SettingsCard.ActionIcon>
+                                <FontIcon Glyph="&#xE8A7;" />
+                            </tk:SettingsCard.ActionIcon>
                         </tk:SettingsCard>
                         <tk:SettingsCard
                             Click="Licenses_Click"

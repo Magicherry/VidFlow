@@ -6,9 +6,12 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube and X, powered by yt-dlp</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>Only download content you have the right to save, and follow each platform&apos;s terms of service and copyright rules.</value></data>
+  <data name="About_Issues" xml:space="preserve"><value>Report a problem</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>Open-source licenses</value></data>
   <data name="About_OpenData" xml:space="preserve"><value>Open data folder</value></data>
   <data name="About_OpenLogs" xml:space="preserve"><value>Open log folder</value></data>
+  <data name="About_Project" xml:space="preserve"><value>Project home</value></data>
+  <data name="About_Releases" xml:space="preserve"><value>All versions</value></data>
   <data name="About_RunWizard" xml:space="preserve"><value>Run the setup wizard again</value></data>
   <data name="About_Troubleshoot" xml:space="preserve"><value>Troubleshooting</value></data>
   <data name="About_TroubleshootDescription" xml:space="preserve"><value>Logs, data folder and the setup wizard</value></data>
@@ -433,6 +436,7 @@
   <data name="Tools_LastChecked" xml:space="preserve"><value>Last checked {0}</value></data>
   <data name="Tools_ManagedNote" xml:space="preserve"><value>VidFlow downloads and keeps these components up to date</value></data>
   <data name="Tools_MissingRequired" xml:space="preserve"><value>{0} is required: install it to download videos</value></data>
+  <data name="Tools_NotChecked" xml:space="preserve"><value>Not checked for updates yet</value></data>
   <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · version {1} · system copy</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>Update all</value></data>
   <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>Parses and downloads videos</value></data>

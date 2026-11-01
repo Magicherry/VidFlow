@@ -2,6 +2,9 @@ key	en	zh
 About_Description	Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube and X, powered by yt-dlp	基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X
 About_Disclaimer	Only download content you have the right to save, and follow each platform's terms of service and copyright rules.	请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。
 About_Licenses	Open-source licenses	开源许可
+About_Project	Project home	项目主页
+About_Issues	Report a problem	反馈问题
+About_Releases	All versions	所有版本
 About_OpenData	Open data folder	打开数据文件夹
 About_OpenLogs	Open log folder	打开日志文件夹
 About_RunWizard	Run the setup wizard again	重新运行首次设置向导
@@ -434,6 +437,7 @@ Tools_Checking	Checking for updates…	正在检查更新…
 Tools_MissingRequired	{0} is required: install it to download videos	缺少必需组件 {0}，安装后才能下载
 Tools_ActionsNeeded	{0} to install or update	有 {0} 项可以安装或更新
 Tools_CheckFailedSummary	Couldn't check for updates: check your network or proxy	无法检查更新，请检查网络或代理设置
+Tools_NotChecked	Not checked for updates yet	尚未检查组件更新
 Tools_AllUpToDate	All components are up to date	所有组件均为最新
 Tools_LastChecked	Last checked {0}	上次检查：{0}
 Tools_ManagedNote	VidFlow downloads and keeps these components up to date	这些组件由 VidFlow 下载并保持更新

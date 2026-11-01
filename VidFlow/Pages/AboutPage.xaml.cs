@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using VidFlow.Controls;
 using VidFlow.Localization;
 using VidFlow.Services;
 
@@ -12,6 +13,7 @@ namespace VidFlow.Pages;
 public sealed partial class AboutPage : Page
 {
     bool _loading;
+    string? _renderedNotes;
 
     public AboutPage()
     {
@@ -43,10 +45,9 @@ public sealed partial class AboutPage : Page
         AutoUpdateToggle.IsOn = AppSettings.Current.AutoUpdateYtDlp;
         _loading = false;
         RefreshUpdate();
+        // Opening the page never goes online: it shows what the last check found. "Check for updates" asks again.
+        _ = App.Tools.LoadKnownAsync();
         BuildToolRows();
-        // Checked once per run (here or by the background update); after that the page shows the last result,
-        // and "Check for updates" asks again.
-        if (App.Tools.LastCheck is null) _ = App.Tools.RefreshAsync(refresh: false);
     }
 
     void Breadcrumb_ItemClicked(BreadcrumbBar sender, BreadcrumbBarItemClickedEventArgs args)
@@ -93,7 +94,11 @@ public sealed partial class AboutPage : Page
 
         ReleaseNotesExpander.Visibility = u.Latest is null ? Visibility.Collapsed : Visibility.Visible;
         if (u.Latest is { } notes)
-            ReleaseNotesText.Text = $"{L.Format("Update_NotesHeader", notes.Version, notes.Published.ToLocalTime().ToString("yyyy-MM-dd"))}\n\n{notes.Notes.Trim()}";
+        {
+            ReleaseNotesHeader.Text = L.Format("Update_NotesHeader", notes.Version, notes.Published.ToLocalTime().ToString("yyyy-MM-dd"));
+            // This runs on every download progress update: leave the text (and any selection in it) alone.
+            if (notes.Notes != _renderedNotes) MarkdownRenderer.Render(ReleaseNotesText, _renderedNotes = notes.Notes);
+        }
     }
 
     async void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -123,6 +128,9 @@ public sealed partial class AboutPage : Page
     }
 
     // ---- About -------------------------------------------------------------------------------------------------
+
+    void ProjectLink_Click(object sender, RoutedEventArgs e) =>
+        Process.Start(new ProcessStartInfo(UpdateService.ProjectUrl + (string)((FrameworkElement)sender).Tag) { UseShellExecute = true });
 
     async void Licenses_Click(object sender, RoutedEventArgs e) =>
         await new LicensesDialog { XamlRoot = XamlRoot }.ShowAsync();
