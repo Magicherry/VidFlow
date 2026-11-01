@@ -48,7 +48,7 @@ public static class InfoParser
         }
 
         var duration = Num(root, "duration");
-        var (qualities, audioBytes, codecs) = Qualities(root, duration);
+        var (qualities, audioBytes, codecs, mediaFormats) = Qualities(root, duration);
         var audioLanguages = AudioLanguages(root);
         var (hdrKinds, hiRes, atmos) = Features(root);
         return new VideoInfo
@@ -64,6 +64,7 @@ public static class InfoParser
             UploadDate = Str(root, "upload_date"),
             Platform = platform,
             Qualities = qualities,
+            Formats = mediaFormats,
             AudioBytes = audioBytes,
             Codecs = codecs,
             AudioLanguages = audioLanguages,
@@ -89,15 +90,16 @@ public static class InfoParser
         return (kinds.OrderBy(k => Array.IndexOf(order, k) is var i and >= 0 ? i : order.Length).ToList(), hiRes, atmos);
     }
 
-    /// <summary>One option per resolution (shorter side, highest first), with the best fps seen and an approximate
-    /// size (largest video stream at that height + the best audio stream).</summary>
-    static (List<QualityOption>, long?, Dictionary<string, int>) Qualities(JsonElement root, double? duration)
+    /// <summary>One option per resolution (shorter side, highest first), with the best fps seen and the size under
+    /// the default options; and the streams themselves, for the size under other options.</summary>
+    static (List<QualityOption>, long?, Dictionary<string, int>, List<MediaFormat>) Qualities(JsonElement root, double? duration)
     {
-        var byHeight = new Dictionary<int, (int Fps, long? Bytes)>();
+        var fpsByHeight = new Dictionary<int, int>();
+        var streams = new List<MediaFormat>();
         var codecs = new Dictionary<string, int>();
         long? audio = null;
         if (!root.TryGetProperty("formats", out var formats) || formats.ValueKind != JsonValueKind.Array)
-            return ([], null, codecs);
+            return ([], null, codecs, streams);
 
         foreach (var f in formats.EnumerateArray())
         {
@@ -107,6 +109,7 @@ public static class InfoParser
             if (vcodec is "none")
             {
                 if (acodec is not "none" && size is > 0 && (audio is null || size > audio)) audio = size;
+                streams.Add(Stream(f, 0, 0));
                 continue;
             }
             // Preview images listed as formats (Weibo's scrubber JPEG, YouTube's storyboards) aren't qualities.
@@ -117,17 +120,23 @@ public static class InfoParser
             if (height <= 0) continue;
             if (width > 0) height = Math.Min(width, height);
             var fps = (int)Math.Round(Num(f, "fps") ?? 0);
-            byHeight.TryGetValue(height, out var cur);
-            byHeight[height] = (Math.Max(cur.Fps, fps), Max(cur.Bytes, size));
+            fpsByHeight[height] = Math.Max(fpsByHeight.GetValueOrDefault(height), fps);
+            streams.Add(Stream(f, height, Num(f, "fps") ?? 0));
             if (VideoCodecs.Family(vcodec) is { } codec)
                 codecs[codec] = Math.Max(codecs.GetValueOrDefault(codec), height);
         }
 
-        var list = byHeight.OrderByDescending(kv => kv.Key)
-            .Select(kv => new QualityOption(kv.Key, kv.Value.Fps, kv.Value.Bytes is > 0 ? kv.Value.Bytes + (audio ?? 0) : null))
+        var defaults = new DownloadTemplate();
+        var list = fpsByHeight.OrderByDescending(kv => kv.Key)
+            .Select(kv => new QualityOption(kv.Key, kv.Value, SizeEstimator.Estimate(streams, duration, kv.Key, defaults, preferH264: false)))
             .ToList();
-        return (list, audio, codecs);
+        return (list, audio, codecs, streams);
     }
+
+    static MediaFormat Stream(JsonElement f, int height, double fps) => new(
+        Str(f, "format_id"), height, fps, Str(f, "vcodec"), Str(f, "acodec"), Str(f, "dynamic_range"), Num(f, "tbr"),
+        Num(f, "filesize") is > 0 and var s ? (long)s : Num(f, "filesize_approx") is > 0 and var a ? (long)a : null,
+        Str(f, "language"), Num(f, "language_preference") ?? 0);
 
     /// <summary>Distinct audio track languages, the original (highest language_preference) first.
     /// Only meaningful when there is more than one (YouTube multi-language audio).</summary>
@@ -152,8 +161,6 @@ public static class InfoParser
         if (Num(f, "tbr") is > 0 and var tbr && duration is > 0) return (long)(tbr * 1000 / 8 * duration.Value);
         return null;
     }
-
-    static long? Max(long? a, long? b) => a is null ? b : b is null ? a : Math.Max(a.Value, b.Value);
 
     public static string? PickThumbnail(JsonElement root)
     {

@@ -11,11 +11,13 @@ public static class YtDlpArgs
         "download:VFP|%(progress.status)s|%(progress.downloaded_bytes)s|%(progress.total_bytes)s|%(progress.total_bytes_estimate)s|%(progress.speed)s|%(progress.eta)s"
         + "|%(progress.fragment_index)s|%(progress.fragment_count)s";
 
-    /// <summary>Printed before downloading: format, size of each stream (NA when unknown), thumbnail, title.</summary>
+    /// <summary>Printed before downloading: format, sizes (NA when unknown), thumbnail, title. The sizes are the two
+    /// streams of a merged download, then the download's own: for a merged one that is just one of its streams.</summary>
     public const string StartTemplate =
         "before_dl:VFS|%(format_id)s"
-        + "|%(requested_formats.0.filesize,requested_formats.0.filesize_approx,filesize,filesize_approx|NA)s"
+        + "|%(requested_formats.0.filesize,requested_formats.0.filesize_approx|NA)s"
         + ",%(requested_formats.1.filesize,requested_formats.1.filesize_approx|NA)s"
+        + ",%(filesize,filesize_approx|NA)s"
         + "|%(thumbnail)s|%(title)s";
 
     /// <summary>Where cookies and tools come from.</summary>

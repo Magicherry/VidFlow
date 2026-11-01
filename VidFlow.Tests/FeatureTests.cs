@@ -711,6 +711,88 @@ public class MediaFeatureTests
     }
 }
 
+public class SizeEstimatorTests
+{
+    // The real list for one YouTube video (sizes in MB): HLS streams state only a peak bitrate.
+    static readonly List<MediaFormat> Rick =
+    [
+        new("270", 1080, 25, "avc1.640028", "none", "SDR", 4688, null, null, 0),
+        new("137", 1080, 25, "avc1.640028", "none", "SDR", 3038, 80_900_000, null, 0),
+        new("614", 1080, 25, "vp09.00.40.08", "none", "SDR", 1763, null, null, 0),
+        new("248", 1080, 25, "vp9", "none", "SDR", 1158, 30_800_000, null, 0),
+        new("399", 1080, 25, "av01.0.08M.08", "none", "SDR", 1142, 30_400_000, null, 0),
+        new("18", 360, 25, "avc1.42001E", "mp4a.40.2", "SDR", 444, 11_800_000, "en", 0),
+        new("140", 0, 0, "none", "mp4a.40.2", null, 129, 3_400_000, "en", 0),
+        new("251", 0, 0, "none", "opus", null, 128, 3_300_000, "en", 0),
+    ];
+
+    static long? Size(DownloadTemplate o, int height = 1080, bool h264 = false) => SizeEstimator.Estimate(Rick, 213, height, o, h264);
+
+    [Fact]
+    public void TheHighestBitrateStreamIsPickedButItsSizeComesFromTheSameEncode()
+    {
+        Assert.Equal("270", SizeEstimator.PickVideo(Rick, 1080, new(), false)!.Id);
+        Assert.Equal(80_900_000 + 3_400_000, Size(new()));
+    }
+
+    [Fact]
+    public void OptionsChangeTheSize()
+    {
+        Assert.Equal(30_800_000 + 3_400_000, Size(new() { Codec = "vp9" }));   // 614 → the size of 248
+        Assert.Equal(30_400_000 + 3_400_000, Size(new() { Codec = "av1" }));
+        Assert.Equal(30_800_000 + 3_300_000, Size(new() { Container = "webm" })); // VP9 + Opus
+        Assert.Equal(80_900_000 + 3_400_000, Size(new() { Codec = "h265" }));  // not offered: relaxed, as the download does
+    }
+
+    [Fact]
+    public void ACodecMissingAtThisHeightMeansALowerResolutionNotAnotherCodec()
+    {
+        List<MediaFormat> formats = [.. Rick, new("625", 2160, 25, "vp09.00.51.08", "none", "SDR", 13000, 358_000_000, null, 0)];
+        Assert.Equal("270", SizeEstimator.PickVideo(formats, 2160, new() { Codec = "h264" }, false)!.Id);
+        Assert.Equal("625", SizeEstimator.PickVideo(formats, 2160, new(), false)!.Id);
+    }
+
+    [Fact]
+    public void SoundBuiltInIsNotCountedTwice() => Assert.Equal(11_800_000, Size(new(), 360));
+
+    [Fact]
+    public void BitrateIsTheLastResort()
+    {
+        List<MediaFormat> formats = [new("x", 720, 30, "avc1", "none", null, 800, null, null, 0)];
+        Assert.Equal(800 * 1000 / 8 * 100, SizeEstimator.Estimate(formats, 100, 720, new(), false));
+        Assert.Null(SizeEstimator.Estimate(formats, null, 720, new(), false));
+    }
+
+    [Fact]
+    public void AudioFollowsTheTrackAndBitrateChosen()
+    {
+        List<MediaFormat> formats =
+        [
+            new("a", 0, 0, "none", "mp4a.40.2", null, 128, 3_000_000, "en", 10),
+            new("b", 0, 0, "none", "mp4a.40.2", null, 192, 9_000_000, "ja", -1),
+            new("c", 0, 0, "none", "mp4a.40.5", null, 48, 1_000_000, "en", 10),
+        ];
+        Assert.Equal("a", SizeEstimator.PickAudio(formats, new())!.Id);         // the original track, not the largest
+        Assert.Equal("b", SizeEstimator.PickAudio(formats, new() { AudioLanguage = "ja" })!.Id);
+        Assert.Equal("c", SizeEstimator.PickAudio(formats, new() { AudioQuality = 96 })!.Id);
+    }
+
+    [Fact]
+    public void ReportedSizesDontMistakeTheDownloadsOwnForAStream()
+    {
+        // A merged download with an HLS video: the video's size is unknown, and is not the audio's.
+        var merged = new YtDlpOutputParser();
+        merged.Feed("VFS|270+140|NA,3400000,3400000|NA|T");
+        var part = Assert.IsType<ProgressEvent>(merged.Feed("VFP|downloading|1000|NA|80000000|0|0|5|100"));
+        Assert.Equal(80000000, part.Progress.Total);
+
+        var single = new YtDlpOutputParser();
+        single.Feed("VFS|18|NA,NA,11800000|NA|T");
+        var one = Assert.IsType<ProgressEvent>(single.Feed("VFP|downloading|1000|NA|NA|0|0|NA|NA"));
+        Assert.Equal(11800000, one.Progress.Total);
+    }
+}
+
 public class MultiConnectionTests
 {
     static readonly DownloadRequest Req = new("https://www.youtube.com/watch?v=abc", "video", 1080, false, "o");

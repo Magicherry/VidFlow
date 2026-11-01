@@ -44,6 +44,9 @@ public sealed class VideoInfo : MediaInfo
     /// <summary>Available resolutions, highest first.</summary>
     public IReadOnlyList<QualityOption> Qualities { get; init; } = [];
 
+    /// <summary>The streams on offer, for working out sizes under the chosen options (see <c>SizeEstimator</c>).</summary>
+    public IReadOnlyList<MediaFormat> Formats { get; init; } = [];
+
     /// <summary>Estimated size of the best audio-only stream (for audio downloads).</summary>
     public long? AudioBytes { get; init; }
 

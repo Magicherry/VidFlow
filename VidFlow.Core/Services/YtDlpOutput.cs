@@ -45,6 +45,8 @@ public sealed class YtDlpOutputParser
             _estimated = new bool[_parts];
             var sizes = (f.ElementAtOrDefault(2) ?? "").Split(',');
             for (var i = 0; i < _parts; i++) _sizes[i] = Long(sizes.ElementAtOrDefault(i) ?? "");
+            // One stream: no "requested_formats", so its size is the download's own.
+            if (_parts == 1 && _sizes[0] <= 0) _sizes[0] = Long(sizes.ElementAtOrDefault(2) ?? "");
             return new StartedEvent(_parts, NullIfNa(f.ElementAtOrDefault(4)), NullIfNa(f.ElementAtOrDefault(3)));
         }
         // aria2c writes its own readout without a line break, so yt-dlp's final line can end up glued after it.
@@ -104,7 +106,7 @@ public sealed class YtDlpOutputParser
             _estimated[current] = true;
             return estimate;
         }
-        return 0;
+        return _sizes[current];
     }
 
     ProgressEvent Downloading(long downloaded, long total, long estimate, double speed, double eta, long fragment, long fragments)

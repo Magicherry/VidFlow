@@ -123,9 +123,10 @@ public sealed partial class DownloadOptionsEditor : UserControl
         if (_video is { Qualities.Count: > 0 } v)
         {
             // The top resolution is "best" (0) itself: listing both would show it twice.
-            QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Quality(v.Qualities[0]), Tag = 0 });
+            string Label(QualityOption q) => Format.Quality(q, SizeEstimator.Estimate(v, q, _options));
+            QualityCombo.Items.Add(new ComboBoxItem { Content = Label(v.Qualities[0]), Tag = 0 });
             foreach (var q in v.Qualities.Skip(1))
-                QualityCombo.Items.Add(new ComboBoxItem { Content = Format.Quality(q), Tag = q.Height });
+                QualityCombo.Items.Add(new ComboBoxItem { Content = Label(q), Tag = q.Height });
         }
         else
         {
@@ -138,6 +139,8 @@ public sealed partial class DownloadOptionsEditor : UserControl
         QualityCombo.SelectedIndex = _options.MaxHeight == 0 || _options.MaxHeight >= TopHeight ? 0
             : Math.Max(0, items.FindIndex(i => (int)i.Tag > 0 && (int)i.Tag <= _options.MaxHeight));
     }
+
+    string SizeInputs() => $"{_options.Codec}|{_options.DynamicRange}|{_options.Container}|{_options.AudioFormat}|{_options.AudioQuality}|{_options.AudioLanguage}";
 
     /// <summary>The parsed video's highest resolution (the first, "best" entry); unknown before parsing.</summary>
     int TopHeight => _video is { Qualities.Count: > 0 } v ? v.Qualities[0].Height : int.MaxValue;
@@ -232,6 +235,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
     {
         if (_loading) return;
         var modeBefore = _options.Mode;
+        var sizesBefore = SizeInputs();
         _options.Mode = TagOf(ModeCombo) ?? "video";
         var height = (QualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
         // The first entry stands for both "best" and the top resolution: a 1080p template on a 1080p video keeps its 1080.
@@ -245,6 +249,14 @@ public sealed partial class DownloadOptionsEditor : UserControl
         _options.Subtitles = SubsToggle.IsOn;
         _options.Recode = RecodeToggle.IsOn;
         _options.FolderTemplate = TagOf(FolderCombo) ?? "";
+
+        // The sizes in the quality list depend on these: a different codec or audio track is a different file.
+        if (_video is not null && SizeInputs() != sizesBefore)
+        {
+            _loading = true;
+            FillQualities();
+            _loading = false;
+        }
 
         if (_options.Mode != modeBefore)
         {

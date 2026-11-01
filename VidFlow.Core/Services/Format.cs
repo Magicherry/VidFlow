@@ -44,6 +44,6 @@ public static class Format
     }
 
     /// <summary>Quality label with an approximate size: "1080p (Full HD) · ~120 MB".</summary>
-    public static string Quality(QualityOption q) =>
-        q.EstimatedBytes is > 0 ? $"{Height(q.Height, q.Fps)}  ·  {L.Format("Size_Approx", Bytes(q.EstimatedBytes.Value))}" : Height(q.Height, q.Fps);
+    public static string Quality(QualityOption q, long? bytes) =>
+        bytes is > 0 ? $"{Height(q.Height, q.Fps)}  ·  {L.Format("Size_Approx", Bytes(bytes.Value))}" : Height(q.Height, q.Fps);
 }

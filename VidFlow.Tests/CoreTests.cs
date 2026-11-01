@@ -203,8 +203,8 @@ public class InfoParserTests
         Assert.Equal("https://i.ytimg.com/hq.jpg", v.ThumbnailUrl);
         Assert.Equal([1080, 720], v.Qualities.Select(q => q.Height));
         Assert.Equal(60, v.Qualities[0].Fps);
-        Assert.Equal(8_000_000 + 1_000_000, v.Qualities[0].EstimatedBytes); // largest 1080p stream + best audio
-        Assert.Equal(800 * 1000 / 8 * 100 + 1_000_000, v.Qualities[1].EstimatedBytes); // from tbr × duration
+        Assert.Equal(8_000_000 + 1_000_000, v.Qualities[0].EstimatedBytes); // the 60 fps 1080p stream + the audio
+        Assert.Equal(800 * 1000 / 8 * 100, v.Qualities[1].EstimatedBytes); // from tbr × duration, sound built in
         Assert.Equal(1_000_000, v.AudioBytes);
         Assert.Equal(1080, v.Codecs["h264"]); // all three avc1 streams; the highest is 1080p
         Assert.Single(v.Codecs);
