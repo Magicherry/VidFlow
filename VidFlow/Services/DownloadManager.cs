@@ -145,7 +145,9 @@ public sealed class DownloadManager
 
     public void Remove(DownloadItem item)
     {
-        if (item.CanRemove) Items.Remove(item);
+        if (!item.CanRemove) return;
+        Items.Remove(item);
+        Changed(); // The taskbar may still be showing this one's failure.
     }
 
     static bool IsFinished(DownloadItem i) => i.State is DownloadState.Completed or DownloadState.Failed or DownloadState.Canceled;
@@ -156,6 +158,7 @@ public sealed class DownloadManager
     {
         foreach (var item in Items.Where(IsFinished).ToList())
             Items.Remove(item);
+        Changed();
     }
 
     /// <summary>On exit: stop processes but keep running items as "queued" so they resume next launch.</summary>

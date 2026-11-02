@@ -32,6 +32,10 @@ public sealed partial class DownloadsPage : Page
         DownloadList.ItemsSource = _shown;
         foreach (var item in App.Downloads.Items) item.PropertyChanged += Item_PropertyChanged;
         App.Downloads.Items.CollectionChanged += Items_CollectionChanged;
+        Loaded += (_, _) =>
+        {
+            if (_filter.Status == DownloadStatusFilter.All) StatusBar.SelectedItem = StatusBar.Items[0];
+        };
         Refresh();
     }
 
@@ -39,7 +43,20 @@ public sealed partial class DownloadsPage : Page
     {
         foreach (DownloadItem item in e.OldItems ?? Array.Empty<DownloadItem>()) item.PropertyChanged -= Item_PropertyChanged;
         foreach (DownloadItem item in e.NewItems ?? Array.Empty<DownloadItem>()) item.PropertyChanged += Item_PropertyChanged;
+        // With nothing left the filter bar is hidden, so no filter may stay on; and a new download is never hidden by one.
+        if (App.Downloads.Items.Count == 0 || (e.NewItems?.Cast<DownloadItem>().Any(i => !_filter.Matches(i.Record)) ?? false))
+            ResetFilters();
         Refresh();
+    }
+
+    void ResetFilters()
+    {
+        _filter = new();
+        // Off screen (a download started from another page) its underline wouldn't follow: Loaded sets it instead.
+        if (StatusBar.IsLoaded) StatusBar.SelectedItem = StatusBar.Items[0];
+        KindCombo.SelectedIndex = 0;
+        PlatformCombo.SelectedIndex = 0;
+        SearchBox.Text = "";
     }
 
     /// <summary>A download that finishes or fails moves between status groups (and its title arrives after it is added).</summary>
