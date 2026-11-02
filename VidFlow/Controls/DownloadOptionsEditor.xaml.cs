@@ -15,7 +15,7 @@ namespace VidFlow.Controls;
 public sealed partial class DownloadOptionsEditor : UserControl
 {
     static readonly int[] GenericHeights = [2160, 1440, 1080, 720, 480, 360];
-    static readonly int[] AudioQualities = [0, 320, 256, 192, 128, 96];
+    static readonly int[] AudioQualities = [320, 256, 192, 128, 96];
 
     DownloadTemplate _options = new();
     VideoInfo? _video;
@@ -26,8 +26,6 @@ public sealed partial class DownloadOptionsEditor : UserControl
         InitializeComponent();
         AddItems(ModeCombo, ("video", L.Get("Mode_Video")), ("audio", L.Get("Mode_Audio")), ("cover", L.Get("Mode_Cover")));
         AddItems(ContainerCombo, ("mp4", L.Get("Container_Mp4")), ("mkv", L.Get("Container_Mkv")), ("webm", L.Get("Container_Webm")));
-        foreach (var q in AudioQualities)
-            AudioQualityCombo.Items.Add(new ComboBoxItem { Content = q == 0 ? L.Get("AudioQuality_Best") : $"{q} kbps", Tag = q });
         AddItems(FolderCombo, ("", L.Get("Folder_None")), ("{platform}", L.Get("Folder_Platform")), ("{uploader}", L.Get("Folder_Uploader")),
             ("{year}-{month}", L.Get("Folder_Month")), ("{platform}/{uploader}", L.Get("Folder_PlatformUploader")));
 
@@ -103,7 +101,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
         FillPictures();
         Select(ContainerCombo, options.Container);
         FillAudioFormats();
-        Select(AudioQualityCombo, options.AudioQuality);
+        FillAudioQualities();
         FillAudioTracks();
         SubsToggle.IsOn = options.Subtitles;
         RecodeToggle.IsOn = options.Recode;
@@ -140,7 +138,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
             : Math.Max(0, items.FindIndex(i => (int)i.Tag > 0 && (int)i.Tag <= _options.MaxHeight));
     }
 
-    string SizeInputs() => $"{_options.Codec}|{_options.DynamicRange}|{_options.Container}|{_options.AudioFormat}|{_options.AudioQuality}|{_options.AudioLanguage}";
+    string SizeInputs() => $"{_options.Mode}|{_options.Codec}|{_options.DynamicRange}|{_options.Container}|{_options.AudioFormat}|{_options.AudioQuality}|{_options.AudioLanguage}";
 
     /// <summary>The parsed video's highest resolution (the first, "best" entry); unknown before parsing.</summary>
     int TopHeight => _video is { Qualities.Count: > 0 } v ? v.Qualities[0].Height : int.MaxValue;
@@ -174,6 +172,24 @@ public sealed partial class DownloadOptionsEditor : UserControl
         if (_options.DynamicRange == MediaFeatures.DolbyVision && !dv)
             PictureCombo.Items.Add(new ComboBoxItem { Content = L.Format("Codec_Unavailable", L.Get("Picture_DolbyVision")), Tag = MediaFeatures.DolbyVision });
         Select(PictureCombo, _options.DynamicRange);
+    }
+
+    /// <summary>What this video's audio actually is, when known (not in the template editor).</summary>
+    int? TopAudioKbps => _video is { Formats.Count: > 0 } v ? SizeEstimator.TopAudioKbps(v.Formats, _options) : null;
+
+    /// <summary>The first entry is "as high as it goes": the video's real bitrate when known, and only lower limits
+    /// after it, since nothing above what the source has can be had.</summary>
+    void FillAudioQualities()
+    {
+        AudioQualityCombo.Items.Clear();
+        var top = TopAudioKbps;
+        AudioQualityCombo.Items.Add(new ComboBoxItem { Content = top is { } kbps ? $"{kbps} kbps" : L.Get("AudioQuality_Best"), Tag = 0 });
+        foreach (var q in AudioQualities.Where(q => top is null || q < top))
+            AudioQualityCombo.Items.Add(new ComboBoxItem { Content = $"{q} kbps", Tag = q });
+        // Closest choice not above the wanted bitrate.
+        var items = AudioQualityCombo.Items.Cast<ComboBoxItem>().ToList();
+        var wanted = _options.AudioQuality;
+        AudioQualityCombo.SelectedIndex = wanted <= 0 ? 0 : Math.Max(0, items.FindIndex(i => (int)i.Tag > 0 && (int)i.Tag <= wanted));
     }
 
     void FillAudioFormats()
@@ -244,25 +260,28 @@ public sealed partial class DownloadOptionsEditor : UserControl
         _options.DynamicRange = TagOf(PictureCombo) ?? MediaFeatures.Auto;
         _options.Container = TagOf(ContainerCombo) ?? "mp4";
         _options.AudioFormat = TagOf(AudioFormatCombo) ?? _options.AudioFormat;
-        _options.AudioQuality = (AudioQualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
+        var audioQuality = (AudioQualityCombo.SelectedItem as ComboBoxItem)?.Tag as int? ?? 0;
+        // As with resolution: the first entry is the top, so a higher limit from a template stays as it is.
+        if (audioQuality != 0 || TopAudioKbps is not { } top || _options.AudioQuality < top) _options.AudioQuality = audioQuality;
         _options.AudioLanguage = TagOf(AudioTrackCombo) ?? "";
         _options.Subtitles = SubsToggle.IsOn;
         _options.Recode = RecodeToggle.IsOn;
         _options.FolderTemplate = TagOf(FolderCombo) ?? "";
-
-        // The sizes in the quality list depend on these: a different codec or audio track is a different file.
-        if (_video is not null && SizeInputs() != sizesBefore)
-        {
-            _loading = true;
-            FillQualities();
-            _loading = false;
-        }
 
         if (_options.Mode != modeBefore)
         {
             // Video and audio-only have different audio format choices.
             _loading = true;
             FillAudioFormats();
+            _loading = false;
+        }
+
+        // The sizes in the quality list depend on these: a different codec or audio track is a different file.
+        if (_video is not null && SizeInputs() != sizesBefore)
+        {
+            _loading = true;
+            FillQualities();
+            FillAudioQualities();
             _loading = false;
         }
         Refresh();

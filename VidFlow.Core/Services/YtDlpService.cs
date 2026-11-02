@@ -28,29 +28,58 @@ public static class YtDlpService
 
     const string DouyinReferer = "https://www.douyin.com/";
 
-    static async Task<DouyinVideo> GetDouyinAsync(string url, CancellationToken ct)
+    static async Task<string> GetDouyinAsync(string url, CancellationToken ct)
     {
         if (FetchDouyinDetail is not { } fetch) throw new YtDlpException(L.Get("Error_DouyinUnavailable"));
         if (UrlTools.CanonicalDouyinUrl(url) is null) throw new YtDlpException(L.Get("Error_DouyinNotVideo"));
-        return DouyinParser.Parse(await fetch(url, ct));
+        return await fetch(url, ct);
     }
 
     public static async Task<MediaInfo> GetInfoAsync(string url, CancellationToken ct)
     {
         url = await ShortLinks.NormalizeAsync(url, ct);
-        if (UrlTools.DetectPlatform(url) == Platform.Douyin) return DouyinParser.ToVideoInfo(await GetDouyinAsync(url, ct));
+        if (UrlTools.DetectPlatform(url) == Platform.Douyin)
+        {
+            var detail = await GetDouyinAsync(url, ct);
+            return DouyinParser.ParsePhotos(detail) is { } note ? DouyinParser.ToVideoInfo(note) : DouyinParser.ToVideoInfo(DouyinParser.Parse(detail));
+        }
+        if (TikTokPhotos.IsPhotoUrl(url))
+            return TikTokPhotos.ToVideoInfo(await TikTokPhotos.FetchAsync(url, ct) ?? throw new YtDlpException(L.Get("Error_TikTokNoPhotos")), url);
         var stdout = new StringBuilder();
         var (code, error) = await RunWithCookieFallbackAsync(url,
             env => { stdout.Clear(); return YtDlpArgs.Info(url, AppSettings.Current, env); },
             line => stdout.AppendLine(line), ct);
-        if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);
+        if (code != 0)
+        {
+            // Or fails on it, depending on the post.
+            if (UrlTools.DetectPlatform(url) == Platform.TikTok && await TryPhotoPostAsync(url, ct) is { } post)
+                return TikTokPhotos.ToVideoInfo(post, url);
+            throw new YtDlpException(ErrorMapper.Friendly(error), error);
+        }
 
         var info = InfoParser.Parse(stdout.ToString(), url);
+        // yt-dlp "succeeds" on a photo post's /video/ address, with its sound and no picture.
+        if (info is VideoInfo { Platform: Platform.TikTok, Qualities.Count: 0 } && await TryPhotoPostAsync(url, ct) is { } photos)
+            return TikTokPhotos.ToVideoInfo(photos, url);
         if (info is PlaylistInfo { Entries.Count: 0 })
             throw new YtDlpException(L.Get("Error_EmptyPlaylist"));
         if (info is PlaylistInfo { Platform: Platform.Bilibili } parts)
             info = await BilibiliApi.EnrichAsync(parts, ct);
         return info;
+    }
+
+    /// <summary>Whether the failure was a photo post; failing to tell leaves yt-dlp's error to be reported.</summary>
+    static async Task<PhotoPost?> TryPhotoPostAsync(string url, CancellationToken ct)
+    {
+        try
+        {
+            return await TikTokPhotos.FetchAsync(url, ct);
+        }
+        catch (HttpRequestException ex)
+        {
+            Log.Info($"TikTok page not read: {ex.Message}");
+            return null;
+        }
     }
 
     /// <summary>Runs the download, reporting events as they happen. Returns the final file path when yt-dlp reports one.</summary>
@@ -60,6 +89,8 @@ public static class YtDlpService
             throw new YtDlpException(L.Get("Error_AudioNeedsFfmpeg"));
         req = req with { Url = await ShortLinks.NormalizeAsync(req.Url, ct) };
         Directory.CreateDirectory(req.OutputFolder);
+        if (UrlTools.DetectPlatform(req.Url) != Platform.Douyin && (req.IsPhotos || TikTokPhotos.IsPhotoUrl(req.Url)))
+            return await TikTokPhotos.DownloadAsync(req, onEvent, ct);
 
         string? filePath = null;
         var parser = new YtDlpOutputParser();
@@ -75,7 +106,10 @@ public static class YtDlpService
         if (UrlTools.DetectPlatform(req.Url) == Platform.Douyin)
         {
             // Stream addresses expire, so look them up again right before downloading (also after a restart).
-            var video = await GetDouyinAsync(req.Url, ct);
+            var detail = await GetDouyinAsync(req.Url, ct);
+            if (DouyinParser.ParsePhotos(detail) is { } photos)
+                return await PhotoPosts.SaveAsync(photos, req.OutputFolder, DouyinReferer, onEvent, ct) ?? throw new YtDlpException(L.Get("Error_DouyinUnavailable"));
+            var video = DouyinParser.Parse(detail);
             var stream = DouyinParser.Pick(video, req.MaxHeight, req.Codec);
             var date = video.UploadDate is { Length: 8 } d ? $"{d[..4]}-{d[4..6]}-{d[6..]}" : null;
             var known = new Dictionary<string, string?>

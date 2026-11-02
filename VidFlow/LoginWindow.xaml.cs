@@ -34,6 +34,7 @@ public sealed partial class LoginWindow : Window
         {
             Platform.Bilibili => L.Get("Login_TitleBili"),
             Platform.Douyin => L.Get("Login_TitleDouyin"),
+            Platform.TikTok => L.Get("Login_TitleTikTok"),
             _ => L.Get("Login_TitleYt"),
         };
         // Douyin's home page has no sign-in form of its own: say where its sign-in button is.

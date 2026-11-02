@@ -711,6 +711,220 @@ public class MediaFeatureTests
     }
 }
 
+public class DouyinPhotoTests
+{
+    const string Post = """
+        {"aweme_detail":{"aweme_id":"7433","desc":" 图文标题 ","create_time":1725812837,"author":{"nickname":"某某"},
+          "music":{"play_url":{"url_list":["https://a/m.mp3"]}},
+          "video":{"play_addr":{"url_list":["https://a/silent.mp4"]}},
+          "images":[{"url_list":["https://a/1.webp","https://b/1.jpg"]},{"url_list":["https://a/2.webp"]},{"url_list":[]}]}}
+        """;
+
+    [Fact]
+    public void ReadsAPhotoPost()
+    {
+        var post = DouyinParser.ParsePhotos(Post)!;
+        Assert.Equal("图文标题", post.Title);
+        Assert.Equal("某某", post.Author);
+        Assert.Equal("https://a/m.mp3", post.MusicUrl);
+        Assert.Equal("https://a/1.webp", post.Cover);
+        Assert.Equal(2, post.Images.Count);
+        Assert.Equal(["https://a/1.webp", "https://b/1.jpg"], post.Images[0].Urls);
+
+        var info = DouyinParser.ToVideoInfo(post);
+        Assert.Equal("https://www.douyin.com/note/7433", info.Url);
+        Assert.True(info.IsPhotoPost);
+        Assert.Equal(Platform.Douyin, info.Platform);
+    }
+
+    [Theory]
+    [InlineData("""{"aweme_detail":{"aweme_id":"1","video":{}}}""")]
+    [InlineData("""{"aweme_detail":{"aweme_id":"1","images":null,"video":{}}}""")]
+    [InlineData("""{"aweme_detail":{"aweme_id":"1","images":[],"video":{}}}""")]
+    [InlineData("""{"aweme_detail":null}""")]
+    public void AVideoIsNotAPhotoPost(string json) => Assert.Null(DouyinParser.ParsePhotos(json));
+
+    [Theory]
+    [InlineData("https://www.douyin.com/note/7433523124836060417", "https://www.douyin.com/note/7433523124836060417")]
+    [InlineData("https://www.iesdouyin.com/share/note/7433523124836060417/?x=1", "https://www.douyin.com/note/7433523124836060417")]
+    [InlineData("https://www.iesdouyin.com/share/slides/7433523124836060417/", "https://www.douyin.com/note/7433523124836060417")]
+    [InlineData("https://www.douyin.com/video/7433523124836060417", "https://www.douyin.com/video/7433523124836060417")]
+    public void LinksKeepTheirKind(string url, string expected) => Assert.Equal(expected, UrlTools.CanonicalDouyinUrl(url));
+}
+
+[Collection("DataDir")]
+public class TikTokPhotoTests
+{
+    static string Page(string item) =>
+        """<html><script id="__UNIVERSAL_DATA_FOR_REHYDRATION__" type="application/json">{"__DEFAULT_SCOPE__":{"webapp.video-detail":{"statusCode":0,"itemInfo":{"itemStruct":"""
+        + item + "}}}}</script></html>";
+
+    const string Post = """
+        {"id":"741","desc":" A title/with: bad?chars ","createTime":"1725812837","author":{"uniqueId":"me","nickname":"Dinky"},
+         "music":{"playUrl":"https://a/m.mp3"},
+         "imagePost":{"title":"t","cover":{"imageURL":{"urlList":["https://a/c.jpg"]}},
+           "images":[{"imageURL":{"urlList":["https://a/1.jpg","https://b/1.jpg"]}},{"imageURL":{"urlList":["https://a/2.jpg"]}},{"imageURL":{"urlList":[]}}]}}
+        """;
+
+    [Fact]
+    public void ReadsThePostFromThePage()
+    {
+        var post = TikTokPhotos.Parse(Page(Post))!;
+        Assert.Equal("741", post.Id);
+        Assert.Equal("A title/with: bad?chars", post.Title);
+        Assert.Equal("Dinky", post.Author);
+        Assert.Equal("https://a/c.jpg", post.Cover);
+        Assert.Equal("https://a/m.mp3", post.MusicUrl);
+        Assert.Equal(2, post.Images.Count); // one without addresses is left out
+        Assert.Equal(["https://a/1.jpg", "https://b/1.jpg"], post.Images[0].Urls);
+        Assert.Equal("A title_with_ bad_chars [741]", PhotoPosts.FolderName(post));
+    }
+
+    [Theory]
+    [InlineData("<html>no data</html>")]
+    [InlineData("<script id=\"__UNIVERSAL_DATA_FOR_REHYDRATION__\">not json</script>")]
+    public void OtherPagesAreNotPhotoPosts(string html) => Assert.Null(TikTokPhotos.Parse(html));
+
+    [Fact]
+    public void AVideoIsNotAPhotoPost() => Assert.Null(TikTokPhotos.Parse(Page("""{"id":"1","video":{}}""")));
+
+    [Fact]
+    public void AddressesAreTold()
+    {
+        const string photo = "https://www.tiktok.com/@me/photo/741?x=1";
+        Assert.True(TikTokPhotos.IsPhotoUrl(photo));
+        Assert.False(TikTokPhotos.IsPhotoUrl("https://www.tiktok.com/@me/video/741"));
+        Assert.Equal("https://www.tiktok.com/@me/video/741", TikTokPhotos.DataPageUrl(photo));
+        Assert.Null(TikTokPhotos.DataPageUrl("https://www.tiktok.com/@me"));
+
+        Assert.True(UrlTools.IsShortLink("https://vm.tiktok.com/ZM1/"));
+        Assert.True(UrlTools.IsShortLink("https://www.tiktok.com/t/ZT1/"));
+        Assert.False(UrlTools.IsShortLink(photo));
+    }
+
+    [Fact]
+    public void ARequestIsLabelledAndFilteredAsPhotos()
+    {
+        var request = PhotoPosts.Request("https://www.tiktok.com/@me/photo/741", "o");
+        Assert.True(request.IsPhotos);
+        Assert.False(request.IsAudio);
+        Assert.Equal(DownloadKind.Photos, DownloadFilter.KindOf(request));
+        Assert.Contains(VidFlow.Localization.L.Get("Mode_Photos"), DownloadLabels.Label(request, null));
+    }
+
+    [Theory]
+    [InlineData("image/jpeg", ".x", ".jpg")]
+    [InlineData("image/webp", ".x", ".webp")]
+    [InlineData("audio/mpeg", ".x", ".mp3")]
+    [InlineData("application/octet-stream", ".mp3", ".mp3")]
+    [InlineData(null, ".jpg", ".jpg")]
+    public void TheExtensionFollowsTheContentType(string? type, string fallback, string expected) =>
+        Assert.Equal(expected, PhotoPosts.ExtensionFor(type, fallback));
+
+    [Fact]
+    public void TikTokSignInIsTracked()
+    {
+        var old = AppSettings.DataDir;
+        var dir = Path.Combine(Path.GetTempPath(), "vidflow-test-" + Guid.NewGuid());
+        AppSettings.DataDir = dir;
+        try
+        {
+            Assert.False(AccountStore.IsLoggedIn(Platform.TikTok));
+            Assert.Null(AccountStore.CookieHeader(Platform.TikTok));
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(AccountStore.CookieFile, ".tiktok.com\tTRUE\t/\tTRUE\t0\tsessionid\tabc\n.tiktok.com\tTRUE\t/\tTRUE\t0\ttt\t1\n.douyin.com\tTRUE\t/\tTRUE\t0\tother\tz\n");
+            Assert.True(AccountStore.HasSignIn(Platform.TikTok));
+            Assert.True(AccountStore.IsLoggedIn(Platform.TikTok));
+            Assert.False(AccountStore.IsLoggedIn(Platform.Douyin));
+            Assert.True(AccountStore.HasAnyLogin);
+            Assert.Equal("sessionid=abc; tt=1", AccountStore.CookieHeader(Platform.TikTok));
+        }
+        finally
+        {
+            AppSettings.DataDir = old;
+            if (Directory.Exists(dir)) Directory.Delete(dir, recursive: true);
+        }
+    }
+}
+
+public class CardLayoutTests
+{
+    [Theory]
+    [InlineData(6, 3, new[] { 3, 3 })]
+    [InlineData(7, 3, new[] { 3, 2, 2 })]
+    [InlineData(7, 2, new[] { 2, 2, 2, 1 })]
+    [InlineData(7, 1, new[] { 1, 1, 1, 1, 1, 1, 1 })]
+    [InlineData(8, 3, new[] { 3, 3, 2 })]
+    [InlineData(2, 3, new[] { 2 })]
+    [InlineData(0, 3, new int[0])]
+    public void SplitsEvenlyWithLongerRowsFirst(int count, int columns, int[] rows) =>
+        Assert.Equal(rows, CardLayout.RowSizes(count, columns));
+}
+
+public class TikTokTests
+{
+    [Theory]
+    [InlineData("https://www.tiktok.com/@scout2015/video/6718335390845095173")]
+    [InlineData("https://vm.tiktok.com/ZMabc123/")]
+    [InlineData("https://vt.tiktok.com/ZSabc123/")]
+    [InlineData("https://www.tiktok.com/t/ZTabc123/")]
+    public void LinksAreRecognized(string url)
+    {
+        Assert.Equal(Platform.TikTok, UrlTools.DetectPlatform(url));
+        Assert.True(UrlTools.IsSupported(url));
+        Assert.Equal(url, UrlTools.ExtractUrl($"看这个 {url} 很好看"));
+    }
+
+    [Fact]
+    public void OnlyItsOwnDomainCounts() => Assert.Equal(Platform.Other, UrlTools.DetectPlatform("https://nottiktok.com/a"));
+
+    [Fact]
+    public void ListedAndNeedsAProxy()
+    {
+        Assert.Contains(Platform.TikTok, PlatformExtensions.Supported);
+        Assert.Equal("TikTok", Platform.TikTok.DisplayName());
+        Assert.True(Connectivity.NeedsProxy(Platform.TikTok));
+        Assert.False(Connectivity.NeedsProxy(Platform.Douyin));
+    }
+}
+
+public class BilibiliNumberTests
+{
+    const string Page = "https://www.bilibili.com/video/BV1GJ411x7h7";
+
+    [Theory]
+    [InlineData("BV1GJ411x7h7")]
+    [InlineData("  BV1GJ411x7h7\n")]
+    [InlineData("bv1GJ411x7h7")]
+    [InlineData("看这个：BV1GJ411x7h7，很好看")]
+    [InlineData("【标题】BV1GJ411x7h7")]
+    public void ABareNumberBecomesItsPage(string text) => Assert.Equal([Page], UrlTools.ExtractUrls(text));
+
+    [Fact]
+    public void KeepsThePartAndWorksWithOtherLinks()
+    {
+        Assert.Equal([Page + "?p=3"], UrlTools.ExtractUrls("BV1GJ411x7h7?p=3"));
+        Assert.Equal([Page, "https://youtu.be/a"], UrlTools.ExtractUrls("BV1GJ411x7h7 https://youtu.be/a"));
+        Assert.Equal(Platform.Bilibili, UrlTools.DetectPlatform(UrlTools.ExtractUrl("BV1GJ411x7h7")!));
+    }
+
+    [Fact]
+    public void ANumberInsideALinkIsNotSeenTwice()
+    {
+        Assert.Equal([Page + "?spm=1"], UrlTools.ExtractUrls(Page + "?spm=1"));
+        Assert.Equal([Page], UrlTools.ExtractUrls($"{Page} BV1GJ411x7h7")); // the same video twice
+    }
+
+    [Theory]
+    [InlineData("BV1GJ411x7")]         // too short
+    [InlineData("BV1GJ411x7h7extra")]  // part of a longer word
+    [InlineData("xBV1GJ411x7h7")]
+    [InlineData("BV2GJ411x7h7")]       // they all start BV1
+    [InlineData("av1 编码 av170001")]   // a codec name, and av numbers aren't read
+    public void OtherTextIsLeftAlone(string text) => Assert.Empty(UrlTools.ExtractUrls(text));
+}
+
+[Collection("DataDir")]
 public class YtDlpInstallTests
 {
     [Fact]
@@ -862,6 +1076,17 @@ public class SizeEstimatorTests
         Assert.Equal("a", SizeEstimator.PickAudio(formats, new())!.Id);         // the original track, not the largest
         Assert.Equal("b", SizeEstimator.PickAudio(formats, new() { AudioLanguage = "ja" })!.Id);
         Assert.Equal("c", SizeEstimator.PickAudio(formats, new() { AudioQuality = 96 })!.Id);
+    }
+
+    [Fact]
+    public void TheTopAudioBitrateIsTheTrackTheDownloadWouldTake()
+    {
+        Assert.Equal(129, SizeEstimator.TopAudioKbps(Rick, new()));                                     // AAC for MP4
+        Assert.Equal(128, SizeEstimator.TopAudioKbps(Rick, new() { Container = "webm" }));              // Opus
+        Assert.Equal(128, SizeEstimator.TopAudioKbps(Rick, new() { Mode = "audio", AudioFormat = "opus" }));
+        Assert.Equal(129, SizeEstimator.TopAudioKbps(Rick, new() { Mode = "audio", AudioFormat = "mp3" }));
+        Assert.Equal(129, SizeEstimator.TopAudioKbps(Rick, new() { AudioQuality = 96 }));               // a limit doesn't change the top
+        Assert.Null(SizeEstimator.TopAudioKbps([], new()));
     }
 
     [Fact]
@@ -1265,6 +1490,20 @@ public class DownloadFilterTests
         Assert.Empty(Shown(new(DownloadStatusFilter.Completed, Query: "never")));
         // The counts on the status choices follow the platform and text, not the status.
         Assert.True(new DownloadFilter(DownloadStatusFilter.Completed, Platform.Bilibili).MatchesExceptStatus(BiliPaused));
+    }
+
+    [Fact]
+    public void FiltersByKind()
+    {
+        DownloadRecord With(string mode) => new() { Request = new("https://youtu.be/a", mode, 0, false, "o"), Title = mode };
+        DownloadRecord video = With("video"), audio = With("audio"), oldMp3 = With("mp3"), cover = With("cover");
+        DownloadRecord[] all = [video, audio, oldMp3, cover];
+        DownloadRecord[] Of(DownloadKind? k) => all.Where(new DownloadFilter(Kind: k).Matches).ToArray();
+
+        Assert.Equal(all, Of(null));
+        Assert.Equal([video], Of(DownloadKind.Video));
+        Assert.Equal([audio, oldMp3], Of(DownloadKind.Audio)); // older lists store the format as the mode
+        Assert.Equal([cover], Of(DownloadKind.Cover));
     }
 
     [Fact]

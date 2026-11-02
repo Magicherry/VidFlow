@@ -4,7 +4,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X</value></data>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube、TikTok 与 X</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。</value></data>
   <data name="About_Issues" xml:space="preserve"><value>反馈问题</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>开源许可</value></data>
@@ -22,6 +22,8 @@
   <data name="Account_DouyinOut" xml:space="preserve"><value>未登录 · 公开作品无需登录</value></data>
   <data name="Account_Login" xml:space="preserve"><value>登录</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>退出登录</value></data>
+  <data name="Account_TikTokIn" xml:space="preserve"><value>已登录 · 可下载需要登录的内容</value></data>
+  <data name="Account_TikTokOut" xml:space="preserve"><value>未登录 · 公开内容无需登录</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制、会员视频</value></data>
   <data name="Account_YtOut" xml:space="preserve"><value>未登录 · 年龄限制、会员视频需登录</value></data>
   <data name="Accounts_Description" xml:space="preserve"><value>登录后可下载更高画质和受限内容，登录信息仅保存在本机</value></data>
@@ -76,6 +78,7 @@
   <data name="Download_Batch" xml:space="preserve"><value>添加 {0} 个链接到队列</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>下载选中的 {0} 个</value></data>
   <data name="Download_Start" xml:space="preserve"><value>开始下载</value></data>
+  <data name="Downloads_AllKinds" xml:space="preserve"><value>全部类型</value></data>
   <data name="Downloads_AllPlatforms" xml:space="preserve"><value>全部平台</value></data>
   <data name="Downloads_ClearBody" xml:space="preserve"><value>已下载的文件不受影响。</value></data>
   <data name="Downloads_ClearConfirm" xml:space="preserve"><value>移除</value></data>
@@ -87,6 +90,7 @@
   <data name="Downloads_FilterAll" xml:space="preserve"><value>全部</value></data>
   <data name="Downloads_FilterCompleted" xml:space="preserve"><value>已完成</value></data>
   <data name="Downloads_FilterFailed" xml:space="preserve"><value>失败</value></data>
+  <data name="Downloads_Kind" xml:space="preserve"><value>类型</value></data>
   <data name="Downloads_More" xml:space="preserve"><value>更多操作</value></data>
   <data name="Downloads_NoMatchBody" xml:space="preserve"><value>换个状态、平台或关键词试试</value></data>
   <data name="Downloads_NoMatchTitle" xml:space="preserve"><value>没有符合条件的下载</value></data>
@@ -102,7 +106,7 @@
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube 要求验证身份。请在「账号」页面中登录，或更换代理节点。</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>磁盘空间不足。</value></data>
-  <data name="Error_DouyinNotVideo" xml:space="preserve"><value>这个抖音链接不是视频（暂不支持图文作品和主页）。</value></data>
+  <data name="Error_DouyinNotVideo" xml:space="preserve"><value>这个抖音链接不是作品（暂不支持主页）。</value></data>
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>这个播放列表中没有可下载的视频。</value></data>
   <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络与速度」中配置代理。</value></data>
@@ -112,6 +116,7 @@
   <data name="Error_NoYtDlp" xml:space="preserve"><value>未找到 yt-dlp，请先在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_Private" xml:space="preserve"><value>这是私享 / 会员视频，需要登录有权限观看的账号。</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>请求过于频繁，请稍后或更换代理节点后重试。</value></data>
+  <data name="Error_TikTokNoPhotos" xml:space="preserve"><value>无法获取这个 TikTok 帖子：可能已删除、不公开或需要登录（可在「账号」页面登录 TikTok 后重试）。</value></data>
   <data name="Error_Unavailable" xml:space="preserve"><value>视频不可用（已删除、地区限制或未公开）。</value></data>
   <data name="Error_UnexpectedExit" xml:space="preserve"><value>yt-dlp 意外退出。</value></data>
   <data name="Error_Unsupported" xml:space="preserve"><value>不支持该链接。</value></data>
@@ -145,11 +150,14 @@
   <data name="Home_Parse" xml:space="preserve"><value>解析</value></data>
   <data name="Home_ParseFailed" xml:space="preserve"><value>解析失败</value></data>
   <data name="Home_Paste" xml:space="preserve"><value>从剪贴板粘贴</value></data>
-  <data name="Home_PlatformsTitle" xml:space="preserve"><value>支持的平台</value></data>
+  <data name="Home_PhotoCount" xml:space="preserve"><value>{0} 张图片</value></data>
+  <data name="Home_PlatformsChina" xml:space="preserve"><value>国内平台</value></data>
+  <data name="Home_PlatformsGlobal" xml:space="preserve"><value>海外平台</value></data>
   <data name="Home_SignedIn" xml:space="preserve"><value>已登录</value></data>
   <data name="Home_SignInForMore" xml:space="preserve"><value>登录以解锁更多</value></data>
-  <data name="Home_Supports_Bilibili" xml:space="preserve"><value>视频、多 P 视频、合集</value></data>
-  <data name="Home_Supports_Douyin" xml:space="preserve"><value>作品链接、分享口令、短链接</value></data>
+  <data name="Home_Supports_Bilibili" xml:space="preserve"><value>视频、多 P 视频、合集、BV 号</value></data>
+  <data name="Home_Supports_Douyin" xml:space="preserve"><value>作品、图文、分享口令、短链接</value></data>
+  <data name="Home_Supports_TikTok" xml:space="preserve"><value>视频、图文、短链接</value></data>
   <data name="Home_Supports_Weibo" xml:space="preserve"><value>视频、带视频的微博、t.cn 短链接</value></data>
   <data name="Home_Supports_X" xml:space="preserve"><value>帖子里的视频与 GIF</value></data>
   <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>视频笔记、分享链接</value></data>
@@ -161,7 +169,7 @@
   <data name="Home_Unreachable" xml:space="preserve"><value>无法连接，可能需要代理</value></data>
   <data name="Home_UnreachableTip" xml:space="preserve"><value>当前网络无法访问 YouTube，请在设置中配置代理</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>视频链接</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴视频链接或分享口令，多个链接用空格分隔</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>粘贴视频链接、分享口令或 BV 号，多个用空格分隔</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>查看下载列表</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} 音频</value></data>
   <data name="Label_AudioOriginal" xml:space="preserve"><value>原始格式音频</value></data>
@@ -188,13 +196,15 @@
   <data name="Login_SuccessClosing" xml:space="preserve"><value>登录成功，正在保存并关闭…</value></data>
   <data name="Login_TitleBili" xml:space="preserve"><value>登录哔哩哔哩</value></data>
   <data name="Login_TitleDouyin" xml:space="preserve"><value>登录抖音</value></data>
+  <data name="Login_TitleTikTok" xml:space="preserve"><value>登录 TikTok</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>登录 YouTube（Google 账号）</value></data>
   <data name="Login_UseWeb" xml:space="preserve"><value>使用账号密码或短信验证码登录</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>无法启动内置浏览器（WebView2）：{0}</value></data>
-  <data name="Mode_Audio" xml:space="preserve"><value>仅音频</value></data>
+  <data name="Mode_Audio" xml:space="preserve"><value>音频</value></data>
   <data name="Mode_Cover" xml:space="preserve"><value>封面</value></data>
-  <data name="Mode_M4a" xml:space="preserve"><value>仅音频 (M4A)</value></data>
-  <data name="Mode_Mp3" xml:space="preserve"><value>仅音频 (MP3)</value></data>
+  <data name="Mode_M4a" xml:space="preserve"><value>音频 (M4A)</value></data>
+  <data name="Mode_Mp3" xml:space="preserve"><value>音频 (MP3)</value></data>
+  <data name="Mode_Photos" xml:space="preserve"><value>图片</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>视频</value></data>
   <data name="Naming_Custom" xml:space="preserve"><value>自定义</value></data>
   <data name="Naming_InsertVariable" xml:space="preserve"><value>插入「{0}」</value></data>
@@ -269,7 +279,7 @@
   <data name="Playlist_SelectAll" xml:space="preserve"><value>全选</value></data>
   <data name="Playlist_Selected" xml:space="preserve"><value>已选择 {0} / {1}</value></data>
   <data name="Playlist_SelectNone" xml:space="preserve"><value>全不选</value></data>
-  <data name="Preset_AudioOnly" xml:space="preserve"><value>仅音频</value></data>
+  <data name="Preset_AudioOnly" xml:space="preserve"><value>音频</value></data>
   <data name="Preset_Best" xml:space="preserve"><value>最高画质</value></data>
   <data name="Preset_Compatible" xml:space="preserve"><value>兼容优先</value></data>
   <data name="Preset_HD" xml:space="preserve"><value>高清优先（1080p）</value></data>

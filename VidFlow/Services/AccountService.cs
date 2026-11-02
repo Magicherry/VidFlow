@@ -10,7 +10,7 @@ public static class AccountService
 {
     public static string WebViewDataDir => Path.Combine(AppSettings.DataDir, "WebView2");
 
-    static readonly string[] CookieSites = ["https://www.bilibili.com/", "https://www.youtube.com/", "https://www.douyin.com/"];
+    static readonly string[] CookieSites = ["https://www.bilibili.com/", "https://www.youtube.com/", "https://www.douyin.com/", "https://www.tiktok.com/"];
 
     /// <summary>One hidden Douyin page at a time (a batch parses several links at once).</summary>
     static readonly SemaphoreSlim DouyinLock = new(1, 1);
@@ -21,6 +21,7 @@ public static class AccountService
     {
         Platform.Bilibili => "https://passport.bilibili.com/login",
         Platform.Douyin => "https://www.douyin.com/",
+        Platform.TikTok => "https://www.tiktok.com/login",
         _ => "https://accounts.google.com/ServiceLogin?service=youtube&continue=https%3A%2F%2Fwww.youtube.com%2F",
     };
 
@@ -102,13 +103,23 @@ public static class AccountService
                         Log.Info($"Douyin detail unreadable: {ex.Message}");
                     }
                 };
-                web.Navigate(videoUrl);
-                if (await Task.WhenAny(detail.Task, Task.Delay(DouyinTimeout, ct)) != detail.Task)
+                using var stop = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                var reading = ReadPhotoPostFromPageAsync(web, id, detail, stop.Token);
+                try
                 {
-                    ct.ThrowIfCancellationRequested();
-                    throw new YtDlpException(L.Get("Error_DouyinUnavailable"));
+                    web.Navigate(videoUrl);
+                    if (await Task.WhenAny(detail.Task, Task.Delay(DouyinTimeout, ct)) != detail.Task)
+                    {
+                        ct.ThrowIfCancellationRequested();
+                        throw new YtDlpException(L.Get("Error_DouyinUnavailable"));
+                    }
+                    return await detail.Task;
                 }
-                return await detail.Task;
+                finally
+                {
+                    stop.Cancel();
+                    await reading;
+                }
             });
         }
         finally
@@ -116,6 +127,57 @@ public static class AccountService
             DouyinLock.Release();
         }
     }
+
+    /// <summary>A photo post's page comes with the post in it and never makes the "aweme/detail" request, so it is
+    /// read from the page, in the shape of that request's answer.</summary>
+    static async Task ReadPhotoPostFromPageAsync(CoreWebView2 web, string id, TaskCompletionSource<string> detail, CancellationToken ct)
+    {
+        var script = DouyinPhotoPostScript.Replace("__ID__", id);
+        try
+        {
+            while (!detail.Task.IsCompleted)
+            {
+                await Task.Delay(500, ct);
+                try
+                {
+                    if (System.Text.Json.JsonSerializer.Deserialize<string>(await web.ExecuteScriptAsync(script)) is { Length: > 0 } json)
+                        detail.TrySetResult(json);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    Log.Info($"Douyin page not read yet: {ex.Message}"); // Between pages, say.
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    const string DouyinPhotoPostScript = """
+        (() => {
+          // From the script tags: once the page's own code has started, what arrives no longer reaches __pace_f itself.
+          for (const s of document.scripts) {
+            const call = /^self\.__pace_f\.push\((\[1,.*\])\)\s*;?\s*$/s.exec(s.textContent);
+            if (!call || !call[1].includes('awemeId')) continue;
+            let page;
+            try {
+              const chunk = JSON.parse(call[1])[1];
+              page = JSON.parse(chunk.slice(chunk.indexOf(':') + 1))[3];
+            } catch { continue; }
+            if (page?.awemeId !== '__ID__') continue;
+            const d = page.aweme?.detail;
+            if (!Array.isArray(d?.images) || d.images.length === 0) return null;
+            return JSON.stringify({ aweme_detail: {
+              aweme_id: d.awemeId, desc: d.desc, create_time: d.createTime,
+              author: { nickname: d.authorInfo?.nickname },
+              music: { play_url: { url_list: d.music?.playUrl?.urlList ?? [] } },
+              images: d.images.map(i => ({ url_list: i.urlList ?? [] })),
+            } });
+          }
+          return null;
+        })()
+        """;
 
     static Task WithHiddenWebViewAsync(IntPtr parentHwnd, Func<CoreWebView2, Task> action) =>
         WithHiddenWebViewAsync(parentHwnd, async web =>

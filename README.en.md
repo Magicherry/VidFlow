@@ -6,7 +6,7 @@
 
 <p><b>A video downloader built for Windows 11</b></p>
 
-<p>Paste a link, pick the quality, download.<br>Works with Bilibili, Douyin, RedNote (Xiaohongshu), Weibo, YouTube and X.</p>
+<p>Paste a link, pick the quality, download.<br>Works with Bilibili, Douyin, RedNote (Xiaohongshu), Weibo, YouTube, TikTok and X.</p>
 
 <p>
   <a href="https://github.com/Magicherry/VidFlow/releases/latest"><img src="https://img.shields.io/badge/Download-Windows%20x64-0078d4?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==" alt="Download for Windows x64"></a>
@@ -38,8 +38,8 @@
 
 ## Features
 
-- **Links**: single videos, playlists, Bilibili multi-part videos and collections, Douyin share text and short links; paste several links at once and tick the ones you want
-- **Content**: video, audio only (MP3 / M4A / Opus / FLAC / WAV) or just the cover image
+- **Links**: single videos, playlists, Bilibili multi-part videos and collections, Douyin share text and short links, Douyin and TikTok photo posts; paste several links at once and tick the ones you want
+- **Content**: video, audio (MP3 / M4A / Opus / FLAC / WAV) or just the cover image
 - **Formats**: qualities listed as actually available, with estimated sizes; H.264 / H.265 / AV1 in MP4 / MKV / WebM; incompatible combinations are flagged and fixed in one click
 - **Extras**: audio tracks in other languages, subtitles, Bilibili danmaku, embedded cover, metadata and chapters; SponsorBlock marks or cuts sponsor segments on YouTube
 - **Templates and naming**: five built-in templates plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date

@@ -3,13 +3,13 @@ using VidFlow.Services;
 
 namespace VidFlow.Models;
 
-public enum Platform { YouTube, Bilibili, Douyin, Weibo, Xiaohongshu, X, Other }
+public enum Platform { YouTube, Bilibili, Douyin, Weibo, Xiaohongshu, X, TikTok, Other }
 
 public static class PlatformExtensions
 {
     /// <summary>The platforms VidFlow supports, in the order they are listed.</summary>
     public static readonly Platform[] Supported =
-        [Platform.Bilibili, Platform.Douyin, Platform.Xiaohongshu, Platform.Weibo, Platform.YouTube, Platform.X];
+        [Platform.Bilibili, Platform.Douyin, Platform.Xiaohongshu, Platform.Weibo, Platform.YouTube, Platform.TikTok, Platform.X];
 
     public static string DisplayName(this Platform p) => p switch
     {
@@ -19,6 +19,7 @@ public static class PlatformExtensions
         Platform.Weibo => L.Get("Platform_Weibo"),
         Platform.Xiaohongshu => L.Get("Platform_Xiaohongshu"),
         Platform.X => "X",
+        Platform.TikTok => "TikTok",
         _ => L.Get("Platform_Other"),
     };
 }
@@ -43,6 +44,11 @@ public sealed class VideoInfo : MediaInfo
 
     /// <summary>Available resolutions, highest first.</summary>
     public IReadOnlyList<QualityOption> Qualities { get; init; } = [];
+
+    /// <summary>A TikTok photo post: how many images it has. 0 for a video.</summary>
+    public int PhotoCount { get; init; }
+
+    public bool IsPhotoPost => PhotoCount > 0;
 
     /// <summary>The streams on offer, for working out sizes under the chosen options (see <c>SizeEstimator</c>).</summary>
     public IReadOnlyList<MediaFormat> Formats { get; init; } = [];
@@ -70,7 +76,7 @@ public sealed class VideoInfo : MediaInfo
 
     /// <summary>Badges for the preview: picture kinds first, then sound.</summary>
     public IEnumerable<string> Features =>
-        HdrKinds.Concat(HasHiRes ? [MediaFeatures.HiRes] : []).Concat(HasAtmos ? [MediaFeatures.Atmos] : []);
+        (IsPhotoPost ? new[] { VidFlow.Localization.L.Format("Home_PhotoCount", PhotoCount) } : []).Concat(HdrKinds).Concat(HasHiRes ? [MediaFeatures.HiRes] : []).Concat(HasAtmos ? [MediaFeatures.Atmos] : []);
 }
 
 public sealed class PlaylistInfo : MediaInfo
@@ -110,6 +116,10 @@ public sealed record DownloadRequest(
     /// <summary>Only the cover (thumbnail) image, saved as JPG when ffmpeg can convert it.</summary>
     public bool IsCover => Mode == "cover";
 
+    /// <summary>All the images of a photo post, see <c>TikTokPhotos</c>.</summary>
+    public const string PhotosMode = "photos";
+    public bool IsPhotos => Mode == PhotosMode;
+
     /// <summary>Output format for audio-only downloads ("best" keeps the source's own format).</summary>
     public string AudioOutputFormat => Mode switch
     {
@@ -118,5 +128,5 @@ public sealed record DownloadRequest(
     };
 
     /// <summary>The picture or sound chosen can't go in MP4 (yt-dlp would merge into MKV anyway): say MKV up front.</summary>
-    public bool NeedsMkv => !IsAudio && !IsCover && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
+    public bool NeedsMkv => !IsAudio && !IsCover && !IsPhotos && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
 }

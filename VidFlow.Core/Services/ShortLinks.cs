@@ -3,7 +3,7 @@ namespace VidFlow.Services;
 /// <summary>
 /// Turns share links into the page links the downloaders understand: Douyin (v.douyin.com, share pages, feed links)
 /// to douyin.com/video/ID, Weibo (t.cn, video.weibo.com/show?fid=) to weibo.com/tv/show/ID, and Xiaohongshu
-/// (xhslink.com) to its note page, keeping the access token the link carries.
+/// (xhslink.com) to its note page, keeping the access token the link carries, and TikTok's to the post's page.
 /// </summary>
 public static class ShortLinks
 {

@@ -71,6 +71,14 @@ public static class SizeEstimator
             .FirstOrDefault();
     }
 
+    /// <summary>The bitrate of the audio the download would take with no limit asked for, rounded; null if unknown.</summary>
+    public static int? TopAudioKbps(IReadOnlyList<MediaFormat> formats, DownloadTemplate options)
+    {
+        var unlimited = options.Clone();
+        unlimited.AudioQuality = 0;
+        return PickAudio(formats, unlimited)?.Tbr is > 0 and var kbps ? (int)Math.Round(kbps) : null;
+    }
+
     /// <summary>The stated size; else the stated size of the same encode in another delivery; else bitrate × duration.
     /// YouTube's HLS streams state no size, and the bitrate they do state is the peak, up to twice the average, but
     /// they are the same encode as a DASH stream that does (measured: the files match to the kilobyte).</summary>
@@ -96,6 +104,9 @@ public static class SizeEstimator
     static bool AudioFits(MediaFormat f, DownloadTemplate o)
     {
         var a = f.ACodec?.ToLowerInvariant() ?? "";
+        // Audio-only downloads take the best track, in the format asked for if it is offered directly.
+        if (o.Mode == "audio")
+            return o.AudioFormat switch { "m4a" => a.StartsWith("mp4a"), "opus" => a == "opus", _ => true };
         return o.AudioFormat switch
         {
             "aac" => a.StartsWith("mp4a"),

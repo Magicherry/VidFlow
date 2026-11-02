@@ -48,9 +48,12 @@ public sealed partial class HomePage : Page
             card.RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => UpdateEmptyState());
     }
 
-    void FillPlatforms() => PlatformsRepeater.ItemsSource = PlatformExtensions.Supported
-        .Select(p => HomePlatform.Create(p, L.Get($"Home_Supports_{p}")))
-        .ToList();
+    void FillPlatforms()
+    {
+        var cards = PlatformExtensions.Supported.Select(p => HomePlatform.Create(p, L.Get($"Home_Supports_{p}"))).ToList();
+        ChinaPlatforms.ItemsSource = cards.Where(c => !Connectivity.NeedsProxy(c.Platform)).ToList();
+        GlobalPlatforms.ItemsSource = cards.Where(c => Connectivity.NeedsProxy(c.Platform)).ToList();
+    }
 
     void UpdateEmptyState() =>
         EmptyState.Visibility = new[] { LoadingCard, PreviewCard, PlaylistCard, BatchCard }.Any(c => c.Visibility == Visibility.Visible)
@@ -305,6 +308,9 @@ public sealed partial class HomePage : Page
     {
         OptionsEditor.Load(OptionsEditor.Options, _video);
         UpdateTemplateState();
+        // A photo post is saved as it is: there is no quality, format or template to choose.
+        var choices = _video is { IsPhotoPost: true } ? Visibility.Collapsed : Visibility.Visible;
+        TemplateCard.Visibility = OptionsEditor.Visibility = choices;
         OptionsPanel.Visibility = Visibility.Visible;
         UpdateDownloadButton();
     }
@@ -570,7 +576,8 @@ public sealed partial class HomePage : Page
                 }
                 else if (entry.Info is { } info)
                 {
-                    App.Downloads.Enqueue(options.ToRequest(info.Url, folder), info.Title, info.ThumbnailUrl, thumbnail: entry.Thumbnail);
+                    App.Downloads.Enqueue(info is VideoInfo { IsPhotoPost: true } ? PhotoPosts.Request(info.Url, folder) : options.ToRequest(info.Url, folder),
+                        info.Title, info.ThumbnailUrl, thumbnail: entry.Thumbnail);
                     total++;
                 }
             }
@@ -578,7 +585,8 @@ public sealed partial class HomePage : Page
         }
         else if (_video is { } video)
         {
-            App.Downloads.Enqueue(options.ToRequest(video.Url, folder), video.Title, video.ThumbnailUrl, thumbnail: _thumb);
+            App.Downloads.Enqueue(video.IsPhotoPost ? PhotoPosts.Request(video.Url, folder) : options.ToRequest(video.Url, folder),
+                video.Title, video.ThumbnailUrl, thumbnail: _thumb);
             added = L.Format("Home_AddedOne", video.Title);
         }
         else

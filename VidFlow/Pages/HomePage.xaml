@@ -10,6 +10,71 @@
     xmlns:tk="using:CommunityToolkit.WinUI.Controls"
     NavigationCacheMode="Required">
 
+    <Page.Resources>
+        <DataTemplate x:Key="PlatformCard" x:DataType="local:HomePlatform">
+            <Border Padding="16" Style="{StaticResource CardStyle}">
+                <Grid ColumnSpacing="14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image
+                        Width="40"
+                        Height="40"
+                        VerticalAlignment="Top"
+                        AutomationProperties.AccessibilityView="Raw"
+                        Source="{x:Bind Logo}" />
+                    <StackPanel Grid.Column="1" Spacing="2">
+                        <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Supports}"
+                            TextWrapping="Wrap" />
+                        <StackPanel
+                            Margin="0,6,0,0"
+                            Orientation="Horizontal"
+                            Spacing="6"
+                            Visibility="{x:Bind SignedIn}">
+                            <FontIcon
+                                FontSize="12"
+                                Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                                Glyph="&#xE73E;" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Text="{x:Bind l:L.Get('Home_SignedIn')}" />
+                        </StackPanel>
+                        <HyperlinkButton
+                            Margin="-6,2,0,-4"
+                            Padding="6,2"
+                            Click="PlatformSignIn_Click"
+                            Content="{x:Bind l:L.Get('Home_SignInForMore')}"
+                            FontSize="12"
+                            Visibility="{x:Bind SignedOut}" />
+                        <!--  The connection check failed: likely needs a proxy  -->
+                        <StackPanel
+                            Margin="0,4,0,-4"
+                            Orientation="Horizontal"
+                            Spacing="6"
+                            Visibility="{x:Bind Unreachable}">
+                            <FontIcon
+                                FontSize="12"
+                                Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                Glyph="&#xE7BA;" />
+                            <HyperlinkButton
+                                Margin="-6,0,0,0"
+                                Padding="6,2"
+                                Click="PlatformUnreachable_Click"
+                                Content="{x:Bind l:L.Get('Home_Unreachable')}"
+                                FontSize="12"
+                                ToolTipService.ToolTip="{x:Bind l:L.Get('Home_UnreachableTip')}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Page.Resources>
+
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -118,80 +183,34 @@
 
                 <!--  Before anything is parsed: which platforms work (with sign-in status)  -->
                 <StackPanel x:Name="EmptyState" Spacing="8">
+                    <!--  Grouped so each row fills the width: four here, three below.  -->
                     <TextBlock
                         Margin="1,8,0,0"
                         Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="{x:Bind l:L.Get('Home_PlatformsTitle')}" />
-                    <ItemsControl x:Name="PlatformsRepeater" IsTabStop="False">
+                        Text="{x:Bind l:L.Get('Home_PlatformsChina')}" />
+                    <ItemsControl
+                        x:Name="ChinaPlatforms"
+                        IsTabStop="False"
+                        ItemTemplate="{StaticResource PlatformCard}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <controls:CardGridPanel MinColumnWidth="200" />
+                                <controls:CardGridPanel MaxColumns="4" MinColumnWidth="176" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="local:HomePlatform">
-                                <Border Padding="16" Style="{StaticResource CardStyle}">
-                                    <Grid ColumnSpacing="14">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image
-                                            Width="40"
-                                            Height="40"
-                                            VerticalAlignment="Top"
-                                            AutomationProperties.AccessibilityView="Raw"
-                                            Source="{x:Bind Logo}" />
-                                        <StackPanel Grid.Column="1" Spacing="2">
-                                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" />
-                                            <TextBlock
-                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                Text="{x:Bind Supports}"
-                                                TextWrapping="Wrap" />
-                                            <StackPanel
-                                                Margin="0,6,0,0"
-                                                Orientation="Horizontal"
-                                                Spacing="6"
-                                                Visibility="{x:Bind SignedIn}">
-                                                <FontIcon
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource SystemFillColorSuccessBrush}"
-                                                    Glyph="&#xE73E;" />
-                                                <TextBlock
-                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                    Style="{StaticResource CaptionTextBlockStyle}"
-                                                    Text="{x:Bind l:L.Get('Home_SignedIn')}" />
-                                            </StackPanel>
-                                            <HyperlinkButton
-                                                Margin="-6,2,0,-4"
-                                                Padding="6,2"
-                                                Click="PlatformSignIn_Click"
-                                                Content="{x:Bind l:L.Get('Home_SignInForMore')}"
-                                                FontSize="12"
-                                                Visibility="{x:Bind SignedOut}" />
-                                            <!--  The connection check failed: likely needs a proxy  -->
-                                            <StackPanel
-                                                Margin="0,4,0,-4"
-                                                Orientation="Horizontal"
-                                                Spacing="6"
-                                                Visibility="{x:Bind Unreachable}">
-                                                <FontIcon
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
-                                                    Glyph="&#xE7BA;" />
-                                                <HyperlinkButton
-                                                    Margin="-6,0,0,0"
-                                                    Padding="6,2"
-                                                    Click="PlatformUnreachable_Click"
-                                                    Content="{x:Bind l:L.Get('Home_Unreachable')}"
-                                                    FontSize="12"
-                                                    ToolTipService.ToolTip="{x:Bind l:L.Get('Home_UnreachableTip')}" />
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock
+                        Margin="1,12,0,0"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="{x:Bind l:L.Get('Home_PlatformsGlobal')}" />
+                    <ItemsControl
+                        x:Name="GlobalPlatforms"
+                        IsTabStop="False"
+                        ItemTemplate="{StaticResource PlatformCard}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <controls:CardGridPanel MaxColumns="3" MinColumnWidth="176" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </StackPanel>
 

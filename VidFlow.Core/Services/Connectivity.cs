@@ -7,7 +7,7 @@ namespace VidFlow.Services;
 public sealed record ConnectivityResult(bool Reachable, TimeSpan Latency, string? Error, DateTime CheckedAt);
 
 /// <summary>
-/// Whether sites outside the Great Firewall (YouTube, and with it X) can be reached with the current proxy setting.
+/// Whether sites outside the Great Firewall (YouTube, and with it X and TikTok) can be reached with the current proxy setting.
 /// An HTTPS request rather than a ping: proxies such as Clash only carry TCP, so ICMP fails even when downloads work.
 /// Any HTTP answer counts as reachable; a timeout or a connection error does not.
 /// </summary>
@@ -26,7 +26,7 @@ public static class Connectivity
 
     /// <summary>Platforms blocked in mainland China, so reachable only through a proxy there; the YouTube check
     /// stands for them all.</summary>
-    public static bool NeedsProxy(Platform p) => p is Platform.YouTube or Platform.X;
+    public static bool NeedsProxy(Platform p) => p is Platform.YouTube or Platform.X or Platform.TikTok;
 
     /// <summary>The last check says YouTube can't be reached.</summary>
     public static bool YouTubeUnreachable => YouTube is { Reachable: false };

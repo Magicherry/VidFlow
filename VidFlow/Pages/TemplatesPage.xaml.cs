@@ -104,8 +104,9 @@ public sealed partial class TemplatesPage : Page
 
     async Task EditTemplateAsync(DownloadTemplate? t)
     {
+        // A save refreshes the list through TemplateStore.Changed. Rebuilding it here as well, on every close, stuttered
+        // the closing animation and destroyed the card that keyboard focus returns to.
         var result = await new TemplateEditorDialog(t) { XamlRoot = XamlRoot }.ShowAsync();
-        BuildLists();
         if (t is { IsBuiltIn: true } && result == ContentDialogResult.Primary) await DuplicateTemplateAsync(t);
     }
 

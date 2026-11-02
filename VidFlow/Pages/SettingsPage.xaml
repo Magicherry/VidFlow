@@ -216,12 +216,12 @@
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <NumberBox
                                     x:Name="SpeedBox"
-                                    Width="140"
+                                    Width="176"
                                     VerticalAlignment="Center"
                                     AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeedMax')}"
                                     Minimum="0.1"
                                     SmallChange="1"
-                                    SpinButtonPlacementMode="Compact"
+                                    SpinButtonPlacementMode="Inline"
                                     ValueChanged="SpeedBox_ValueChanged" />
                                 <ComboBox
                                     x:Name="SpeedUnitCombo"

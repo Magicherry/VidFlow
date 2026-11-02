@@ -5,9 +5,16 @@ namespace VidFlow.Services;
 /// <summary>The status groups the download list can be narrowed to.</summary>
 public enum DownloadStatusFilter { All, Active, Completed, Failed }
 
-/// <summary>What the download list shows: a status group, one platform, and text found in the title or link.</summary>
-public sealed record DownloadFilter(DownloadStatusFilter Status = DownloadStatusFilter.All, Platform? Platform = null, string Query = "")
+/// <summary>What a download saves.</summary>
+public enum DownloadKind { Video, Audio, Cover, Photos }
+
+/// <summary>What the download list shows: a status group, one platform, one kind, and text found in the title or link.</summary>
+public sealed record DownloadFilter(DownloadStatusFilter Status = DownloadStatusFilter.All, Platform? Platform = null, string Query = "",
+    DownloadKind? Kind = null)
 {
+    public static DownloadKind KindOf(DownloadRequest r) =>
+        r.IsPhotos ? DownloadKind.Photos : r.IsCover ? DownloadKind.Cover : r.IsAudio ? DownloadKind.Audio : DownloadKind.Video;
+
     /// <summary>Paused counts as in progress (it continues later); canceled sits with failed (neither finished).</summary>
     public static DownloadStatusFilter GroupOf(DownloadState state) => state switch
     {
@@ -16,9 +23,10 @@ public sealed record DownloadFilter(DownloadStatusFilter Status = DownloadStatus
         _ => DownloadStatusFilter.Active,
     };
 
-    /// <summary>Platform and text only, ignoring the status: what the counts on the status choices are taken over.</summary>
+    /// <summary>Everything but the status: what the counts on the status choices are taken over.</summary>
     public bool MatchesExceptStatus(DownloadRecord r)
     {
+        if (Kind is { } kind && KindOf(r.Request) != kind) return false;
         if (Platform is { } p && UrlTools.DetectPlatform(r.Request.Url) != p) return false;
         var q = Query.Trim();
         return q.Length == 0

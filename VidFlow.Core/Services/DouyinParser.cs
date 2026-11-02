@@ -21,6 +21,40 @@ public sealed record DouyinVideo(
 /// </summary>
 public static class DouyinParser
 {
+    /// <summary>The post if this answer is a photo post (its images are listed where a video's streams would be),
+    /// otherwise null.</summary>
+    public static PhotoPost? ParsePhotos(string json)
+    {
+        using var doc = JsonDocument.Parse(json);
+        if (!doc.RootElement.TryGetProperty("aweme_detail", out var a) || a.ValueKind != JsonValueKind.Object
+            || !a.TryGetProperty("images", out var images) || images.ValueKind != JsonValueKind.Array)
+            return null;
+        var list = images.EnumerateArray().Select(i => new PostImage(Urls(i))).Where(i => i.Urls.Count > 0).ToList();
+        if (list.Count == 0) return null;
+
+        var id = Str(a, "aweme_id") ?? "";
+        var title = (Str(a, "desc") ?? "").Trim();
+        if (title.Length == 0) title = $"Douyin {id}";
+        var author = a.TryGetProperty("author", out var au) ? Str(au, "nickname") : null;
+        var date = a.TryGetProperty("create_time", out var ct) && ct.TryGetInt64(out var secs) && secs > 0
+            ? DateTimeOffset.FromUnixTimeSeconds(secs).ToLocalTime().ToString("yyyyMMdd")
+            : null;
+        var music = a.TryGetProperty("music", out var m) && m.ValueKind == JsonValueKind.Object
+                    && m.TryGetProperty("play_url", out var play) ? FirstUrl(play) : null;
+        return new(id, title, author, date, list[0].Urls[0], list, music);
+    }
+
+    public static VideoInfo ToVideoInfo(PhotoPost post) => new()
+    {
+        Url = $"https://www.douyin.com/note/{post.Id}",
+        Title = post.Title,
+        Uploader = post.Author,
+        UploadDate = post.UploadDate,
+        ThumbnailUrl = post.Cover,
+        Platform = Platform.Douyin,
+        PhotoCount = post.Images.Count,
+    };
+
     public static DouyinVideo Parse(string json)
     {
         using var doc = JsonDocument.Parse(json);
@@ -35,8 +69,7 @@ public static class DouyinParser
             ? DateTimeOffset.FromUnixTimeSeconds(secs).ToLocalTime().ToString("yyyyMMdd")
             : null;
 
-        if (!a.TryGetProperty("video", out var v) || v.ValueKind != JsonValueKind.Object
-            || a.TryGetProperty("images", out var images) && images.ValueKind == JsonValueKind.Array && images.GetArrayLength() > 0)
+        if (!a.TryGetProperty("video", out var v) || v.ValueKind != JsonValueKind.Object)
             throw new YtDlpException(L.Get("Error_DouyinNotVideo"));
 
         var streams = new List<DouyinStream>();

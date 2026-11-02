@@ -4,7 +4,7 @@
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube and X, powered by yt-dlp</value></data>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>  <data name="About_Description" xml:space="preserve"><value>Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube, TikTok and X, powered by yt-dlp</value></data>
   <data name="About_Disclaimer" xml:space="preserve"><value>Only download content you have the right to save, and follow each platform&apos;s terms of service and copyright rules.</value></data>
   <data name="About_Issues" xml:space="preserve"><value>Report a problem</value></data>
   <data name="About_Licenses" xml:space="preserve"><value>Open-source licenses</value></data>
@@ -22,6 +22,8 @@
   <data name="Account_DouyinOut" xml:space="preserve"><value>Not signed in · public videos work without it</value></data>
   <data name="Account_Login" xml:space="preserve"><value>Sign in</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>Sign out</value></data>
+  <data name="Account_TikTokIn" xml:space="preserve"><value>Signed in · account-only posts available</value></data>
+  <data name="Account_TikTokOut" xml:space="preserve"><value>Not signed in · public posts work without it</value></data>
   <data name="Account_YtIn" xml:space="preserve"><value>Signed in · age-restricted / members-only videos available</value></data>
   <data name="Account_YtOut" xml:space="preserve"><value>Not signed in · needed for age-restricted / members-only videos</value></data>
   <data name="Accounts_Description" xml:space="preserve"><value>Sign in for higher quality and restricted videos. Your sign-in stays on this PC</value></data>
@@ -76,6 +78,7 @@
   <data name="Download_Batch" xml:space="preserve"><value>Add {0} links to queue</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>Download {0} selected</value></data>
   <data name="Download_Start" xml:space="preserve"><value>Start download</value></data>
+  <data name="Downloads_AllKinds" xml:space="preserve"><value>All types</value></data>
   <data name="Downloads_AllPlatforms" xml:space="preserve"><value>All platforms</value></data>
   <data name="Downloads_ClearBody" xml:space="preserve"><value>Downloaded files stay where they are.</value></data>
   <data name="Downloads_ClearConfirm" xml:space="preserve"><value>Remove</value></data>
@@ -87,6 +90,7 @@
   <data name="Downloads_FilterAll" xml:space="preserve"><value>All</value></data>
   <data name="Downloads_FilterCompleted" xml:space="preserve"><value>Completed</value></data>
   <data name="Downloads_FilterFailed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Downloads_Kind" xml:space="preserve"><value>Type</value></data>
   <data name="Downloads_More" xml:space="preserve"><value>More options</value></data>
   <data name="Downloads_NoMatchBody" xml:space="preserve"><value>Try another status, platform or search</value></data>
   <data name="Downloads_NoMatchTitle" xml:space="preserve"><value>No matching downloads</value></data>
@@ -102,7 +106,7 @@
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube wants to confirm you&apos;re not a bot. Sign in on the Accounts page, or switch proxy node.</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>Couldn&apos;t read browser cookies. Close that browser and retry, or use in-app sign-in instead.</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>Not enough disk space.</value></data>
-  <data name="Error_DouyinNotVideo" xml:space="preserve"><value>This Douyin link isn&apos;t a video (photo posts and profiles aren&apos;t supported).</value></data>
+  <data name="Error_DouyinNotVideo" xml:space="preserve"><value>This Douyin link isn&apos;t a post (profiles aren&apos;t supported).</value></data>
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>Couldn&apos;t get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
   <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network and speed).</value></data>
@@ -112,6 +116,7 @@
   <data name="Error_NoYtDlp" xml:space="preserve"><value>yt-dlp is not installed. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_Private" xml:space="preserve"><value>This is a private or members-only video; sign in with an account that can watch it.</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>Too many requests. Wait a while or switch proxy node, then retry.</value></data>
+  <data name="Error_TikTokNoPhotos" xml:space="preserve"><value>Couldn&apos;t get this TikTok post. It may have been deleted or be private, or it may need an account (sign in to TikTok on the Accounts page).</value></data>
   <data name="Error_Unavailable" xml:space="preserve"><value>The video is unavailable (deleted, region-locked or private).</value></data>
   <data name="Error_UnexpectedExit" xml:space="preserve"><value>yt-dlp exited unexpectedly.</value></data>
   <data name="Error_Unsupported" xml:space="preserve"><value>This link is not supported.</value></data>
@@ -145,11 +150,14 @@
   <data name="Home_Parse" xml:space="preserve"><value>Parse</value></data>
   <data name="Home_ParseFailed" xml:space="preserve"><value>Couldn&apos;t parse the link</value></data>
   <data name="Home_Paste" xml:space="preserve"><value>Paste from clipboard</value></data>
-  <data name="Home_PlatformsTitle" xml:space="preserve"><value>Supported platforms</value></data>
+  <data name="Home_PhotoCount" xml:space="preserve"><value>Photos: {0}</value></data>
+  <data name="Home_PlatformsChina" xml:space="preserve"><value>Platforms in China</value></data>
+  <data name="Home_PlatformsGlobal" xml:space="preserve"><value>Global platforms</value></data>
   <data name="Home_SignedIn" xml:space="preserve"><value>Signed in</value></data>
   <data name="Home_SignInForMore" xml:space="preserve"><value>Sign in for more</value></data>
-  <data name="Home_Supports_Bilibili" xml:space="preserve"><value>Videos, multi-part videos, collections</value></data>
-  <data name="Home_Supports_Douyin" xml:space="preserve"><value>Video links, share text, short links</value></data>
+  <data name="Home_Supports_Bilibili" xml:space="preserve"><value>Videos, multi-part videos, collections, BV numbers</value></data>
+  <data name="Home_Supports_Douyin" xml:space="preserve"><value>Videos, photo posts, share text, short links</value></data>
+  <data name="Home_Supports_TikTok" xml:space="preserve"><value>Videos, photo posts, short links</value></data>
   <data name="Home_Supports_Weibo" xml:space="preserve"><value>Videos, posts with video, t.cn links</value></data>
   <data name="Home_Supports_X" xml:space="preserve"><value>Videos and GIFs in posts</value></data>
   <data name="Home_Supports_Xiaohongshu" xml:space="preserve"><value>Video notes, share links</value></data>
@@ -161,7 +169,7 @@
   <data name="Home_Unreachable" xml:space="preserve"><value>Can&apos;t connect · may need a proxy</value></data>
   <data name="Home_UnreachableTip" xml:space="preserve"><value>YouTube could not be reached on this network. Set a proxy in Settings</value></data>
   <data name="Home_UrlBoxName" xml:space="preserve"><value>Video link</value></data>
-  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links or share text (separate several with spaces)</value></data>
+  <data name="Home_UrlPlaceholder" xml:space="preserve"><value>Paste video links, share text or BV numbers (separate several with spaces)</value></data>
   <data name="Home_ViewDownloads" xml:space="preserve"><value>View downloads</value></data>
   <data name="Label_Audio" xml:space="preserve"><value>{0} audio</value></data>
   <data name="Label_AudioOriginal" xml:space="preserve"><value>Original audio</value></data>
@@ -188,13 +196,15 @@
   <data name="Login_SuccessClosing" xml:space="preserve"><value>Signed in. Saving and closing…</value></data>
   <data name="Login_TitleBili" xml:space="preserve"><value>Sign in to Bilibili</value></data>
   <data name="Login_TitleDouyin" xml:space="preserve"><value>Sign in to Douyin</value></data>
+  <data name="Login_TitleTikTok" xml:space="preserve"><value>Sign in to TikTok</value></data>
   <data name="Login_TitleYt" xml:space="preserve"><value>Sign in to YouTube (Google account)</value></data>
   <data name="Login_UseWeb" xml:space="preserve"><value>Sign in with password or SMS instead</value></data>
   <data name="Login_WebViewFailed" xml:space="preserve"><value>The built-in browser (WebView2) couldn&apos;t start: {0}</value></data>
-  <data name="Mode_Audio" xml:space="preserve"><value>Audio only</value></data>
+  <data name="Mode_Audio" xml:space="preserve"><value>Audio</value></data>
   <data name="Mode_Cover" xml:space="preserve"><value>Cover</value></data>
-  <data name="Mode_M4a" xml:space="preserve"><value>Audio only (M4A)</value></data>
-  <data name="Mode_Mp3" xml:space="preserve"><value>Audio only (MP3)</value></data>
+  <data name="Mode_M4a" xml:space="preserve"><value>Audio (M4A)</value></data>
+  <data name="Mode_Mp3" xml:space="preserve"><value>Audio (MP3)</value></data>
+  <data name="Mode_Photos" xml:space="preserve"><value>Photos</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>Video</value></data>
   <data name="Naming_Custom" xml:space="preserve"><value>Custom</value></data>
   <data name="Naming_InsertVariable" xml:space="preserve"><value>Insert {0}</value></data>
@@ -269,7 +279,7 @@
   <data name="Playlist_SelectAll" xml:space="preserve"><value>Select all</value></data>
   <data name="Playlist_Selected" xml:space="preserve"><value>{0} of {1} selected</value></data>
   <data name="Playlist_SelectNone" xml:space="preserve"><value>Select none</value></data>
-  <data name="Preset_AudioOnly" xml:space="preserve"><value>Audio only</value></data>
+  <data name="Preset_AudioOnly" xml:space="preserve"><value>Audio</value></data>
   <data name="Preset_Best" xml:space="preserve"><value>Best quality</value></data>
   <data name="Preset_Compatible" xml:space="preserve"><value>Compatible</value></data>
   <data name="Preset_HD" xml:space="preserve"><value>HD first (1080p)</value></data>

@@ -48,11 +48,16 @@ public sealed partial class AccountsPage : Page
         var douyin = AccountStore.IsLoggedIn(Platform.Douyin);
         DouyinAccountCard.Description = douyin ? L.Get("Account_DouyinIn") : L.Get("Account_DouyinOut");
         DouyinAccountButton.Content = douyin ? L.Get("Account_Logout") : L.Get("Account_Login");
+
+        var tikTok = AccountStore.IsLoggedIn(Platform.TikTok);
+        TikTokAccountCard.Description = tikTok ? L.Get("Account_TikTokIn") : L.Get("Account_TikTokOut");
+        TikTokAccountButton.Content = tikTok ? L.Get("Account_Logout") : L.Get("Account_Login");
     }
 
     async void BiliAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.Bilibili, BiliAccountButton);
     async void YouTubeAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.YouTube, YouTubeAccountButton);
     async void DouyinAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.Douyin, DouyinAccountButton);
+    async void TikTokAccount_Click(object sender, RoutedEventArgs e) => await ToggleAccountAsync(Platform.TikTok, TikTokAccountButton);
 
     async Task ToggleAccountAsync(Platform platform, Button button)
     {

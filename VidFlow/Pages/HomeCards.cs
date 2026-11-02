@@ -25,6 +25,7 @@ public sealed record HomePlatform(Platform Platform, ImageSource? Logo, string N
         Platform.Weibo => Asset("weibo"),
         Platform.Xiaohongshu => Asset("xiaohongshu"),
         Platform.X => Asset("x"),
+        Platform.TikTok => Asset("douyin"), // the same mark: one company, one logo
         _ => null,
     };
 

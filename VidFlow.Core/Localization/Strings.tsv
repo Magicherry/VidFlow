@@ -1,5 +1,5 @@
 key	en	zh
-About_Description	Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube and X, powered by yt-dlp	基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X
+About_Description	Video downloader for Bilibili, Douyin, RedNote, Weibo, YouTube, TikTok and X, powered by yt-dlp	基于 yt-dlp 的视频下载器，支持哔哩哔哩、抖音、小红书、微博、YouTube、TikTok 与 X
 About_Disclaimer	Only download content you have the right to save, and follow each platform's terms of service and copyright rules.	请仅下载你有权保存的内容，并遵守相关平台的服务条款与版权规定。
 About_Licenses	Open-source licenses	开源许可
 About_Project	Project home	项目主页
@@ -46,6 +46,8 @@ Downloads_FilterAll	All	全部
 Downloads_FilterActive	In progress	进行中
 Downloads_FilterCompleted	Completed	已完成
 Downloads_FilterFailed	Failed	失败
+Downloads_Kind	Type	类型
+Downloads_AllKinds	All types	全部类型
 Downloads_Platform	Platform	平台
 Downloads_AllPlatforms	All platforms	全部平台
 Downloads_Search	Search titles and links	搜索标题或链接
@@ -90,7 +92,7 @@ Home_ToolsMissingAction	Install	前往安装
 Home_ToolsMissingMessage	yt-dlp and ffmpeg need installing first.	首次使用需要安装 yt-dlp 和 ffmpeg。
 Home_ToolsMissingTitle	Download components not installed	尚未安装下载组件
 Home_UrlBoxName	Video link	视频链接
-Home_UrlPlaceholder	Paste video links or share text (separate several with spaces)	粘贴视频链接或分享口令，多个链接用空格分隔
+Home_UrlPlaceholder	Paste video links, share text or BV numbers (separate several with spaces)	粘贴视频链接、分享口令或 BV 号，多个用空格分隔
 Home_ViewDownloads	View downloads	查看下载列表
 Label_M4a	M4A audio	M4A 音频
 Label_Mp3	MP3 audio	MP3 音频
@@ -103,8 +105,8 @@ Login_Instructions	Sign in below; the window closes when you're done	在下方�
 Login_TitleBili	Sign in to Bilibili	登录哔哩哔哩
 Login_TitleYt	Sign in to YouTube (Google account)	登录 YouTube（Google 账号）
 Login_WebViewFailed	The built-in browser (WebView2) couldn't start: {0}	无法启动内置浏览器（WebView2）：{0}
-Mode_M4a	Audio only (M4A)	仅音频 (M4A)
-Mode_Mp3	Audio only (MP3)	仅音频 (MP3)
+Mode_M4a	Audio (M4A)	音频 (M4A)
+Mode_Mp3	Audio (MP3)	音频 (MP3)
 Mode_Video	Video	视频
 Mode_Cover	Cover	封面
 Nav_Downloads	Downloads	下载列表
@@ -279,7 +281,7 @@ Home_NoDenoTitle	Deno recommended	建议安装 Deno
 Label_CodecAuto	Auto codec	自动编码
 Label_NoSubtitles	No subtitles	不下载字幕
 Label_Audio	{0} audio	{0} 音频
-Mode_Audio	Audio only	仅音频
+Mode_Audio	Audio	音频
 Notify_Stalled	Download stalled	下载停滞
 Notify_UpdateAvailable	VidFlow {0} is available	VidFlow {0} 已发布
 Notify_UpdateAvailableBody	See what's new and update in Settings.	可在设置中查看更新内容并更新。
@@ -304,7 +306,7 @@ Options_Naming	Naming and folders	命名与分类
 Options_NamingDescription	File names and subfolders	文件名与子文件夹
 Options_Recode	Convert automatically	不兼容时自动转换
 Options_RecodeDescription	Re-encode when the format doesn't fit (slow); otherwise saved as MKV	格式不兼容时重新编码（较慢），否则存为 MKV
-Preset_AudioOnly	Audio only	仅音频
+Preset_AudioOnly	Audio	音频
 Preset_Best	Best quality	最高画质
 Preset_Compatible	Compatible	兼容优先
 Preset_HD	HD first (1080p)	高清优先（1080p）
@@ -460,14 +462,22 @@ Account_DouyinOut	Not signed in · public videos work without it	未登录 · �
 Login_TitleDouyin	Sign in to Douyin	登录抖音
 Login_InstructionsDouyin	Click 登录 at the top right and scan with the Douyin app	点击右上角「登录」，用抖音 App 扫码
 Error_DouyinUnavailable	Couldn't get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).	无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。
-Error_DouyinNotVideo	This Douyin link isn't a video (photo posts and profiles aren't supported).	这个抖音链接不是视频（暂不支持图文作品和主页）。
-Home_PlatformsTitle	Supported platforms	支持的平台
+Error_DouyinNotVideo	This Douyin link isn't a post (profiles aren't supported).	这个抖音链接不是作品（暂不支持主页）。
 Home_SignedIn	Signed in	已登录
 Home_SignInForMore	Sign in for more	登录以解锁更多
 Platform_Weibo	Weibo	微博
 Platform_Xiaohongshu	RedNote	小红书
-Home_Supports_Bilibili	Videos, multi-part videos, collections	视频、多 P 视频、合集
-Home_Supports_Douyin	Video links, share text, short links	作品链接、分享口令、短链接
+Home_Supports_Bilibili	Videos, multi-part videos, collections, BV numbers	视频、多 P 视频、合集、BV 号
+Home_Supports_Douyin	Videos, photo posts, share text, short links	作品、图文、分享口令、短链接
+Home_PlatformsChina	Platforms in China	国内平台
+Home_PlatformsGlobal	Global platforms	海外平台
+Home_PhotoCount	Photos: {0}	{0} 张图片
+Mode_Photos	Photos	图片
+Error_TikTokNoPhotos	Couldn't get this TikTok post. It may have been deleted or be private, or it may need an account (sign in to TikTok on the Accounts page).	无法获取这个 TikTok 帖子：可能已删除、不公开或需要登录（可在「账号」页面登录 TikTok 后重试）。
+Account_TikTokIn	Signed in · account-only posts available	已登录 · 可下载需要登录的内容
+Account_TikTokOut	Not signed in · public posts work without it	未登录 · 公开内容无需登录
+Login_TitleTikTok	Sign in to TikTok	登录 TikTok
+Home_Supports_TikTok	Videos, photo posts, short links	视频、图文、短链接
 Home_Supports_Xiaohongshu	Video notes, share links	视频笔记、分享链接
 Home_Supports_Weibo	Videos, posts with video, t.cn links	视频、带视频的微博、t.cn 短链接
 Home_Supports_YouTube	Videos, Shorts, playlists	视频、Shorts、播放列表

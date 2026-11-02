@@ -6,7 +6,7 @@
 
 <p><b>为 Windows 11 打造的视频下载器</b></p>
 
-<p>粘贴链接，选好画质，一键下载。<br>支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X。</p>
+<p>粘贴链接，选好画质，一键下载。<br>支持哔哩哔哩、抖音、小红书、微博、YouTube、TikTok 与 X。</p>
 
 <p>
   <a href="https://github.com/Magicherry/VidFlow/releases/latest"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-Windows%20x64-0078d4?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==" alt="下载 Windows x64 版"></a>
@@ -38,8 +38,8 @@
 
 ## 功能
 
-- **解析**：单个视频、播放列表、哔哩哔哩多 P 与合集、抖音分享口令与短链接；一次粘贴多个链接，勾选要下载的项目
-- **内容**：视频、仅音频（MP3 / M4A / Opus / FLAC / WAV）或仅封面
+- **解析**：单个视频、播放列表、哔哩哔哩多 P 与合集、抖音分享口令与短链接、抖音和 TikTok 图文帖；一次粘贴多个链接，勾选要下载的项目
+- **内容**：视频、音频（MP3 / M4A / Opus / FLAC / WAV）或封面
 - **格式**：画质按实际可用分辨率列出并预估大小；编码可选 H.264 / H.265 / AV1，封装可选 MP4 / MKV / WebM；格式不兼容时给出提示与一键推荐
 - **附加内容**：多语言音轨、字幕、哔哩哔哩弹幕、嵌入封面与元数据、嵌入章节；YouTube 可用 SponsorBlock 标记或删除赞助片段
 - **模板与命名**：五种内置模板与自定义模板；用 {标题}、{作者}、{上传日期} 等变量命名，并按平台、作者或日期归类

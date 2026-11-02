@@ -5,17 +5,24 @@ namespace VidFlow.Services;
 
 public static partial class UrlTools
 {
-    [GeneratedRegex(@"https?://[^\s""'<>，。【】]+", RegexOptions.IgnoreCase)]
+    /// <summary>A link, or a Bilibili BV number on its own (BV1 and nine more letters or digits, optionally "?p=3").
+    /// A BV number inside a link is part of that link. Not bare av numbers: "av1" is also a video codec.</summary>
+    [GeneratedRegex(@"https?://[^\s""'<>，。【】]+|(?<![0-9A-Za-z])(?<bv>[Bb][Vv]1[0-9A-Za-z]{9})(?<part>\?p=\d+)?(?![0-9A-Za-z])", RegexOptions.IgnoreCase)]
     private static partial Regex UrlRegex();
 
     /// <summary>Pulls the first URL out of pasted share text such as "【标题】 https://b23.tv/xxx".</summary>
     public static string? ExtractUrl(string? text) => ExtractUrls(text).FirstOrDefault();
 
-    /// <summary>All distinct URLs in the text, in order (for batch pasting).</summary>
+    /// <summary>All distinct URLs in the text, in order (for batch pasting). A BV number comes back as its page's link.</summary>
     public static IReadOnlyList<string> ExtractUrls(string? text)
     {
         if (string.IsNullOrWhiteSpace(text)) return [];
-        return UrlRegex().Matches(text).Select(m => m.Value.TrimEnd('.', ',', ')', ']')).Distinct().ToList();
+        return UrlRegex().Matches(text)
+            .Select(m => m.Groups["bv"].Success
+                // The prefix may be typed in any case; the rest of the number is case-sensitive.
+                ? $"https://www.bilibili.com/video/BV{m.Groups["bv"].Value[2..]}{m.Groups["part"].Value}"
+                : m.Value.TrimEnd('.', ',', ')', ']'))
+            .Distinct().ToList();
     }
 
     public static bool IsSupported(string? url) => url is not null && DetectPlatform(url) != Platform.Other;
@@ -29,11 +36,12 @@ public static partial class UrlTools
         (Platform.Weibo, ["weibo.com", "weibo.cn", "t.cn"]),
         (Platform.Xiaohongshu, ["xiaohongshu.com", "xhslink.com"]),
         (Platform.X, ["x.com", "twitter.com", "t.co"]),
+        (Platform.TikTok, ["tiktok.com"]), // vm. and vt. short links are its subdomains, and yt-dlp follows them
     ];
 
     /// <summary>Shorteners whose redirects VidFlow follows itself (yt-dlp can't: they end on a login or visitor
     /// check page, or need the id rewritten).</summary>
-    static readonly string[] ShortLinkHosts = ["v.douyin.com", "t.cn", "xhslink.com"];
+    static readonly string[] ShortLinkHosts = ["v.douyin.com", "t.cn", "xhslink.com", "vm.tiktok.com", "vt.tiktok.com"];
 
     /// <summary>By host name: "x.com" must not match netflix.com.</summary>
     public static Platform DetectPlatform(string url)
@@ -47,10 +55,16 @@ public static partial class UrlTools
     }
 
     public static bool IsShortLink(string url) =>
-        Uri.TryCreate(url, UriKind.Absolute, out var u) && ShortLinkHosts.Contains(u.Host.ToLowerInvariant());
+        Uri.TryCreate(url, UriKind.Absolute, out var u)
+        && (ShortLinkHosts.Contains(u.Host.ToLowerInvariant())
+            // TikTok's other short form. Followed by VidFlow too: where it leads may be a photo post, which yt-dlp can't read.
+            || (DetectPlatform(url) == Platform.TikTok && u.AbsolutePath.StartsWith("/t/", StringComparison.Ordinal)));
 
     [GeneratedRegex(@"(?:/video/|/share/video/|[?&]modal_id=|[?&]vid=)(\d{15,20})")]
     private static partial Regex DouyinIdRegex();
+
+    [GeneratedRegex(@"(?:/note/|/slides/)(\d{15,20})")]
+    private static partial Regex DouyinNoteIdRegex();
 
     /// <summary>
     /// yt-dlp only understands douyin.com/video/ID. Douyin links come in several other shapes: the feed
@@ -59,6 +73,8 @@ public static partial class UrlTools
     /// </summary>
     public static string? CanonicalDouyinUrl(string url)
     {
+        // A photo post stays on its own address.
+        if (DouyinNoteIdRegex().Match(url) is { Success: true } note) return $"https://www.douyin.com/note/{note.Groups[1].Value}";
         var m = DouyinIdRegex().Match(url);
         return m.Success ? $"https://www.douyin.com/video/{m.Groups[1].Value}" : null;
     }

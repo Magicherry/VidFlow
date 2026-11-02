@@ -10,7 +10,11 @@ public static class DownloadLabels
     public static string Label(DownloadRequest r, int? partIndex)
     {
         string mode;
-        if (r.IsCover)
+        if (r.IsPhotos)
+        {
+            mode = L.Get("Mode_Photos");
+        }
+        else if (r.IsCover)
         {
             mode = L.Get("Mode_Cover");
         }

@@ -23,6 +23,10 @@ public sealed partial class DownloadsPage : Page
         SettingsPage.AddItems(PlatformCombo, [("", L.Get("Downloads_AllPlatforms")),
             .. PlatformExtensions.Supported.Select(p => (p.ToString(), p.DisplayName()))]);
         PlatformCombo.SelectedIndex = 0;
+        SettingsPage.AddItems(KindCombo, ("", L.Get("Downloads_AllKinds")), (nameof(DownloadKind.Video), L.Get("Mode_Video")),
+            (nameof(DownloadKind.Audio), L.Get("Mode_Audio")), (nameof(DownloadKind.Cover), L.Get("Mode_Cover")),
+            (nameof(DownloadKind.Photos), L.Get("Mode_Photos")));
+        KindCombo.SelectedIndex = 0;
         StatusBar.SelectedItem = StatusBar.Items[0];
 
         DownloadList.ItemsSource = _shown;
@@ -48,6 +52,12 @@ public sealed partial class DownloadsPage : Page
     {
         if (sender.SelectedItem?.Tag is string tag && Enum.TryParse<DownloadStatusFilter>(tag, out var status))
             SetFilter(_filter with { Status = status });
+    }
+
+    void KindCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (KindCombo.SelectedItem is ComboBoxItem { Tag: string tag })
+            SetFilter(_filter with { Kind = Enum.TryParse<DownloadKind>(tag, out var kind) ? kind : null });
     }
 
     void PlatformCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

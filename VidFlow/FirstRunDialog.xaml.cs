@@ -45,6 +45,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         (Platform.Bilibili, "Account_BiliIn", "Account_BiliOut"),
         (Platform.YouTube, "Account_YtIn", "Account_YtOut"),
         (Platform.Douyin, "Account_DouyinIn", "Account_DouyinOut"),
+        (Platform.TikTok, "Account_TikTokIn", "Account_TikTokOut"),
     ];
 
     public FirstRunDialog()

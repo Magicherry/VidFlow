@@ -11,7 +11,7 @@ public static class AccountStore
     public static string CookieFile => Path.Combine(AppSettings.DataDir, "cookies.txt");
 
     /// <summary>Platforms with an in-app sign-in. The others work without an account.</summary>
-    public static readonly Platform[] SignInPlatforms = [Platform.Bilibili, Platform.YouTube, Platform.Douyin];
+    public static readonly Platform[] SignInPlatforms = [Platform.Bilibili, Platform.YouTube, Platform.Douyin, Platform.TikTok];
 
     public static bool HasSignIn(Platform p) => SignInPlatforms.Contains(p);
 
@@ -19,6 +19,7 @@ public static class AccountStore
     {
         Platform.Bilibili => "bilibili.com",
         Platform.Douyin => "douyin.com",
+        Platform.TikTok => "tiktok.com",
         _ => "youtube.com",
     };
 
@@ -26,11 +27,11 @@ public static class AccountStore
     public static IReadOnlyList<string> SessionCookieNames(Platform p) => p switch
     {
         Platform.Bilibili => ["SESSDATA"],
-        Platform.Douyin => ["sessionid", "sessionid_ss"],
+        Platform.Douyin or Platform.TikTok => ["sessionid", "sessionid_ss"],
         _ => ["SAPISID", "__Secure-3PAPISID", "LOGIN_INFO"],
     };
 
-    public static bool HasAnyLogin => IsLoggedIn(Platform.Bilibili) || IsLoggedIn(Platform.YouTube) || IsLoggedIn(Platform.Douyin);
+    public static bool HasAnyLogin => SignInPlatforms.Any(IsLoggedIn);
 
     /// <summary>The cookie file to pass to yt-dlp, or null when nobody is signed in.</summary>
     public static string? LoginCookieFileOrNull => HasAnyLogin ? CookieFile : null;
@@ -50,6 +51,26 @@ public static class AccountStore
         catch (IOException)
         {
             return false;
+        }
+    }
+
+    /// <summary>The platform's cookies as a Cookie header, for requests VidFlow makes itself; null if it has none.</summary>
+    public static string? CookieHeader(Platform p)
+    {
+        try
+        {
+            if (!File.Exists(CookieFile)) return null;
+            var domain = Domain(p);
+            var pairs = File.ReadLines(CookieFile)
+                .Select(l => l.Split('\t'))
+                .Where(f => f.Length >= 7 && f[0].EndsWith(domain, StringComparison.OrdinalIgnoreCase))
+                .Select(f => $"{f[5]}={f[6]}")
+                .ToList();
+            return pairs.Count > 0 ? string.Join("; ", pairs) : null;
+        }
+        catch (IOException)
+        {
+            return null;
         }
     }
 

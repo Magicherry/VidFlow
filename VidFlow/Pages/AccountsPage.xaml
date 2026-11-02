@@ -71,6 +71,16 @@
                         MinWidth="96"
                         Click="DouyinAccount_Click" />
                 </tk:SettingsCard>
+                <tk:SettingsCard x:Name="TikTokAccountCard" Header="TikTok">
+                    <tk:SettingsCard.HeaderIcon>
+                        <ImageIcon Source="ms-appx:///Assets/Platforms/douyin.png" />
+                    </tk:SettingsCard.HeaderIcon>
+
+                    <Button
+                        x:Name="TikTokAccountButton"
+                        MinWidth="96"
+                        Click="TikTokAccount_Click" />
+                </tk:SettingsCard>
                 <TextBlock
                     Margin="1,4,0,0"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
