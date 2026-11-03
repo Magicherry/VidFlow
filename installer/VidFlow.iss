@@ -46,7 +46,14 @@ ChangesAssociations=yes
 UninstallDisplayName={#AppName}
 Compression=lzma2/ultra64
 SolidCompression=yes
-WizardStyle=modern
+; Windows 11 look, light or dark as Windows is set, without the divider lines. Images from tools/gen-installer-art.ps1.
+WizardStyle=modern dynamic windows11 hidebevels
+WizardImageFile=art\wizard-light-100.png,art\wizard-light-125.png,art\wizard-light-150.png,art\wizard-light-200.png
+WizardImageFileDynamicDark=art\wizard-dark-100.png,art\wizard-dark-125.png,art\wizard-dark-150.png,art\wizard-dark-200.png
+WizardSmallImageFile=art\small-100.png,art\small-125.png,art\small-150.png,art\small-200.png
+WizardSmallImageFileDynamicDark=art\small-100.png,art\small-125.png,art\small-150.png,art\small-200.png
+; The welcome page shows the large image; updates run silently and never see it.
+DisableWelcomePage=no
 CloseApplications=yes
 RestartApplications=no
 ShowLanguageDialog=auto
@@ -55,12 +62,16 @@ ShowLanguageDialog=auto
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 
-[Messages]
-; Simplified Chinese for the pages a per-user install / uninstall actually shows. Anything not listed
-; falls back to English.
+; The language's own name and ID belong here: listed under [Messages] they are ignored, and the language
+; picker shows "English" twice.
+[LangOptions]
 chinesesimp.LanguageName=简体中文
 chinesesimp.LanguageID=$0804
 chinesesimp.LanguageCodePage=0
+
+[Messages]
+; Simplified Chinese for the pages a per-user install / uninstall actually shows. Anything not listed
+; falls back to English.
 chinesesimp.SetupAppTitle=安装
 chinesesimp.SetupWindowTitle=安装 - %1
 chinesesimp.UninstallAppTitle=卸载
@@ -80,6 +91,10 @@ chinesesimp.ButtonFinish=完成(&F)
 chinesesimp.ButtonBrowse=浏览(&B)...
 chinesesimp.ButtonWizardBrowse=浏览(&R)...
 chinesesimp.ButtonNewFolder=新建文件夹(&M)
+chinesesimp.WelcomeLabel1=欢迎使用 [name] 安装向导
+chinesesimp.WelcomeLabel2=即将在你的电脑上安装 [name/ver]。%n%n建议在继续之前关闭其他所有程序。
+chinesesimp.ClickNext=点击“下一步”继续，或点击“取消”退出安装程序。
+chinesesimp.RunEntryExec=运行 %1
 chinesesimp.ExitSetupTitle=退出安装
 chinesesimp.ExitSetupMessage=安装尚未完成。如果现在退出，程序将不会被安装。%n%n你可以稍后再次运行安装程序完成安装。%n%n确定要退出安装吗？
 chinesesimp.WizardSelectDir=选择安装位置
