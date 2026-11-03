@@ -151,6 +151,16 @@
                         TextWrapping="Wrap" />
                 </Grid>
             </StackPanel>
+
+            <!--  Step 4: optional features, one card with a row each (built in code)  -->
+            <StackPanel
+                x:Name="Step4"
+                Spacing="12"
+                Visibility="Collapsed">
+                <Border Padding="0" Style="{StaticResource CardStyle}">
+                    <StackPanel x:Name="ExtrasList" />
+                </Border>
+            </StackPanel>
         </Grid>
 
         <!--  Footer: where you are on the left; skip, back and next on the right  -->
@@ -166,7 +176,7 @@
                 x:Name="Pips"
                 VerticalAlignment="Center"
                 IsHitTestVisible="False"
-                NumberOfPages="3" />
+                NumberOfPages="4" />
             <HyperlinkButton
                 x:Name="SkipButton"
                 Grid.Column="2"

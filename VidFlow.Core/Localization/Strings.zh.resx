@@ -18,14 +18,14 @@
   <data name="About_Version" xml:space="preserve"><value>版本 {0}</value></data>
   <data name="Account_BiliIn" xml:space="preserve"><value>已登录 · 1080p 及以上（4K / HDR 需大会员）</value></data>
   <data name="Account_BiliOut" xml:space="preserve"><value>未登录 · 最高 720p</value></data>
-  <data name="Account_DouyinIn" xml:space="preserve"><value>已登录 · 可下载需登录的作品</value></data>
+  <data name="Account_DouyinIn" xml:space="preserve"><value>已登录 · 可下载需要登录的作品</value></data>
   <data name="Account_DouyinOut" xml:space="preserve"><value>未登录 · 公开作品无需登录</value></data>
   <data name="Account_Login" xml:space="preserve"><value>登录</value></data>
   <data name="Account_Logout" xml:space="preserve"><value>退出登录</value></data>
   <data name="Account_TikTokIn" xml:space="preserve"><value>已登录 · 可下载需要登录的内容</value></data>
   <data name="Account_TikTokOut" xml:space="preserve"><value>未登录 · 公开内容无需登录</value></data>
-  <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制、会员视频</value></data>
-  <data name="Account_YtOut" xml:space="preserve"><value>未登录 · 年龄限制、会员视频需登录</value></data>
+  <data name="Account_YtIn" xml:space="preserve"><value>已登录 · 可下载年龄限制和会员视频</value></data>
+  <data name="Account_YtOut" xml:space="preserve"><value>未登录 · 年龄限制和会员视频需要登录</value></data>
   <data name="Accounts_Description" xml:space="preserve"><value>登录后可下载更高画质和受限内容，登录信息仅保存在本机</value></data>
   <data name="Accounts_Platforms" xml:space="preserve"><value>平台账号</value></data>
   <data name="Action_CopyError" xml:space="preserve"><value>复制错误详情</value></data>
@@ -38,6 +38,13 @@
   <data name="Action_Resume" xml:space="preserve"><value>继续</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>重试</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>在文件夹中显示</value></data>
+  <data name="Asr_Lang_auto" xml:space="preserve"><value>自动检测语言</value></data>
+  <data name="Asr_Lang_en" xml:space="preserve"><value>英文</value></data>
+  <data name="Asr_Lang_ja" xml:space="preserve"><value>日文</value></data>
+  <data name="Asr_Lang_zh" xml:space="preserve"><value>中文</value></data>
+  <data name="Asr_ModelAccurate" xml:space="preserve"><value>高精度</value></data>
+  <data name="Asr_ModelFast" xml:space="preserve"><value>快速</value></data>
+  <data name="Asr_ModelSize" xml:space="preserve"><value>{0} · 约 {1}</value></data>
   <data name="AudioFormat_Atmos" xml:space="preserve"><value>杜比全景声（E-AC-3）</value></data>
   <data name="AudioFormat_Auto" xml:space="preserve"><value>自动（按封装格式选择）</value></data>
   <data name="AudioFormat_Flac" xml:space="preserve"><value>FLAC（无损）</value></data>
@@ -102,6 +109,8 @@
   <data name="Downloads_Title" xml:space="preserve"><value>下载列表</value></data>
   <data name="Drop_Caption" xml:space="preserve"><value>用 VidFlow 下载</value></data>
   <data name="Drop_Hint" xml:space="preserve"><value>松开以解析链接</value></data>
+  <data name="Error_AsrFailed" xml:space="preserve"><value>语音识别失败。</value></data>
+  <data name="Error_AsrNotReady" xml:space="preserve"><value>语音识别尚未启用。请先在「设置 → 语音识别」中下载。</value></data>
   <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>提取音频需要 ffmpeg，请先在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube 要求验证身份。请在「账号」页面中登录，或更换代理节点。</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。</value></data>
@@ -113,7 +122,7 @@
   <data name="Error_NoCover" xml:space="preserve"><value>这个作品没有封面图片。</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「账号」页面中退出 YouTube 登录后重试，或更新 yt-dlp。</value></data>
-  <data name="Error_NoSubtitles" xml:space="preserve"><value>没有找到所选语言的字幕。可以换一种语言，或在设置中添加字幕语言。</value></data>
+  <data name="Error_NoSubtitles" xml:space="preserve"><value>没有找到所选语言的字幕。可以换一种语言，或在「字幕语言」中选择语音识别生成。</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>未找到 yt-dlp，请先在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_Private" xml:space="preserve"><value>这是私享 / 会员视频，需要登录有权限观看的账号。</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>请求过于频繁，请稍后或更换代理节点后重试。</value></data>
@@ -179,6 +188,7 @@
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 音频</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · 最高画质</value></data>
   <data name="Label_NoSubtitles" xml:space="preserve"><value>不下载字幕</value></data>
+  <data name="Label_Speech" xml:space="preserve"><value>语音识别</value></data>
   <data name="Label_Subtitles" xml:space="preserve"><value>{0} 字幕</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
@@ -266,7 +276,7 @@
   <data name="Options_SubtitleFormatDescription" xml:space="preserve"><value>TXT 与 Markdown 只保留文字，适合阅读或做笔记</value></data>
   <data name="Options_SubtitleLanguage" xml:space="preserve"><value>字幕语言</value></data>
   <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>默认使用设置中的语言；没有时使用自动生成的字幕</value></data>
-  <data name="Options_SubtitleNone" xml:space="preserve"><value>没有找到这个视频的字幕</value></data>
+  <data name="Options_SubtitleNone" xml:space="preserve"><value>没有找到这个视频的字幕，可以用语音识别生成</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>字幕语言在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
@@ -298,6 +308,7 @@
   <data name="Settings_About" xml:space="preserve"><value>关于</value></data>
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
+  <data name="Settings_AddOns" xml:space="preserve"><value>附加组件</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>外观</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>未安装 · 可大幅提升下载速度（推荐）</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新组件</value></data>
@@ -320,7 +331,6 @@
   <data name="Settings_ConnectivityIdle" xml:space="preserve"><value>检查在上方代理设置下能否访问 YouTube</value></data>
   <data name="Settings_ConnectivityOk" xml:space="preserve"><value>可以访问 YouTube · {0} 毫秒</value></data>
   <data name="Settings_ConnectivityTest" xml:space="preserve"><value>测试</value></data>
-  <data name="Settings_Content" xml:space="preserve"><value>保存内容</value></data>
   <data name="Settings_CookieFile" xml:space="preserve"><value>cookies.txt 文件</value></data>
   <data name="Settings_CookieFileDescription" xml:space="preserve"><value>Netscape 格式，可用浏览器扩展导出</value></data>
   <data name="Settings_Danmaku" xml:space="preserve"><value>保存 哔哩哔哩弹幕</value></data>
@@ -357,6 +367,21 @@
   <data name="Settings_RestartMessage" xml:space="preserve"><value>新的语言将在重启 VidFlow 后生效，未完成的下载会自动继续。</value></data>
   <data name="Settings_RestartNow" xml:space="preserve"><value>立即重启</value></data>
   <data name="Settings_RestartTitle" xml:space="preserve"><value>需要重启</value></data>
+  <data name="Settings_Speech" xml:space="preserve"><value>语音识别</value></data>
+  <data name="Settings_SpeechBusy" xml:space="preserve"><value>正在识别语音，暂时无法移除。请在该任务完成后再试。</value></data>
+  <data name="Settings_SpeechDownload" xml:space="preserve"><value>下载</value></data>
+  <data name="Settings_SpeechFailed" xml:space="preserve"><value>下载失败：{0}</value></data>
+  <data name="Settings_SpeechGpu" xml:space="preserve"><value>显卡加速（NVIDIA）</value></data>
+  <data name="Settings_SpeechGpuOff" xml:space="preserve"><value>用显卡识别，通常快数倍。需另外下载约 {0}；首次使用会多花约半分钟做准备。</value></data>
+  <data name="Settings_SpeechGpuReady" xml:space="preserve"><value>已启用 · 占用 {0}。优先用显卡识别，失败时自动改用 CPU</value></data>
+  <data name="Settings_SpeechInstalling" xml:space="preserve"><value>正在下载… {0}%</value></data>
+  <data name="Settings_SpeechModel" xml:space="preserve"><value>识别模型</value></data>
+  <data name="Settings_SpeechModelDescription" xml:space="preserve"><value>高精度识别更准确；快速适合配置较低的电脑</value></data>
+  <data name="Settings_SpeechModelMissing" xml:space="preserve"><value>所选模型尚未下载（约 {0}），下载后即可使用语音识别。</value></data>
+  <data name="Settings_SpeechOff" xml:space="preserve"><value>为没有字幕的视频，根据语音生成字幕。在本机运行，不会上传任何内容。</value></data>
+  <data name="Settings_SpeechReady" xml:space="preserve"><value>已启用 · 占用 {0}。下载字幕时在「字幕语言」中选择语音识别</value></data>
+  <data name="Settings_SpeechRemove" xml:space="preserve"><value>移除</value></data>
+  <data name="Settings_SpeechRemoveFailed" xml:space="preserve"><value>无法移除：{0}</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>限速</value></data>
   <data name="Settings_SpeedLimitDescription" xml:space="preserve"><value>按单个任务限速</value></data>
   <data name="Settings_SpeedMax" xml:space="preserve"><value>每个任务最高速度</value></data>
@@ -368,11 +393,13 @@
   <data name="Settings_SponsorBlockOff" xml:space="preserve"><value>关闭</value></data>
   <data name="Settings_SponsorBlockRemove" xml:space="preserve"><value>删除这些片段</value></data>
   <data name="Settings_SubLangs" xml:space="preserve"><value>字幕语言</value></data>
+  <data name="Settings_SubLangsCommon" xml:space="preserve"><value>常用语言</value></data>
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>其他语言</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>语言代码，用逗号分隔</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>未选择语言，将保存中文和英文字幕</value></data>
-  <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>保存语言：{0}</value></data>
+  <data name="Settings_SubtitlesSection" xml:space="preserve"><value>字幕</value></data>
+  <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>{0}</value></data>
   <data name="Settings_Templates" xml:space="preserve"><value>下载模板</value></data>
   <data name="Settings_TemplatesDescription" xml:space="preserve"><value>新建下载会套用默认模板</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>应用主题</value></data>
@@ -387,6 +414,7 @@
   <data name="Settings_Updates" xml:space="preserve"><value>应用更新</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>更新到 {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>已是最新</value></data>
+  <data name="Settings_VideoFiles" xml:space="preserve"><value>视频文件</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>未安装 · 用于解析和下载视频（必需）</value></data>
   <data name="Size_Approx" xml:space="preserve"><value>约 {0}</value></data>
   <data name="Status_AudioStream" xml:space="preserve"><value>音频流</value></data>
@@ -399,6 +427,8 @@
   <data name="Status_Next" xml:space="preserve"><value>已置顶，即将开始</value></data>
   <data name="Status_Paused" xml:space="preserve"><value>已暂停</value></data>
   <data name="Status_PausedAt" xml:space="preserve"><value>已暂停 · {0}%</value></data>
+  <data name="Status_RecognizeWaiting" xml:space="preserve"><value>等待其他语音识别完成…</value></data>
+  <data name="Status_Recognizing" xml:space="preserve"><value>正在识别语音  ·  {0}%</value></data>
   <data name="Status_Remaining" xml:space="preserve"><value>剩余 {0}</value></data>
   <data name="Status_Resuming" xml:space="preserve"><value>即将继续…</value></data>
   <data name="Status_Stalled" xml:space="preserve"><value>已 {0} 分钟没有进度，仍在尝试…</value></data>
@@ -409,6 +439,8 @@
   <data name="SubFormat_Txt" xml:space="preserve"><value>纯文本（TXT）</value></data>
   <data name="SubLang_Auto" xml:space="preserve"><value>{0}（自动生成）</value></data>
   <data name="SubLang_Settings" xml:space="preserve"><value>设置中的语言</value></data>
+  <data name="SubLang_Speech" xml:space="preserve"><value>语音识别生成 · {0}</value></data>
+  <data name="SubLang_SpeechOff" xml:space="preserve"><value>{0}（需在设置中启用）</value></data>
   <data name="Subtitles_MdLanguage" xml:space="preserve"><value>语言</value></data>
   <data name="Subtitles_MdSource" xml:space="preserve"><value>来源</value></data>
   <data name="Template_BuiltInSuffix" xml:space="preserve"><value>{0}（内置）</value></data>
@@ -449,11 +481,11 @@
   <data name="Title_UpdateReadyTip" xml:space="preserve"><value>重启并安装 VidFlow {0}。退出 VidFlow 时也会自动安装。</value></data>
   <data name="Tools_ActionsNeeded" xml:space="preserve"><value>有 {0} 项可以安装或更新</value></data>
   <data name="Tools_AllUpToDate" xml:space="preserve"><value>所有组件均为最新</value></data>
-  <data name="Tools_Aria2Purpose" xml:space="preserve"><value>加速 YouTube、X 等海外视频下载</value></data>
+  <data name="Tools_Aria2Purpose" xml:space="preserve"><value>多线程加速 YouTube、X 等海外视频下载</value></data>
   <data name="Tools_CheckFailed" xml:space="preserve"><value>无法检查</value></data>
   <data name="Tools_CheckFailedSummary" xml:space="preserve"><value>无法检查更新，请检查网络或代理设置</value></data>
   <data name="Tools_Checking" xml:space="preserve"><value>正在检查更新…</value></data>
-  <data name="Tools_DenoPurpose" xml:space="preserve"><value>获取部分 YouTube 格式</value></data>
+  <data name="Tools_DenoPurpose" xml:space="preserve"><value>让 YouTube 显示全部画质</value></data>
   <data name="Tools_FfmpegPurpose" xml:space="preserve"><value>合并音视频、转换格式</value></data>
   <data name="Tools_InstallDoneMessage" xml:space="preserve"><value>已安装，可以使用：{0}</value></data>
   <data name="Tools_Installed" xml:space="preserve"><value>{0} · 版本 {1}</value></data>
@@ -503,15 +535,19 @@
   <data name="Var_title" xml:space="preserve"><value>标题</value></data>
   <data name="Var_uploader" xml:space="preserve"><value>作者</value></data>
   <data name="Var_year" xml:space="preserve"><value>年份</value></data>
-  <data name="Wizard_AccountsBody" xml:space="preserve"><value>可选。公开视频无需登录，也可以稍后在「账号」页面中登录。</value></data>
-  <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在官方网页中完成，VidFlow 不会读取或保存你的密码</value></data>
+  <data name="Wizard_AccountsBody" xml:space="preserve"><value>公开视频无需登录。登录后可以下载更高画质和需要登录才能看的内容，也可以之后在「账号」页面登录。</value></data>
+  <data name="Wizard_AccountsNote" xml:space="preserve"><value>登录在 VidFlow 打开的官方网页中完成，VidFlow 不会读取或保存你的密码。</value></data>
   <data name="Wizard_AccountsTitle" xml:space="preserve"><value>登录账号（可选）</value></data>
   <data name="Wizard_Back" xml:space="preserve"><value>上一步</value></data>
   <data name="Wizard_Change" xml:space="preserve"><value>更改</value></data>
+  <data name="Wizard_ExtrasBody" xml:space="preserve"><value>按需开启，之后都可以在设置中更改。</value></data>
+  <data name="Wizard_ExtrasTitle" xml:space="preserve"><value>更多功能（可选）</value></data>
   <data name="Wizard_Finish" xml:space="preserve"><value>开始使用</value></data>
-  <data name="Wizard_FolderBody" xml:space="preserve"><value>下载的视频会保存到这里，播放列表会自动放进单独的子文件夹</value></data>
+  <data name="Wizard_FolderBody" xml:space="preserve"><value>下载的内容会保存到这里。播放列表和带字幕的视频会各自放进单独的文件夹。之后可以随时在设置中更改。</value></data>
   <data name="Wizard_FolderTitle" xml:space="preserve"><value>保存位置</value></data>
-  <data name="Wizard_InstallAll" xml:space="preserve"><value>一键安装组件</value></data>
+  <data name="Wizard_GpuDescription" xml:space="preserve"><value>识别快数倍，需另外下载约 {0}</value></data>
+  <data name="Wizard_GpuNeedsSpeech" xml:space="preserve"><value>需先下载语音识别</value></data>
+  <data name="Wizard_InstallAll" xml:space="preserve"><value>全部安装</value></data>
   <data name="Wizard_Installing" xml:space="preserve"><value>正在安装 {0}…</value></data>
   <data name="Wizard_Next" xml:space="preserve"><value>下一步</value></data>
   <data name="Wizard_Ready" xml:space="preserve"><value>已就绪</value></data>
@@ -519,6 +555,7 @@
   <data name="Wizard_Required" xml:space="preserve"><value>必需</value></data>
   <data name="Wizard_SignedIn" xml:space="preserve"><value>已登录</value></data>
   <data name="Wizard_Skip" xml:space="preserve"><value>跳过</value></data>
-  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>VidFlow 用这些免费组件下载和处理视频（约 185 MB，来自官方 GitHub）</value></data>
+  <data name="Wizard_SpeechDescription" xml:space="preserve"><value>为没有字幕的视频生成字幕，在本机运行（约 {0}）</value></data>
+  <data name="Wizard_WelcomeBody" xml:space="preserve"><value>下载和处理视频需要以下几个开源组件，共约 185 MB，均从官方 GitHub 发布页下载。</value></data>
   <data name="Wizard_WelcomeTitle" xml:space="preserve"><value>欢迎使用 VidFlow</value></data>
 </root>

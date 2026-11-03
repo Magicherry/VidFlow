@@ -43,6 +43,7 @@ public partial class App : Application
         ClipboardWatcher.Initialize();
 
         MainWindow.Activate();
+        SpeechRecognizer.CleanUpWork();
         Downloads.LoadPersisted();
         _ = Task.Run(() => Connectivity.CheckYouTubeAsync());
 

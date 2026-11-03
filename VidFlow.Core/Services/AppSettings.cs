@@ -51,6 +51,9 @@ public sealed class AppSettings
 
     /// <summary>SponsorBlock on YouTube videos (see SponsorBlockModes): off, mark segments as chapters, or cut them out.</summary>
     public string SponsorBlock { get; set; } = "off";
+
+    /// <summary>Speech recognition model: "accurate" or "fast" (see SpeechRecognizer.Models).</summary>
+    public string SpeechModel { get; set; } = "accurate";
     public bool WriteSubtitles { get; set; }
 
     /// <summary>yt-dlp --sub-langs value.</summary>

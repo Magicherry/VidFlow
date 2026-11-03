@@ -22,15 +22,19 @@ public sealed partial class SettingsPage : Page
             ("Dark", L.Get("Settings_ThemeDark")));
 
         // The page is recreated on each visit: subscribe while shown, unsubscribe when it goes away.
+        foreach (var model in SpeechRecognizer.Models)
+            AddItems(SpeechModelCombo, (model.Id, L.Format("Asr_ModelSize", L.Get(model.NameKey), Format.Bytes(model.Bytes))));
         Loaded += (_, _) =>
         {
             App.Updates.Changed += RefreshAbout;
             Connectivity.Changed += OnConnectivityChanged;
+            SpeechRecognizer.Changed += OnSpeechChanged;
         };
         Unloaded += (_, _) =>
         {
             App.Updates.Changed -= RefreshAbout;
             Connectivity.Changed -= OnConnectivityChanged;
+            SpeechRecognizer.Changed -= OnSpeechChanged;
         };
     }
 
@@ -51,6 +55,8 @@ public sealed partial class SettingsPage : Page
         TrayToggle.IsOn = s.MinimizeToTray;
         ClipboardToggle.IsOn = s.WatchClipboard;
         FolderCard.Description = s.DownloadFolder;
+        Select(SpeechModelCombo, SpeechRecognizer.Chosen.Id);
+        ShowSpeech();
         ConcurrencyCombo.SelectedItem = Math.Clamp(s.MaxConcurrent, 1, 5);
         MultiConnectionToggle.IsOn = s.MultiConnection;
         // Needs aria2 (Components page); say so rather than silently doing nothing.
@@ -146,6 +152,69 @@ public sealed partial class SettingsPage : Page
         if (SpeedToggle.IsOn) s.SpeedLimitKBps = s.SpeedLimitValueKBps;
         AppSettings.Save();
         UpdateSpeedSummary();
+    }
+
+    // ---- Speech recognition ------------------------------------------------------------------------------------
+
+    void OnSpeechChanged() => DispatcherQueue.TryEnqueue(ShowSpeech);
+
+    /// <summary>What is downloaded for the chosen model, and the one thing to do: download it, or remove it all.</summary>
+    void ShowSpeech()
+    {
+        var gpuInstalling = SpeechRecognizer.InstallingGpu;
+        var installing = SpeechRecognizer.Installing && !gpuInstalling;
+        var ready = SpeechRecognizer.IsReady();
+        var removeProblem = SpeechRecognizer.RemoveProblem;
+        SpeechCard.Description = installing ? L.Format("Settings_SpeechInstalling", SpeechRecognizer.Progress.ToString("0"))
+            : SpeechRecognizer.LastError is { } error && !SpeechRecognizer.LastInstallGpu ? L.Format("Settings_SpeechFailed", error)
+            : removeProblem is not null && !SpeechRecognizer.RemoveProblemGpu ? removeProblem
+            : ready ? L.Format("Settings_SpeechReady", Format.Bytes(SpeechRecognizer.SizeOnDisk()))
+            // Set up, with another model than the one now chosen.
+            : SpeechRecognizer.EngineInstalled ? L.Format("Settings_SpeechModelMissing", Format.Bytes(SpeechRecognizer.Chosen.Bytes))
+            : L.Get("Settings_SpeechOff");
+        SpeechProgress.Visibility = installing ? Visibility.Visible : Visibility.Collapsed;
+        SpeechProgress.Value = SpeechRecognizer.Progress;
+        SpeechModelCombo.IsEnabled = !SpeechRecognizer.Installing;
+        SpeechButton.Visibility = installing ? Visibility.Collapsed : Visibility.Visible;
+        SpeechButton.IsEnabled = !SpeechRecognizer.Installing;
+        SpeechButton.Content = L.Get(ready ? "Settings_SpeechRemove" : "Settings_SpeechDownload");
+        SpeechButton.Style = (Style)Application.Current.Resources[ready ? "DefaultButtonStyle" : "AccentButtonStyle"];
+
+        // Graphics card: offered on a PC with an NVIDIA card, once recognition itself is there.
+        var gpu = SpeechRecognizer.GpuReady;
+        SpeechGpuCard.Visibility = SpeechRecognizer.HasNvidia && (ready || gpu) ? Visibility.Visible : Visibility.Collapsed;
+        SpeechGpuCard.Description = gpuInstalling ? L.Format("Settings_SpeechInstalling", SpeechRecognizer.Progress.ToString("0"))
+            : SpeechRecognizer.LastError is { } gpuError && SpeechRecognizer.LastInstallGpu ? L.Format("Settings_SpeechFailed", gpuError)
+            : removeProblem is not null && SpeechRecognizer.RemoveProblemGpu ? removeProblem
+            : gpu ? L.Format("Settings_SpeechGpuReady", Format.Bytes(SpeechRecognizer.SizeOnDisk(gpuOnly: true)))
+            : L.Format("Settings_SpeechGpuOff", Format.Bytes(SpeechRecognizer.GpuBytes));
+        SpeechGpuProgress.Visibility = gpuInstalling ? Visibility.Visible : Visibility.Collapsed;
+        SpeechGpuProgress.Value = SpeechRecognizer.Progress;
+        SpeechGpuButton.Visibility = gpuInstalling ? Visibility.Collapsed : Visibility.Visible;
+        SpeechGpuButton.IsEnabled = !SpeechRecognizer.Installing;
+        SpeechGpuButton.Content = L.Get(gpu ? "Settings_SpeechRemove" : "Settings_SpeechDownload");
+    }
+
+    async void SpeechGpuButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (SpeechRecognizer.GpuReady) SpeechRecognizer.Remove(gpuOnly: true);
+        else await SpeechRecognizer.InstallGpuAsync();
+        ShowSpeech();
+    }
+
+    void SpeechModelCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || SpeechModelCombo.SelectedItem is not ComboBoxItem { Tag: string id }) return;
+        AppSettings.Current.SpeechModel = id;
+        AppSettings.Save();
+        ShowSpeech();
+    }
+
+    async void SpeechButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (SpeechRecognizer.IsReady()) SpeechRecognizer.Remove();
+        else await SpeechRecognizer.InstallAsync(SpeechRecognizer.Chosen);
+        ShowSpeech();
     }
 
     // ---- Subtitles ---------------------------------------------------------------------------------------------

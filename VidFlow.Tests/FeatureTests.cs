@@ -1341,8 +1341,10 @@ public class SubtitleModeTests
     {
         var cues = SubtitleFiles.Parse(Rolling);
         Assert.Equal("hello world this is & that.\n\nNew part\n", SubtitleFiles.ToText(cues));
-        // Chinese lines run on without a space.
-        Assert.Equal("第一句第二句\n", SubtitleFiles.ToText([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "第一句\n第二句")]));
+        // Chinese lines run on without a space; where there is no punctuation, a comma and a full stop are added.
+        Assert.Equal("第一句，第二句。\n", SubtitleFiles.ToText([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "第一句\n第二句")]));
+        Assert.Equal("你好！再见。\n", SubtitleFiles.ToText([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "你好！\n再见。")]));
+        Assert.Equal("用 AI 生成。\n", SubtitleFiles.ToText([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "用\nAI\n生成")]));
     }
 
     [Fact]
@@ -1384,6 +1386,122 @@ public class SubtitleModeTests
             Directory.Delete(dir, true);
         }
     }
+}
+
+public class SpeechRecognitionTests
+{
+    [Fact]
+    public void ChineseIsSteeredToSimplified()
+    {
+        var zh = SpeechRecognizer.Arguments("m.bin", "vad.bin", "a.wav", "zh", @"C:\o\v", 8);
+        Assert.Equal("zh", zh[zh.IndexOf("-l") + 1]);
+        Assert.Equal("8", zh[zh.IndexOf("-t") + 1]);
+        Assert.Contains("--vad", zh);
+        Assert.Equal("vad.bin", zh[zh.IndexOf("-vm") + 1]);
+        Assert.Contains("-osrt", zh);
+        Assert.Equal(@"C:\o\v", zh[zh.IndexOf("-of") + 1]);
+        Assert.Contains("--prompt", zh);
+        Assert.DoesNotContain("--prompt", SpeechRecognizer.Arguments("m", "v", "a", "auto", "o", 4));
+    }
+
+    [Theory]
+    [InlineData("[00:01:30.000 --> 00:01:30.000]  你好", 180, 50.0)]
+    [InlineData("[00:00:00.230 --> 00:00:02.750]  朋友们", 0, null)]
+    [InlineData("whisper_print_progress_callback: progress =  74%", 180, null)]
+    [InlineData("[01:00:00.000 --> 01:00:05.000]  over the end", 60, 100.0)]
+    public void ProgressComesFromTheSegments(string line, double seconds, double? expected) =>
+        Assert.Equal(expected, SpeechRecognizer.ProgressOf(line, seconds));
+
+    [Fact]
+    public void ReadsTheDetectedLanguage()
+    {
+        Assert.Equal("zh", SpeechRecognizer.DetectedLanguage("whisper_full_with_state: auto-detected language: zh (p = 0.998314)"));
+        Assert.Null(SpeechRecognizer.DetectedLanguage("read_audio_data: trying to decode with miniaudio"));
+    }
+
+    [Fact]
+    public void TheMostAccurateModelIsTheDefault()
+    {
+        Assert.Equal("accurate", new AppSettings().SpeechModel);
+        Assert.Equal("accurate", SpeechRecognizer.Model("nonsense").Id);
+        Assert.Equal("ggml-small-q5_1.bin", SpeechRecognizer.Model("fast").File);
+        Assert.Equal("whisper-bin-win-cpu-arm64.zip", SpeechRecognizer.EngineZip("arm64"));
+    }
+
+    [Fact]
+    public void RecognizedSubtitlesSaySo()
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", SubtitleFormat = "md", SubtitleLanguage = "asr:zh" }.ToRequest("https://www.bilibili.com/video/BV1x", "o");
+        Assert.True(SubtitleFiles.IsSpeech(req.SubtitleLanguage));
+        Assert.Contains(VidFlow.Localization.L.Get("Label_Speech"), DownloadLabels.Label(req, null));
+        Assert.False(SubtitleFiles.IsSpeech("auto:en-orig"));
+    }
+}
+
+public class OwnFolderTests
+{
+    static string Output(List<string> args) => args[args.IndexOf("-o") + 1];
+
+    [Fact]
+    public void AVideoWithSubtitlesGetsAFolderOfItsOwn()
+    {
+        var env = new YtDlpArgs.Environment(@"C:f", null, false);
+        var withSubs = new DownloadTemplate { Subtitles = true, FolderTemplate = "{platform}" }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.Equal("YouTube/%(title).150B [%(id)s]/%(title).150B [%(id)s].%(ext)s", Output(YtDlpArgs.Download(withSubs, new AppSettings(), env)));
+
+        var without = new DownloadTemplate { Subtitles = false }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.Equal("%(title).150B [%(id)s].%(ext)s", Output(YtDlpArgs.Download(without, new AppSettings(), env)));
+
+        // Subtitles alone are one file each: no folder.
+        var subsOnly = new DownloadTemplate { Mode = "subtitles", Subtitles = true }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.DoesNotContain("/", Output(YtDlpArgs.Download(subsOnly, new AppSettings(), env)));
+    }
+
+    [Fact]
+    public void AVideoWithoutSubtitlesLeavesItsFolder()
+    {
+        var root = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            string Make(string name, params string[] extra)
+            {
+                var folder = Directory.CreateDirectory(Path.Combine(root, name)).FullName;
+                var file = Path.Combine(folder, name + ".mp4");
+                File.WriteAllText(file, "v");
+                foreach (var e in extra) File.WriteAllText(Path.Combine(folder, e), "s");
+                return file;
+            }
+
+            // Alone: it moves up and the folder goes.
+            var lone = Make("A [1]");
+            Assert.Equal(Path.Combine(root, "A [1].mp4"), YtDlpService.LeaveLoneFolder(lone));
+            Assert.False(Directory.Exists(Path.Combine(root, "A [1]")));
+
+            // With its subtitles: it stays.
+            var withSubs = Make("B [2]", "B [2].zh.srt");
+            Assert.Equal(withSubs, YtDlpService.LeaveLoneFolder(withSubs));
+
+            // A file of that name already above: nothing is overwritten.
+            File.WriteAllText(Path.Combine(root, "C [3].mp4"), "old");
+            var taken = Make("C [3]");
+            Assert.Equal(taken, YtDlpService.LeaveLoneFolder(taken));
+            Assert.Equal("old", File.ReadAllText(Path.Combine(root, "C [3].mp4")));
+
+            // A folder named otherwise is the user's, not ours.
+            var other = Path.Combine(Directory.CreateDirectory(Path.Combine(root, "Mine")).FullName, "D [4].mp4");
+            File.WriteAllText(other, "v");
+            Assert.Equal(other, YtDlpService.LeaveLoneFolder(other));
+        }
+        finally
+        {
+            Directory.Delete(root, true);
+        }
+    }
+
+    [Fact]
+    public void ThePreviewShowsTheFolder() =>
+        Assert.Equal(@"Big Buck Bunny [aqz-KE-bpKQ]\Big Buck Bunny [aqz-KE-bpKQ].mp4",
+            NamingTemplate.Preview(NamingTemplate.DefaultFileName, "", "mp4", ownFolder: true));
 }
 
 public class ChapterTests

@@ -9,9 +9,9 @@ using VidFlow.Services;
 
 namespace VidFlow;
 
-/// <summary>First-run setup in three steps: install components, pick the download folder, optionally sign in. Each step
-/// has an icon, title and one line of explanation; components and accounts are rows in one card; the footer has the
-/// step dots and skip / back / next.</summary>
+/// <summary>First-run setup in four steps: install components, pick the download folder, optionally sign in, optionally
+/// turn on more (clipboard, tray, speech recognition). Each step has an icon, title and one line of explanation; its
+/// choices are rows in one card; the footer has the step dots and skip / back / next.</summary>
 public sealed partial class FirstRunDialog : ContentDialog
 {
     int _step;
@@ -38,6 +38,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         ("", "Wizard_WelcomeTitle", "Wizard_WelcomeBody"),
         ("", "Wizard_FolderTitle", "Wizard_FolderBody"),
         ("", "Wizard_AccountsTitle", "Wizard_AccountsBody"),
+        ("", "Wizard_ExtrasTitle", "Wizard_ExtrasBody"),
     ];
 
     static readonly (Platform Platform, string InKey, string OutKey)[] Accounts =
@@ -55,8 +56,13 @@ public sealed partial class FirstRunDialog : ContentDialog
         ToolTipService.SetToolTip(FolderText, AppSettings.Current.DownloadFolder);
         UpdateComponents();
         UpdateAccounts();
+        UpdateExtras();
         ShowStep(0);
+        // Speech recognition downloads in the background and reports as it goes.
+        SpeechRecognizer.Changed += OnSpeechChanged;
     }
+
+    void OnSpeechChanged() => DispatcherQueue.TryEnqueue(UpdateExtras);
 
     void ShowStep(int step)
     {
@@ -70,6 +76,7 @@ public sealed partial class FirstRunDialog : ContentDialog
         Step1.Visibility = step == 0 ? Visibility.Visible : Visibility.Collapsed;
         Step2.Visibility = step == 1 ? Visibility.Visible : Visibility.Collapsed;
         Step3.Visibility = step == 2 ? Visibility.Visible : Visibility.Collapsed;
+        Step4.Visibility = step == 3 ? Visibility.Visible : Visibility.Collapsed;
         var last = step == Steps.Length - 1;
         NextButton.Content = last ? L.Get("Wizard_Finish") : L.Get("Wizard_Next");
         BackButton.Visibility = step > 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -121,6 +128,84 @@ public sealed partial class FirstRunDialog : ContentDialog
             var logo = new Image { Source = HomePlatform.LogoFor(platform), Width = 28, Height = 28 };
             AccountList.Children.Add(Row(logo, platform.DisplayName(), L.Get(signedIn ? inKey : outKey), action));
         }
+    }
+
+    /// <summary>Optional features: two switches that take effect at once, and speech recognition, which is a download
+    /// of its own (the size is said up front; it carries on if the guide is closed).</summary>
+    void UpdateExtras()
+    {
+        ExtrasList.Children.Clear();
+        var s = AppSettings.Current;
+        ExtrasList.Children.Add(Row(Glyph(""), L.Get("Settings_Clipboard"), L.Get("Settings_ClipboardDescription"),
+            Switch(s.WatchClipboard, on => s.WatchClipboard = on, L.Get("Settings_Clipboard"))));
+        ExtrasList.Children.Add(Divider());
+        ExtrasList.Children.Add(Row(Glyph(""), L.Get("Settings_Tray"), L.Get("Settings_TrayDescription"),
+            Switch(s.MinimizeToTray, on => s.MinimizeToTray = on, L.Get("Settings_Tray"))));
+        ExtrasList.Children.Add(Divider());
+
+        FrameworkElement speech;
+        if (SpeechRecognizer.Installing && !SpeechRecognizer.InstallingGpu)
+            speech = new ProgressBar { Width = 96, Value = SpeechRecognizer.Progress };
+        else if (SpeechRecognizer.CanRecognize)
+            speech = Status("", "SystemFillColorSuccessBrush", L.Get("Wizard_Ready"));
+        else
+        {
+            var button = new Button { Content = L.Get("Settings_SpeechDownload"), MinWidth = 80 };
+            AutomationProperties.SetName(button, $"{L.Get("Settings_SpeechDownload")} {L.Get("Settings_Speech")}");
+            button.Click += async (_, _) => await SpeechRecognizer.InstallAsync(SpeechRecognizer.Chosen);
+            speech = button;
+        }
+        var description = SpeechRecognizer.LastError is { } error && !SpeechRecognizer.LastInstallGpu ? L.Format("Settings_SpeechFailed", error)
+            : L.Format("Wizard_SpeechDescription", Format.Bytes(SpeechRecognizer.Chosen.Bytes));
+        ExtrasList.Children.Add(Row(Glyph(""), L.Get("Settings_Speech"), description, speech));
+
+        // Graphics card: only on a PC with an NVIDIA card, and only once there is recognition to speed up.
+        if (!SpeechRecognizer.HasNvidia) return;
+        FrameworkElement gpu;
+        if (SpeechRecognizer.InstallingGpu)
+            gpu = new ProgressBar { Width = 96, Value = SpeechRecognizer.Progress };
+        else if (SpeechRecognizer.GpuReady)
+            gpu = Status("", "SystemFillColorSuccessBrush", L.Get("Wizard_Ready"));
+        else
+        {
+            var button = new Button
+            {
+                Content = L.Get("Settings_SpeechDownload"),
+                MinWidth = 80,
+                IsEnabled = SpeechRecognizer.CanRecognize && !SpeechRecognizer.Installing,
+            };
+            AutomationProperties.SetName(button, $"{L.Get("Settings_SpeechDownload")} {L.Get("Settings_SpeechGpu")}");
+            button.Click += async (_, _) => await SpeechRecognizer.InstallGpuAsync();
+            gpu = button;
+        }
+        var gpuDescription = SpeechRecognizer.LastError is { } gpuError && SpeechRecognizer.LastInstallGpu ? L.Format("Settings_SpeechFailed", gpuError)
+            : SpeechRecognizer.CanRecognize || SpeechRecognizer.GpuReady ? L.Format("Wizard_GpuDescription", Format.Bytes(SpeechRecognizer.GpuBytes))
+            : L.Get("Wizard_GpuNeedsSpeech");
+        ExtrasList.Children.Add(Divider());
+        ExtrasList.Children.Add(Row(Glyph(""), L.Get("Settings_SpeechGpu"), gpuDescription, gpu));
+    }
+
+    static FontIcon Glyph(string glyph) => new() { Glyph = glyph, FontSize = 18, Foreground = Brush("AccentTextFillColorPrimaryBrush") };
+
+    /// <summary>On/off with its words spelled out (an implicit style can't set them; see the settings page).</summary>
+    static ToggleSwitch Switch(bool on, Action<bool> set, string name)
+    {
+        var toggle = new ToggleSwitch { IsOn = on, OnContent = L.Get("Common_On"), OffContent = L.Get("Common_Off"), MinWidth = 0 };
+        AutomationProperties.SetName(toggle, name);
+        toggle.Toggled += (_, _) =>
+        {
+            set(toggle.IsOn);
+            AppSettings.Save();
+        };
+        return toggle;
+    }
+
+    static StackPanel Status(string glyph, string brush, string text)
+    {
+        var status = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
+        status.Children.Add(new FontIcon { Glyph = glyph, FontSize = 12, Foreground = Brush(brush) });
+        status.Children.Add(new TextBlock { Text = text, Foreground = Brush("TextFillColorSecondaryBrush") });
+        return status;
     }
 
     /// <summary>A row in a card: an icon tile, the name over a one-line description, and a status or button on the right.</summary>
@@ -234,6 +319,7 @@ public sealed partial class FirstRunDialog : ContentDialog
     /// <summary>However it closes (finish, skip or Esc), the guide doesn't open by itself again.</summary>
     void Dialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
     {
+        SpeechRecognizer.Changed -= OnSpeechChanged;
         AppSettings.Current.FirstRunCompleted = true;
         AppSettings.Save();
         // It may have installed components: the About page shows the last check otherwise.

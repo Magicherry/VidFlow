@@ -17,6 +17,7 @@ public static class DownloadLabels
         else if (r.IsSubtitles)
         {
             mode = L.Format("Label_Subtitles", SubtitleFiles.ShortName(r.SubtitleFormat));
+            if (SubtitleFiles.IsSpeech(r.SubtitleLanguage)) mode += $" · {L.Get("Label_Speech")}";
         }
         else if (r.IsCover)
         {

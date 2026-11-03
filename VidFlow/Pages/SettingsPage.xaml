@@ -97,40 +97,14 @@
                     <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
                 </tk:SettingsCard>
 
-                <!--  Saved content: what goes into (or next to) each downloaded file  -->
-                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Content')}" />
-                <!--  Subtitles: tick languages; other codes for anything not listed  -->
-                <tk:SettingsExpander
-                    x:Name="SubtitlesExpander"
-                    Header="{x:Bind l:L.Get('Settings_Subtitles')}">
-                    <tk:SettingsExpander.HeaderIcon>
-                        <FontIcon Glyph="&#xED1E;" />
-                    </tk:SettingsExpander.HeaderIcon>
-                    <tk:SettingsExpander.Items>
-                        <tk:SettingsCard
-                            HorizontalContentAlignment="Stretch"
-                            ContentAlignment="Vertical"
-                            Header="{x:Bind l:L.Get('Settings_SubLangs')}">
-                            <!--  One check box per common language, filled in code; wraps on narrow windows.  -->
-                            <VariableSizedWrapGrid
-                                x:Name="SubLangsPanel"
-                                Margin="0,4,0,0"
-                                ItemWidth="132"
-                                Orientation="Horizontal" />
-                        </tk:SettingsCard>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SubLangsOtherDescription')}" Header="{x:Bind l:L.Get('Settings_SubLangsOther')}">
-                            <TextBox
-                                x:Name="SubLangsOtherBox"
-                                MinWidth="200"
-                                AutomationProperties.Name="{x:Bind l:L.Get('Settings_SubLangsOther')}"
-                                LostFocus="SubLangsOtherBox_LostFocus"
-                                PlaceholderText="fr, de, es" />
-                        </tk:SettingsCard>
-                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_DanmakuDescription')}" Header="{x:Bind l:L.Get('Settings_Danmaku')}">
-                            <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
-                        </tk:SettingsCard>
-                    </tk:SettingsExpander.Items>
-                </tk:SettingsExpander>
+                <!--  Video files: how the file is put together and what goes into it  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_VideoFiles')}" />
+                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7F4;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="H264Toggle" Toggled="Toggle_Changed" />
+                </tk:SettingsCard>
                 <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8EC;" />
@@ -152,13 +126,41 @@
                         MinWidth="200"
                         SelectionChanged="SponsorBlockCombo_SelectionChanged" />
                 </tk:SettingsCard>
-                <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
-                    <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE7F4;" />
-                    </tk:SettingsCard.HeaderIcon>
-                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="H264Toggle" Toggled="Toggle_Changed" />
-                </tk:SettingsCard>
 
+                <!--  Subtitles: which ones are saved  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_SubtitlesSection')}" />
+                <!--  Languages: tick common ones; other codes for anything not listed  -->
+                <tk:SettingsExpander
+                    x:Name="SubtitlesExpander"
+                    Header="{x:Bind l:L.Get('Settings_SubLangs')}">
+                    <tk:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xED1E;" />
+                    </tk:SettingsExpander.HeaderIcon>
+                    <tk:SettingsExpander.Items>
+                        <tk:SettingsCard
+                            HorizontalContentAlignment="Stretch"
+                            ContentAlignment="Vertical"
+                            Header="{x:Bind l:L.Get('Settings_SubLangsCommon')}">
+                            <!--  One check box per common language, filled in code; wraps on narrow windows.  -->
+                            <VariableSizedWrapGrid
+                                x:Name="SubLangsPanel"
+                                Margin="0,4,0,0"
+                                ItemWidth="132"
+                                Orientation="Horizontal" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SubLangsOtherDescription')}" Header="{x:Bind l:L.Get('Settings_SubLangsOther')}">
+                            <TextBox
+                                x:Name="SubLangsOtherBox"
+                                MinWidth="200"
+                                AutomationProperties.Name="{x:Bind l:L.Get('Settings_SubLangsOther')}"
+                                LostFocus="SubLangsOtherBox_LostFocus"
+                                PlaceholderText="fr, de, es" />
+                        </tk:SettingsCard>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_DanmakuDescription')}" Header="{x:Bind l:L.Get('Settings_Danmaku')}">
+                            <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
+                        </tk:SettingsCard>
+                    </tk:SettingsExpander.Items>
+                </tk:SettingsExpander>
                 <!--  Network and speed  -->
                 <TextBlock
                     x:Name="NetworkHeader"
@@ -236,6 +238,54 @@
                         </tk:SettingsCard>
                     </tk:SettingsExpander.Items>
                 </tk:SettingsExpander>
+
+                <!--  Add-ons: optional features that need a download of their own (hundreds of MB), with what each takes
+                      up on disk. The components every download needs are on About & updates.  -->
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_AddOns')}" />
+                <!--  Speech recognition: the program and one model; the header says where it stands and has the one
+                      thing to do. See SpeechRecognizer.  -->
+                <tk:SettingsExpander x:Name="SpeechCard" Header="{x:Bind l:L.Get('Settings_Speech')}">
+                    <tk:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE720;" />
+                    </tk:SettingsExpander.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressBar
+                            x:Name="SpeechProgress"
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="SpeechButton"
+                            MinWidth="96"
+                            Click="SpeechButton_Click" />
+                    </StackPanel>
+                    <tk:SettingsExpander.Items>
+                        <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SpeechModelDescription')}" Header="{x:Bind l:L.Get('Settings_SpeechModel')}">
+                            <ComboBox
+                                x:Name="SpeechModelCombo"
+                                MinWidth="200"
+                                AutomationProperties.Name="{x:Bind l:L.Get('Settings_SpeechModel')}"
+                                SelectionChanged="SpeechModelCombo_SelectionChanged" />
+                        </tk:SettingsCard>
+                    </tk:SettingsExpander.Items>
+                </tk:SettingsExpander>
+                <!--  The CUDA build for speech recognition: offered with an NVIDIA card, once recognition is there  -->
+                <tk:SettingsCard x:Name="SpeechGpuCard" Header="{x:Bind l:L.Get('Settings_SpeechGpu')}">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE950;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ProgressBar
+                            x:Name="SpeechGpuProgress"
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed" />
+                        <Button
+                            x:Name="SpeechGpuButton"
+                            MinWidth="96"
+                            Click="SpeechGpuButton_Click" />
+                    </StackPanel>
+                </tk:SettingsCard>
 
                 <!--  Background and notifications: what happens while the window is closed  -->
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Background')}" />

@@ -51,7 +51,9 @@ public static class YtDlpArgs
         {
             "--no-playlist", "--newline", "--progress", "--no-warnings", "--continue",
             "-P", req.OutputFolder,
-            "-o", NamingTemplate.ToOutputTemplate(req.FileNameTemplate, req.FolderTemplate, platform.DisplayName(), direct?.Known),
+            // Only when subtitles can come (not Douyin's media file): a lone file needs no folder.
+            "-o", NamingTemplate.ToOutputTemplate(req.FileNameTemplate, req.FolderTemplate, platform.DisplayName(), direct?.Known,
+                ownFolder: req.WriteSubtitles && direct is null),
             "--print", StartTemplate,
             "--print", "after_move:VFF|%(filepath)s",
             "--progress-template", ProgressTemplate,

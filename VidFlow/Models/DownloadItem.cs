@@ -29,6 +29,13 @@ public sealed class DownloadItem : INotifyPropertyChanged
     internal DateTime LastActivity { get; set; } = DateTime.Now;
     internal bool StallReported { get; set; }
 
+    /// <summary>Recognizing speech: it reports only as each sentence is done, so long silence or music (or waiting for
+    /// another recognition) is no sign of a stall.</summary>
+    internal bool Recognizing { get; set; }
+
+    /// <summary>Waiting for another recognition to finish: it holds no download slot meanwhile.</summary>
+    internal bool WaitingForTurn { get; set; }
+
     public string Title
     {
         get => Record.Title;

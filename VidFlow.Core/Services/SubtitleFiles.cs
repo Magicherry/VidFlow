@@ -32,6 +32,12 @@ public static partial class SubtitleFiles
     /// machine translations of it.</summary>
     public const string AutoOriginal = AutoPrefix + ".*-orig";
 
+    /// <summary>Prefix of a <see cref="DownloadRequest.SubtitleLanguage"/> asking for subtitles made by speech
+    /// recognition, followed by the spoken language ("auto" to let it tell).</summary>
+    public const string SpeechPrefix = "asr:";
+
+    public static bool IsSpeech(string choice) => choice.StartsWith(SpeechPrefix, StringComparison.Ordinal);
+
     public static bool IsText(string format) => format is "txt" or "md";
 
     public static string Normalize(string? format) => Formats.Contains(format) ? format! : DefaultFormat;
@@ -206,21 +212,32 @@ public static partial class SubtitleFiles
                 var sentenceEnd = text[^1] is '.' or '!' or '?' or '。' or '！' or '？' or '…';
                 if ((cue.Start - lastEnd).TotalSeconds >= ParagraphGap || span >= HardLength || span >= SoftLength && sentenceEnd)
                 {
-                    result.Add((start, text.ToString()));
+                    result.Add((start, Close(text)));
                     text.Clear();
                 }
             }
             if (text.Length == 0) start = cue.Start;
             foreach (var line in cue.Text.Split('\n'))
             {
-                if (text.Length > 0 && !(IsCjk(text[^1]) && IsCjk(line[0]))) text.Append(' ');
+                if (text.Length > 0)
+                {
+                    // Chinese subtitles (and speech recognition) mostly come without punctuation: a comma where the
+                    // lines met keeps a paragraph readable.
+                    var last = text[^1];
+                    if (!IsCjk(last) || !IsCjk(line[0])) text.Append(' ');
+                    else if (!char.IsPunctuation(last) && !char.IsPunctuation(line[0])) text.Append('，');
+                }
                 text.Append(line);
             }
             lastEnd = cue.End;
         }
-        if (text.Length > 0) result.Add((start, text.ToString()));
+        if (text.Length > 0) result.Add((start, Close(text)));
         return result;
     }
+
+    /// <summary>A Chinese paragraph that stops without a full stop gets one.</summary>
+    static string Close(StringBuilder text) =>
+        IsCjk(text[^1]) && !char.IsPunctuation(text[^1]) ? text.Append('。').ToString() : text.ToString();
 
     /// <summary>Chinese and Japanese run on without spaces between lines.</summary>
     static bool IsCjk(char c) => c is >= '　' and <= '鿿' or >= '豈' and <= '﫿' or >= '＀' and <= '￯';

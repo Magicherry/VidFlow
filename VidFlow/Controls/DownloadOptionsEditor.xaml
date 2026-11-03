@@ -36,7 +36,6 @@
 
         <tk:SettingsCard
             x:Name="SubLanguageCard"
-            Description="{x:Bind l:L.Get('Options_SubtitleLanguageDescription')}"
             Header="{x:Bind l:L.Get('Options_SubtitleLanguage')}">
             <tk:SettingsCard.HeaderIcon>
                 <FontIcon Glyph="&#xF2B7;" />

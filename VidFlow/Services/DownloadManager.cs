@@ -38,7 +38,7 @@ public sealed class DownloadManager
     /// <summary>A running download with no output from yt-dlp for a while is flagged (status + one notification).</summary>
     void CheckStalled()
     {
-        foreach (var item in Items.Where(i => i.State == DownloadState.Downloading && !i.StallReported
+        foreach (var item in Items.Where(i => i.State == DownloadState.Downloading && !i.StallReported && !i.Recognizing
                                              && DateTime.Now - i.LastActivity > StallAfter))
         {
             item.StallReported = true;
@@ -193,7 +193,8 @@ public sealed class DownloadManager
 
     void Pump()
     {
-        var running = Items.Count(i => i.IsRunning);
+        // One waiting for its turn at speech recognition isn't downloading anything: another download may go meanwhile.
+        var running = Items.Count(i => i.IsRunning && !i.WaitingForTurn);
         // Prioritized items first (most recently prioritized first), then oldest first (the list is newest-on-top).
         foreach (var item in Items.Reverse().Where(i => i.State == DownloadState.Queued)
                      .OrderByDescending(i => i.Record.PriorityAt ?? DateTime.MinValue).ToList())
@@ -218,6 +219,7 @@ public sealed class DownloadManager
         item.PauseRequested = false;
         item.LastActivity = DateTime.Now;
         item.StallReported = false;
+        item.Recognizing = item.WaitingForTurn = false;
         using var cts = new CancellationTokenSource();
         item.Cts = cts;
         Log.Info($"Download start: {item.Request.Url} ({item.Request.Mode}, {item.Request.MaxHeight})");
@@ -253,6 +255,7 @@ public sealed class DownloadManager
         finally
         {
             item.Cts = null;
+            item.Recognizing = item.WaitingForTurn = false;
             Changed();
         }
     }
@@ -294,6 +297,20 @@ public sealed class DownloadManager
                 break;
             case ProgressEvent { Progress: var p }:
                 ApplyProgress(item, p);
+                break;
+            case RecognizingEvent { Percent: < 0 }:
+                item.State = DownloadState.Downloading;
+                item.StatusText = L.Get("Status_RecognizeWaiting");
+                item.Recognizing = item.WaitingForTurn = true;
+                Pump();
+                break;
+            case RecognizingEvent { Percent: var percent }:
+                item.Recognizing = true;
+                item.WaitingForTurn = false;
+                item.State = DownloadState.Downloading;
+                item.Progress = percent;
+                item.StatusText = L.Format("Status_Recognizing", percent.ToString("0"));
+                UpdateOverallProgress();
                 break;
         }
     }

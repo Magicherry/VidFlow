@@ -14,6 +14,8 @@ public abstract record DownloadEvent;
 public sealed record StartedEvent(int Parts, string? Title, string? ThumbnailUrl) : DownloadEvent;
 public sealed record FileEvent(string Path) : DownloadEvent;
 public sealed record ProgressEvent(DownloadProgress Progress) : DownloadEvent;
+/// <summary>Speech recognition (subtitles made from the sound) is this far along, 0-100.</summary>
+public sealed record RecognizingEvent(double Percent) : DownloadEvent;
 
 /// <summary>
 /// Parses the machine-readable lines VidFlow asks yt-dlp to print (see <see cref="YtDlpArgs"/>):

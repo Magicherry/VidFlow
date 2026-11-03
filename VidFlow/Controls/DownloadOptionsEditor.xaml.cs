@@ -247,8 +247,20 @@ public sealed partial class DownloadOptionsEditor : UserControl
             AddItems(SubLanguageCombo, (code, $"{SubtitleFiles.LanguageName(code)} ({code})"));
         foreach (var code in _video?.AutoSubtitleLanguages ?? [])
             AddItems(SubLanguageCombo, (SubtitleFiles.AutoPrefix + code, L.Format("SubLang_Auto", SubtitleFiles.LanguageName(code))));
+        // Made from the sound, for any video; offered greyed out until it is downloaded in Settings.
+        var speech = SpeechRecognizer.CanRecognize;
+        foreach (var language in SpeechRecognizer.Languages)
+        {
+            var text = L.Format("SubLang_Speech", L.Get($"Asr_Lang_{language}"));
+            SubLanguageCombo.Items.Add(new ComboBoxItem
+            {
+                Content = speech ? text : L.Format("SubLang_SpeechOff", text),
+                Tag = SubtitleFiles.SpeechPrefix + language,
+                IsEnabled = speech,
+            });
+        }
         // A track another video had (from a template) means nothing here.
-        if (!SubLanguageCombo.Items.Cast<ComboBoxItem>().Any(i => (string)i.Tag == _options.SubtitleLanguage)) _options.SubtitleLanguage = "";
+        if (!SubLanguageCombo.Items.Cast<ComboBoxItem>().Any(i => (string)i.Tag == _options.SubtitleLanguage && i.IsEnabled)) _options.SubtitleLanguage = "";
         Select(SubLanguageCombo, _options.SubtitleLanguage);
         SubLanguageCard.Description = _video is { HasSubtitles: false }
             ? L.Get("Options_SubtitleNone") : L.Get("Options_SubtitleLanguageDescription");
@@ -384,7 +396,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
             : video ? (request.NeedsMkv ? "mkv" : _options.Container)
             : _options.AudioFormat == MediaFeatures.Original ? (_video?.HasHiRes == true ? "flac" : "m4a")
             : _options.AudioFormat;
-        PreviewText.Text = $"{L.Get("Options_PreviewRoot")}\\{NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext)}";
+        PreviewText.Text = $"{L.Get("Options_PreviewRoot")}\\{NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext, request.WriteSubtitles)}";
         PreviewIcon.Glyph = subtitles ? "\uED1E" : cover ? "" : video ? "" : "";
         var unknown = NamingTemplate.UnknownVariables(_options.FileNameTemplate);
         UnknownVariableText.Visibility = unknown.Count > 0 ? Visibility.Visible : Visibility.Collapsed;

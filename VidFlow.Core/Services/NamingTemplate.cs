@@ -41,12 +41,15 @@ public static partial class NamingTemplate
     /// <summary>The yt-dlp "-o" value: optional folders, then the file name, then the extension.
     /// <paramref name="known"/> supplies values VidFlow already has (when yt-dlp is only given a bare media
     /// address and wouldn't know the title or uploader); the rest are left to yt-dlp.</summary>
+    /// <param name="ownFolder">Put the file in a folder named like it: a video with its subtitles (and danmaku)
+    /// stays together instead of scattering several files through the download folder.</param>
     public static string ToOutputTemplate(string fileTemplate, string folderTemplate, string platformName,
-        IReadOnlyDictionary<string, string?>? known = null)
+        IReadOnlyDictionary<string, string?>? known = null, bool ownFolder = false)
     {
         var file = Translate(string.IsNullOrWhiteSpace(fileTemplate) ? DefaultFileName : fileTemplate, platformName, false, known);
         if (file.Trim().Length == 0) file = Translate(DefaultFileName, platformName, false, known);
         var folder = string.IsNullOrWhiteSpace(folderTemplate) ? "" : Translate(folderTemplate, platformName, true, known).Trim('/');
+        if (ownFolder) folder = (folder.Length > 0 ? folder + "/" : "") + file;
         return (folder.Length > 0 ? folder + "/" : "") + file + ".%(ext)s";
     }
 
@@ -90,7 +93,7 @@ public static partial class NamingTemplate
     }
 
     /// <summary>Example result for the editor, e.g. "YouTube\Blender\Big Buck Bunny [aqz-KE-bpKQ].mp4".</summary>
-    public static string Preview(string fileTemplate, string folderTemplate, string ext = "mp4")
+    public static string Preview(string fileTemplate, string folderTemplate, string ext = "mp4", bool ownFolder = false)
     {
         var sample = new Dictionary<string, string>
         {
@@ -107,6 +110,7 @@ public static partial class NamingTemplate
             sample.TryGetValue(m.Groups[1].Value, out var v) ? v : m.Value).Replace('/', folders ? '\\' : '_');
         var file = Fill(string.IsNullOrWhiteSpace(fileTemplate) ? DefaultFileName : fileTemplate, false);
         var folder = string.IsNullOrWhiteSpace(folderTemplate) ? "" : Fill(folderTemplate, true).Trim('\\') + "\\";
+        if (ownFolder) folder += file + "\\";
         return $"{folder}{file}.{ext}";
     }
 }

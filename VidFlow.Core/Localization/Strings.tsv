@@ -13,8 +13,8 @@ Account_BiliIn	Signed in · 1080p and above (4K / HDR need premium)	已登录 ·
 Account_BiliOut	Not signed in · up to 720p	未登录 · 最高 720p
 Account_Login	Sign in	登录
 Account_Logout	Sign out	退出登录
-Account_YtIn	Signed in · age-restricted / members-only videos available	已登录 · 可下载年龄限制、会员视频
-Account_YtOut	Not signed in · needed for age-restricted / members-only videos	未登录 · 年龄限制、会员视频需登录
+Account_YtIn	Signed in · age-restricted and members-only videos available	已登录 · 可下载年龄限制和会员视频
+Account_YtOut	Not signed in · age-restricted and members-only videos need it	未登录 · 年龄限制和会员视频需要登录
 Action_CopyError	Copy error details	复制错误详情
 Action_Download	Download	下载
 Action_OpenFolder	Open folder	打开文件夹
@@ -227,18 +227,18 @@ Tray_PasteLink	Download copied link	下载已复制的链接
 Tray_Show	Open VidFlow	打开 VidFlow
 Tray_Tooltip	VidFlow · {0} downloading · {1}%	VidFlow · {0} 个任务 · {1}%
 Untitled	Untitled video	未命名视频
-Wizard_AccountsBody	Optional: public videos download without signing in. You can also sign in later on the Accounts page.	可选。公开视频无需登录，也可以稍后在「账号」页面中登录。
-Wizard_AccountsNote	Sign-in happens on the official site inside VidFlow; your password is never seen or stored by VidFlow	登录在官方网页中完成，VidFlow 不会读取或保存你的密码
+Wizard_AccountsBody	Public videos don't need an account. Signing in unlocks higher quality and videos that need one. You can also do this later on the Accounts page.	公开视频无需登录。登录后可以下载更高画质和需要登录才能看的内容，也可以之后在「账号」页面登录。
+Wizard_AccountsNote	You sign in on the official site, opened inside VidFlow. VidFlow never sees or stores your password.	登录在 VidFlow 打开的官方网页中完成，VidFlow 不会读取或保存你的密码。
 Wizard_AccountsTitle	Accounts (optional)	登录账号（可选）
 Wizard_Back	Back	上一步
 Wizard_Change	Change	更改
 Wizard_Finish	Get started	开始使用
-Wizard_FolderBody	Downloaded videos are saved here. Playlists get their own subfolder	下载的视频会保存到这里，播放列表会自动放进单独的子文件夹
+Wizard_FolderBody	Downloads are saved here. Playlists, and videos saved with subtitles, each get a folder of their own. You can change this any time in Settings.	下载的内容会保存到这里。播放列表和带字幕的视频会各自放进单独的文件夹。之后可以随时在设置中更改。
 Wizard_FolderTitle	Where to save	保存位置
-Wizard_InstallAll	Install components	一键安装组件
+Wizard_InstallAll	Install all	全部安装
 Wizard_Next	Next	下一步
 Wizard_Skip	Skip	跳过
-Wizard_WelcomeBody	VidFlow uses these free components to download and process videos (about 185 MB, from their official GitHub releases)	VidFlow 用这些免费组件下载和处理视频（约 185 MB，来自官方 GitHub）
+Wizard_WelcomeBody	VidFlow downloads and processes videos with these open-source components: about 185 MB in all, from their official GitHub releases.	下载和处理视频需要以下几个开源组件，共约 185 MB，均从官方 GitHub 发布页下载。
 Wizard_WelcomeTitle	Welcome to VidFlow	欢迎使用 VidFlow
 Wizard_Ready	Ready	已就绪
 Wizard_Required	Required	必需
@@ -389,7 +389,6 @@ Nav_Templates	Templates	下载模板
 Nav_Accounts	Accounts	账号
 Settings_AboutUpdates	About & updates	关于与更新
 Settings_Appearance	Appearance	外观
-Settings_Content	Saved content	保存内容
 Settings_NetworkSpeed	Network and speed	网络与速度
 Settings_Background	Background and notifications	后台与通知
 Settings_NotifyDescription	When VidFlow is in the background	VidFlow 在后台时提醒
@@ -408,7 +407,7 @@ Settings_SpeedUnit	Unit	单位
 Settings_SpeedOn	On · up to {0} per download	已开启 · 每个任务最高 {0}
 Settings_SubLangsOther	Other languages	其他语言
 Settings_SubLangsOtherDescription	Language codes, comma separated	语言代码，用逗号分隔
-Settings_SubtitlesSummary	Languages: {0}	保存语言：{0}
+Settings_SubtitlesSummary	{0}	{0}
 Settings_SubtitlesNone	No language chosen: Chinese and English subtitles are saved	未选择语言，将保存中文和英文字幕
 Options_FileNamePattern	Format	命名格式
 Options_FileNamePlaceholder	e.g. {uploader} - {title}	例如 {uploader} - {title}
@@ -430,8 +429,8 @@ Var_id	Video ID	视频 ID
 Var_platform	Platform	平台
 Tools_YtDlpPurpose	Parses and downloads videos	解析和下载视频
 Tools_FfmpegPurpose	Merges video and audio, converts formats	合并音视频、转换格式
-Tools_DenoPurpose	Unlocks some YouTube formats	获取部分 YouTube 格式
-Tools_Aria2Purpose	Faster YouTube and X downloads	加速 YouTube、X 等海外视频下载
+Tools_DenoPurpose	Lets YouTube offer every quality	让 YouTube 显示全部画质
+Tools_Aria2Purpose	Downloads YouTube, X and others over several connections	多线程加速 YouTube、X 等海外视频下载
 Tools_Installed	{0} · version {1}	{0} · 版本 {1}
 Tools_SystemCopy	{0} · version {1} · system copy	{0} · 版本 {1} · 系统中的版本
 Tools_CheckFailed	Couldn't check	无法检查
@@ -457,8 +456,8 @@ Login_UseWeb	Sign in with password or SMS instead	使用账号密码或短信验
 Login_StoredLocally	Your sign-in is stored only on this computer	登录信息仅保存在本机
 Login_SuccessClosing	Signed in. Saving and closing…	登录成功，正在保存并关闭…
 Platform_Douyin	Douyin	抖音
-Account_DouyinIn	Signed in · account-only videos available	已登录 · 可下载需登录的作品
-Account_DouyinOut	Not signed in · public videos work without it	未登录 · 公开作品无需登录
+Account_DouyinIn	Signed in · posts that need an account available	已登录 · 可下载需要登录的作品
+Account_DouyinOut	Not signed in · public posts work without it	未登录 · 公开作品无需登录
 Login_TitleDouyin	Sign in to Douyin	登录抖音
 Login_InstructionsDouyin	Click 登录 at the top right and scan with the Douyin app	点击右上角「登录」，用抖音 App 扫码
 Error_DouyinUnavailable	Couldn't get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).	无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。
@@ -474,7 +473,7 @@ Home_PlatformsGlobal	Global platforms	海外平台
 Home_PhotoCount	Photos: {0}	{0} 张图片
 Mode_Photos	Photos	图片
 Error_TikTokNoPhotos	Couldn't get this TikTok post. It may have been deleted or be private, or it may need an account (sign in to TikTok on the Accounts page).	无法获取这个 TikTok 帖子：可能已删除、不公开或需要登录（可在「账号」页面登录 TikTok 后重试）。
-Account_TikTokIn	Signed in · account-only posts available	已登录 · 可下载需要登录的内容
+Account_TikTokIn	Signed in · posts that need an account available	已登录 · 可下载需要登录的内容
 Account_TikTokOut	Not signed in · public posts work without it	未登录 · 公开内容无需登录
 Login_TitleTikTok	Sign in to TikTok	登录 TikTok
 Home_Supports_TikTok	Videos, photo posts, short links	视频、图文、短链接
@@ -507,12 +506,50 @@ Options_SubtitleFormat	Subtitle format	字幕格式
 Options_SubtitleFormatDescription	TXT and Markdown keep the words only, for reading or notes	TXT 与 Markdown 只保留文字，适合阅读或做笔记
 Options_SubtitleLanguage	Subtitle language	字幕语言
 Options_SubtitleLanguageDescription	By default the languages in Settings; auto-generated ones when there are none	默认使用设置中的语言；没有时使用自动生成的字幕
-Options_SubtitleNone	No subtitles were found for this video	没有找到这个视频的字幕
+Options_SubtitleNone	No subtitles were found for this video; speech recognition can make them	没有找到这个视频的字幕，可以用语音识别生成
 SubLang_Settings	Languages in Settings	设置中的语言
 SubLang_Auto	{0} (auto-generated)	{0}（自动生成）
 SubFormat_Txt	Plain text (TXT)	纯文本（TXT）
 SubFormat_Md	Markdown (with timestamps)	Markdown（带时间戳）
 Label_Subtitles	{0} subtitles	{0} 字幕
-Error_NoSubtitles	No subtitles were found in the chosen languages. Pick another language, or add languages in Settings.	没有找到所选语言的字幕。可以换一种语言，或在设置中添加字幕语言。
+Error_NoSubtitles	No subtitles were found in the chosen languages. Pick another language, or have them made by speech recognition (subtitle language).	没有找到所选语言的字幕。可以换一种语言，或在「字幕语言」中选择语音识别生成。
 Subtitles_MdSource	Source	来源
 Subtitles_MdLanguage	Language	语言
+Status_Recognizing	Recognizing speech  ·  {0}%	正在识别语音  ·  {0}%
+Label_Speech	speech recognition	语音识别
+SubLang_Speech	Speech recognition · {0}	语音识别生成 · {0}
+SubLang_SpeechOff	{0} (turn on in Settings)	{0}（需在设置中启用）
+Asr_Lang_auto	detect language	自动检测语言
+Asr_Lang_zh	Chinese	中文
+Asr_Lang_en	English	英文
+Asr_Lang_ja	Japanese	日文
+Asr_ModelAccurate	Accurate	高精度
+Asr_ModelFast	Fast	快速
+Asr_ModelSize	{0} · about {1}	{0} · 约 {1}
+Settings_Speech	Speech recognition	语音识别
+Settings_SpeechOff	Makes subtitles for videos that have none, from what is said. Runs on this PC: nothing is uploaded.	为没有字幕的视频，根据语音生成字幕。在本机运行，不会上传任何内容。
+Settings_SpeechReady	On · {0} on disk. Choose speech recognition under Subtitle language when downloading subtitles	已启用 · 占用 {0}。下载字幕时在「字幕语言」中选择语音识别
+Settings_SpeechInstalling	Downloading… {0}%	正在下载… {0}%
+Settings_SpeechFailed	Download failed: {0}	下载失败：{0}
+Settings_SpeechDownload	Download	下载
+Settings_SpeechRemove	Remove	移除
+Settings_SpeechModel	Model	识别模型
+Error_AsrNotReady	Speech recognition isn't set up. Download it in Settings, under Speech recognition.	语音识别尚未启用。请先在「设置 → 语音识别」中下载。
+Error_AsrFailed	Speech recognition failed.	语音识别失败。
+Settings_SpeechGpu	Graphics card acceleration (NVIDIA)	显卡加速（NVIDIA）
+Settings_SpeechGpuOff	Recognizes several times faster on the graphics card. A further download of about {0}; the first time it is used takes about half a minute more to get ready.	用显卡识别，通常快数倍。需另外下载约 {0}；首次使用会多花约半分钟做准备。
+Settings_SpeechGpuReady	On · {0} on disk. Speech is recognized on the graphics card, or on the CPU when that fails	已启用 · 占用 {0}。优先用显卡识别，失败时自动改用 CPU
+Settings_VideoFiles	Video files	视频文件
+Settings_SubtitlesSection	Subtitles	字幕
+Settings_SubLangsCommon	Common languages	常用语言
+Settings_SpeechModelDescription	Accurate gets names and terms right more often; Fast suits slower PCs	高精度识别更准确；快速适合配置较低的电脑
+Settings_AddOns	Add-ons	附加组件
+Settings_SpeechBusy	Can't remove it while speech is being recognized. Try again when that download is done.	正在识别语音，暂时无法移除。请在该任务完成后再试。
+Settings_SpeechRemoveFailed	Couldn't remove it: {0}	无法移除：{0}
+Settings_SpeechModelMissing	The chosen model isn't downloaded yet (about {0}). Download it to use speech recognition.	所选模型尚未下载（约 {0}），下载后即可使用语音识别。
+Status_RecognizeWaiting	Waiting for another speech recognition to finish…	等待其他语音识别完成…
+Wizard_ExtrasTitle	More features (optional)	更多功能（可选）
+Wizard_ExtrasBody	Turn on what suits you. All of it can be changed later in Settings.	按需开启，之后都可以在设置中更改。
+Wizard_SpeechDescription	Makes subtitles for videos without them, on this PC (about {0})	为没有字幕的视频生成字幕，在本机运行（约 {0}）
+Wizard_GpuDescription	Recognizes several times faster; a further download of about {0}	识别快数倍，需另外下载约 {0}
+Wizard_GpuNeedsSpeech	Download speech recognition first	需先下载语音识别

@@ -92,14 +92,17 @@ public static class YtDlpService
         if (UrlTools.DetectPlatform(req.Url) != Platform.Douyin && (req.IsPhotos || TikTokPhotos.IsPhotoUrl(req.Url)))
             return await TikTokPhotos.DownloadAsync(req, onEvent, ct);
 
-        if (req.IsSubtitles) return await DownloadSubtitlesAsync(req, ct);
+        if (req.IsSubtitles) return await DownloadSubtitlesAsync(req, onEvent, ct);
 
         string? filePath = null;
+        // Set when VidFlow found the title itself: yt-dlp, given only a media file's address, would report that file's name.
+        string? knownTitle = null;
         var parser = new YtDlpOutputParser();
         void OnLine(string line)
         {
             if (parser.Feed(line) is not { } e) return;
             if (e is FileEvent f) filePath = f.Path;
+            if (e is StartedEvent s && knownTitle is not null) e = s with { Title = knownTitle };
             onEvent(e);
         }
 
@@ -130,6 +133,7 @@ public static class YtDlpService
             // The cover is a plain image address too, downloaded the same way.
             var media = req.IsCover ? video.Cover ?? throw new YtDlpException(L.Get("Error_NoCover")) : stream.Url;
             var direct = new YtDlpArgs.DirectMedia(media, DouyinReferer, known);
+            knownTitle = video.Title;
             (code, error) = await RunAsync(YtDlpArgs.Download(req with { Url = $"https://www.douyin.com/video/{video.Id}" }, AppSettings.Current, env, direct), OnLine, ct);
         }
         else
@@ -142,13 +146,39 @@ public static class YtDlpService
 
         ct.ThrowIfCancellationRequested();
         if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);
-        return filePath;
+        return req.WriteSubtitles && filePath is not null ? LeaveLoneFolder(filePath) : filePath;
+    }
+
+    /// <summary>A download with subtitles goes into a folder of its own (see <see cref="NamingTemplate"/>); when no
+    /// subtitles came, the file alone needs none, so it moves up and the folder goes. Returns where the file is.</summary>
+    internal static string LeaveLoneFolder(string file)
+    {
+        try
+        {
+            var folder = Path.GetDirectoryName(file);
+            var parent = Path.GetDirectoryName(folder);
+            // Only the folder named after the file, holding nothing else; never over a file already there.
+            if (folder is null || parent is null || Path.GetFileName(folder) != Path.GetFileNameWithoutExtension(file)
+                || Directory.EnumerateFileSystemEntries(folder).Skip(1).Any())
+                return file;
+            var dest = Path.Combine(parent, Path.GetFileName(file));
+            if (File.Exists(dest)) return file;
+            File.Move(file, dest);
+            Directory.Delete(folder);
+            return dest;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            Log.Info($"Left in its own folder: {ex.Message}");
+            return file;
+        }
     }
 
     /// <summary>The subtitles alone. With no language chosen it is the uploader's own subtitles in the languages from
     /// Settings, and failing those the automatic ones in the video's own language. Returns the first file.</summary>
-    static async Task<string> DownloadSubtitlesAsync(DownloadRequest req, CancellationToken ct)
+    static async Task<string> DownloadSubtitlesAsync(DownloadRequest req, Action<DownloadEvent> onEvent, CancellationToken ct)
     {
+        if (SubtitleFiles.IsSpeech(req.SubtitleLanguage)) return await RecognizeSubtitlesAsync(req, onEvent, ct);
         // Douyin's own downloads don't go through yt-dlp, and its videos come without subtitles.
         if (UrlTools.DetectPlatform(req.Url) == Platform.Douyin) throw new YtDlpException(L.Get("Error_NoSubtitles"));
         var target = SubtitleFiles.IsText(req.SubtitleFormat) ? "srt" : req.SubtitleFormat;
@@ -172,6 +202,53 @@ public static class YtDlpService
         if (saved.Files.Count == 0) throw new YtDlpException(L.Get("Error_NoSubtitles"));
         if (!SubtitleFiles.IsText(req.SubtitleFormat)) return saved.Files[0].Path;
         return saved.Files.Select(f => SubtitleFiles.WriteText(f, req.SubtitleFormat, saved.Title, saved.Url ?? req.Url)).ToList()[0];
+    }
+
+    /// <summary>Subtitles made from the sound: the audio is downloaded like any audio download (so Douyin and file
+    /// naming work as usual) but into a folder of its own under Temp, so nothing already in the download folder (an
+    /// audio download of the same video, say) is reused or removed. The subtitles get the name the audio had:
+    /// "Title [id].zh.srt", or "Title [id].zh.asr.srt" when that is taken.</summary>
+    static async Task<string> RecognizeSubtitlesAsync(DownloadRequest req, Action<DownloadEvent> onEvent, CancellationToken ct)
+    {
+        if (!SpeechRecognizer.CanRecognize) throw new YtDlpException(L.Get("Error_AsrNotReady"));
+        var work = Path.Combine(SpeechRecognizer.WorkRoot, Guid.NewGuid().ToString("N"));
+        try
+        {
+            string? title = null;
+            // MaxHeight 1: where sound only comes with the picture (Douyin), the smallest picture will do.
+            var audio = await DownloadAsync(req with
+                {
+                    Mode = "audio", AudioFormat = "wav", MaxHeight = 1, WriteSubtitles = false, SubtitleLanguage = "", OutputFolder = work,
+                },
+                e => { if (e is StartedEvent { Title: { } t }) title ??= t; onEvent(e); }, ct);
+            if (audio is null || !File.Exists(audio)) throw new YtDlpException(L.Get("Error_AsrFailed"));
+
+            var (srt, language) = await SpeechRecognizer.RecognizeAsync(audio, req.SubtitleLanguage[SubtitleFiles.SpeechPrefix.Length..],
+                Path.Combine(work, "speech"), p => onEvent(new RecognizingEvent(p)), ct);
+            // Where the audio would have gone (the same folders and name), with the language before the extension.
+            var name = Path.Combine(req.OutputFolder, Path.ChangeExtension(Path.GetRelativePath(work, audio), null));
+            var tag = File.Exists($"{name}.{language}.{req.SubtitleFormat}") ? $"{language}.asr" : language;
+            var path = $"{name}.{tag}.srt";
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.Move(srt, path, overwrite: true);
+            return req.SubtitleFormat switch
+            {
+                "srt" => path,
+                "txt" or "md" => SubtitleFiles.WriteText(new SavedSubtitle(language, path), req.SubtitleFormat, title, req.Url),
+                _ => await SpeechRecognizer.ConvertAsync(path, req.SubtitleFormat, ct),
+            };
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(work)) Directory.Delete(work, recursive: true);
+            }
+            catch (IOException ex)
+            {
+                Log.Info($"Speech work folder not removed: {ex.Message}");
+            }
+        }
     }
 
     /// <summary>"Original" audio: which codec the track has decides the file type (Hi-Res FLAC → .flac). Falls back to
