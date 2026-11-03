@@ -113,6 +113,7 @@
   <data name="Error_NoCover" xml:space="preserve"><value>This video has no cover image.</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>ffmpeg is required for this. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>The site returned no downloadable formats. On YouTube this usually means the sign-in cookies are no longer valid — try signing out of YouTube on the Accounts page, or update yt-dlp.</value></data>
+  <data name="Error_NoSubtitles" xml:space="preserve"><value>No subtitles were found in the chosen languages. Pick another language, or add languages in Settings.</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>yt-dlp is not installed. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_Private" xml:space="preserve"><value>This is a private or members-only video; sign in with an account that can watch it.</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>Too many requests. Wait a while or switch proxy node, then retry.</value></data>
@@ -178,6 +179,7 @@
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 audio</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · best quality</value></data>
   <data name="Label_NoSubtitles" xml:space="preserve"><value>No subtitles</value></data>
+  <data name="Label_Subtitles" xml:space="preserve"><value>{0} subtitles</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>Downloaded from the official yt-dlp builds when you choose to install it; not bundled with VidFlow. Source code: ffmpeg.org.</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow is built on these open-source components. Click a license to read it.</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically</value></data>
@@ -205,6 +207,7 @@
   <data name="Mode_M4a" xml:space="preserve"><value>Audio (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>Audio (MP3)</value></data>
   <data name="Mode_Photos" xml:space="preserve"><value>Photos</value></data>
+  <data name="Mode_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>Video</value></data>
   <data name="Naming_Custom" xml:space="preserve"><value>Custom</value></data>
   <data name="Naming_InsertVariable" xml:space="preserve"><value>Insert {0}</value></data>
@@ -259,6 +262,11 @@
   <data name="Options_Recode" xml:space="preserve"><value>Convert automatically</value></data>
   <data name="Options_RecodeDescription" xml:space="preserve"><value>Re-encode when the format doesn&apos;t fit (slow); otherwise saved as MKV</value></data>
   <data name="Options_Subfolder" xml:space="preserve"><value>Sort into subfolders</value></data>
+  <data name="Options_SubtitleFormat" xml:space="preserve"><value>Subtitle format</value></data>
+  <data name="Options_SubtitleFormatDescription" xml:space="preserve"><value>TXT and Markdown keep the words only, for reading or notes</value></data>
+  <data name="Options_SubtitleLanguage" xml:space="preserve"><value>Subtitle language</value></data>
+  <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>By default the languages in Settings; auto-generated ones when there are none</value></data>
+  <data name="Options_SubtitleNone" xml:space="preserve"><value>No subtitles were found for this video</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Languages are set in Settings</value></data>
   <data name="Options_Title" xml:space="preserve"><value>Download options</value></data>
@@ -397,6 +405,12 @@
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>Video done, downloading audio…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>Video</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>Waiting…</value></data>
+  <data name="SubFormat_Md" xml:space="preserve"><value>Markdown (with timestamps)</value></data>
+  <data name="SubFormat_Txt" xml:space="preserve"><value>Plain text (TXT)</value></data>
+  <data name="SubLang_Auto" xml:space="preserve"><value>{0} (auto-generated)</value></data>
+  <data name="SubLang_Settings" xml:space="preserve"><value>Languages in Settings</value></data>
+  <data name="Subtitles_MdLanguage" xml:space="preserve"><value>Language</value></data>
+  <data name="Subtitles_MdSource" xml:space="preserve"><value>Source</value></data>
   <data name="Template_BuiltInSuffix" xml:space="preserve"><value>{0} (built-in)</value></data>
   <data name="Template_CopyName" xml:space="preserve"><value>{0} copy</value></data>
   <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0} (default)</value></data>

@@ -6,14 +6,14 @@ namespace VidFlow.Services;
 public enum DownloadStatusFilter { All, Active, Completed, Failed }
 
 /// <summary>What a download saves.</summary>
-public enum DownloadKind { Video, Audio, Cover, Photos }
+public enum DownloadKind { Video, Audio, Cover, Photos, Subtitles }
 
 /// <summary>What the download list shows: a status group, one platform, one kind, and text found in the title or link.</summary>
 public sealed record DownloadFilter(DownloadStatusFilter Status = DownloadStatusFilter.All, Platform? Platform = null, string Query = "",
     DownloadKind? Kind = null)
 {
     public static DownloadKind KindOf(DownloadRequest r) =>
-        r.IsPhotos ? DownloadKind.Photos : r.IsCover ? DownloadKind.Cover : r.IsAudio ? DownloadKind.Audio : DownloadKind.Video;
+        r.IsPhotos ? DownloadKind.Photos : r.IsSubtitles ? DownloadKind.Subtitles : r.IsCover ? DownloadKind.Cover : r.IsAudio ? DownloadKind.Audio : DownloadKind.Video;
 
     /// <summary>Paused counts as in progress (it continues later); canceled sits with failed (neither finished).</summary>
     public static DownloadStatusFilter GroupOf(DownloadState state) => state switch

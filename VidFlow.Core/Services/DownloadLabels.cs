@@ -14,6 +14,10 @@ public static class DownloadLabels
         {
             mode = L.Get("Mode_Photos");
         }
+        else if (r.IsSubtitles)
+        {
+            mode = L.Format("Label_Subtitles", SubtitleFiles.ShortName(r.SubtitleFormat));
+        }
         else if (r.IsCover)
         {
             mode = L.Get("Mode_Cover");
@@ -43,6 +47,11 @@ public static class DownloadLabels
         {
             parts.Add(L.Get("Mode_Cover"));
         }
+        else if (t.Mode == DownloadRequest.SubtitlesMode)
+        {
+            parts.Add(L.Get("Mode_Subtitles"));
+            parts.Add(SubtitleFiles.ShortName(SubtitleFiles.Normalize(t.SubtitleFormat)));
+        }
         else if (t.Mode == "audio")
         {
             var format = t.AudioFormat is "auto" ? "mp3" : t.AudioFormat;
@@ -71,7 +80,7 @@ public static class DownloadLabels
             if (t.AudioQuality > 0) parts.Add($"{t.AudioQuality} kbps");
             parts.Add(L.Get(t.Subtitles ? "Options_Subtitles" : "Label_NoSubtitles"));
         }
-        if (t.Mode != "cover" && t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
+        if (t.Mode is "video" or "audio" && t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
         if (t.FolderTemplate.Length > 0) parts.Add(t.FolderTemplate.Replace('/', '\\'));
         return string.Join(" · ", parts);
     }

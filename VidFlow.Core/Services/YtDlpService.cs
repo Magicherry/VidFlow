@@ -92,6 +92,8 @@ public static class YtDlpService
         if (UrlTools.DetectPlatform(req.Url) != Platform.Douyin && (req.IsPhotos || TikTokPhotos.IsPhotoUrl(req.Url)))
             return await TikTokPhotos.DownloadAsync(req, onEvent, ct);
 
+        if (req.IsSubtitles) return await DownloadSubtitlesAsync(req, ct);
+
         string? filePath = null;
         var parser = new YtDlpOutputParser();
         void OnLine(string line)
@@ -141,6 +143,35 @@ public static class YtDlpService
         ct.ThrowIfCancellationRequested();
         if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);
         return filePath;
+    }
+
+    /// <summary>The subtitles alone. With no language chosen it is the uploader's own subtitles in the languages from
+    /// Settings, and failing those the automatic ones in the video's own language. Returns the first file.</summary>
+    static async Task<string> DownloadSubtitlesAsync(DownloadRequest req, CancellationToken ct)
+    {
+        // Douyin's own downloads don't go through yt-dlp, and its videos come without subtitles.
+        if (UrlTools.DetectPlatform(req.Url) == Platform.Douyin) throw new YtDlpException(L.Get("Error_NoSubtitles"));
+        var target = SubtitleFiles.IsText(req.SubtitleFormat) ? "srt" : req.SubtitleFormat;
+
+        async Task<(List<SavedSubtitle> Files, string? Title, string? Url)> RunOnce(DownloadRequest r)
+        {
+            string? result = null;
+            var (code, error) = await RunWithCookieFallbackAsync(r.Url, env => YtDlpArgs.Download(r, AppSettings.Current, env),
+                line => { if (line.StartsWith("VFSUB|", StringComparison.Ordinal)) result = line[6..]; }, ct);
+            ct.ThrowIfCancellationRequested();
+            if (code != 0) throw new YtDlpException(ErrorMapper.Friendly(error), error);
+            return SubtitleFiles.Saved(result, target, r.OutputFolder);
+        }
+
+        var saved = await RunOnce(req);
+        if (saved.Files.Count == 0 && req.SubtitleLanguage.Length == 0)
+        {
+            Log.Info("No subtitles in the chosen languages, trying the automatic ones");
+            saved = await RunOnce(req with { SubtitleLanguage = SubtitleFiles.AutoOriginal });
+        }
+        if (saved.Files.Count == 0) throw new YtDlpException(L.Get("Error_NoSubtitles"));
+        if (!SubtitleFiles.IsText(req.SubtitleFormat)) return saved.Files[0].Path;
+        return saved.Files.Select(f => SubtitleFiles.WriteText(f, req.SubtitleFormat, saved.Title, saved.Url ?? req.Url)).ToList()[0];
     }
 
     /// <summary>"Original" audio: which codec the track has decides the file type (Hi-Res FLAC → .flac). Falls back to

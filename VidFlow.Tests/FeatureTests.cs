@@ -1232,6 +1232,160 @@ public class CoverModeTests
         Assert.Null(FormatCompatibility.Check(new DownloadTemplate { Mode = "cover", Container = "webm", AudioFormat = MediaFeatures.HiRes }));
 }
 
+public class SubtitleModeTests
+{
+    static readonly YtDlpArgs.Environment Env = new(@"C:\ff", null, false, Aria2Path: @"C:\aria2c.exe");
+    static string Arg(List<string> args, string name) => args[args.IndexOf(name) + 1];
+
+    [Fact]
+    public void DownloadsOnlyTheSubtitles()
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", SubtitleFormat = "ass", MaxHeight = 1080, Subtitles = true }
+            .ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.True(req.IsSubtitles);
+        Assert.False(req.WriteSubtitles);
+        Assert.Equal(0, req.MaxHeight);
+        Assert.False(req.NeedsMkv);
+        Assert.Equal(DownloadKind.Subtitles, DownloadFilter.KindOf(req));
+
+        var args = YtDlpArgs.Download(req, new AppSettings { SubtitleLanguages = "zh-Hans,en" }, Env);
+        Assert.Contains("--skip-download", args);
+        Assert.Equal("zh-Hans,en", Arg(args, "--sub-langs"));
+        // The languages in Settings are the uploader's own subtitles: automatic ones there would be machine translations.
+        Assert.DoesNotContain("--write-auto-subs", args);
+        Assert.Equal("ass", Arg(args, "--convert-subs"));
+        Assert.DoesNotContain("-f", args);
+        Assert.DoesNotContain("--downloader", args);
+        Assert.Contains("after_video:" + SubtitleFiles.ResultTemplate, args);
+    }
+
+    [Theory]
+    [InlineData("txt", "srt")]
+    [InlineData("md", "srt")]
+    [InlineData("vtt", "vtt")]
+    [InlineData("lrc", "lrc")]
+    [InlineData("srt", "srt")]
+    public void TextFormatsStartFromSrt(string format, string converted)
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", SubtitleFormat = format }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.Equal(converted, Arg(YtDlpArgs.Download(req, new AppSettings(), Env), "--convert-subs"));
+        // Without ffmpeg nothing converts: ask for the format, else what is there.
+        var plain = YtDlpArgs.Download(req, new AppSettings(), new YtDlpArgs.Environment(null, null, false));
+        Assert.DoesNotContain("--convert-subs", plain);
+        Assert.StartsWith(converted, Arg(plain, "--sub-format"));
+    }
+
+    [Fact]
+    public void AnAutomaticTrackIsAskedForAsOne()
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", SubtitleLanguage = "auto:en-orig" }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        var args = YtDlpArgs.Download(req, new AppSettings(), Env);
+        Assert.Equal("en-orig", Arg(args, "--sub-langs"));
+        Assert.Contains("--write-auto-subs", args);
+        Assert.Equal(("en", false), SubtitleFiles.Languages("en", new AppSettings()));
+    }
+
+    [Fact]
+    public void AnUnknownFormatFallsBackToSrt() =>
+        Assert.Equal("srt", new DownloadTemplate { Mode = "subtitles", SubtitleFormat = "docx" }.ToRequest("u", "o").SubtitleFormat);
+
+    [Fact]
+    public void LabelsSayTheFormat()
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", SubtitleFormat = "md" }.ToRequest("https://www.youtube.com/watch?v=abc", "o");
+        Assert.Contains(VidFlow.Localization.L.Format("Label_Subtitles", "Markdown"), DownloadLabels.Label(req, null));
+        Assert.Contains("Markdown", DownloadLabels.Summary(new DownloadTemplate { Mode = "subtitles", SubtitleFormat = "md" }));
+        Assert.Null(FormatCompatibility.Check(new DownloadTemplate { Mode = "subtitles", Container = "webm", AudioFormat = MediaFeatures.HiRes }));
+    }
+
+    [Fact]
+    public void ListsTheVideosTracks()
+    {
+        var v = Assert.IsType<VideoInfo>(InfoParser.Parse("""
+            {"id":"a","title":"T","webpage_url":"https://www.youtube.com/watch?v=a",
+             "subtitles":{"en":[{"ext":"vtt"}],"live_chat":[{"ext":"json"}],"de":[]},
+             "automatic_captions":{"en-orig":[{"ext":"vtt"}],"fr-en":[{"ext":"vtt"}]}}
+            """, "https://www.youtube.com/watch?v=a"));
+        Assert.Equal(["en"], v.SubtitleLanguages);
+        Assert.Equal(["en-orig"], v.AutoSubtitleLanguages);
+        Assert.True(v.HasSubtitles);
+    }
+
+    const string Rolling = "WEBVTT\nKind: captions\nLanguage: en\n\n"
+        + "00:00:01.000 --> 00:00:03.000 align:start position:0%\nhello <00:00:01.500><c>world</c>\n\n"
+        + "00:00:03.000 --> 00:00:03.010\nhello world\n\n"
+        + "00:00:03.010 --> 00:00:05.000\nhello world\nthis is &amp; that.\n\n"
+        + "00:00:09.000 --> 00:00:10.000\nNew part\n";
+
+    [Fact]
+    public void ReadsRollingCaptionsOnce()
+    {
+        var cues = SubtitleFiles.Parse(Rolling);
+        Assert.Equal(["hello world", "this is & that.", "New part"], cues.Select(c => c.Text));
+        Assert.Equal(TimeSpan.FromSeconds(1), cues[0].Start);
+        Assert.Equal(TimeSpan.FromSeconds(9), cues[2].Start);
+    }
+
+    [Fact]
+    public void ReadsSrt()
+    {
+        var cues = SubtitleFiles.Parse("1\r\n00:01:02,500 --> 00:01:04,000\r\n<i>第一句</i>\r\n第二句\r\n\r\n2\r\n01:00:00,000 --> 01:00:01,000\r\n{\\an8}最后\r\n");
+        Assert.Equal(["第一句\n第二句", "最后"], cues.Select(c => c.Text));
+        Assert.Equal(new TimeSpan(0, 0, 1, 2, 500), cues[0].Start);
+        Assert.Equal("01:00:00", SubtitleFiles.Stamp(cues[1].Start));
+        Assert.Equal("01:02", SubtitleFiles.Stamp(cues[0].Start));
+    }
+
+    [Fact]
+    public void TextIsParagraphsBrokenAtPauses()
+    {
+        var cues = SubtitleFiles.Parse(Rolling);
+        Assert.Equal("hello world this is & that.\n\nNew part\n", SubtitleFiles.ToText(cues));
+        // Chinese lines run on without a space.
+        Assert.Equal("第一句第二句\n", SubtitleFiles.ToText([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "第一句\n第二句")]));
+    }
+
+    [Fact]
+    public void MarkdownHasATitleSourceAndTimes()
+    {
+        var md = SubtitleFiles.ToMarkdown(SubtitleFiles.Parse(Rolling), "My video", "https://youtu.be/a", "en-orig");
+        Assert.StartsWith("# My video\n\n", md);
+        Assert.Contains("<https://youtu.be/a>", md);
+        Assert.Contains("**00:01** hello world this is & that.", md);
+        Assert.Contains("**00:09** New part", md);
+        // A paragraph that would read as a heading or list is escaped.
+        var escaped = SubtitleFiles.ToMarkdown([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "# 1 rule")], "t", null, "en");
+        Assert.Contains("**00:00** \\# 1 rule", escaped);
+    }
+
+    [Fact]
+    public void ReportsOnlyFilesThatExist()
+    {
+        var dir = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            var srt = Path.Combine(dir, "v.en.srt");
+            File.WriteAllText(srt, "1\n00:00:00,000 --> 00:00:01,000\nhi\n");
+            // Printed with the path before converting (.vtt): found under the converted one.
+            var json = "{\"title\":\"T\",\"webpage_url\":\"https://x\",\"requested_subtitles\":{\"en\":{\"ext\":\"vtt\",\"filepath\":"
+                       + System.Text.Json.JsonSerializer.Serialize(Path.ChangeExtension(srt, "vtt")) + "},\"de\":{\"filepath\":\"C:\\\\none.srt\"}}}";
+            var (files, title, url) = SubtitleFiles.Saved(json, "srt");
+            Assert.Equal([new SavedSubtitle("en", srt)], files);
+            Assert.Equal(("T", "https://x"), (title, url));
+            Assert.Empty(SubtitleFiles.Saved("NA", "srt").Files);
+
+            var md = SubtitleFiles.WriteText(files[0], "md", title, url);
+            Assert.Equal(Path.Combine(dir, "v.en.md"), md);
+            Assert.False(File.Exists(srt));
+            Assert.Contains("**00:00** hi", File.ReadAllText(md));
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+}
+
 public class ChapterTests
 {
     static readonly YtDlpArgs.Environment WithFfmpeg = new(@"C:\ff", null, false);

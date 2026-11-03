@@ -24,7 +24,9 @@ public sealed partial class DownloadOptionsEditor : UserControl
     public DownloadOptionsEditor()
     {
         InitializeComponent();
-        AddItems(ModeCombo, ("video", L.Get("Mode_Video")), ("audio", L.Get("Mode_Audio")), ("cover", L.Get("Mode_Cover")));
+        AddItems(ModeCombo, ("video", L.Get("Mode_Video")), ("audio", L.Get("Mode_Audio")), ("cover", L.Get("Mode_Cover")),
+            (DownloadRequest.SubtitlesMode, L.Get("Mode_Subtitles")));
+        AddItems(SubFormatCombo, SubtitleFiles.Formats.Select(f => (f, SubtitleFiles.DisplayName(f))).ToArray());
         AddItems(ContainerCombo, ("mp4", L.Get("Container_Mp4")), ("mkv", L.Get("Container_Mkv")), ("webm", L.Get("Container_Webm")));
         AddItems(FolderCombo, ("", L.Get("Folder_None")), ("{platform}", L.Get("Folder_Platform")), ("{uploader}", L.Get("Folder_Uploader")),
             ("{year}-{month}", L.Get("Folder_Month")), ("{platform}/{uploader}", L.Get("Folder_PlatformUploader")));
@@ -83,7 +85,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
     public void MakeReadOnly()
     {
         foreach (var input in new Control[] { ModeCombo, QualityCombo, CodecCombo, PictureCombo, ContainerCombo, AudioFormatCombo,
-                     AudioQualityCombo, AudioTrackCombo, SubsToggle, RecodeToggle, FileNamePresetCombo, FileNameBox, FolderCombo, CompatFixButton })
+                     AudioQualityCombo, AudioTrackCombo, SubFormatCombo, SubLanguageCombo, SubsToggle, RecodeToggle, FileNamePresetCombo, FileNameBox, FolderCombo, CompatFixButton })
             input.IsEnabled = false;
         VariablePanel.Visibility = Visibility.Collapsed;
         AudioExpander.IsExpanded = true;
@@ -95,7 +97,9 @@ public sealed partial class DownloadOptionsEditor : UserControl
         _video = video;
         _loading = true;
 
-        Select(ModeCombo, options.Mode is "audio" or "cover" ? options.Mode : "video");
+        Select(ModeCombo, options.Mode is "audio" or "cover" or DownloadRequest.SubtitlesMode ? options.Mode : "video");
+        Select(SubFormatCombo, SubtitleFiles.Normalize(options.SubtitleFormat));
+        FillSubtitleLanguages();
         FillQualities();
         FillCodecs();
         FillPictures();
@@ -234,6 +238,22 @@ public sealed partial class DownloadOptionsEditor : UserControl
         Select(AudioTrackCombo, _options.AudioLanguage);
     }
 
+    /// <summary>The languages in Settings, then each track the video has: the uploader's own, then automatic ones.</summary>
+    void FillSubtitleLanguages()
+    {
+        SubLanguageCombo.Items.Clear();
+        AddItems(SubLanguageCombo, ("", L.Get("SubLang_Settings")));
+        foreach (var code in _video?.SubtitleLanguages ?? [])
+            AddItems(SubLanguageCombo, (code, $"{SubtitleFiles.LanguageName(code)} ({code})"));
+        foreach (var code in _video?.AutoSubtitleLanguages ?? [])
+            AddItems(SubLanguageCombo, (SubtitleFiles.AutoPrefix + code, L.Format("SubLang_Auto", SubtitleFiles.LanguageName(code))));
+        // A track another video had (from a template) means nothing here.
+        if (!SubLanguageCombo.Items.Cast<ComboBoxItem>().Any(i => (string)i.Tag == _options.SubtitleLanguage)) _options.SubtitleLanguage = "";
+        Select(SubLanguageCombo, _options.SubtitleLanguage);
+        SubLanguageCard.Description = _video is { HasSubtitles: false }
+            ? L.Get("Options_SubtitleNone") : L.Get("Options_SubtitleLanguageDescription");
+    }
+
     static string LanguageName(string code)
     {
         try
@@ -265,6 +285,8 @@ public sealed partial class DownloadOptionsEditor : UserControl
         if (audioQuality != 0 || TopAudioKbps is not { } top || _options.AudioQuality < top) _options.AudioQuality = audioQuality;
         _options.AudioLanguage = TagOf(AudioTrackCombo) ?? "";
         _options.Subtitles = SubsToggle.IsOn;
+        _options.SubtitleFormat = TagOf(SubFormatCombo) ?? SubtitleFiles.DefaultFormat;
+        _options.SubtitleLanguage = TagOf(SubLanguageCombo) ?? "";
         _options.Recode = RecodeToggle.IsOn;
         _options.FolderTemplate = TagOf(FolderCombo) ?? "";
 
@@ -345,20 +367,25 @@ public sealed partial class DownloadOptionsEditor : UserControl
     {
         var video = _options.Mode == "video";
         var cover = _options.Mode == "cover";
+        var subtitles = _options.Mode == DownloadRequest.SubtitlesMode;
         QualityCard.Visibility = CodecCard.Visibility = ContainerCard.Visibility = RecodeCard.Visibility =
             video ? Visibility.Visible : Visibility.Collapsed;
-        // A cover is just the image: no sound or subtitles to choose.
-        AudioExpander.Visibility = SubtitlesCard.Visibility = cover ? Visibility.Collapsed : Visibility.Visible;
+        // A cover is just the image, subtitles just the text: no sound to choose.
+        AudioExpander.Visibility = SubtitlesCard.Visibility = cover || subtitles ? Visibility.Collapsed : Visibility.Visible;
+        SubFormatCard.Visibility = subtitles ? Visibility.Visible : Visibility.Collapsed;
+        // Which tracks there are is only known for a parsed video (not in the template editor).
+        SubLanguageCard.Visibility = subtitles && _video is not null ? Visibility.Visible : Visibility.Collapsed;
         // Nothing to choose for a video that is SDR only.
         PictureCard.Visibility = video && (_video is null || _video.HdrKinds.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
 
         var request = _options.ToRequest("", "");
-        var ext = cover ? "jpg"
+        var ext = subtitles ? SubtitleFiles.Normalize(_options.SubtitleFormat)
+            : cover ? "jpg"
             : video ? (request.NeedsMkv ? "mkv" : _options.Container)
             : _options.AudioFormat == MediaFeatures.Original ? (_video?.HasHiRes == true ? "flac" : "m4a")
             : _options.AudioFormat;
         PreviewText.Text = $"{L.Get("Options_PreviewRoot")}\\{NamingTemplate.Preview(_options.FileNameTemplate, _options.FolderTemplate, ext)}";
-        PreviewIcon.Glyph = cover ? "" : video ? "" : "";
+        PreviewIcon.Glyph = subtitles ? "\uED1E" : cover ? "" : video ? "" : "";
         var unknown = NamingTemplate.UnknownVariables(_options.FileNameTemplate);
         UnknownVariableText.Visibility = unknown.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         if (unknown.Count > 0)

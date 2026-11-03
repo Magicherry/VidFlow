@@ -68,6 +68,8 @@ public static class InfoParser
             AudioBytes = audioBytes,
             Codecs = codecs,
             AudioLanguages = audioLanguages,
+            SubtitleLanguages = SubtitleKeys(root, "subtitles").Where(k => k is not ("live_chat" or "danmaku")).ToList(),
+            AutoSubtitleLanguages = SubtitleKeys(root, "automatic_captions").Where(k => k.EndsWith("-orig", StringComparison.Ordinal)).ToList(),
         };
     }
 
@@ -152,6 +154,11 @@ public static class InfoParser
         }
         return best.Count < 2 ? [] : best.OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key).Select(kv => kv.Key).ToList();
     }
+
+    static IEnumerable<string> SubtitleKeys(JsonElement root, string name) =>
+        root.TryGetProperty(name, out var subs) && subs.ValueKind == JsonValueKind.Object
+            ? subs.EnumerateObject().Where(s => s.Value.ValueKind == JsonValueKind.Array && s.Value.GetArrayLength() > 0).Select(s => s.Name).ToList()
+            : [];
 
     static long? Size(JsonElement f, double? duration)
     {

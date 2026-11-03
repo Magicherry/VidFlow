@@ -88,6 +88,21 @@ public static class YtDlpArgs
             return args;
         }
 
+        if (req.IsSubtitles)
+        {
+            var (langs, automatic) = SubtitleFiles.Languages(req.SubtitleLanguage, s);
+            args.AddRange(["--skip-download", "--write-subs", "--sub-langs", langs]);
+            if (automatic) args.Add("--write-auto-subs");
+            // TXT and Markdown are written by VidFlow from SRT; the timed formats are ffmpeg's conversions.
+            var target = SubtitleFiles.IsText(req.SubtitleFormat) ? "srt" : req.SubtitleFormat;
+            args.AddRange(hasFfmpeg ? ["--convert-subs", target] : ["--sub-format", target == "srt" ? "srt/vtt/best" : $"{target}/best"]);
+            // Nothing is downloaded, so "after_move" never comes: list the files saved instead.
+            args.AddRange(["--print", "after_video:" + SubtitleFiles.ResultTemplate]);
+            args.AddRange(Common(s, env));
+            args.Add(req.Url);
+            return args;
+        }
+
         var lang = LanguageFilter(req.AudioLanguage);
         var splitAudio = SplitDownloaders(platform, env);
         if (!req.IsAudio)

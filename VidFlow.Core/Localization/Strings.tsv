@@ -502,3 +502,17 @@ Compat_UseMkv	Use MKV	改用 MKV
 Settings_MultiConnection	Multi-connection acceleration	多连接加速
 Settings_MultiConnectionNeedsAria2	Needs aria2 · install it in About & updates	需要 aria2 · 可在「关于与更新」中安装
 Error_NoCover	This video has no cover image.	这个作品没有封面图片。
+Mode_Subtitles	Subtitles	字幕
+Options_SubtitleFormat	Subtitle format	字幕格式
+Options_SubtitleFormatDescription	TXT and Markdown keep the words only, for reading or notes	TXT 与 Markdown 只保留文字，适合阅读或做笔记
+Options_SubtitleLanguage	Subtitle language	字幕语言
+Options_SubtitleLanguageDescription	By default the languages in Settings; auto-generated ones when there are none	默认使用设置中的语言；没有时使用自动生成的字幕
+Options_SubtitleNone	No subtitles were found for this video	没有找到这个视频的字幕
+SubLang_Settings	Languages in Settings	设置中的语言
+SubLang_Auto	{0} (auto-generated)	{0}（自动生成）
+SubFormat_Txt	Plain text (TXT)	纯文本（TXT）
+SubFormat_Md	Markdown (with timestamps)	Markdown（带时间戳）
+Label_Subtitles	{0} subtitles	{0} 字幕
+Error_NoSubtitles	No subtitles were found in the chosen languages. Pick another language, or add languages in Settings.	没有找到所选语言的字幕。可以换一种语言，或在设置中添加字幕语言。
+Subtitles_MdSource	Source	来源
+Subtitles_MdLanguage	Language	语言

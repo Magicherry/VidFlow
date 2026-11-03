@@ -113,6 +113,7 @@
   <data name="Error_NoCover" xml:space="preserve"><value>这个作品没有封面图片。</value></data>
   <data name="Error_NoFfmpeg" xml:space="preserve"><value>此操作需要 ffmpeg，请在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_NoFormats" xml:space="preserve"><value>网站没有返回可下载的格式。在 YouTube 上通常是登录状态（Cookie）已失效所致，可在「账号」页面中退出 YouTube 登录后重试，或更新 yt-dlp。</value></data>
+  <data name="Error_NoSubtitles" xml:space="preserve"><value>没有找到所选语言的字幕。可以换一种语言，或在设置中添加字幕语言。</value></data>
   <data name="Error_NoYtDlp" xml:space="preserve"><value>未找到 yt-dlp，请先在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_Private" xml:space="preserve"><value>这是私享 / 会员视频，需要登录有权限观看的账号。</value></data>
   <data name="Error_RateLimited" xml:space="preserve"><value>请求过于频繁，请稍后或更换代理节点后重试。</value></data>
@@ -178,6 +179,7 @@
   <data name="Label_Mp3" xml:space="preserve"><value>MP3 音频</value></data>
   <data name="Label_Mp4Best" xml:space="preserve"><value>MP4 · 最高画质</value></data>
   <data name="Label_NoSubtitles" xml:space="preserve"><value>不下载字幕</value></data>
+  <data name="Label_Subtitles" xml:space="preserve"><value>{0} 字幕</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新</value></data>
@@ -205,6 +207,7 @@
   <data name="Mode_M4a" xml:space="preserve"><value>音频 (M4A)</value></data>
   <data name="Mode_Mp3" xml:space="preserve"><value>音频 (MP3)</value></data>
   <data name="Mode_Photos" xml:space="preserve"><value>图片</value></data>
+  <data name="Mode_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Mode_Video" xml:space="preserve"><value>视频</value></data>
   <data name="Naming_Custom" xml:space="preserve"><value>自定义</value></data>
   <data name="Naming_InsertVariable" xml:space="preserve"><value>插入「{0}」</value></data>
@@ -259,6 +262,11 @@
   <data name="Options_Recode" xml:space="preserve"><value>不兼容时自动转换</value></data>
   <data name="Options_RecodeDescription" xml:space="preserve"><value>格式不兼容时重新编码（较慢），否则存为 MKV</value></data>
   <data name="Options_Subfolder" xml:space="preserve"><value>子文件夹分类</value></data>
+  <data name="Options_SubtitleFormat" xml:space="preserve"><value>字幕格式</value></data>
+  <data name="Options_SubtitleFormatDescription" xml:space="preserve"><value>TXT 与 Markdown 只保留文字，适合阅读或做笔记</value></data>
+  <data name="Options_SubtitleLanguage" xml:space="preserve"><value>字幕语言</value></data>
+  <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>默认使用设置中的语言；没有时使用自动生成的字幕</value></data>
+  <data name="Options_SubtitleNone" xml:space="preserve"><value>没有找到这个视频的字幕</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
   <data name="Options_SubtitlesDescription" xml:space="preserve"><value>字幕语言在设置中调整</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
@@ -397,6 +405,12 @@
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>视频流已完成，正在下载音频流…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>视频流</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>等待中…</value></data>
+  <data name="SubFormat_Md" xml:space="preserve"><value>Markdown（带时间戳）</value></data>
+  <data name="SubFormat_Txt" xml:space="preserve"><value>纯文本（TXT）</value></data>
+  <data name="SubLang_Auto" xml:space="preserve"><value>{0}（自动生成）</value></data>
+  <data name="SubLang_Settings" xml:space="preserve"><value>设置中的语言</value></data>
+  <data name="Subtitles_MdLanguage" xml:space="preserve"><value>语言</value></data>
+  <data name="Subtitles_MdSource" xml:space="preserve"><value>来源</value></data>
   <data name="Template_BuiltInSuffix" xml:space="preserve"><value>{0}（内置）</value></data>
   <data name="Template_CopyName" xml:space="preserve"><value>{0} 副本</value></data>
   <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0}（默认）</value></data>

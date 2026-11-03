@@ -25,7 +25,7 @@ public sealed partial class DownloadsPage : Page
         PlatformCombo.SelectedIndex = 0;
         SettingsPage.AddItems(KindCombo, ("", L.Get("Downloads_AllKinds")), (nameof(DownloadKind.Video), L.Get("Mode_Video")),
             (nameof(DownloadKind.Audio), L.Get("Mode_Audio")), (nameof(DownloadKind.Cover), L.Get("Mode_Cover")),
-            (nameof(DownloadKind.Photos), L.Get("Mode_Photos")));
+            (nameof(DownloadKind.Photos), L.Get("Mode_Photos")), (nameof(DownloadKind.Subtitles), L.Get("Mode_Subtitles")));
         KindCombo.SelectedIndex = 0;
         StatusBar.SelectedItem = StatusBar.Items[0];
 

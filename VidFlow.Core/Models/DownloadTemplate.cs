@@ -21,7 +21,7 @@ public sealed class DownloadTemplate
     public bool IsBuiltIn => NameKey is not null;
     public string DisplayName => NameKey is null ? Name : L.Get(NameKey);
 
-    public string Mode { get; set; } = "video";            // video | audio | cover
+    public string Mode { get; set; } = "video";            // video | audio | cover | subtitles
     public int MaxHeight { get; set; }                     // 0 = best (original)
     public string Codec { get; set; } = VideoCodecs.Auto;
 
@@ -34,6 +34,12 @@ public sealed class DownloadTemplate
     public string AudioLanguage { get; set; } = "";
     public bool Recode { get; set; }
     public bool Subtitles { get; set; }
+
+    /// <summary>Subtitles only: the file format (see <see cref="SubtitleFiles.Formats"/>).</summary>
+    public string SubtitleFormat { get; set; } = SubtitleFiles.DefaultFormat;
+
+    /// <summary>Subtitles only: "" for the languages in Settings, else one track of the parsed video.</summary>
+    public string SubtitleLanguage { get; set; } = "";
     public string FileNameTemplate { get; set; } = NamingTemplate.DefaultFileName;
     public string FolderTemplate { get; set; } = "";
 
@@ -52,6 +58,8 @@ public sealed class DownloadTemplate
         AudioLanguage = AudioLanguage,
         Recode = Recode,
         Subtitles = Subtitles,
+        SubtitleFormat = SubtitleFormat,
+        SubtitleLanguage = SubtitleLanguage,
         FileNameTemplate = FileNameTemplate,
         FolderTemplate = FolderTemplate,
     };
@@ -60,10 +68,12 @@ public sealed class DownloadTemplate
     public bool SameOptionsAs(DownloadTemplate o) =>
         Mode == o.Mode && MaxHeight == o.MaxHeight && Codec == o.Codec && DynamicRange == o.DynamicRange && Container == o.Container
         && AudioFormat == o.AudioFormat && AudioQuality == o.AudioQuality && AudioLanguage == o.AudioLanguage
-        && Recode == o.Recode && Subtitles == o.Subtitles && FileNameTemplate == o.FileNameTemplate
+        && Recode == o.Recode && Subtitles == o.Subtitles && SubtitleFormat == o.SubtitleFormat && SubtitleLanguage == o.SubtitleLanguage
+        && FileNameTemplate == o.FileNameTemplate
         && FolderTemplate == o.FolderTemplate;
 
     public DownloadRequest ToRequest(string url, string baseFolder) =>
-        new(url, Mode is "audio" or "cover" ? Mode : "video", Mode == "video" ? MaxHeight : 0, Subtitles && Mode != "cover", baseFolder,
-            Codec, Container, AudioFormat, AudioQuality, AudioLanguage, Recode, FileNameTemplate, FolderTemplate, DynamicRange);
+        new(url, Mode is "audio" or "cover" or DownloadRequest.SubtitlesMode ? Mode : "video", Mode == "video" ? MaxHeight : 0,
+            Subtitles && Mode is "video" or "audio", baseFolder, Codec, Container, AudioFormat, AudioQuality, AudioLanguage, Recode,
+            FileNameTemplate, FolderTemplate, DynamicRange, SubtitleFiles.Normalize(SubtitleFormat), SubtitleLanguage);
 }

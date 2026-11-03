@@ -62,6 +62,14 @@ public sealed class VideoInfo : MediaInfo
     /// <summary>Audio track languages offered (YouTube multi-language audio); the original track first.</summary>
     public IReadOnlyList<string> AudioLanguages { get; init; } = [];
 
+    /// <summary>Subtitle languages the uploader provided, as yt-dlp names them.</summary>
+    public IReadOnlyList<string> SubtitleLanguages { get; init; } = [];
+
+    /// <summary>Automatically generated subtitles in the video's own language ("en-orig"), not machine translations.</summary>
+    public IReadOnlyList<string> AutoSubtitleLanguages { get; init; } = [];
+
+    public bool HasSubtitles => SubtitleLanguages.Count > 0 || AutoSubtitleLanguages.Count > 0;
+
     /// <summary>High dynamic range kinds offered ("DV", "HDR10", "HDR10+", "HLG"), best first; empty when SDR only.</summary>
     public IReadOnlyList<string> HdrKinds { get; init; } = [];
 
@@ -97,7 +105,7 @@ public sealed class PlaylistEntry
 /// parameters have defaults so download lists saved by older versions still load.</summary>
 public sealed record DownloadRequest(
     string Url,
-    string Mode,                      // video | audio | cover (older lists may contain mp3 / m4a, meaning audio)
+    string Mode,                      // video | audio | cover | subtitles | photos (older lists may contain mp3 / m4a, meaning audio)
     int MaxHeight,                    // 0 = best
     bool WriteSubtitles,
     string OutputFolder,              // base folder; FolderTemplate subfolders go inside it
@@ -109,7 +117,9 @@ public sealed record DownloadRequest(
     bool Recode = false,              // re-encode when the streams don't fit the container
     string FileNameTemplate = NamingTemplate.DefaultFileName,
     string FolderTemplate = "",
-    string DynamicRange = MediaFeatures.Auto) // auto, dv, sdr (see MediaFeatures)
+    string DynamicRange = MediaFeatures.Auto, // auto, dv, sdr (see MediaFeatures)
+    string SubtitleFormat = SubtitleFiles.DefaultFormat, // subtitles only: srt, vtt, ass, lrc, txt, md
+    string SubtitleLanguage = "")     // subtitles only: "" = the languages in Settings, "auto:xx" = automatic, else a code
 {
     public bool IsAudio => Mode is "audio" or "mp3" or "m4a";
 
@@ -118,6 +128,10 @@ public sealed record DownloadRequest(
 
     /// <summary>All the images of a photo post, see <c>TikTokPhotos</c>.</summary>
     public const string PhotosMode = "photos";
+
+    /// <summary>The subtitles alone, in <see cref="SubtitleFormat"/>, see <c>SubtitleFiles</c>.</summary>
+    public const string SubtitlesMode = "subtitles";
+    public bool IsSubtitles => Mode == SubtitlesMode;
     public bool IsPhotos => Mode == PhotosMode;
 
     /// <summary>Output format for audio-only downloads ("best" keeps the source's own format).</summary>
@@ -128,5 +142,5 @@ public sealed record DownloadRequest(
     };
 
     /// <summary>The picture or sound chosen can't go in MP4 (yt-dlp would merge into MKV anyway): say MKV up front.</summary>
-    public bool NeedsMkv => !IsAudio && !IsCover && !IsPhotos && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
+    public bool NeedsMkv => !IsAudio && !IsCover && !IsPhotos && !IsSubtitles && (DynamicRange == MediaFeatures.DolbyVision || AudioFormat == MediaFeatures.HiRes);
 }
