@@ -140,7 +140,11 @@ public static class AccountService
                 await Task.Delay(500, ct);
                 try
                 {
-                    if (System.Text.Json.JsonSerializer.Deserialize<string>(await web.ExecuteScriptAsync(script)) is { Length: > 0 } json)
+                    // The script's result comes back as JSON: a string, or null. Read without JsonSerializer, whose
+                    // reflection is switched off in the trimmed release build.
+                    using var result = System.Text.Json.JsonDocument.Parse(await web.ExecuteScriptAsync(script));
+                    if (result.RootElement.ValueKind == System.Text.Json.JsonValueKind.String
+                        && result.RootElement.GetString() is { Length: > 0 } json)
                         detail.TrySetResult(json);
                 }
                 catch (Exception ex) when (ex is not OperationCanceledException)
