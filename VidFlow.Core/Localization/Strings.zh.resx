@@ -252,7 +252,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>下载列表</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>新建下载</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>设置</value></data>
-  <data name="Nav_Templates" xml:space="preserve"><value>下载模板</value></data>
+  <data name="Nav_Templates" xml:space="preserve"><value>预设模板</value></data>
   <data name="Notify_BatchCompleted" xml:space="preserve"><value>{0} 个下载已全部完成</value></data>
   <data name="Notify_Completed" xml:space="preserve"><value>下载完成</value></data>
   <data name="Notify_Failed" xml:space="preserve"><value>下载失败</value></data>
@@ -336,12 +336,9 @@
   <data name="Settings_AddOns" xml:space="preserve"><value>附加组件</value></data>
   <data name="Settings_AddOnsDescription" xml:space="preserve"><value>语音识别、显卡加速，按需下载</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>外观</value></data>
-  <data name="Settings_AppearanceDescription" xml:space="preserve"><value>语言、应用主题</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>未安装 · 可大幅提升下载速度（推荐）</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新组件</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查，在没有下载任务时于后台更新；过旧的 yt-dlp 常导致下载失败</value></data>
-  <data name="Settings_Background" xml:space="preserve"><value>后台与通知</value></data>
-  <data name="Settings_BackgroundDescription" xml:space="preserve"><value>托盘、下载通知</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 需先关闭浏览器</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
@@ -365,11 +362,17 @@
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>随字幕一起保存为 XML</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>未安装 · YouTube 部分格式需要（推荐）</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>下载</value></data>
-  <data name="Settings_DownloadsDescription" xml:space="preserve"><value>保存位置、同时下载数、监听剪贴板</value></data>
+  <data name="Settings_DownloadsDescription" xml:space="preserve"><value>保存位置、同时下载数、速度、代理</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>未安装 · 用于合并高清音视频、提取音频（推荐）</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>默认保存位置</value></data>
-  <data name="Settings_GroupApp" xml:space="preserve"><value>通用</value></data>
-  <data name="Settings_GroupDownloading" xml:space="preserve"><value>下载与文件</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>常规</value></data>
+  <data name="Settings_GeneralDescription" xml:space="preserve"><value>语言、主题、托盘、剪贴板、通知</value></data>
+  <data name="Settings_GroupBehavior" xml:space="preserve"><value>行为</value></data>
+  <data name="Settings_GroupNetwork" xml:space="preserve"><value>网络</value></data>
+  <data name="Settings_GroupNotifications" xml:space="preserve"><value>通知</value></data>
+  <data name="Settings_GroupSaving" xml:space="preserve"><value>保存</value></data>
+  <data name="Settings_GroupSpeed" xml:space="preserve"><value>速度</value></data>
+  <data name="Settings_GroupVideo" xml:space="preserve"><value>视频</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>兼容模式</value></data>
   <data name="Settings_H264Description" xml:space="preserve"><value>优先 H.264 / AAC，适合旧设备，画质可能受限</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>安装</value></data>
@@ -379,12 +382,12 @@
   <data name="Settings_InstallManaged" xml:space="preserve"><value>安装独立版本</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>语言</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>跟随系统</value></data>
+  <data name="Settings_Media" xml:space="preserve"><value>视频与字幕</value></data>
+  <data name="Settings_MediaDescription" xml:space="preserve"><value>兼容模式、封面与元数据、章节、SponsorBlock、字幕语言</value></data>
   <data name="Settings_Metadata" xml:space="preserve"><value>嵌入封面与元数据</value></data>
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>写入标题、作者和封面</value></data>
   <data name="Settings_MultiConnection" xml:space="preserve"><value>多连接加速</value></data>
   <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>需要 aria2 · 可在「关于与更新」中安装</value></data>
-  <data name="Settings_NetworkDescription" xml:space="preserve"><value>代理、连接测试、多连接加速、限速</value></data>
-  <data name="Settings_NetworkSpeed" xml:space="preserve"><value>网络与速度</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>下载完成通知</value></data>
   <data name="Settings_NotifyDescription" xml:space="preserve"><value>VidFlow 在后台时提醒</value></data>
   <data name="Settings_NotifyFailure" xml:space="preserve"><value>失败与异常通知</value></data>
@@ -429,12 +432,11 @@
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>其他语言</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>语言代码，用逗号分隔</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>字幕</value></data>
-  <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>字幕语言、哔哩哔哩弹幕</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>未选择语言，将保存中文和英文字幕</value></data>
   <data name="Settings_SubtitlesSection" xml:space="preserve"><value>字幕</value></data>
   <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>{0}</value></data>
-  <data name="Settings_Templates" xml:space="preserve"><value>下载模板</value></data>
-  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>新建下载会套用默认模板</value></data>
+  <data name="Settings_Templates" xml:space="preserve"><value>预设模板</value></data>
+  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>新建下载会使用默认预设</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>应用主题</value></data>
   <data name="Settings_ThemeDark" xml:space="preserve"><value>深色</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>浅色</value></data>
@@ -447,8 +449,6 @@
   <data name="Settings_Updates" xml:space="preserve"><value>应用更新</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>更新到 {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>已是最新</value></data>
-  <data name="Settings_VideoFiles" xml:space="preserve"><value>视频文件</value></data>
-  <data name="Settings_VideoFilesDescription" xml:space="preserve"><value>兼容模式、封面与元数据、章节、SponsorBlock</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>未安装 · 用于解析和下载视频（必需）</value></data>
   <data name="Size_Approx" xml:space="preserve"><value>约 {0}</value></data>
   <data name="Status_AudioStream" xml:space="preserve"><value>音频流</value></data>
@@ -482,30 +482,30 @@
   <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0}（默认）</value></data>
   <data name="Template_Delete" xml:space="preserve"><value>删除</value></data>
   <data name="Template_DeleteBody" xml:space="preserve"><value>已添加的下载任务不受影响。</value></data>
-  <data name="Template_DeletePresetBody" xml:space="preserve"><value>之后可通过「还原内置模板」恢复。</value></data>
+  <data name="Template_DeletePresetBody" xml:space="preserve"><value>之后可通过「还原内置预设」恢复。</value></data>
   <data name="Template_DeleteTitle" xml:space="preserve"><value>删除「{0}」？</value></data>
   <data name="Template_Duplicate" xml:space="preserve"><value>复制</value></data>
   <data name="Template_DuplicateToEdit" xml:space="preserve"><value>复制后编辑</value></data>
   <data name="Template_Edit" xml:space="preserve"><value>编辑</value></data>
-  <data name="Template_EditTitle" xml:space="preserve"><value>编辑模板</value></data>
-  <data name="Template_Header" xml:space="preserve"><value>下载模板</value></data>
+  <data name="Template_EditTitle" xml:space="preserve"><value>编辑预设</value></data>
+  <data name="Template_Header" xml:space="preserve"><value>预设</value></data>
   <data name="Template_IsDefault" xml:space="preserve"><value>默认</value></data>
-  <data name="Template_ModifiedHint" xml:space="preserve"><value>已针对本次下载修改（不影响模板）</value></data>
+  <data name="Template_ModifiedHint" xml:space="preserve"><value>已针对本次下载修改（不影响预设）</value></data>
   <data name="Template_Name" xml:space="preserve"><value>名称</value></data>
-  <data name="Template_New" xml:space="preserve"><value>新建模板</value></data>
-  <data name="Template_NewName" xml:space="preserve"><value>我的模板</value></data>
-  <data name="Template_NewTitle" xml:space="preserve"><value>新建模板</value></data>
+  <data name="Template_New" xml:space="preserve"><value>新建预设</value></data>
+  <data name="Template_NewName" xml:space="preserve"><value>我的预设</value></data>
+  <data name="Template_NewTitle" xml:space="preserve"><value>新建预设</value></data>
   <data name="Template_Rename" xml:space="preserve"><value>重命名</value></data>
-  <data name="Template_Reset" xml:space="preserve"><value>恢复模板设置</value></data>
-  <data name="Template_SaveAs" xml:space="preserve"><value>另存为模板</value></data>
-  <data name="Template_SaveAsTitle" xml:space="preserve"><value>另存为模板</value></data>
+  <data name="Template_Reset" xml:space="preserve"><value>恢复预设</value></data>
+  <data name="Template_SaveAs" xml:space="preserve"><value>另存为预设</value></data>
+  <data name="Template_SaveAsTitle" xml:space="preserve"><value>另存为预设</value></data>
   <data name="Template_SetDefault" xml:space="preserve"><value>设为默认</value></data>
   <data name="Template_View" xml:space="preserve"><value>查看设置</value></data>
-  <data name="Templates_BuiltIn" xml:space="preserve"><value>内置模板</value></data>
-  <data name="Templates_Empty" xml:space="preserve"><value>还没有自定义模板</value></data>
-  <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建模板」，或复制一个内置模板</value></data>
-  <data name="Templates_Mine" xml:space="preserve"><value>我的模板</value></data>
-  <data name="Templates_RestorePresets" xml:space="preserve"><value>还原内置模板</value></data>
+  <data name="Templates_BuiltIn" xml:space="preserve"><value>内置预设</value></data>
+  <data name="Templates_Empty" xml:space="preserve"><value>还没有自定义预设</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>点击「新建预设」，或复制一个内置预设</value></data>
+  <data name="Templates_Mine" xml:space="preserve"><value>我的预设</value></data>
+  <data name="Templates_RestorePresets" xml:space="preserve"><value>还原内置预设</value></data>
   <data name="Title_UpdateAvailable" xml:space="preserve"><value>新版本 {0}</value></data>
   <data name="Title_UpdateAvailableTip" xml:space="preserve"><value>下载 VidFlow {0}</value></data>
   <data name="Title_UpdateDownloading" xml:space="preserve"><value>正在更新 {0}%</value></data>

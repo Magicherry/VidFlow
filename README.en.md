@@ -42,7 +42,7 @@
 - **Content**: video, audio (MP3 / M4A / Opus / FLAC / WAV) or just the cover image
 - **Formats**: qualities listed as actually available, with estimated sizes; H.264 / H.265 / AV1 in MP4 / MKV / WebM; incompatible combinations are flagged and fixed in one click
 - **Extras**: audio tracks in other languages, subtitles, Bilibili danmaku, embedded cover, metadata and chapters; SponsorBlock marks or cuts sponsor segments on YouTube
-- **Templates and naming**: five built-in templates plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date
+- **Presets and naming**: five built-in presets plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date
 - **Queue**: pause and resume, retry, speed limit, parallel downloads; unfinished downloads continue after a restart
 - **Convenience**: drag a link onto the window or let VidFlow watch the clipboard; the app updates itself and rolls back if an update fails; Chinese and English UI
 
@@ -52,7 +52,7 @@
   <tr>
     <td width="33%"><img src="docs/images/platforms-en.png" alt="New download and supported platforms"><br><sub>Supported platforms</sub></td>
     <td width="33%"><img src="docs/images/batch-en.png" alt="Several links parsed at once"><br><sub>Several links at once</sub></td>
-    <td width="33%"><img src="docs/images/templates-en.png" alt="Download templates"><br><sub>Download templates</sub></td>
+    <td width="33%"><img src="docs/images/templates-en.png" alt="Presets"><br><sub>Presets</sub></td>
   </tr>
 </table>
 

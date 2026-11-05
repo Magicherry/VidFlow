@@ -6,7 +6,7 @@ using VidFlow.Services;
 
 namespace VidFlow.Pages;
 
-/// <summary>App-wide preferences: a list of categories, and each category as a page of its own ("settings/network"),
+/// <summary>App-wide preferences: a list of categories, and each category as a page of its own ("settings/downloads"),
 /// navigated to with the category as the parameter. About &amp; updates is a page of its own too (<see cref="AboutPage"/>).</summary>
 public sealed partial class SettingsPage : Page
 {
@@ -15,12 +15,9 @@ public sealed partial class SettingsPage : Page
     /// <summary>Each category's panel and title (the Tag of its card on the list).</summary>
     (StackPanel Panel, string Title)? CategoryOf(string? name) => name switch
     {
+        "general" => (GeneralPanel, "Settings_General"),
         "downloads" => (DownloadsPanel, "Settings_Downloads"),
-        "video" => (VideoPanel, "Settings_VideoFiles"),
-        "subtitles" => (SubtitlesPanel, "Settings_SubtitlesSection"),
-        "network" => (NetworkPanel, "Settings_NetworkSpeed"),
-        "appearance" => (AppearancePanel, "Settings_Appearance"),
-        "background" => (BackgroundPanel, "Settings_Background"),
+        "media" => (MediaPanel, "Settings_Media"),
         "addons" => (AddOnsPanel, "Settings_AddOns"),
         _ => null,
     };
@@ -32,7 +29,7 @@ public sealed partial class SettingsPage : Page
         CategoryPanel.Visibility = category is null ? Visibility.Visible : Visibility.Collapsed;
         TitleText.Visibility = category is null ? Visibility.Visible : Visibility.Collapsed;
         Breadcrumb.Visibility = category is null ? Visibility.Collapsed : Visibility.Visible;
-        foreach (var panel in new[] { DownloadsPanel, VideoPanel, SubtitlesPanel, NetworkPanel, AppearancePanel, BackgroundPanel, AddOnsPanel })
+        foreach (var panel in new[] { GeneralPanel, DownloadsPanel, MediaPanel, AddOnsPanel })
             panel.Visibility = panel == category?.Panel ? Visibility.Visible : Visibility.Collapsed;
         if (category is { } c) Breadcrumb.ItemsSource = new[] { L.Get("Nav_Settings"), L.Get(c.Title) };
     }

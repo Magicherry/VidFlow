@@ -52,10 +52,16 @@
 
                 <!--  The categories, each a page of its own (Tag: the page's name after "settings/")  -->
                 <StackPanel x:Name="CategoryPanel" Spacing="4">
-                    <TextBlock
-                        Margin="1,8,0,4"
-                        Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="{x:Bind l:L.Get('Settings_GroupDownloading')}" />
+                    <tk:SettingsCard
+                        Click="Category_Click"
+                        Description="{x:Bind l:L.Get('Settings_GeneralDescription')}"
+                        Header="{x:Bind l:L.Get('Settings_General')}"
+                        IsClickEnabled="True"
+                        Tag="general">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE713;" />
+                        </tk:SettingsCard.HeaderIcon>
+                    </tk:SettingsCard>
                     <tk:SettingsCard
                         Click="Category_Click"
                         Description="{x:Bind l:L.Get('Settings_DownloadsDescription')}"
@@ -68,53 +74,12 @@
                     </tk:SettingsCard>
                     <tk:SettingsCard
                         Click="Category_Click"
-                        Description="{x:Bind l:L.Get('Settings_VideoFilesDescription')}"
-                        Header="{x:Bind l:L.Get('Settings_VideoFiles')}"
+                        Description="{x:Bind l:L.Get('Settings_MediaDescription')}"
+                        Header="{x:Bind l:L.Get('Settings_Media')}"
                         IsClickEnabled="True"
-                        Tag="video">
+                        Tag="media">
                         <tk:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE714;" />
-                        </tk:SettingsCard.HeaderIcon>
-                    </tk:SettingsCard>
-                    <tk:SettingsCard
-                        Click="Category_Click"
-                        Description="{x:Bind l:L.Get('Settings_SubtitlesDescription')}"
-                        Header="{x:Bind l:L.Get('Settings_SubtitlesSection')}"
-                        IsClickEnabled="True"
-                        Tag="subtitles">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xED1E;" />
-                        </tk:SettingsCard.HeaderIcon>
-                    </tk:SettingsCard>
-                    <tk:SettingsCard
-                        Click="Category_Click"
-                        Description="{x:Bind l:L.Get('Settings_NetworkDescription')}"
-                        Header="{x:Bind l:L.Get('Settings_NetworkSpeed')}"
-                        IsClickEnabled="True"
-                        Tag="network">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE774;" />
-                        </tk:SettingsCard.HeaderIcon>
-                    </tk:SettingsCard>
-                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupApp')}" />
-                    <tk:SettingsCard
-                        Click="Category_Click"
-                        Description="{x:Bind l:L.Get('Settings_AppearanceDescription')}"
-                        Header="{x:Bind l:L.Get('Settings_Appearance')}"
-                        IsClickEnabled="True"
-                        Tag="appearance">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE790;" />
-                        </tk:SettingsCard.HeaderIcon>
-                    </tk:SettingsCard>
-                    <tk:SettingsCard
-                        Click="Category_Click"
-                        Description="{x:Bind l:L.Get('Settings_BackgroundDescription')}"
-                        Header="{x:Bind l:L.Get('Settings_Background')}"
-                        IsClickEnabled="True"
-                        Tag="background">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xEA8F;" />
                         </tk:SettingsCard.HeaderIcon>
                     </tk:SettingsCard>
                     <tk:SettingsCard
@@ -142,11 +107,74 @@
                     </tk:SettingsCard>
                 </StackPanel>
 
-                <!--  Downloads: where they go, how many at once, and where links come from  -->
+                <!--  General: how the app looks, what it does in the background, what it tells you  -->
+                <StackPanel
+                    x:Name="GeneralPanel"
+                    Spacing="4"
+                    Visibility="Collapsed">
+                    <TextBlock Margin="1,8,0,4" Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_Appearance')}" />
+                    <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Language')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xF2B7;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ComboBox
+                            x:Name="LanguageCombo"
+                            MinWidth="200"
+                            SelectionChanged="LanguageCombo_SelectionChanged" />
+                    </tk:SettingsCard>
+                    <InfoBar
+                        x:Name="RestartBar"
+                        Title="{x:Bind l:L.Get('Settings_RestartTitle')}"
+                        Message="{x:Bind l:L.Get('Settings_RestartMessage')}"
+                        Severity="Informational"
+                        Visibility="{x:Bind RestartBar.IsOpen, Mode=OneWay}">
+                        <InfoBar.ActionButton>
+                            <Button Click="Restart_Click" Content="{x:Bind l:L.Get('Settings_RestartNow')}" />
+                        </InfoBar.ActionButton>
+                    </InfoBar>
+                    <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Theme')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE790;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ComboBox
+                            x:Name="ThemeCombo"
+                            MinWidth="200"
+                            SelectionChanged="ThemeCombo_SelectionChanged" />
+                    </tk:SettingsCard>
+                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupBehavior')}" />
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_TrayDescription')}" Header="{x:Bind l:L.Get('Settings_Tray')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE737;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="TrayToggle" Toggled="Toggle_Changed" />
+                    </tk:SettingsCard>
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE77F;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
+                    </tk:SettingsCard>
+                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupNotifications')}" />
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyDescription')}" Header="{x:Bind l:L.Get('Settings_Notify')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xEA8F;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="NotifyToggle" Toggled="Toggle_Changed" />
+                    </tk:SettingsCard>
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE7BA;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
+                    </tk:SettingsCard>
+                </StackPanel>
+
+                <!--  Downloads: where they go, how fast, and through which connection  -->
                 <StackPanel
                     x:Name="DownloadsPanel"
                     Spacing="4"
                     Visibility="Collapsed">
+                    <TextBlock Margin="1,8,0,4" Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupSaving')}" />
                     <tk:SettingsCard
                         x:Name="FolderCard"
                         Click="ChangeFolder_Click"
@@ -168,123 +196,7 @@
                             MinWidth="200"
                             SelectionChanged="ConcurrencyCombo_SelectionChanged" />
                     </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ClipboardDescription')}" Header="{x:Bind l:L.Get('Settings_Clipboard')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE77F;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ClipboardToggle" Toggled="Toggle_Changed" />
-                    </tk:SettingsCard>
-                </StackPanel>
-
-                <!--  Video files: how the file is put together and what goes into it  -->
-                <StackPanel
-                    x:Name="VideoPanel"
-                    Spacing="4"
-                    Visibility="Collapsed">
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE7F4;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="H264Toggle" Toggled="Toggle_Changed" />
-                    </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE8EC;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="MetadataToggle" Toggled="Toggle_Changed" />
-                    </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ChaptersDescription')}" Header="{x:Bind l:L.Get('Settings_Chapters')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE8A4;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
-                    </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SponsorBlockDescription')}" Header="{x:Bind l:L.Get('Settings_SponsorBlock')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE893;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <ComboBox
-                            x:Name="SponsorBlockCombo"
-                            MinWidth="200"
-                            SelectionChanged="SponsorBlockCombo_SelectionChanged" />
-                    </tk:SettingsCard>
-                </StackPanel>
-
-                <!--  Subtitles: which ones are saved  -->
-                <StackPanel
-                    x:Name="SubtitlesPanel"
-                    Spacing="4"
-                    Visibility="Collapsed">
-                    <!--  Languages: tick common ones; other codes for anything not listed. The description sums up the choice.  -->
-                    <tk:SettingsCard
-                        x:Name="SubLangsCard"
-                        HorizontalContentAlignment="Stretch"
-                        ContentAlignment="Vertical"
-                        Header="{x:Bind l:L.Get('Settings_SubLangs')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xED1E;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <!--  One check box per common language, filled in code; wraps on narrow windows.  -->
-                        <VariableSizedWrapGrid
-                            x:Name="SubLangsPanel"
-                            Margin="0,4,0,0"
-                            ItemWidth="132"
-                            Orientation="Horizontal" />
-                    </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SubLangsOtherDescription')}" Header="{x:Bind l:L.Get('Settings_SubLangsOther')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE943;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <TextBox
-                            x:Name="SubLangsOtherBox"
-                            MinWidth="200"
-                            AutomationProperties.Name="{x:Bind l:L.Get('Settings_SubLangsOther')}"
-                            LostFocus="SubLangsOtherBox_LostFocus"
-                            PlaceholderText="fr, de, es" />
-                    </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_DanmakuDescription')}" Header="{x:Bind l:L.Get('Settings_Danmaku')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE8BD;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
-                    </tk:SettingsCard>
-                </StackPanel>
-
-                <!--  Network and speed  -->
-                <StackPanel
-                    x:Name="NetworkPanel"
-                    Spacing="4"
-                    Visibility="Collapsed">
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ProxyDescription')}" Header="{x:Bind l:L.Get('Settings_Proxy')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE774;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <TextBox
-                            x:Name="ProxyBox"
-                            MinWidth="240"
-                            AutomationProperties.Name="{x:Bind l:L.Get('Settings_Proxy')}"
-                            LostFocus="ProxyBox_LostFocus"
-                            PlaceholderText="{x:Bind l:L.Get('Settings_ProxyPlaceholder')}" />
-                    </tk:SettingsCard>
-                    <!--  Can YouTube be reached with the proxy above (or the system proxy)?  -->
-                    <tk:SettingsCard x:Name="ConnectivityCard" Header="{x:Bind l:L.Get('Settings_Connectivity')}">
-                        <tk:SettingsCard.HeaderIcon>
-                            <FontIcon x:Name="ConnectivityIcon" Glyph="&#xE9D9;" />
-                        </tk:SettingsCard.HeaderIcon>
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <ProgressRing
-                                x:Name="ConnectivityRing"
-                                Width="20"
-                                Height="20"
-                                IsActive="False"
-                                Visibility="Collapsed" />
-                            <Button
-                                x:Name="ConnectivityButton"
-                                MinWidth="96"
-                                Click="TestConnectivity_Click"
-                                Content="{x:Bind l:L.Get('Settings_ConnectivityTest')}" />
-                        </StackPanel>
-                    </tk:SettingsCard>
+                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupSpeed')}" />
                     <tk:SettingsCard x:Name="MultiConnectionCard" Header="{x:Bind l:L.Get('Settings_MultiConnection')}">
                         <tk:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xEC4A;" />
@@ -327,65 +239,105 @@
                             </tk:SettingsCard>
                         </tk:SettingsExpander.Items>
                     </tk:SettingsExpander>
-                </StackPanel>
-
-                <!--  Appearance  -->
-                <StackPanel
-                    x:Name="AppearancePanel"
-                    Spacing="4"
-                    Visibility="Collapsed">
-                    <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Language')}">
+                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupNetwork')}" />
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ProxyDescription')}" Header="{x:Bind l:L.Get('Settings_Proxy')}">
                         <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xF2B7;" />
+                            <FontIcon Glyph="&#xE774;" />
                         </tk:SettingsCard.HeaderIcon>
-                        <ComboBox
-                            x:Name="LanguageCombo"
-                            MinWidth="200"
-                            SelectionChanged="LanguageCombo_SelectionChanged" />
+                        <TextBox
+                            x:Name="ProxyBox"
+                            MinWidth="240"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Settings_Proxy')}"
+                            LostFocus="ProxyBox_LostFocus"
+                            PlaceholderText="{x:Bind l:L.Get('Settings_ProxyPlaceholder')}" />
                     </tk:SettingsCard>
-                    <InfoBar
-                        x:Name="RestartBar"
-                        Title="{x:Bind l:L.Get('Settings_RestartTitle')}"
-                        Message="{x:Bind l:L.Get('Settings_RestartMessage')}"
-                        Severity="Informational"
-                        Visibility="{x:Bind RestartBar.IsOpen, Mode=OneWay}">
-                        <InfoBar.ActionButton>
-                            <Button Click="Restart_Click" Content="{x:Bind l:L.Get('Settings_RestartNow')}" />
-                        </InfoBar.ActionButton>
-                    </InfoBar>
-                    <tk:SettingsCard Header="{x:Bind l:L.Get('Settings_Theme')}">
+                    <!--  Can YouTube be reached with the proxy above (or the system proxy)?  -->
+                    <tk:SettingsCard x:Name="ConnectivityCard" Header="{x:Bind l:L.Get('Settings_Connectivity')}">
                         <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE790;" />
+                            <FontIcon x:Name="ConnectivityIcon" Glyph="&#xE9D9;" />
                         </tk:SettingsCard.HeaderIcon>
-                        <ComboBox
-                            x:Name="ThemeCombo"
-                            MinWidth="200"
-                            SelectionChanged="ThemeCombo_SelectionChanged" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <ProgressRing
+                                x:Name="ConnectivityRing"
+                                Width="20"
+                                Height="20"
+                                IsActive="False"
+                                Visibility="Collapsed" />
+                            <Button
+                                x:Name="ConnectivityButton"
+                                MinWidth="96"
+                                Click="TestConnectivity_Click"
+                                Content="{x:Bind l:L.Get('Settings_ConnectivityTest')}" />
+                        </StackPanel>
                     </tk:SettingsCard>
                 </StackPanel>
 
-                <!--  Background and notifications: what happens while the window is closed  -->
+                <!--  Video and subtitles: what goes into each file saved  -->
                 <StackPanel
-                    x:Name="BackgroundPanel"
+                    x:Name="MediaPanel"
                     Spacing="4"
                     Visibility="Collapsed">
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_TrayDescription')}" Header="{x:Bind l:L.Get('Settings_Tray')}">
+                    <TextBlock Margin="1,8,0,4" Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_GroupVideo')}" />
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_H264Description')}" Header="{x:Bind l:L.Get('Settings_H264')}">
                         <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE737;" />
+                            <FontIcon Glyph="&#xE7F4;" />
                         </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="TrayToggle" Toggled="Toggle_Changed" />
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="H264Toggle" Toggled="Toggle_Changed" />
                     </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyDescription')}" Header="{x:Bind l:L.Get('Settings_Notify')}">
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_MetadataDescription')}" Header="{x:Bind l:L.Get('Settings_Metadata')}">
                         <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xEA8F;" />
+                            <FontIcon Glyph="&#xE8EC;" />
                         </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="NotifyToggle" Toggled="Toggle_Changed" />
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="MetadataToggle" Toggled="Toggle_Changed" />
                     </tk:SettingsCard>
-                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_NotifyFailureDescription')}" Header="{x:Bind l:L.Get('Settings_NotifyFailure')}">
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_ChaptersDescription')}" Header="{x:Bind l:L.Get('Settings_Chapters')}">
                         <tk:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE7BA;" />
+                            <FontIcon Glyph="&#xE8A4;" />
                         </tk:SettingsCard.HeaderIcon>
-                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="NotifyFailureToggle" Toggled="Toggle_Changed" />
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="ChaptersToggle" Toggled="Toggle_Changed" />
+                    </tk:SettingsCard>
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SponsorBlockDescription')}" Header="{x:Bind l:L.Get('Settings_SponsorBlock')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE893;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ComboBox
+                            x:Name="SponsorBlockCombo"
+                            MinWidth="200"
+                            SelectionChanged="SponsorBlockCombo_SelectionChanged" />
+                    </tk:SettingsCard>
+                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_SubtitlesSection')}" />
+                    <!--  Languages: tick common ones; other codes for anything not listed. The description sums up the choice.  -->
+                    <tk:SettingsCard
+                        x:Name="SubLangsCard"
+                        HorizontalContentAlignment="Stretch"
+                        ContentAlignment="Vertical"
+                        Header="{x:Bind l:L.Get('Settings_SubLangs')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xED1E;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <!--  One check box per common language, filled in code; wraps on narrow windows.  -->
+                        <VariableSizedWrapGrid
+                            x:Name="SubLangsPanel"
+                            Margin="0,4,0,0"
+                            ItemWidth="132"
+                            Orientation="Horizontal" />
+                    </tk:SettingsCard>
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_SubLangsOtherDescription')}" Header="{x:Bind l:L.Get('Settings_SubLangsOther')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE943;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <TextBox
+                            x:Name="SubLangsOtherBox"
+                            MinWidth="200"
+                            AutomationProperties.Name="{x:Bind l:L.Get('Settings_SubLangsOther')}"
+                            LostFocus="SubLangsOtherBox_LostFocus"
+                            PlaceholderText="fr, de, es" />
+                    </tk:SettingsCard>
+                    <tk:SettingsCard Description="{x:Bind l:L.Get('Settings_DanmakuDescription')}" Header="{x:Bind l:L.Get('Settings_Danmaku')}">
+                        <tk:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE8BD;" />
+                        </tk:SettingsCard.HeaderIcon>
+                        <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" x:Name="DanmakuToggle" Toggled="Toggle_Changed" />
                     </tk:SettingsCard>
                 </StackPanel>
 

@@ -252,7 +252,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>New download</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>Settings</value></data>
-  <data name="Nav_Templates" xml:space="preserve"><value>Templates</value></data>
+  <data name="Nav_Templates" xml:space="preserve"><value>Presets</value></data>
   <data name="Notify_BatchCompleted" xml:space="preserve"><value>All {0} downloads finished</value></data>
   <data name="Notify_Completed" xml:space="preserve"><value>Download finished</value></data>
   <data name="Notify_Failed" xml:space="preserve"><value>Download failed</value></data>
@@ -336,12 +336,9 @@
   <data name="Settings_AddOns" xml:space="preserve"><value>Add-ons</value></data>
   <data name="Settings_AddOnsDescription" xml:space="preserve"><value>Speech recognition, graphics card acceleration: downloaded only if you want them</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>Appearance</value></data>
-  <data name="Settings_AppearanceDescription" xml:space="preserve"><value>Language, theme</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>Not installed · makes downloads much faster (recommended)</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>Update components automatically</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checked daily and updated in the background when nothing is downloading; an outdated yt-dlp is the usual cause of failed downloads</value></data>
-  <data name="Settings_Background" xml:space="preserve"><value>Background and notifications</value></data>
-  <data name="Settings_BackgroundDescription" xml:space="preserve"><value>Notification area, download notifications</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Close Chrome / Edge first</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>Don&apos;t use</value></data>
@@ -365,11 +362,17 @@
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>Saved as XML alongside subtitles</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>Not installed · needed for some YouTube formats (recommended)</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>Downloads</value></data>
-  <data name="Settings_DownloadsDescription" xml:space="preserve"><value>Save location, simultaneous downloads, clipboard</value></data>
+  <data name="Settings_DownloadsDescription" xml:space="preserve"><value>Save location, simultaneous downloads, speed, proxy</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>Not installed · merges high-quality streams and extracts audio (recommended)</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>Default save location</value></data>
-  <data name="Settings_GroupApp" xml:space="preserve"><value>General</value></data>
-  <data name="Settings_GroupDownloading" xml:space="preserve"><value>Downloading</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>General</value></data>
+  <data name="Settings_GeneralDescription" xml:space="preserve"><value>Language, theme, notification area, clipboard, notifications</value></data>
+  <data name="Settings_GroupBehavior" xml:space="preserve"><value>Behavior</value></data>
+  <data name="Settings_GroupNetwork" xml:space="preserve"><value>Network</value></data>
+  <data name="Settings_GroupNotifications" xml:space="preserve"><value>Notifications</value></data>
+  <data name="Settings_GroupSaving" xml:space="preserve"><value>Saving</value></data>
+  <data name="Settings_GroupSpeed" xml:space="preserve"><value>Speed</value></data>
+  <data name="Settings_GroupVideo" xml:space="preserve"><value>Video</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>Compatibility mode</value></data>
   <data name="Settings_H264Description" xml:space="preserve"><value>Prefer H.264 / AAC for older devices; may limit quality</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>Install</value></data>
@@ -379,12 +382,12 @@
   <data name="Settings_InstallManaged" xml:space="preserve"><value>Install app copy</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
   <data name="Settings_LanguageSystem" xml:space="preserve"><value>Same as Windows</value></data>
+  <data name="Settings_Media" xml:space="preserve"><value>Video and subtitles</value></data>
+  <data name="Settings_MediaDescription" xml:space="preserve"><value>Compatibility mode, cover and metadata, chapters, SponsorBlock, subtitle languages</value></data>
   <data name="Settings_Metadata" xml:space="preserve"><value>Embed cover and metadata</value></data>
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>Title, uploader and cover</value></data>
   <data name="Settings_MultiConnection" xml:space="preserve"><value>Multi-connection acceleration</value></data>
   <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>Needs aria2 · install it in About &amp; updates</value></data>
-  <data name="Settings_NetworkDescription" xml:space="preserve"><value>Proxy, connection test, multi-connection, speed limit</value></data>
-  <data name="Settings_NetworkSpeed" xml:space="preserve"><value>Network and speed</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>Download finished</value></data>
   <data name="Settings_NotifyDescription" xml:space="preserve"><value>When VidFlow is in the background</value></data>
   <data name="Settings_NotifyFailure" xml:space="preserve"><value>Failure notifications</value></data>
@@ -429,12 +432,11 @@
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>Other languages</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>Language codes, comma separated</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
-  <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>Subtitle languages, Bilibili danmaku</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>No language chosen: Chinese and English subtitles are saved</value></data>
   <data name="Settings_SubtitlesSection" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>{0}</value></data>
-  <data name="Settings_Templates" xml:space="preserve"><value>Download templates</value></data>
-  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>New downloads start from the default template</value></data>
+  <data name="Settings_Templates" xml:space="preserve"><value>Presets</value></data>
+  <data name="Settings_TemplatesDescription" xml:space="preserve"><value>New downloads start from the default preset</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>App theme</value></data>
   <data name="Settings_ThemeDark" xml:space="preserve"><value>Dark</value></data>
   <data name="Settings_ThemeLight" xml:space="preserve"><value>Light</value></data>
@@ -447,8 +449,6 @@
   <data name="Settings_Updates" xml:space="preserve"><value>App updates</value></data>
   <data name="Settings_UpdateTo" xml:space="preserve"><value>Update to {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>Up to date</value></data>
-  <data name="Settings_VideoFiles" xml:space="preserve"><value>Video files</value></data>
-  <data name="Settings_VideoFilesDescription" xml:space="preserve"><value>Compatibility mode, cover and metadata, chapters, SponsorBlock</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>Not installed · parses and downloads videos (required)</value></data>
   <data name="Size_Approx" xml:space="preserve"><value>~{0}</value></data>
   <data name="Status_AudioStream" xml:space="preserve"><value>Audio</value></data>
@@ -482,30 +482,30 @@
   <data name="Template_DefaultSuffix" xml:space="preserve"><value>{0} (default)</value></data>
   <data name="Template_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Template_DeleteBody" xml:space="preserve"><value>Downloads already added are not affected.</value></data>
-  <data name="Template_DeletePresetBody" xml:space="preserve"><value>You can bring it back with Restore built-in templates.</value></data>
+  <data name="Template_DeletePresetBody" xml:space="preserve"><value>You can bring it back with Restore built-in presets.</value></data>
   <data name="Template_DeleteTitle" xml:space="preserve"><value>Delete “{0}”?</value></data>
   <data name="Template_Duplicate" xml:space="preserve"><value>Duplicate</value></data>
   <data name="Template_DuplicateToEdit" xml:space="preserve"><value>Duplicate to edit</value></data>
   <data name="Template_Edit" xml:space="preserve"><value>Edit</value></data>
-  <data name="Template_EditTitle" xml:space="preserve"><value>Edit template</value></data>
-  <data name="Template_Header" xml:space="preserve"><value>Download template</value></data>
+  <data name="Template_EditTitle" xml:space="preserve"><value>Edit preset</value></data>
+  <data name="Template_Header" xml:space="preserve"><value>Preset</value></data>
   <data name="Template_IsDefault" xml:space="preserve"><value>Default</value></data>
-  <data name="Template_ModifiedHint" xml:space="preserve"><value>Changed for this download only (the template is unchanged)</value></data>
+  <data name="Template_ModifiedHint" xml:space="preserve"><value>Changed for this download only (the preset is unchanged)</value></data>
   <data name="Template_Name" xml:space="preserve"><value>Name</value></data>
-  <data name="Template_New" xml:space="preserve"><value>New template</value></data>
-  <data name="Template_NewName" xml:space="preserve"><value>My template</value></data>
-  <data name="Template_NewTitle" xml:space="preserve"><value>New template</value></data>
+  <data name="Template_New" xml:space="preserve"><value>New preset</value></data>
+  <data name="Template_NewName" xml:space="preserve"><value>My preset</value></data>
+  <data name="Template_NewTitle" xml:space="preserve"><value>New preset</value></data>
   <data name="Template_Rename" xml:space="preserve"><value>Rename</value></data>
   <data name="Template_Reset" xml:space="preserve"><value>Reset</value></data>
-  <data name="Template_SaveAs" xml:space="preserve"><value>Save as template</value></data>
-  <data name="Template_SaveAsTitle" xml:space="preserve"><value>Save as template</value></data>
+  <data name="Template_SaveAs" xml:space="preserve"><value>Save as preset</value></data>
+  <data name="Template_SaveAsTitle" xml:space="preserve"><value>Save as preset</value></data>
   <data name="Template_SetDefault" xml:space="preserve"><value>Set as default</value></data>
   <data name="Template_View" xml:space="preserve"><value>View settings</value></data>
-  <data name="Templates_BuiltIn" xml:space="preserve"><value>Built-in templates</value></data>
-  <data name="Templates_Empty" xml:space="preserve"><value>No custom templates yet</value></data>
-  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Use New template, or duplicate a built-in one</value></data>
-  <data name="Templates_Mine" xml:space="preserve"><value>My templates</value></data>
-  <data name="Templates_RestorePresets" xml:space="preserve"><value>Restore built-in templates</value></data>
+  <data name="Templates_BuiltIn" xml:space="preserve"><value>Built-in presets</value></data>
+  <data name="Templates_Empty" xml:space="preserve"><value>No custom presets yet</value></data>
+  <data name="Templates_EmptyDescription" xml:space="preserve"><value>Use New preset, or duplicate a built-in one</value></data>
+  <data name="Templates_Mine" xml:space="preserve"><value>My presets</value></data>
+  <data name="Templates_RestorePresets" xml:space="preserve"><value>Restore built-in presets</value></data>
   <data name="Title_UpdateAvailable" xml:space="preserve"><value>Update {0}</value></data>
   <data name="Title_UpdateAvailableTip" xml:space="preserve"><value>Download VidFlow {0}</value></data>
   <data name="Title_UpdateDownloading" xml:space="preserve"><value>Updating {0}%</value></data>

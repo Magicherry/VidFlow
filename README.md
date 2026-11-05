@@ -42,7 +42,7 @@
 - **内容**：视频、音频（MP3 / M4A / Opus / FLAC / WAV）或封面
 - **格式**：画质按实际可用分辨率列出并预估大小；编码可选 H.264 / H.265 / AV1，封装可选 MP4 / MKV / WebM；格式不兼容时给出提示与一键推荐
 - **附加内容**：多语言音轨、字幕、哔哩哔哩弹幕、嵌入封面与元数据、嵌入章节；YouTube 可用 SponsorBlock 标记或删除赞助片段
-- **模板与命名**：五种内置模板与自定义模板；用 {标题}、{作者}、{上传日期} 等变量命名，并按平台、作者或日期归类
+- **预设与命名**：五种内置预设与自定义预设；用 {标题}、{作者}、{上传日期} 等变量命名，并按平台、作者或日期归类
 - **下载管理**：队列、暂停与断点续传、重试、限速、同时下载数；重启后自动继续未完成的任务
 - **便捷**：拖入链接即可下载，可监听剪贴板；应用自动更新，失败自动回滚；简体中文 / English 界面
 
@@ -52,7 +52,7 @@
   <tr>
     <td width="33%"><img src="docs/images/platforms-zh.png" alt="新建下载与支持的平台"><br><sub>支持的平台</sub></td>
     <td width="33%"><img src="docs/images/batch-zh.png" alt="一次解析多个链接"><br><sub>一次解析多个链接</sub></td>
-    <td width="33%"><img src="docs/images/templates-zh.png" alt="下载模板"><br><sub>下载模板</sub></td>
+    <td width="33%"><img src="docs/images/templates-zh.png" alt="预设模板"><br><sub>预设模板</sub></td>
   </tr>
 </table>
 

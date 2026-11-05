@@ -316,8 +316,8 @@ Settings_Aria2Missing	Not installed · makes downloads much faster (recommended)
 Settings_NotifyFailure	Failure notifications	失败与异常通知
 Settings_NotifyFailureDescription	When a download fails or stalls	下载失败或长时间无进度时
 Settings_ReleaseNotes	What's new	更新日志
-Settings_Templates	Download templates	下载模板
-Settings_TemplatesDescription	New downloads start from the default template	新建下载会套用默认模板
+Settings_Templates	Presets	预设模板
+Settings_TemplatesDescription	New downloads start from the default preset	新建下载会使用默认预设
 Settings_UpdateMode	Update mode	更新方式
 Settings_UpdateModeDescription	Automatic downloads updates in the background and installs them when you exit VidFlow	自动更新会在后台下载新版本，并在退出 VidFlow 时安装
 Settings_Updates	App updates	应用更新
@@ -328,22 +328,22 @@ Template_CopyName	{0} copy	{0} 副本
 Template_DefaultSuffix	{0} (default)	{0}（默认）
 Template_Delete	Delete	删除
 Template_DeleteBody	Downloads already added are not affected.	已添加的下载任务不受影响。
-Template_DeletePresetBody	You can bring it back with Restore built-in templates.	之后可通过「还原内置模板」恢复。
+Template_DeletePresetBody	You can bring it back with Restore built-in presets.	之后可通过「还原内置预设」恢复。
 Template_DeleteTitle	Delete “{0}”?	删除「{0}」？
 Template_Duplicate	Duplicate	复制
 Template_Edit	Edit	编辑
-Template_EditTitle	Edit template	编辑模板
-Template_Header	Download template	下载模板
+Template_EditTitle	Edit preset	编辑预设
+Template_Header	Preset	预设
 Template_IsDefault	Default	默认
-Template_ModifiedHint	Changed for this download only (the template is unchanged)	已针对本次下载修改（不影响模板）
+Template_ModifiedHint	Changed for this download only (the preset is unchanged)	已针对本次下载修改（不影响预设）
 Template_Name	Name	名称
-Template_New	New template	新建模板
-Template_NewName	My template	我的模板
-Template_NewTitle	New template	新建模板
+Template_New	New preset	新建预设
+Template_NewName	My preset	我的预设
+Template_NewTitle	New preset	新建预设
 Template_Rename	Rename	重命名
-Template_Reset	Reset	恢复模板设置
-Template_SaveAs	Save as template	另存为模板
-Template_SaveAsTitle	Save as template	另存为模板
+Template_Reset	Reset	恢复预设
+Template_SaveAs	Save as preset	另存为预设
+Template_SaveAsTitle	Save as preset	另存为预设
 Template_SetDefault	Set as default	设为默认
 Template_View	View settings	查看设置
 Template_DuplicateToEdit	Duplicate to edit	复制后编辑
@@ -385,19 +385,17 @@ Batch_PlaylistMeta	Playlist · {0} videos	播放列表 · {0} 个视频
 Batch_ListName	Links to download	要下载的链接
 Batch_Status	Parsed {0} of {1}. Tick the ones to download	已解析 {0} / {1}，勾选要下载的项目
 Batch_StatusFailed	Parsed {0} of {1}, {2} failed. Tick the ones to download	已解析 {0} / {1}，其中 {2} 个失败；勾选要下载的项目
-Nav_Templates	Templates	下载模板
+Nav_Templates	Presets	预设模板
 Nav_Accounts	Accounts	账号
 Settings_AboutUpdates	About & updates	关于与更新
 Settings_Appearance	Appearance	外观
-Settings_NetworkSpeed	Network and speed	网络与速度
-Settings_Background	Background and notifications	后台与通知
 Settings_NotifyDescription	When VidFlow is in the background	VidFlow 在后台时提醒
 Settings_UpdateBadge	Update available: {0}	有可用更新：{0}
-Templates_Mine	My templates	我的模板
-Templates_BuiltIn	Built-in templates	内置模板
-Templates_RestorePresets	Restore built-in templates	还原内置模板
-Templates_Empty	No custom templates yet	还没有自定义模板
-Templates_EmptyDescription	Use New template, or duplicate a built-in one	点击「新建模板」，或复制一个内置模板
+Templates_Mine	My presets	我的预设
+Templates_BuiltIn	Built-in presets	内置预设
+Templates_RestorePresets	Restore built-in presets	还原内置预设
+Templates_Empty	No custom presets yet	还没有自定义预设
+Templates_EmptyDescription	Use New preset, or duplicate a built-in one	点击「新建预设」，或复制一个内置预设
 Accounts_Description	Sign in for higher quality and restricted videos. Your sign-in stays on this PC	登录后可下载更高画质和受限内容，登录信息仅保存在本机
 Accounts_Platforms	Platform accounts	平台账号
 About_Troubleshoot	Troubleshooting	故障排查
@@ -539,7 +537,6 @@ Error_AsrFailed	Speech recognition failed.	语音识别失败。
 Settings_SpeechGpu	Graphics card acceleration (NVIDIA)	显卡加速（NVIDIA）
 Settings_SpeechGpuOff	Recognizes several times faster on the graphics card. A further download of about {0}; the first time it is used takes about half a minute more to get ready.	用显卡识别，通常快数倍。需另外下载约 {0}；首次使用会多花约半分钟做准备。
 Settings_SpeechGpuReady	On · {0} on disk. Speech is recognized on the graphics card, or on the CPU when that fails	已启用 · 占用 {0}。优先用显卡识别，失败时自动改用 CPU
-Settings_VideoFiles	Video files	视频文件
 Settings_SubtitlesSection	Subtitles	字幕
 Settings_SubLangsCommon	Common languages	常用语言
 Settings_SpeechModelDescription	Accurate gets names and terms right more often; Fast suits slower PCs	高精度识别更准确；快速适合配置较低的电脑
@@ -578,12 +575,15 @@ Convert_Canceled	Canceled	已取消
 Convert_AudioOnly	{0} (audio only)	{0}（仅音频）
 Convert_SkippedTitle	{0} files can't be converted	有 {0} 个文件无法转换
 Convert_SkippedBody	Videos, audio, images and subtitles can be converted. Other files were left out.	可以转换视频、音频、图片和字幕，其他文件已略过。
-Settings_GroupDownloading	Downloading	下载与文件
-Settings_GroupApp	General	通用
-Settings_AppearanceDescription	Language, theme	语言、应用主题
-Settings_DownloadsDescription	Save location, simultaneous downloads, clipboard	保存位置、同时下载数、监听剪贴板
-Settings_VideoFilesDescription	Compatibility mode, cover and metadata, chapters, SponsorBlock	兼容模式、封面与元数据、章节、SponsorBlock
-Settings_SubtitlesDescription	Subtitle languages, Bilibili danmaku	字幕语言、哔哩哔哩弹幕
-Settings_NetworkDescription	Proxy, connection test, multi-connection, speed limit	代理、连接测试、多连接加速、限速
 Settings_AddOnsDescription	Speech recognition, graphics card acceleration: downloaded only if you want them	语音识别、显卡加速，按需下载
-Settings_BackgroundDescription	Notification area, download notifications	托盘、下载通知
+Settings_General	General	常规
+Settings_GeneralDescription	Language, theme, notification area, clipboard, notifications	语言、主题、托盘、剪贴板、通知
+Settings_DownloadsDescription	Save location, simultaneous downloads, speed, proxy	保存位置、同时下载数、速度、代理
+Settings_Media	Video and subtitles	视频与字幕
+Settings_MediaDescription	Compatibility mode, cover and metadata, chapters, SponsorBlock, subtitle languages	兼容模式、封面与元数据、章节、SponsorBlock、字幕语言
+Settings_GroupBehavior	Behavior	行为
+Settings_GroupNotifications	Notifications	通知
+Settings_GroupSaving	Saving	保存
+Settings_GroupSpeed	Speed	速度
+Settings_GroupNetwork	Network	网络
+Settings_GroupVideo	Video	视频

@@ -49,7 +49,7 @@ public sealed partial class MainWindow : Window
 
     public bool IsForeground => AppWindow.IsVisible && GetForegroundWindow() == Hwnd;
 
-    /// <summary>Shows a page by its nav tag. Settings' sub-pages ("about", "settings/network") keep Settings selected
+    /// <summary>Shows a page by its nav tag. Settings' sub-pages ("about", "settings/downloads") keep Settings selected
     /// in the pane.</summary>
     public void NavigateTo(string tag)
     {
