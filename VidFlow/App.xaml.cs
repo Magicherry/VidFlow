@@ -11,6 +11,7 @@ public partial class App : Application
 {
     public static MainWindow MainWindow { get; private set; } = null!;
     public static DownloadManager Downloads { get; private set; } = null!;
+    public static ConvertQueue Converts { get; } = new();
     public static UpdateController Updates { get; private set; } = null!;
     public static ComponentUpdater Tools { get; private set; } = null!;
     public static DispatcherQueue UiQueue { get; private set; } = null!;

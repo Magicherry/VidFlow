@@ -82,6 +82,25 @@
   <data name="Container_Mkv" xml:space="preserve"><value>MKV（支持所有编码）</value></data>
   <data name="Container_Mp4" xml:space="preserve"><value>MP4（兼容性最好）</value></data>
   <data name="Container_Webm" xml:space="preserve"><value>WebM（VP9 / AV1 + Opus）</value></data>
+  <data name="Convert_AddFiles" xml:space="preserve"><value>添加文件</value></data>
+  <data name="Convert_AudioOnly" xml:space="preserve"><value>{0}（仅音频）</value></data>
+  <data name="Convert_Canceled" xml:space="preserve"><value>已取消</value></data>
+  <data name="Convert_ChooseFolder" xml:space="preserve"><value>选择文件夹…</value></data>
+  <data name="Convert_ClearFinished" xml:space="preserve"><value>移除已结束</value></data>
+  <data name="Convert_Converting" xml:space="preserve"><value>正在转换  ·  {0}%</value></data>
+  <data name="Convert_Done" xml:space="preserve"><value>已完成 · {0}</value></data>
+  <data name="Convert_DropCaption" xml:space="preserve"><value>添加到格式转换</value></data>
+  <data name="Convert_EmptyBody" xml:space="preserve"><value>把视频、音频、图片或字幕拖到这里，或点击「添加文件」。转换会另存一份新格式的文件，原文件保持不变。</value></data>
+  <data name="Convert_EmptyTitle" xml:space="preserve"><value>还没有要转换的文件</value></data>
+  <data name="Convert_Output" xml:space="preserve"><value>保存位置</value></data>
+  <data name="Convert_SameFolder" xml:space="preserve"><value>与原文件相同</value></data>
+  <data name="Convert_SameFolderDescription" xml:space="preserve"><value>转换后的文件保存在原文件所在的文件夹</value></data>
+  <data name="Convert_SkippedBody" xml:space="preserve"><value>可以转换视频、音频、图片和字幕，其他文件已略过。</value></data>
+  <data name="Convert_SkippedTitle" xml:space="preserve"><value>有 {0} 个文件无法转换</value></data>
+  <data name="Convert_Start" xml:space="preserve"><value>开始转换</value></data>
+  <data name="Convert_Summary" xml:space="preserve"><value>共 {0} 个文件 · {1} 个等待 · {2} 个完成</value></data>
+  <data name="Convert_Target" xml:space="preserve"><value>转换为</value></data>
+  <data name="Convert_Waiting" xml:space="preserve"><value>等待转换</value></data>
   <data name="Download_Batch" xml:space="preserve"><value>添加 {0} 个链接到队列</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>下载选中的 {0} 个</value></data>
   <data name="Download_Start" xml:space="preserve"><value>开始下载</value></data>
@@ -113,6 +132,11 @@
   <data name="Error_AsrNotReady" xml:space="preserve"><value>语音识别尚未启用。请先在「设置 → 语音识别」中下载。</value></data>
   <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>提取音频需要 ffmpeg，请先在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube 要求验证身份。请在「账号」页面中登录，或更换代理节点。</value></data>
+  <data name="Error_ConvertFailed" xml:space="preserve"><value>转换失败。</value></data>
+  <data name="Error_ConvertNeedsFfmpeg" xml:space="preserve"><value>格式转换需要 ffmpeg，请在「设置 → 关于与更新」中安装。</value></data>
+  <data name="Error_ConvertNoAudio" xml:space="preserve"><value>这个文件没有声音，无法转换为音频。</value></data>
+  <data name="Error_ConvertNoVideo" xml:space="preserve"><value>这个文件没有画面，无法转换为视频。</value></data>
+  <data name="Error_ConvertUnreadable" xml:space="preserve"><value>无法读取这个文件，它可能已损坏，或不是媒体文件。</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>读取浏览器 Cookie 失败。请关闭该浏览器后重试，或改用应用内登录。</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>磁盘空间不足。</value></data>
   <data name="Error_DouyinNotVideo" xml:space="preserve"><value>这个抖音链接不是作品（暂不支持主页）。</value></data>
@@ -224,6 +248,7 @@
   <data name="Naming_Recommended" xml:space="preserve"><value>{0}（推荐）</value></data>
   <data name="Naming_Unknown" xml:space="preserve"><value>无法识别的变量会按原样保留为文字：{0}</value></data>
   <data name="Nav_Accounts" xml:space="preserve"><value>账号</value></data>
+  <data name="Nav_Convert" xml:space="preserve"><value>格式转换</value></data>
   <data name="Nav_Downloads" xml:space="preserve"><value>下载列表</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>新建下载</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>设置</value></data>
@@ -309,11 +334,14 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>关于与更新</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>账号</value></data>
   <data name="Settings_AddOns" xml:space="preserve"><value>附加组件</value></data>
+  <data name="Settings_AddOnsDescription" xml:space="preserve"><value>语音识别、显卡加速，按需下载</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>外观</value></data>
+  <data name="Settings_AppearanceDescription" xml:space="preserve"><value>语言、应用主题</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>未安装 · 可大幅提升下载速度（推荐）</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>自动更新组件</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>每天检查，在没有下载任务时于后台更新；过旧的 yt-dlp 常导致下载失败</value></data>
   <data name="Settings_Background" xml:space="preserve"><value>后台与通知</value></data>
+  <data name="Settings_BackgroundDescription" xml:space="preserve"><value>托盘、下载通知</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>从浏览器读取</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Chrome / Edge 需先关闭浏览器</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>不使用</value></data>
@@ -337,8 +365,11 @@
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>随字幕一起保存为 XML</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>未安装 · YouTube 部分格式需要（推荐）</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>下载</value></data>
+  <data name="Settings_DownloadsDescription" xml:space="preserve"><value>保存位置、同时下载数、监听剪贴板</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>未安装 · 用于合并高清音视频、提取音频（推荐）</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>默认保存位置</value></data>
+  <data name="Settings_GroupApp" xml:space="preserve"><value>通用</value></data>
+  <data name="Settings_GroupDownloading" xml:space="preserve"><value>下载与文件</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>兼容模式</value></data>
   <data name="Settings_H264Description" xml:space="preserve"><value>优先 H.264 / AAC，适合旧设备，画质可能受限</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>安装</value></data>
@@ -352,6 +383,7 @@
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>写入标题、作者和封面</value></data>
   <data name="Settings_MultiConnection" xml:space="preserve"><value>多连接加速</value></data>
   <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>需要 aria2 · 可在「关于与更新」中安装</value></data>
+  <data name="Settings_NetworkDescription" xml:space="preserve"><value>代理、连接测试、多连接加速、限速</value></data>
   <data name="Settings_NetworkSpeed" xml:space="preserve"><value>网络与速度</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>下载完成通知</value></data>
   <data name="Settings_NotifyDescription" xml:space="preserve"><value>VidFlow 在后台时提醒</value></data>
@@ -397,6 +429,7 @@
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>其他语言</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>语言代码，用逗号分隔</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>字幕</value></data>
+  <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>字幕语言、哔哩哔哩弹幕</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>未选择语言，将保存中文和英文字幕</value></data>
   <data name="Settings_SubtitlesSection" xml:space="preserve"><value>字幕</value></data>
   <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>{0}</value></data>
@@ -415,6 +448,7 @@
   <data name="Settings_UpdateTo" xml:space="preserve"><value>更新到 {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>已是最新</value></data>
   <data name="Settings_VideoFiles" xml:space="preserve"><value>视频文件</value></data>
+  <data name="Settings_VideoFilesDescription" xml:space="preserve"><value>兼容模式、封面与元数据、章节、SponsorBlock</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>未安装 · 用于解析和下载视频（必需）</value></data>
   <data name="Size_Approx" xml:space="preserve"><value>约 {0}</value></data>
   <data name="Status_AudioStream" xml:space="preserve"><value>音频流</value></data>

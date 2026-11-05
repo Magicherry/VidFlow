@@ -82,6 +82,25 @@
   <data name="Container_Mkv" xml:space="preserve"><value>MKV (holds any codec)</value></data>
   <data name="Container_Mp4" xml:space="preserve"><value>MP4 (most compatible)</value></data>
   <data name="Container_Webm" xml:space="preserve"><value>WebM (VP9 / AV1 + Opus)</value></data>
+  <data name="Convert_AddFiles" xml:space="preserve"><value>Add files</value></data>
+  <data name="Convert_AudioOnly" xml:space="preserve"><value>{0} (audio only)</value></data>
+  <data name="Convert_Canceled" xml:space="preserve"><value>Canceled</value></data>
+  <data name="Convert_ChooseFolder" xml:space="preserve"><value>Choose a folder…</value></data>
+  <data name="Convert_ClearFinished" xml:space="preserve"><value>Clear finished</value></data>
+  <data name="Convert_Converting" xml:space="preserve"><value>Converting  ·  {0}%</value></data>
+  <data name="Convert_Done" xml:space="preserve"><value>Done · {0}</value></data>
+  <data name="Convert_DropCaption" xml:space="preserve"><value>Add to Convert</value></data>
+  <data name="Convert_EmptyBody" xml:space="preserve"><value>Drag videos, audio, images or subtitles here, or choose Add files. A copy in the new format is saved; the original stays as it is.</value></data>
+  <data name="Convert_EmptyTitle" xml:space="preserve"><value>Nothing to convert yet</value></data>
+  <data name="Convert_Output" xml:space="preserve"><value>Save to</value></data>
+  <data name="Convert_SameFolder" xml:space="preserve"><value>Next to the original</value></data>
+  <data name="Convert_SameFolderDescription" xml:space="preserve"><value>Each converted file goes next to the file it came from</value></data>
+  <data name="Convert_SkippedBody" xml:space="preserve"><value>Videos, audio, images and subtitles can be converted. Other files were left out.</value></data>
+  <data name="Convert_SkippedTitle" xml:space="preserve"><value>{0} files can&apos;t be converted</value></data>
+  <data name="Convert_Start" xml:space="preserve"><value>Convert</value></data>
+  <data name="Convert_Summary" xml:space="preserve"><value>{0} files · {1} waiting · {2} done</value></data>
+  <data name="Convert_Target" xml:space="preserve"><value>Convert to</value></data>
+  <data name="Convert_Waiting" xml:space="preserve"><value>Waiting</value></data>
   <data name="Download_Batch" xml:space="preserve"><value>Add {0} links to queue</value></data>
   <data name="Download_Selected" xml:space="preserve"><value>Download {0} selected</value></data>
   <data name="Download_Start" xml:space="preserve"><value>Start download</value></data>
@@ -113,6 +132,11 @@
   <data name="Error_AsrNotReady" xml:space="preserve"><value>Speech recognition isn&apos;t set up. Download it in Settings, under Speech recognition.</value></data>
   <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>Extracting audio needs ffmpeg. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube wants to confirm you&apos;re not a bot. Sign in on the Accounts page, or switch proxy node.</value></data>
+  <data name="Error_ConvertFailed" xml:space="preserve"><value>The conversion failed.</value></data>
+  <data name="Error_ConvertNeedsFfmpeg" xml:space="preserve"><value>Converting needs ffmpeg. Install it under Settings → About &amp; updates.</value></data>
+  <data name="Error_ConvertNoAudio" xml:space="preserve"><value>This file has no sound to convert into audio.</value></data>
+  <data name="Error_ConvertNoVideo" xml:space="preserve"><value>This file has no picture to convert into a video.</value></data>
+  <data name="Error_ConvertUnreadable" xml:space="preserve"><value>This file couldn&apos;t be read. It may be damaged, or not a media file.</value></data>
   <data name="Error_Cookies" xml:space="preserve"><value>Couldn&apos;t read browser cookies. Close that browser and retry, or use in-app sign-in instead.</value></data>
   <data name="Error_DiskFull" xml:space="preserve"><value>Not enough disk space.</value></data>
   <data name="Error_DouyinNotVideo" xml:space="preserve"><value>This Douyin link isn&apos;t a post (profiles aren&apos;t supported).</value></data>
@@ -224,6 +248,7 @@
   <data name="Naming_Recommended" xml:space="preserve"><value>{0} (recommended)</value></data>
   <data name="Naming_Unknown" xml:space="preserve"><value>Not recognised, kept as plain text: {0}</value></data>
   <data name="Nav_Accounts" xml:space="preserve"><value>Accounts</value></data>
+  <data name="Nav_Convert" xml:space="preserve"><value>Convert</value></data>
   <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>New download</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>Settings</value></data>
@@ -309,11 +334,14 @@
   <data name="Settings_AboutUpdates" xml:space="preserve"><value>About &amp; updates</value></data>
   <data name="Settings_Accounts" xml:space="preserve"><value>Accounts</value></data>
   <data name="Settings_AddOns" xml:space="preserve"><value>Add-ons</value></data>
+  <data name="Settings_AddOnsDescription" xml:space="preserve"><value>Speech recognition, graphics card acceleration: downloaded only if you want them</value></data>
   <data name="Settings_Appearance" xml:space="preserve"><value>Appearance</value></data>
+  <data name="Settings_AppearanceDescription" xml:space="preserve"><value>Language, theme</value></data>
   <data name="Settings_Aria2Missing" xml:space="preserve"><value>Not installed · makes downloads much faster (recommended)</value></data>
   <data name="Settings_AutoUpdate" xml:space="preserve"><value>Update components automatically</value></data>
   <data name="Settings_AutoUpdateDescription" xml:space="preserve"><value>Checked daily and updated in the background when nothing is downloading; an outdated yt-dlp is the usual cause of failed downloads</value></data>
   <data name="Settings_Background" xml:space="preserve"><value>Background and notifications</value></data>
+  <data name="Settings_BackgroundDescription" xml:space="preserve"><value>Notification area, download notifications</value></data>
   <data name="Settings_BrowserCookies" xml:space="preserve"><value>Read from browser</value></data>
   <data name="Settings_BrowserCookiesDescription" xml:space="preserve"><value>Close Chrome / Edge first</value></data>
   <data name="Settings_BrowserNone" xml:space="preserve"><value>Don&apos;t use</value></data>
@@ -337,8 +365,11 @@
   <data name="Settings_DanmakuDescription" xml:space="preserve"><value>Saved as XML alongside subtitles</value></data>
   <data name="Settings_DenoMissing" xml:space="preserve"><value>Not installed · needed for some YouTube formats (recommended)</value></data>
   <data name="Settings_Downloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Settings_DownloadsDescription" xml:space="preserve"><value>Save location, simultaneous downloads, clipboard</value></data>
   <data name="Settings_FfmpegMissing" xml:space="preserve"><value>Not installed · merges high-quality streams and extracts audio (recommended)</value></data>
   <data name="Settings_Folder" xml:space="preserve"><value>Default save location</value></data>
+  <data name="Settings_GroupApp" xml:space="preserve"><value>General</value></data>
+  <data name="Settings_GroupDownloading" xml:space="preserve"><value>Downloading</value></data>
   <data name="Settings_H264" xml:space="preserve"><value>Compatibility mode</value></data>
   <data name="Settings_H264Description" xml:space="preserve"><value>Prefer H.264 / AAC for older devices; may limit quality</value></data>
   <data name="Settings_Install" xml:space="preserve"><value>Install</value></data>
@@ -352,6 +383,7 @@
   <data name="Settings_MetadataDescription" xml:space="preserve"><value>Title, uploader and cover</value></data>
   <data name="Settings_MultiConnection" xml:space="preserve"><value>Multi-connection acceleration</value></data>
   <data name="Settings_MultiConnectionNeedsAria2" xml:space="preserve"><value>Needs aria2 · install it in About &amp; updates</value></data>
+  <data name="Settings_NetworkDescription" xml:space="preserve"><value>Proxy, connection test, multi-connection, speed limit</value></data>
   <data name="Settings_NetworkSpeed" xml:space="preserve"><value>Network and speed</value></data>
   <data name="Settings_Notify" xml:space="preserve"><value>Download finished</value></data>
   <data name="Settings_NotifyDescription" xml:space="preserve"><value>When VidFlow is in the background</value></data>
@@ -397,6 +429,7 @@
   <data name="Settings_SubLangsOther" xml:space="preserve"><value>Other languages</value></data>
   <data name="Settings_SubLangsOtherDescription" xml:space="preserve"><value>Language codes, comma separated</value></data>
   <data name="Settings_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
+  <data name="Settings_SubtitlesDescription" xml:space="preserve"><value>Subtitle languages, Bilibili danmaku</value></data>
   <data name="Settings_SubtitlesNone" xml:space="preserve"><value>No language chosen: Chinese and English subtitles are saved</value></data>
   <data name="Settings_SubtitlesSection" xml:space="preserve"><value>Subtitles</value></data>
   <data name="Settings_SubtitlesSummary" xml:space="preserve"><value>{0}</value></data>
@@ -415,6 +448,7 @@
   <data name="Settings_UpdateTo" xml:space="preserve"><value>Update to {0}</value></data>
   <data name="Settings_UpToDate" xml:space="preserve"><value>Up to date</value></data>
   <data name="Settings_VideoFiles" xml:space="preserve"><value>Video files</value></data>
+  <data name="Settings_VideoFilesDescription" xml:space="preserve"><value>Compatibility mode, cover and metadata, chapters, SponsorBlock</value></data>
   <data name="Settings_YtDlpMissing" xml:space="preserve"><value>Not installed · parses and downloads videos (required)</value></data>
   <data name="Size_Approx" xml:space="preserve"><value>~{0}</value></data>
   <data name="Status_AudioStream" xml:space="preserve"><value>Audio</value></data>

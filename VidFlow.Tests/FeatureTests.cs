@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using System.Security.Cryptography;
 using VidFlow.Models;
 using VidFlow.Services;
@@ -1502,6 +1504,161 @@ public class OwnFolderTests
     public void ThePreviewShowsTheFolder() =>
         Assert.Equal(@"Big Buck Bunny [aqz-KE-bpKQ]\Big Buck Bunny [aqz-KE-bpKQ].mp4",
             NamingTemplate.Preview(NamingTemplate.DefaultFileName, "", "mp4", ownFolder: true));
+}
+
+public class ConvertTests
+{
+    static MediaProbe Probe(string[] video, string[] audio, double seconds = 60) => new(video, audio, seconds);
+    static string Codec(List<string> args, string flag) => args[args.IndexOf(flag) + 1];
+
+    [Theory]
+    [InlineData("a.MP4", MediaKind.Video)]
+    [InlineData("a.flac", MediaKind.Audio)]
+    [InlineData("a.jpeg", MediaKind.Image)]
+    [InlineData("a.ass", MediaKind.Subtitle)]
+    public void KnowsWhatAFileIs(string path, MediaKind kind) => Assert.Equal(kind, MediaConverter.KindOf(path));
+
+    [Fact]
+    public void OffersOtherFormatsOfItsKind()
+    {
+        Assert.Null(MediaConverter.KindOf("a.exe"));
+        var video = MediaConverter.TargetsFor("a.mp4");
+        Assert.DoesNotContain("mp4", video);
+        Assert.Contains("mkv", video);
+        Assert.Contains("mp3", video); // a video's sound alone
+        Assert.DoesNotContain("jpg", MediaConverter.TargetsFor("a.jpeg"));
+        Assert.Contains("md", MediaConverter.TargetsFor("a.srt"));
+        Assert.Equal("mkv", MediaConverter.DefaultTarget("a.mp4"));
+        Assert.Equal("mp4", MediaConverter.DefaultTarget("a.mkv"));
+        Assert.Equal("m4a", MediaConverter.DefaultTarget("a.mp3"));
+    }
+
+    [Fact]
+    public void CopiesWhatTheTargetHolds()
+    {
+        var h264Aac = Probe(["h264"], ["aac"]);
+        var rewrap = MediaConverter.Arguments("in.mp4", "out.mkv", "mkv", h264Aac);
+        Assert.Equal("copy", Codec(rewrap, "-c:v"));
+        Assert.Equal("copy", Codec(rewrap, "-c:a"));
+        Assert.True(MediaConverter.IsRewrap("mkv", h264Aac));
+
+        // H.264 with Opus into MP4: the picture is copied, only the sound is encoded.
+        var opus = MediaConverter.Arguments("in.mkv", "out.mp4", "mp4", Probe(["h264"], ["opus"]));
+        Assert.Equal("copy", Codec(opus, "-c:v"));
+        Assert.Equal("aac", Codec(opus, "-c:a"));
+        Assert.Contains("0:V?", opus); // not cover pictures
+
+        // WebM takes only VP8/VP9/AV1 and Opus/Vorbis.
+        var webm = MediaConverter.Arguments("in.mp4", "out.webm", "webm", h264Aac);
+        Assert.Equal("libvpx-vp9", Codec(webm, "-c:v"));
+        Assert.Equal("libopus", Codec(webm, "-c:a"));
+        Assert.False(MediaConverter.IsRewrap("webm", h264Aac));
+    }
+
+    [Fact]
+    public void AudioAloneTakesTheFirstTrack()
+    {
+        var mp3 = MediaConverter.Arguments("in.mp4", "out.mp3", "mp3", Probe(["h264"], ["aac", "aac"]));
+        Assert.Contains("-vn", mp3);
+        Assert.Equal("0:a:0", Codec(mp3, "-map"));
+        Assert.Equal("libmp3lame", Codec(mp3, "-c:a"));
+        Assert.Equal("copy", Codec(MediaConverter.Arguments("in.mp4", "out.m4a", "m4a", Probe(["h264"], ["aac"])), "-c:a"));
+    }
+
+    [Fact]
+    public void ReadsProgressAndProbe()
+    {
+        Assert.Equal(50, MediaConverter.ProgressOf("out_time_us=30000000", 60));
+        Assert.Null(MediaConverter.ProgressOf("frame=120", 60));
+        Assert.Null(MediaConverter.ProgressOf("out_time_us=N/A", 60));
+
+        var probe = MediaConverter.ParseProbe("""
+            {"streams":[{"codec_name":"h264","codec_type":"video","disposition":{"attached_pic":0}},
+                        {"codec_name":"mjpeg","codec_type":"video","disposition":{"attached_pic":1}},
+                        {"codec_name":"opus","codec_type":"audio","disposition":{"attached_pic":0}}],
+             "format":{"duration":"12.5"}}
+            """);
+        Assert.Equal(["h264"], probe.VideoCodecs);
+        Assert.Equal(["opus"], probe.AudioCodecs);
+        Assert.Equal(12.5, probe.Duration);
+    }
+
+    [Fact]
+    public void NeverOverwrites()
+    {
+        var dir = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            var source = Path.Combine(dir, "clip.mp4");
+            File.WriteAllText(source, "");
+            Assert.Equal(Path.Combine(dir, "clip.mkv"), MediaConverter.OutputPath(source, "mkv"));
+            File.WriteAllText(Path.Combine(dir, "clip.mkv"), "");
+            Assert.Equal(Path.Combine(dir, "clip (2).mkv"), MediaConverter.OutputPath(source, "mkv"));
+            Assert.Equal(Path.Combine(dir, "out", "clip.mkv"), MediaConverter.OutputPath(source, "mkv", Path.Combine(dir, "out")));
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Fact]
+    public void MkvLeavesOutWhatItCannotHold()
+    {
+        // MP4 text subtitles become SRT, closed captions are left out, SRT is copied; data tracks (timecode) go.
+        var args = MediaConverter.Arguments("in.mp4", "out.mkv", "mkv",
+            new(["h264"], ["aac"], 60, ["mov_text", "eia_608", "subrip"]));
+        Assert.Contains("-0:d?", args);
+        Assert.Equal("srt", Codec(args, "-c:s:0"));
+        Assert.Contains("-0:s:1", args);
+        Assert.Equal("copy", Codec(args, "-c:s:1"));
+        Assert.DoesNotContain("-c:s:2", args);
+    }
+
+    [Fact]
+    public void EncodersGetWhatTheyCanTake()
+    {
+        // x264 wants even sizes; libopus wants a layout it knows.
+        var mp4 = MediaConverter.Arguments("in.wmv", "out.mp4", "mp4", Probe(["wmv3"], ["wmav2"]));
+        Assert.StartsWith("scale=", Codec(mp4, "-vf"));
+        var opus = MediaConverter.Arguments("in.mkv", "out.opus", "opus", Probe(["h264"], ["ac3"]));
+        Assert.StartsWith("aformat=", Codec(opus, "-af"));
+        // HEVC copied into MP4 is tagged for Apple's players.
+        Assert.Equal("hvc1", Codec(MediaConverter.Arguments("in.mkv", "out.mp4", "mp4", Probe(["hevc"], ["aac"])), "-tag:v"));
+    }
+
+    [Fact]
+    public void PicturesAreSingleAndJpgHasABackground()
+    {
+        var jpg = MediaConverter.ImageArguments("100% a.png", "out.jpg", "jpg");
+        Assert.Equal("1", Codec(jpg, "-update"));
+        Assert.Contains("-filter_complex", jpg);
+        Assert.DoesNotContain("-filter_complex", MediaConverter.ImageArguments("a.png", "out.webp", "webp"));
+    }
+
+    [Fact]
+    public void ReadsSubtitlesInOtherEncodings()
+    {
+        var culture = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = new CultureInfo("zh-CN");
+            Assert.Null(MediaConverter.DecodeLegacy(Encoding.UTF8.GetBytes("你好")));
+            Assert.Equal("你好", MediaConverter.DecodeLegacy([0xC4, 0xE3, 0xBA, 0xC3]));
+            Assert.Equal("你好", MediaConverter.DecodeLegacy(Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes("你好")).ToArray()));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = culture;
+        }
+    }
+
+    [Fact]
+    public void MarkdownWithoutSourceOrLanguageHasNoList()
+    {
+        var md = SubtitleFiles.ToMarkdown([new(TimeSpan.Zero, TimeSpan.FromSeconds(1), "hi")], "clip", null, "");
+        Assert.Equal("# clip\n\n**00:00** hi\n", md);
+    }
 }
 
 public class ChapterTests

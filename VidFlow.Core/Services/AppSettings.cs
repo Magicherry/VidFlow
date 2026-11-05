@@ -54,6 +54,9 @@ public sealed class AppSettings
 
     /// <summary>Speech recognition model: "accurate" or "fast" (see SpeechRecognizer.Models).</summary>
     public string SpeechModel { get; set; } = "accurate";
+
+    /// <summary>Where converted files go: "" for next to each source file.</summary>
+    public string ConvertFolder { get; set; } = "";
     public bool WriteSubtitles { get; set; }
 
     /// <summary>yt-dlp --sub-langs value.</summary>

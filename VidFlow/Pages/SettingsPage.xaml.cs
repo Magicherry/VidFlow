@@ -6,10 +6,44 @@ using VidFlow.Services;
 
 namespace VidFlow.Pages;
 
-/// <summary>App-wide preferences. Templates, accounts and About &amp; updates have pages of their own.</summary>
+/// <summary>App-wide preferences: a list of categories, and each category as a page of its own ("settings/network"),
+/// navigated to with the category as the parameter. About &amp; updates is a page of its own too (<see cref="AboutPage"/>).</summary>
 public sealed partial class SettingsPage : Page
 {
     bool _loading;
+
+    /// <summary>Each category's panel and title (the Tag of its card on the list).</summary>
+    (StackPanel Panel, string Title)? CategoryOf(string? name) => name switch
+    {
+        "downloads" => (DownloadsPanel, "Settings_Downloads"),
+        "video" => (VideoPanel, "Settings_VideoFiles"),
+        "subtitles" => (SubtitlesPanel, "Settings_SubtitlesSection"),
+        "network" => (NetworkPanel, "Settings_NetworkSpeed"),
+        "appearance" => (AppearancePanel, "Settings_Appearance"),
+        "background" => (BackgroundPanel, "Settings_Background"),
+        "addons" => (AddOnsPanel, "Settings_AddOns"),
+        _ => null,
+    };
+
+    /// <summary>The list, or one category's settings under "Settings > Category".</summary>
+    void ShowCategory(string? name)
+    {
+        var category = CategoryOf(name);
+        CategoryPanel.Visibility = category is null ? Visibility.Visible : Visibility.Collapsed;
+        TitleText.Visibility = category is null ? Visibility.Visible : Visibility.Collapsed;
+        Breadcrumb.Visibility = category is null ? Visibility.Collapsed : Visibility.Visible;
+        foreach (var panel in new[] { DownloadsPanel, VideoPanel, SubtitlesPanel, NetworkPanel, AppearancePanel, BackgroundPanel, AddOnsPanel })
+            panel.Visibility = panel == category?.Panel ? Visibility.Visible : Visibility.Collapsed;
+        if (category is { } c) Breadcrumb.ItemsSource = new[] { L.Get("Nav_Settings"), L.Get(c.Title) };
+    }
+
+    void Category_Click(object sender, RoutedEventArgs e) =>
+        App.MainWindow.NavigateTo("settings/" + (string)((FrameworkElement)sender).Tag);
+
+    void Breadcrumb_ItemClicked(BreadcrumbBar sender, BreadcrumbBarItemClickedEventArgs args)
+    {
+        if (args.Index == 0) App.MainWindow.NavigateTo("settings");
+    }
 
     public SettingsPage()
     {
@@ -48,6 +82,7 @@ public sealed partial class SettingsPage : Page
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
+        ShowCategory(e.Parameter as string);
         var s = AppSettings.Current;
         _loading = true;
         Select(LanguageCombo, s.Language);
@@ -253,7 +288,7 @@ public sealed partial class SettingsPage : Page
     void UpdateSubtitleSummary()
     {
         var names = SubtitleLanguageSet.Describe(AppSettings.Current.SubtitleLanguages);
-        SubtitlesExpander.Description = names.Length > 0 ? L.Format("Settings_SubtitlesSummary", names) : L.Get("Settings_SubtitlesNone");
+        SubLangsCard.Description = names.Length > 0 ? L.Format("Settings_SubtitlesSummary", names) : L.Get("Settings_SubtitlesNone");
     }
 
     /// <summary>"Version 1.2.0", plus the newer version when one is waiting.</summary>
@@ -319,15 +354,6 @@ public sealed partial class SettingsPage : Page
     }
 
     // ---- Connection test ---------------------------------------------------------------------------------------
-
-    /// <summary>Scrolls to the network section (proxy and connection test), once the page is laid out.</summary>
-    public void ShowNetwork()
-    {
-        void Scroll() => DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
-            NetworkHeader.StartBringIntoView(new BringIntoViewOptions { VerticalAlignmentRatio = 0, AnimationDesired = false }));
-        if (IsLoaded) Scroll();
-        else Loaded += (_, _) => Scroll();
-    }
 
     async void TestConnectivity_Click(object sender, RoutedEventArgs e) =>
         await Task.Run(() => Connectivity.CheckYouTubeAsync());

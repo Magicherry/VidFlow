@@ -553,3 +553,37 @@ Wizard_ExtrasBody	Turn on what suits you. All of it can be changed later in Sett
 Wizard_SpeechDescription	Makes subtitles for videos without them, on this PC (about {0})	为没有字幕的视频生成字幕，在本机运行（约 {0}）
 Wizard_GpuDescription	Recognizes several times faster; a further download of about {0}	识别快数倍，需另外下载约 {0}
 Wizard_GpuNeedsSpeech	Download speech recognition first	需先下载语音识别
+Error_ConvertNeedsFfmpeg	Converting needs ffmpeg. Install it under Settings → About & updates.	格式转换需要 ffmpeg，请在「设置 → 关于与更新」中安装。
+Error_ConvertNoVideo	This file has no picture to convert into a video.	这个文件没有画面，无法转换为视频。
+Error_ConvertNoAudio	This file has no sound to convert into audio.	这个文件没有声音，无法转换为音频。
+Error_ConvertUnreadable	This file couldn't be read. It may be damaged, or not a media file.	无法读取这个文件，它可能已损坏，或不是媒体文件。
+Error_ConvertFailed	The conversion failed.	转换失败。
+Nav_Convert	Convert	格式转换
+Convert_AddFiles	Add files	添加文件
+Convert_ClearFinished	Clear finished	移除已结束
+Convert_Output	Save to	保存位置
+Convert_SameFolder	Next to the original	与原文件相同
+Convert_SameFolderDescription	Each converted file goes next to the file it came from	转换后的文件保存在原文件所在的文件夹
+Convert_ChooseFolder	Choose a folder…	选择文件夹…
+Convert_EmptyTitle	Nothing to convert yet	还没有要转换的文件
+Convert_EmptyBody	Drag videos, audio, images or subtitles here, or choose Add files. A copy in the new format is saved; the original stays as it is.	把视频、音频、图片或字幕拖到这里，或点击「添加文件」。转换会另存一份新格式的文件，原文件保持不变。
+Convert_DropCaption	Add to Convert	添加到格式转换
+Convert_Target	Convert to	转换为
+Convert_Start	Convert	开始转换
+Convert_Summary	{0} files · {1} waiting · {2} done	共 {0} 个文件 · {1} 个等待 · {2} 个完成
+Convert_Waiting	Waiting	等待转换
+Convert_Converting	Converting  ·  {0}%	正在转换  ·  {0}%
+Convert_Done	Done · {0}	已完成 · {0}
+Convert_Canceled	Canceled	已取消
+Convert_AudioOnly	{0} (audio only)	{0}（仅音频）
+Convert_SkippedTitle	{0} files can't be converted	有 {0} 个文件无法转换
+Convert_SkippedBody	Videos, audio, images and subtitles can be converted. Other files were left out.	可以转换视频、音频、图片和字幕，其他文件已略过。
+Settings_GroupDownloading	Downloading	下载与文件
+Settings_GroupApp	General	通用
+Settings_AppearanceDescription	Language, theme	语言、应用主题
+Settings_DownloadsDescription	Save location, simultaneous downloads, clipboard	保存位置、同时下载数、监听剪贴板
+Settings_VideoFilesDescription	Compatibility mode, cover and metadata, chapters, SponsorBlock	兼容模式、封面与元数据、章节、SponsorBlock
+Settings_SubtitlesDescription	Subtitle languages, Bilibili danmaku	字幕语言、哔哩哔哩弹幕
+Settings_NetworkDescription	Proxy, connection test, multi-connection, speed limit	代理、连接测试、多连接加速、限速
+Settings_AddOnsDescription	Speech recognition, graphics card acceleration: downloaded only if you want them	语音识别、显卡加速，按需下载
+Settings_BackgroundDescription	Notification area, download notifications	托盘、下载通知

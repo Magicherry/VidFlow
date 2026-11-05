@@ -41,6 +41,12 @@
                     Visibility="{x:Bind ErrorBar.IsOpen, Mode=OneWay}" />
 
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Accounts_Platforms')}" />
+                <TextBlock
+                    Margin="1,0,0,8"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind l:L.Get('Accounts_Description')}"
+                    TextWrapping="Wrap" />
                 <tk:SettingsCard x:Name="BiliAccountCard" Header="{x:Bind l:L.Get('Platform_Bilibili')}">
                     <tk:SettingsCard.HeaderIcon>
                         <ImageIcon Source="ms-appx:///Assets/Platforms/bilibili.png" />
@@ -81,12 +87,6 @@
                         MinWidth="96"
                         Click="TikTokAccount_Click" />
                 </tk:SettingsCard>
-                <TextBlock
-                    Margin="1,4,0,0"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="{x:Bind l:L.Get('Accounts_Description')}"
-                    TextWrapping="Wrap" />
 
                 <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('Settings_OtherCookies')}" />
                 <TextBlock

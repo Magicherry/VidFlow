@@ -39,6 +39,7 @@ public sealed partial class MainWindow : Window
         ApplyTheme(AppSettings.Current.Theme);
 
         App.Downloads.ActiveCountChanged += UpdateBadge;
+        App.Converts.ActiveCountChanged += UpdateConvertBadge;
         AppWindow.Closing += AppWindow_Closing;
 
         NavView.SelectedItem = NavView.MenuItems[0];
@@ -48,11 +49,14 @@ public sealed partial class MainWindow : Window
 
     public bool IsForeground => AppWindow.IsVisible && GetForegroundWindow() == Hwnd;
 
-    /// <summary>Shows a page by its nav tag. "about" is a sub-page of Settings: Settings stays selected in the pane.</summary>
+    /// <summary>Shows a page by its nav tag. Settings' sub-pages ("about", "settings/network") keep Settings selected
+    /// in the pane.</summary>
     public void NavigateTo(string tag)
     {
+        var sub = tag.StartsWith("settings/", StringComparison.Ordinal) ? tag["settings/".Length..] : null;
+        var navTag = tag == "about" || sub is not null ? "settings" : tag;
         var item = NavView.MenuItems.Concat(NavView.FooterMenuItems)
-            .OfType<NavigationViewItem>().First(i => (string)i.Tag == (tag == "about" ? "settings" : tag));
+            .OfType<NavigationViewItem>().First(i => (string)i.Tag == navTag);
         _selecting = true;
         try
         {
@@ -62,7 +66,8 @@ public sealed partial class MainWindow : Window
         {
             _selecting = false;
         }
-        Show(tag == "about" ? typeof(AboutPage) : PageFor(tag));
+        if (tag == "about") Show(typeof(AboutPage));
+        else Show(PageFor(navTag), sub);
     }
 
     /// <summary>The page on show.</summary>
@@ -183,6 +188,7 @@ public sealed partial class MainWindow : Window
             return;
         }
         App.Downloads.Shutdown();
+        App.Converts.Shutdown();
         TrayIcon.Dispose();
     }
 
@@ -199,25 +205,43 @@ public sealed partial class MainWindow : Window
         ActiveBadge.Visibility = n > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
+    /// <summary>Files left in the conversion under way, seen from any page (the queue is used on the UI thread).</summary>
+    void UpdateConvertBadge()
+    {
+        var n = App.Converts.ActiveCount;
+        ConvertBadge.Value = n;
+        ConvertBadge.Visibility = n > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
     static Type PageFor(object? tag) => tag switch
     {
         "downloads" => typeof(DownloadsPage),
         "templates" => typeof(TemplatesPage),
+        "convert" => typeof(ConvertPage),
         "accounts" => typeof(AccountsPage),
         "settings" => typeof(SettingsPage),
         _ => typeof(HomePage),
     };
 
-    void Show(Type page)
+    /// <summary>The Settings category on show (the parameter SettingsPage was given), null for the list.</summary>
+    string? _settingsSub;
+
+    bool OnSettingsSubPage => ContentFrame.CurrentSourcePageType == typeof(AboutPage)
+        || ContentFrame.CurrentSourcePageType == typeof(SettingsPage) && _settingsSub is not null;
+
+    void Show(Type page, string? sub = null)
     {
-        if (ContentFrame.CurrentSourcePageType == page) return;
-        // Settings ⇄ its sub-page slide like a drill-in; everything else uses the usual entrance.
+        if (ContentFrame.CurrentSourcePageType == page && _settingsSub == sub) return;
+        var toSub = page == typeof(AboutPage) || sub is not null;
+        var fromList = ContentFrame.CurrentSourcePageType == typeof(SettingsPage) && _settingsSub is null;
+        // Settings ⇄ its sub-pages slide like a drill-in; everything else uses the usual entrance.
         NavigationTransitionInfo transition =
-            page == typeof(AboutPage) ? new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromRight }
-            : page == typeof(SettingsPage) && ContentFrame.CurrentSourcePageType == typeof(AboutPage)
+            toSub && fromList ? new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromRight }
+            : page == typeof(SettingsPage) && sub is null && OnSettingsSubPage
                 ? new SlideNavigationTransitionInfo { Effect = SlideNavigationTransitionEffect.FromLeft }
             : new EntranceNavigationTransitionInfo();
-        ContentFrame.Navigate(page, null, transition);
+        _settingsSub = page == typeof(SettingsPage) ? sub : null;
+        ContentFrame.Navigate(page, sub, transition);
     }
 
     void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -227,11 +251,10 @@ public sealed partial class MainWindow : Window
         Show(PageFor((args.SelectedItem as NavigationViewItem)?.Tag));
     }
 
-    /// <summary>Clicking Settings again while on its sub-page goes back up to Settings.</summary>
+    /// <summary>Clicking Settings again while on one of its sub-pages goes back up to the list.</summary>
     void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
     {
-        if (args.InvokedItemContainer?.Tag is "settings" && ContentFrame.CurrentSourcePageType == typeof(AboutPage))
-            Show(typeof(SettingsPage));
+        if (args.InvokedItemContainer?.Tag is "settings" && OnSettingsSubPage) Show(typeof(SettingsPage));
     }
 
     /// <summary>Narrow windows keep the icon strip (with the pane button on top) rather than hiding the pane, which

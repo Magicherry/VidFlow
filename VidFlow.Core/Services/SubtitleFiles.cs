@@ -164,7 +164,9 @@ public static partial class SubtitleFiles
         var md = new StringBuilder();
         md.Append("# ").Append(title.Trim()).Append("\n\n");
         if (url is { Length: > 0 }) md.Append("- ").Append(L.Get("Subtitles_MdSource")).Append(": <").Append(url).Append(">\n");
-        md.Append("- ").Append(L.Get("Subtitles_MdLanguage")).Append(": ").Append(LanguageName(language)).Append("\n\n");
+        // A file converted by hand has no source and no known language: then there is no list at all.
+        if (language.Length > 0) md.Append("- ").Append(L.Get("Subtitles_MdLanguage")).Append(": ").Append(LanguageName(language)).Append('\n');
+        if (url is { Length: > 0 } || language.Length > 0) md.Append('\n');
         foreach (var (start, text) in Paragraphs(cues))
             md.Append("**").Append(Stamp(start)).Append("** ").Append(EscapeStart(text)).Append("\n\n");
         return md.ToString().TrimEnd() + "\n";

@@ -89,6 +89,16 @@
                         <FontIcon Glyph="&#xE8A1;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <!--  Converting files already on this PC: beside downloading, not part of it  -->
+                <NavigationViewItemSeparator />
+                <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Convert')}" Tag="convert">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8AB;" />
+                    </NavigationViewItem.Icon>
+                    <NavigationViewItem.InfoBadge>
+                        <InfoBadge x:Name="ConvertBadge" Visibility="Collapsed" />
+                    </NavigationViewItem.InfoBadge>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Accounts')}" Tag="accounts">

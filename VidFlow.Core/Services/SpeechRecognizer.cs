@@ -401,39 +401,6 @@ public static partial class SpeechRecognizer
         return dest;
     }
 
-    /// <summary>Runs a program, passing each line it prints (either stream) on; stopped when canceled.</summary>
-    static async Task<(int Code, string Error)> RunAsync(string exe, IEnumerable<string> args, Action<string>? onLine, CancellationToken ct)
-    {
-        var psi = new ProcessStartInfo(exe)
-        {
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            StandardOutputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8,
-        };
-        foreach (var a in args) psi.ArgumentList.Add(a);
-        using var p = new Process { StartInfo = psi };
-        var errors = new StringBuilder();
-        void Line(string? text, bool error)
-        {
-            if (text is null) return;
-            onLine?.Invoke(text);
-            if (error) lock (errors) if (errors.Length < 16000) errors.AppendLine(text);
-        }
-        p.OutputDataReceived += (_, e) => Line(e.Data, false);
-        p.ErrorDataReceived += (_, e) => Line(e.Data, true);
-        p.Start();
-        ProcessJob.Add(p);
-        p.BeginOutputReadLine();
-        p.BeginErrorReadLine();
-        using var reg = ct.Register(() =>
-        {
-            try { if (!p.HasExited) p.Kill(entireProcessTree: true); } catch { }
-        });
-        await p.WaitForExitAsync(CancellationToken.None);
-        ct.ThrowIfCancellationRequested();
-        lock (errors) return (p.ExitCode, errors.ToString().Trim());
-    }
+    static Task<(int Code, string Error)> RunAsync(string exe, IEnumerable<string> args, Action<string>? onLine, CancellationToken ct) =>
+        ProcessRunner.RunAsync(exe, args, onLine, ct);
 }

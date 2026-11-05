@@ -15,6 +15,16 @@ public static class Pickers
         return folder?.Path;
     }
 
+    /// <summary>Any number of files, of any type (what can't be used is said afterwards).</summary>
+    public static async Task<IReadOnlyList<string>> PickFilesAsync()
+    {
+        var picker = new FileOpenPicker();
+        picker.FileTypeFilter.Add("*");
+        InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(App.MainWindow));
+        var files = await picker.PickMultipleFilesAsync();
+        return files.Select(f => f.Path).ToList();
+    }
+
     public static async Task<string?> PickFileAsync(params string[] extensions)
     {
         var picker = new FileOpenPicker();

@@ -68,11 +68,7 @@ public sealed partial class HomePage : Page
     }
 
     /// <summary>Straight to the proxy setting and the connection test.</summary>
-    void PlatformUnreachable_Click(object sender, RoutedEventArgs e)
-    {
-        App.MainWindow.NavigateTo("settings");
-        (App.MainWindow.CurrentPage as SettingsPage)?.ShowNetwork();
-    }
+    void PlatformUnreachable_Click(object sender, RoutedEventArgs e) => App.MainWindow.NavigateTo("settings/network");
 
     public static string FormatDuration(double? seconds) => seconds is > 0 ? Format.Duration(seconds.Value) : "";
 
