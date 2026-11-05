@@ -57,6 +57,19 @@ public sealed class DownloadItem : INotifyPropertyChanged
     public string? FilePath { get => Record.FilePath; set => Record.FilePath = value; }
     public string? ErrorDetail { get => Record.ErrorDetail; set => Record.ErrorDetail = value; }
 
+    /// <summary>Done, but without the subtitles asked for: why (see <see cref="CanRetrySubtitles"/>).</summary>
+    public string? SubtitleProblem
+    {
+        get => Record.SubtitleProblem;
+        set
+        {
+            if (Record.SubtitleProblem == value) return;
+            Record.SubtitleProblem = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(CanRetrySubtitles));
+        }
+    }
+
     public DownloadState State
     {
         get => Record.State;
@@ -67,7 +80,7 @@ public sealed class DownloadItem : INotifyPropertyChanged
             OnPropertyChanged();
             foreach (var name in new[] { nameof(IsActive), nameof(IsRunning), nameof(IsIndeterminate), nameof(IsCompleted),
                          nameof(IsFailed), nameof(IsPausedOrCanceled), nameof(CanPause), nameof(CanResume),
-                         nameof(CanRetry), nameof(CanRemove), nameof(CanCancel), nameof(CanPrioritize), nameof(ShowProgress) })
+                         nameof(CanRetry), nameof(CanRemove), nameof(CanCancel), nameof(CanPrioritize), nameof(ShowProgress), nameof(CanRetrySubtitles) })
                 OnPropertyChanged(name);
         }
     }
@@ -86,6 +99,9 @@ public sealed class DownloadItem : INotifyPropertyChanged
     public bool CanCancel => IsActive || State == DownloadState.Paused;
     public bool CanPrioritize => State == DownloadState.Queued;
     public bool ShowProgress => State != DownloadState.Completed;
+
+    /// <summary>The video is there, its subtitles are not: they can be fetched (or made) again on their own.</summary>
+    public bool CanRetrySubtitles => State == DownloadState.Completed && SubtitleProblem is not null;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

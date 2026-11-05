@@ -19,34 +19,6 @@
                 SelectionChanged="Option_Changed" />
         </tk:SettingsCard>
 
-        <!--  Subtitles only: the file format, and which track (when the video is known)  -->
-        <tk:SettingsCard
-            x:Name="SubFormatCard"
-            Description="{x:Bind l:L.Get('Options_SubtitleFormatDescription')}"
-            Header="{x:Bind l:L.Get('Options_SubtitleFormat')}">
-            <tk:SettingsCard.HeaderIcon>
-                <FontIcon Glyph="&#xE8A5;" />
-            </tk:SettingsCard.HeaderIcon>
-            <ComboBox
-                x:Name="SubFormatCombo"
-                MinWidth="200"
-                AutomationProperties.Name="{x:Bind l:L.Get('Options_SubtitleFormat')}"
-                SelectionChanged="Option_Changed" />
-        </tk:SettingsCard>
-
-        <tk:SettingsCard
-            x:Name="SubLanguageCard"
-            Header="{x:Bind l:L.Get('Options_SubtitleLanguage')}">
-            <tk:SettingsCard.HeaderIcon>
-                <FontIcon Glyph="&#xF2B7;" />
-            </tk:SettingsCard.HeaderIcon>
-            <ComboBox
-                x:Name="SubLanguageCombo"
-                MinWidth="200"
-                AutomationProperties.Name="{x:Bind l:L.Get('Options_SubtitleLanguage')}"
-                SelectionChanged="Option_Changed" />
-        </tk:SettingsCard>
-
         <tk:SettingsCard
             x:Name="QualityCard"
             Description="{x:Bind l:L.Get('Options_QualityDescription')}"
@@ -136,18 +108,64 @@
             </tk:SettingsExpander.Items>
         </tk:SettingsExpander>
 
-        <tk:SettingsCard
-            x:Name="SubtitlesCard"
+        <!--  Subtitles: the switch in the header, which ones and in what format inside (opened when switched on).
+              For subtitles alone it has no switch and stays open.  -->
+        <tk:SettingsExpander
+            x:Name="SubtitlesExpander"
             Description="{x:Bind l:L.Get('Options_SubtitlesDescription')}"
             Header="{x:Bind l:L.Get('Options_Subtitles')}">
-            <tk:SettingsCard.HeaderIcon>
+            <tk:SettingsExpander.HeaderIcon>
                 <FontIcon Glyph="&#xED1E;" />
-            </tk:SettingsCard.HeaderIcon>
+            </tk:SettingsExpander.HeaderIcon>
             <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}"
                 x:Name="SubsToggle"
                 AutomationProperties.Name="{x:Bind l:L.Get('Options_Subtitles')}"
                 Toggled="Option_Changed" />
-        </tk:SettingsCard>
+            <tk:SettingsExpander.Items>
+                <tk:SettingsCard
+                    x:Name="SubLanguageCard"
+                    Description="{x:Bind l:L.Get('Options_SubtitleLanguageDescription')}"
+                    Header="{x:Bind l:L.Get('Options_SubtitleLanguage')}">
+                    <ComboBox
+                        x:Name="SubLanguageCombo"
+                        MinWidth="200"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_SubtitleLanguage')}"
+                        SelectionChanged="Option_Changed" />
+                </tk:SettingsCard>
+                <tk:SettingsCard
+                    x:Name="SubFormatCard"
+                    Description="{x:Bind l:L.Get('Options_SubtitleFormatDescription')}"
+                    Header="{x:Bind l:L.Get('Options_SubtitleFormat')}">
+                    <ComboBox
+                        x:Name="SubFormatCombo"
+                        MinWidth="200"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_SubtitleFormat')}"
+                        SelectionChanged="Option_Changed" />
+                </tk:SettingsCard>
+                <!--  A video's subtitles inside the file, as tracks players can turn on (MP4, MKV, WebM)  -->
+                <tk:SettingsCard
+                    x:Name="EmbedCard"
+                    Description="{x:Bind l:L.Get('Options_EmbedSubtitlesDescription')}"
+                    Header="{x:Bind l:L.Get('Options_EmbedSubtitles')}">
+                    <ToggleSwitch OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}"
+                        x:Name="EmbedToggle"
+                        AutomationProperties.Name="{x:Bind l:L.Get('Options_EmbedSubtitles')}"
+                        Toggled="Option_Changed" />
+                </tk:SettingsCard>
+            </tk:SettingsExpander.Items>
+        </tk:SettingsExpander>
+
+        <!--  Bilibili gives its subtitles (AI ones too) only to a signed-in account  -->
+        <InfoBar
+            x:Name="SubLoginBar"
+            Title="{x:Bind l:L.Get('Options_SubtitleSignIn')}"
+            IsClosable="False"
+            Severity="Informational"
+            Visibility="{x:Bind SubLoginBar.IsOpen, Mode=OneWay}">
+            <InfoBar.ActionButton>
+                <Button Click="SignIn_Click" Content="{x:Bind l:L.Get('Options_SubtitleSignInButton')}" />
+            </InfoBar.ActionButton>
+        </InfoBar>
 
         <tk:SettingsCard
             x:Name="RecodeCard"

@@ -35,6 +35,7 @@ public static class DownloadLabels
             if (PictureLabel(r.DynamicRange) is { } picture) mode += $" · {picture}";
             if (SoundLabel(r.AudioFormat) is { } sound) mode += $" · {sound}";
         }
+        if (r.WriteSubtitles && SubtitleFiles.IsSpeech(r.SubtitleLanguage)) mode += $" · {L.Get("Label_Speech")}";
         var label = $"{UrlTools.DetectPlatform(r.Url).DisplayName()}  ·  {mode}";
         return partIndex is { } p ? $"{label}  ·  P{p}" : label;
     }
@@ -79,7 +80,10 @@ public static class DownloadLabels
             if (t.AudioFormat is "aac" or "opus") parts.Add(t.AudioFormat == "aac" ? "AAC" : "Opus");
             if (SoundLabel(t.AudioFormat) is { } sound) parts.Add(sound);
             if (t.AudioQuality > 0) parts.Add($"{t.AudioQuality} kbps");
-            parts.Add(L.Get(t.Subtitles ? "Options_Subtitles" : "Label_NoSubtitles"));
+            parts.Add(!t.Subtitles ? L.Get("Label_NoSubtitles")
+                : t.EmbedSubtitles ? L.Get("Label_SubtitlesEmbedded")
+                : SubtitleFiles.Normalize(t.SubtitleFormat) is var f && f != SubtitleFiles.DefaultFormat ? $"{L.Get("Options_Subtitles")} {SubtitleFiles.ShortName(f)}"
+                : L.Get("Options_Subtitles"));
         }
         if (t.Mode is "video" or "audio" && t.AudioLanguage.Length > 0) parts.Add(t.AudioLanguage);
         if (t.FolderTemplate.Length > 0) parts.Add(t.FolderTemplate.Replace('/', '\\'));

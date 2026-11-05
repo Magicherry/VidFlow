@@ -85,7 +85,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
     public void MakeReadOnly()
     {
         foreach (var input in new Control[] { ModeCombo, QualityCombo, CodecCombo, PictureCombo, ContainerCombo, AudioFormatCombo,
-                     AudioQualityCombo, AudioTrackCombo, SubFormatCombo, SubLanguageCombo, SubsToggle, RecodeToggle, FileNamePresetCombo, FileNameBox, FolderCombo, CompatFixButton })
+                     AudioQualityCombo, AudioTrackCombo, SubFormatCombo, SubLanguageCombo, SubsToggle, EmbedToggle, RecodeToggle, FileNamePresetCombo, FileNameBox, FolderCombo, CompatFixButton })
             input.IsEnabled = false;
         VariablePanel.Visibility = Visibility.Collapsed;
         AudioExpander.IsExpanded = true;
@@ -108,6 +108,7 @@ public sealed partial class DownloadOptionsEditor : UserControl
         FillAudioQualities();
         FillAudioTracks();
         SubsToggle.IsOn = options.Subtitles;
+        EmbedToggle.IsOn = options.EmbedSubtitles;
         RecodeToggle.IsOn = options.Recode;
         FileNameBox.Text = string.IsNullOrWhiteSpace(options.FileNameTemplate) ? NamingTemplate.DefaultFileName : options.FileNameTemplate;
         SyncFileNamePreset();
@@ -262,9 +263,18 @@ public sealed partial class DownloadOptionsEditor : UserControl
         // A track another video had (from a template) means nothing here.
         if (!SubLanguageCombo.Items.Cast<ComboBoxItem>().Any(i => (string)i.Tag == _options.SubtitleLanguage && i.IsEnabled)) _options.SubtitleLanguage = "";
         Select(SubLanguageCombo, _options.SubtitleLanguage);
-        SubLanguageCard.Description = _video is { HasSubtitles: false }
-            ? L.Get("Options_SubtitleNone") : L.Get("Options_SubtitleLanguageDescription");
     }
+
+    /// <summary>For a parsed video without subtitles: that speech recognition will make them (the download falls back
+    /// to it when no track is chosen), or where to get it.</summary>
+    bool NeedsBilibiliSignIn => _video is { } v && UrlTools.DetectPlatform(v.Url) == Platform.Bilibili
+        && !AccountStore.IsLoggedIn(Platform.Bilibili);
+
+    void SignIn_Click(object sender, RoutedEventArgs e) => App.MainWindow.NavigateTo("accounts");
+
+    string? NoSubtitlesNote => _video is { HasSubtitles: false }
+        ? L.Get(SpeechRecognizer.CanRecognize ? "Options_SubtitleNoneSpeech" : "Options_SubtitleNoneOff")
+        : null;
 
     static string LanguageName(string code)
     {
@@ -296,9 +306,12 @@ public sealed partial class DownloadOptionsEditor : UserControl
         // As with resolution: the first entry is the top, so a higher limit from a template stays as it is.
         if (audioQuality != 0 || TopAudioKbps is not { } top || _options.AudioQuality < top) _options.AudioQuality = audioQuality;
         _options.AudioLanguage = TagOf(AudioTrackCombo) ?? "";
+        // Switching subtitles on opens their choices; off, they fold away.
+        if (_options.Subtitles != SubsToggle.IsOn) SubtitlesExpander.IsExpanded = SubsToggle.IsOn;
         _options.Subtitles = SubsToggle.IsOn;
         _options.SubtitleFormat = TagOf(SubFormatCombo) ?? SubtitleFiles.DefaultFormat;
         _options.SubtitleLanguage = TagOf(SubLanguageCombo) ?? "";
+        _options.EmbedSubtitles = EmbedToggle.IsOn;
         _options.Recode = RecodeToggle.IsOn;
         _options.FolderTemplate = TagOf(FolderCombo) ?? "";
 
@@ -308,6 +321,8 @@ public sealed partial class DownloadOptionsEditor : UserControl
             _loading = true;
             FillAudioFormats();
             _loading = false;
+            // Leaving subtitles alone (always open): open as far as the switch says.
+            if (modeBefore == DownloadRequest.SubtitlesMode) SubtitlesExpander.IsExpanded = _options.Subtitles;
         }
 
         // The sizes in the quality list depend on these: a different codec or audio track is a different file.
@@ -383,10 +398,28 @@ public sealed partial class DownloadOptionsEditor : UserControl
         QualityCard.Visibility = CodecCard.Visibility = ContainerCard.Visibility = RecodeCard.Visibility =
             video ? Visibility.Visible : Visibility.Collapsed;
         // A cover is just the image, subtitles just the text: no sound to choose.
-        AudioExpander.Visibility = SubtitlesCard.Visibility = cover || subtitles ? Visibility.Collapsed : Visibility.Visible;
-        SubFormatCard.Visibility = subtitles ? Visibility.Visible : Visibility.Collapsed;
-        // Which tracks there are is only known for a parsed video (not in the template editor).
-        SubLanguageCard.Visibility = subtitles && _video is not null ? Visibility.Visible : Visibility.Collapsed;
+        AudioExpander.Visibility = cover || subtitles ? Visibility.Collapsed : Visibility.Visible;
+        // Subtitles: a switch for a video or its sound; for subtitles alone always on, and open.
+        SubtitlesExpander.Visibility = cover ? Visibility.Collapsed : Visibility.Visible;
+        SubsToggle.Visibility = subtitles ? Visibility.Collapsed : Visibility.Visible;
+        if (subtitles) SubtitlesExpander.IsExpanded = true;
+        var on = subtitles || _options.Subtitles;
+        // Inside the video they need no format; which tracks there are is only known for a parsed video.
+        // The expander doesn't lay its items out again when one is hidden, so the list itself changes.
+        var items = new List<object>();
+        if (_video is not null) items.Add(SubLanguageCard);
+        if (!(video && _options.EmbedSubtitles)) items.Add(SubFormatCard);
+        if (video) items.Add(EmbedCard);
+        if (!items.SequenceEqual(SubtitlesExpander.Items))
+        {
+            SubtitlesExpander.Items.Clear();
+            foreach (var item in items) SubtitlesExpander.Items.Add(item);
+        }
+        SubLanguageCard.IsEnabled = SubFormatCard.IsEnabled = EmbedCard.IsEnabled = on;
+        // Signed out of Bilibili, its subtitles look like none at all: say that before speech recognition.
+        SubLoginBar.IsOpen = on && NeedsBilibiliSignIn;
+        var defaultLanguages = _options.SubtitleLanguage.Length == 0 && !NeedsBilibiliSignIn;
+        SubtitlesExpander.Description = (defaultLanguages ? NoSubtitlesNote : null) ?? L.Get("Options_SubtitlesDescription");
         // Nothing to choose for a video that is SDR only.
         PictureCard.Visibility = video && (_video is null || _video.HdrKinds.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
 

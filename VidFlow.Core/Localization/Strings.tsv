@@ -123,7 +123,7 @@ Options_Mode	Download	下载内容
 Options_Quality	Quality	画质
 Options_QualityDescription	Sizes are estimates	大小为估算值
 Options_Subtitles	Subtitles	字幕
-Options_SubtitlesDescription	Languages are set in Settings	字幕语言在设置中调整
+Options_SubtitlesDescription	By default in the languages set in Settings	默认使用设置中的字幕语言
 Options_Title	Download options	下载选项
 Platform_Bilibili	Bilibili	哔哩哔哩
 Platform_Other	Video	视频
@@ -503,8 +503,9 @@ Mode_Subtitles	Subtitles	字幕
 Options_SubtitleFormat	Subtitle format	字幕格式
 Options_SubtitleFormatDescription	TXT and Markdown keep the words only, for reading or notes	TXT 与 Markdown 只保留文字，适合阅读或做笔记
 Options_SubtitleLanguage	Subtitle language	字幕语言
-Options_SubtitleLanguageDescription	By default the languages in Settings; auto-generated ones when there are none	默认使用设置中的语言；没有时使用自动生成的字幕
-Options_SubtitleNone	No subtitles were found for this video; speech recognition can make them	没有找到这个视频的字幕，可以用语音识别生成
+Options_SubtitleLanguageDescription	By default the languages in Settings; failing those, auto-generated ones, any other language, then speech recognition	默认使用设置中的语言；没有时依次尝试自动生成的字幕、其他语言的字幕，最后用语音识别
+Options_SubtitleNoneSpeech	This video has no subtitles: speech recognition will make them	这个视频没有字幕，下载时会用语音识别生成
+Options_SubtitleNoneOff	This video has no subtitles. Get speech recognition in Settings › Add-ons to make them	这个视频没有字幕。在「设置 → 附加组件」下载语音识别后，可自动生成字幕
 SubLang_Settings	Languages in Settings	设置中的语言
 SubLang_Auto	{0} (auto-generated)	{0}（自动生成）
 SubFormat_Txt	Plain text (TXT)	纯文本（TXT）
@@ -526,7 +527,7 @@ Asr_ModelFast	Fast	快速
 Asr_ModelSize	{0} · about {1}	{0} · 约 {1}
 Settings_Speech	Speech recognition	语音识别
 Settings_SpeechOff	Makes subtitles for videos that have none, from what is said. Runs on this PC: nothing is uploaded.	为没有字幕的视频，根据语音生成字幕。在本机运行，不会上传任何内容。
-Settings_SpeechReady	On · {0} on disk. Choose speech recognition under Subtitle language when downloading subtitles	已启用 · 占用 {0}。下载字幕时在「字幕语言」中选择语音识别
+Settings_SpeechReady	On · {0} on disk. Videos without subtitles get theirs from it; you can also pick it under Subtitle language	已启用 · 占用 {0}。没有字幕的视频会自动用它生成字幕，也可以在「字幕语言」中直接选择
 Settings_SpeechInstalling	Downloading… {0}%	正在下载… {0}%
 Settings_SpeechFailed	Download failed: {0}	下载失败：{0}
 Settings_SpeechDownload	Download	下载
@@ -587,3 +588,14 @@ Settings_GroupSaving	Saving	保存
 Settings_GroupSpeed	Speed	速度
 Settings_GroupNetwork	Network	网络
 Settings_GroupVideo	Video	视频
+Sub_NoSpeech	no speech was heard in it	视频中没有识别到说话
+Sub_NotFound	none were found	没有找到字幕
+Error_EmbedSubtitles	Could not put the subtitles into the video	无法把字幕放进视频
+Status_Subtitles	Getting subtitles…	正在处理字幕…
+Status_CompletedNoSubtitles	Completed · {0} · no subtitles: {1}	已完成 · {0} · 未获取到字幕：{1}
+Action_RetrySubtitles	Try the subtitles again	重试字幕
+Options_EmbedSubtitles	Put inside the video	嵌入视频
+Options_EmbedSubtitlesDescription	As subtitle tracks players can turn on, instead of files beside the video	作为字幕轨放进视频，播放器中可以开关，不再单独保存字幕文件
+Options_SubtitleSignIn	Bilibili gives its subtitles (AI ones too) only when you are signed in	登录哔哩哔哩后才能获取它的字幕（包括 AI 字幕）
+Options_SubtitleSignInButton	Sign in	去登录
+Label_SubtitlesEmbedded	Embedded subtitles	嵌入字幕

@@ -127,6 +127,8 @@ public sealed partial class DownloadsPage : Page
     void Resume_Click(object sender, RoutedEventArgs e) => App.Downloads.Resume(ItemOf(sender));
     void Cancel_Click(object sender, RoutedEventArgs e) => App.Downloads.Cancel(ItemOf(sender));
     void Retry_Click(object sender, RoutedEventArgs e) => App.Downloads.Retry(ItemOf(sender));
+
+    void RetrySubtitles_Click(object sender, RoutedEventArgs e) => App.Downloads.RetrySubtitles(ItemOf(sender));
     void Remove_Click(object sender, RoutedEventArgs e) => App.Downloads.Remove(ItemOf(sender));
     void PauseAll_Click(object sender, RoutedEventArgs e) => App.Downloads.PauseAll();
     void ResumeAll_Click(object sender, RoutedEventArgs e) => App.Downloads.ResumeAll();

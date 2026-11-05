@@ -1481,7 +1481,11 @@ public class OwnFolderTests
 
             // With its subtitles: it stays.
             var withSubs = Make("B [2]", "B [2].zh.srt");
+            Assert.True(YtDlpService.HasSubtitlesBeside(withSubs));
             Assert.Equal(withSubs, YtDlpService.LeaveLoneFolder(withSubs));
+
+            // Danmaku alone is no subtitles: speech recognition would make them.
+            Assert.False(YtDlpService.HasSubtitlesBeside(Make("E [5]", "E [5].danmaku.xml")));
 
             // A file of that name already above: nothing is overwritten.
             File.WriteAllText(Path.Combine(root, "C [3].mp4"), "old");
@@ -2002,5 +2006,71 @@ public class ConnectivityTests
             Assert.Contains("no answer", result.Error);
         }
         finally { tcp.Stop(); }
+    }
+}
+
+public class VideoSubtitleTests
+{
+    static readonly YtDlpArgs.Environment WithFfmpeg = new(@"C:\ff", null, false);
+
+    static List<string> Args(string url, DownloadTemplate t, AppSettings? s = null) =>
+        YtDlpArgs.Download(t.ToRequest(url, "o"), s ?? new AppSettings(), WithFfmpeg);
+
+    [Fact]
+    public void AVideoTakesTheTrackChosen()
+    {
+        const string url = "https://www.youtube.com/watch?v=abc";
+        var settings = Args(url, new DownloadTemplate { Subtitles = true });
+        Assert.Contains("--write-subs", settings);
+
+        var auto = Args(url, new DownloadTemplate { Subtitles = true, SubtitleLanguage = "auto:en-orig" });
+        Assert.Equal("en-orig", auto[auto.IndexOf("--sub-langs") + 1]);
+        Assert.Contains("--write-auto-subs", auto);
+
+        // Made from the sound afterwards: yt-dlp is not asked for any (no doubled subtitles).
+        Assert.DoesNotContain("--write-subs", Args(url, new DownloadTemplate { Subtitles = true, SubtitleLanguage = "asr:zh" }));
+        // Bilibili's danmaku still comes.
+        var bili = Args("https://www.bilibili.com/video/BV1xx411c7mD", new DownloadTemplate { Subtitles = true, SubtitleLanguage = "asr:zh" },
+            new AppSettings { SaveDanmaku = true });
+        Assert.Equal("danmaku", bili[bili.IndexOf("--sub-langs") + 1]);
+    }
+
+    [Fact]
+    public void OnlyAVideoEmbeds()
+    {
+        Assert.True(new DownloadTemplate { Subtitles = true, EmbedSubtitles = true }.ToRequest("u", "o").EmbedSubtitles);
+        Assert.False(new DownloadTemplate { Mode = "audio", Subtitles = true, EmbedSubtitles = true }.ToRequest("u", "o").EmbedSubtitles);
+    }
+
+    [Fact]
+    public void EmbeddingNamesEachTrack()
+    {
+        var mp4 = YtDlpService.EmbedArguments("A [1].mp4", ["A [1].ai-zh.srt", "A [1].en.srt"], "out.mp4");
+        Assert.Equal("mov_text", mp4[mp4.IndexOf("-c:s") + 1]);
+        Assert.Contains("language=chi", mp4);
+        Assert.Contains("language=eng", mp4);
+        Assert.Contains("title=ai-zh", mp4);
+        Assert.Contains("2:0", mp4);
+        var mkv = YtDlpService.EmbedArguments("A [1].mkv", ["A [1].und.srt"], "out.mkv");
+        Assert.Equal("srt", mkv[mkv.IndexOf("-c:s") + 1]);
+        Assert.DoesNotContain(mkv, a => a.StartsWith("language=", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void FindsTheSubtitlesBesideAVideo()
+    {
+        var dir = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            var video = Path.Combine(dir, "A [1].mp4");
+            foreach (var f in new[] { "A [1].mp4", "A [1].zh-CN.srt", "A [1].danmaku.xml", "A [1].en.vtt", "B [2].zh.srt" })
+                File.WriteAllText(Path.Combine(dir, f), "");
+            Assert.Equal(["A [1].en.vtt", "A [1].zh-CN.srt"], YtDlpService.SubtitlesBeside(video).Select(Path.GetFileName));
+            Assert.Equal("zh-CN", YtDlpService.LanguageOf(Path.Combine(dir, "A [1].zh-CN.srt")));
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
     }
 }

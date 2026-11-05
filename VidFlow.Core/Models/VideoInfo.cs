@@ -118,8 +118,9 @@ public sealed record DownloadRequest(
     string FileNameTemplate = NamingTemplate.DefaultFileName,
     string FolderTemplate = "",
     string DynamicRange = MediaFeatures.Auto, // auto, dv, sdr (see MediaFeatures)
-    string SubtitleFormat = SubtitleFiles.DefaultFormat, // subtitles only: srt, vtt, ass, lrc, txt, md
-    string SubtitleLanguage = "")     // subtitles only: "" = the languages in Settings, "auto:xx" = automatic, else a code
+    string SubtitleFormat = SubtitleFiles.DefaultFormat, // srt, vtt, ass, lrc, txt, md (a video's subtitles too)
+    string SubtitleLanguage = "",     // "" = the languages in Settings, "auto:xx" = automatic, "asr:xx" = speech recognition, else a code
+    bool EmbedSubtitles = false)      // a video's subtitles go inside the file rather than beside it
 {
     public bool IsAudio => Mode is "audio" or "mp3" or "m4a";
 

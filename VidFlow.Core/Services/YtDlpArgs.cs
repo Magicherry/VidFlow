@@ -152,11 +152,17 @@ public static class YtDlpArgs
 
         if (req.WriteSubtitles)
         {
-            var langs = string.IsNullOrWhiteSpace(s.SubtitleLanguages) ? SubtitleLanguageSet.Fallback : s.SubtitleLanguages.Trim();
-            if (platform == Platform.Bilibili && s.SaveDanmaku) langs += ",danmaku";
-            args.AddRange(["--write-subs", "--sub-langs", langs]);
-            // Bilibili already serves SRT, and its danmaku is XML that must not be converted.
-            if (platform != Platform.Bilibili && hasFfmpeg) args.AddRange(["--convert-subs", "srt"]);
+            // Speech recognition makes them afterwards (YtDlpService): then yt-dlp only brings the danmaku.
+            var (langs, automatic) = SubtitleFiles.IsSpeech(req.SubtitleLanguage) ? ("", false) : SubtitleFiles.Languages(req.SubtitleLanguage, s);
+            if (platform == Platform.Bilibili && s.SaveDanmaku) langs = langs.Length > 0 ? langs + ",danmaku" : "danmaku";
+            if (langs.Length > 0)
+            {
+                args.AddRange(["--write-subs", "--sub-langs", langs]);
+                if (automatic) args.Add("--write-auto-subs");
+                // Bilibili already serves SRT, and its danmaku is XML that must not be converted. Other formats
+                // than SRT are made afterwards, from the SRT.
+                if (platform != Platform.Bilibili && hasFfmpeg) args.AddRange(["--convert-subs", "srt"]);
+            }
         }
 
         if (s.EmbedMetadata && hasFfmpeg)

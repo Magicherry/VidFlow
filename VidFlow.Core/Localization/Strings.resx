@@ -37,6 +37,7 @@
   <data name="Action_Remove" xml:space="preserve"><value>Remove from list</value></data>
   <data name="Action_Resume" xml:space="preserve"><value>Resume</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="Action_RetrySubtitles" xml:space="preserve"><value>Try the subtitles again</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
   <data name="Asr_Lang_auto" xml:space="preserve"><value>detect language</value></data>
   <data name="Asr_Lang_en" xml:space="preserve"><value>English</value></data>
@@ -141,6 +142,7 @@
   <data name="Error_DiskFull" xml:space="preserve"><value>Not enough disk space.</value></data>
   <data name="Error_DouyinNotVideo" xml:space="preserve"><value>This Douyin link isn&apos;t a post (profiles aren&apos;t supported).</value></data>
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>Couldn&apos;t get this Douyin video. It may have been deleted or be private, or it may need an account (sign in to Douyin on the Accounts page).</value></data>
+  <data name="Error_EmbedSubtitles" xml:space="preserve"><value>Could not put the subtitles into the video</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>This playlist has no downloadable videos.</value></data>
   <data name="Error_Network" xml:space="preserve"><value>Network error. Reaching YouTube may require a proxy (Settings → Network and speed).</value></data>
   <data name="Error_NoCover" xml:space="preserve"><value>This video has no cover image.</value></data>
@@ -214,6 +216,7 @@
   <data name="Label_NoSubtitles" xml:space="preserve"><value>No subtitles</value></data>
   <data name="Label_Speech" xml:space="preserve"><value>speech recognition</value></data>
   <data name="Label_Subtitles" xml:space="preserve"><value>{0} subtitles</value></data>
+  <data name="Label_SubtitlesEmbedded" xml:space="preserve"><value>Embedded subtitles</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>Downloaded from the official yt-dlp builds when you choose to install it; not bundled with VidFlow. Source code: ffmpeg.org.</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow is built on these open-source components. Click a license to read it.</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically</value></data>
@@ -279,6 +282,8 @@
   <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 plays everywhere; H.265 / AV1 are smaller</value></data>
   <data name="Options_Container" xml:space="preserve"><value>Container</value></data>
   <data name="Options_ContainerDescription" xml:space="preserve"><value>MP4 plays almost everywhere</value></data>
+  <data name="Options_EmbedSubtitles" xml:space="preserve"><value>Put inside the video</value></data>
+  <data name="Options_EmbedSubtitlesDescription" xml:space="preserve"><value>As subtitle tracks players can turn on, instead of files beside the video</value></data>
   <data name="Options_FileName" xml:space="preserve"><value>File name</value></data>
   <data name="Options_FileNameDescription" xml:space="preserve"><value>Or compose your own below</value></data>
   <data name="Options_FileNamePattern" xml:space="preserve"><value>Format</value></data>
@@ -300,10 +305,13 @@
   <data name="Options_SubtitleFormat" xml:space="preserve"><value>Subtitle format</value></data>
   <data name="Options_SubtitleFormatDescription" xml:space="preserve"><value>TXT and Markdown keep the words only, for reading or notes</value></data>
   <data name="Options_SubtitleLanguage" xml:space="preserve"><value>Subtitle language</value></data>
-  <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>By default the languages in Settings; auto-generated ones when there are none</value></data>
-  <data name="Options_SubtitleNone" xml:space="preserve"><value>No subtitles were found for this video; speech recognition can make them</value></data>
+  <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>By default the languages in Settings; failing those, auto-generated ones, any other language, then speech recognition</value></data>
+  <data name="Options_SubtitleNoneOff" xml:space="preserve"><value>This video has no subtitles. Get speech recognition in Settings › Add-ons to make them</value></data>
+  <data name="Options_SubtitleNoneSpeech" xml:space="preserve"><value>This video has no subtitles: speech recognition will make them</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>Subtitles</value></data>
-  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>Languages are set in Settings</value></data>
+  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>By default in the languages set in Settings</value></data>
+  <data name="Options_SubtitleSignIn" xml:space="preserve"><value>Bilibili gives its subtitles (AI ones too) only when you are signed in</value></data>
+  <data name="Options_SubtitleSignInButton" xml:space="preserve"><value>Sign in</value></data>
   <data name="Options_Title" xml:space="preserve"><value>Download options</value></data>
   <data name="Picture_Auto" xml:space="preserve"><value>Auto (HDR when available)</value></data>
   <data name="Picture_AutoNoHdr" xml:space="preserve"><value>Auto</value></data>
@@ -414,7 +422,7 @@
   <data name="Settings_SpeechModelDescription" xml:space="preserve"><value>Accurate gets names and terms right more often; Fast suits slower PCs</value></data>
   <data name="Settings_SpeechModelMissing" xml:space="preserve"><value>The chosen model isn&apos;t downloaded yet (about {0}). Download it to use speech recognition.</value></data>
   <data name="Settings_SpeechOff" xml:space="preserve"><value>Makes subtitles for videos that have none, from what is said. Runs on this PC: nothing is uploaded.</value></data>
-  <data name="Settings_SpeechReady" xml:space="preserve"><value>On · {0} on disk. Choose speech recognition under Subtitle language when downloading subtitles</value></data>
+  <data name="Settings_SpeechReady" xml:space="preserve"><value>On · {0} on disk. Videos without subtitles get theirs from it; you can also pick it under Subtitle language</value></data>
   <data name="Settings_SpeechRemove" xml:space="preserve"><value>Remove</value></data>
   <data name="Settings_SpeechRemoveFailed" xml:space="preserve"><value>Couldn&apos;t remove it: {0}</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>Speed limit</value></data>
@@ -455,6 +463,7 @@
   <data name="Status_Canceled" xml:space="preserve"><value>Canceled</value></data>
   <data name="Status_Completed" xml:space="preserve"><value>Completed</value></data>
   <data name="Status_CompletedFile" xml:space="preserve"><value>Completed · {0}</value></data>
+  <data name="Status_CompletedNoSubtitles" xml:space="preserve"><value>Completed · {0} · no subtitles: {1}</value></data>
   <data name="Status_Connecting" xml:space="preserve"><value>Connecting…</value></data>
   <data name="Status_Converting" xml:space="preserve"><value>Converting audio…</value></data>
   <data name="Status_Merging" xml:space="preserve"><value>Merging video and audio…</value></data>
@@ -466,9 +475,12 @@
   <data name="Status_Remaining" xml:space="preserve"><value>{0} left</value></data>
   <data name="Status_Resuming" xml:space="preserve"><value>Will resume…</value></data>
   <data name="Status_Stalled" xml:space="preserve"><value>No progress for {0} minutes; still trying…</value></data>
+  <data name="Status_Subtitles" xml:space="preserve"><value>Getting subtitles…</value></data>
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>Video done, downloading audio…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>Video</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>Waiting…</value></data>
+  <data name="Sub_NoSpeech" xml:space="preserve"><value>no speech was heard in it</value></data>
+  <data name="Sub_NotFound" xml:space="preserve"><value>none were found</value></data>
   <data name="SubFormat_Md" xml:space="preserve"><value>Markdown (with timestamps)</value></data>
   <data name="SubFormat_Txt" xml:space="preserve"><value>Plain text (TXT)</value></data>
   <data name="SubLang_Auto" xml:space="preserve"><value>{0} (auto-generated)</value></data>

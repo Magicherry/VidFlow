@@ -37,6 +37,7 @@
   <data name="Action_Remove" xml:space="preserve"><value>从列表中移除</value></data>
   <data name="Action_Resume" xml:space="preserve"><value>继续</value></data>
   <data name="Action_Retry" xml:space="preserve"><value>重试</value></data>
+  <data name="Action_RetrySubtitles" xml:space="preserve"><value>重试字幕</value></data>
   <data name="Action_ShowInFolder" xml:space="preserve"><value>在文件夹中显示</value></data>
   <data name="Asr_Lang_auto" xml:space="preserve"><value>自动检测语言</value></data>
   <data name="Asr_Lang_en" xml:space="preserve"><value>英文</value></data>
@@ -141,6 +142,7 @@
   <data name="Error_DiskFull" xml:space="preserve"><value>磁盘空间不足。</value></data>
   <data name="Error_DouyinNotVideo" xml:space="preserve"><value>这个抖音链接不是作品（暂不支持主页）。</value></data>
   <data name="Error_DouyinUnavailable" xml:space="preserve"><value>无法获取这个抖音作品：可能已删除、仅作者可见，或需要登录（可在「账号」页面登录抖音后重试）。</value></data>
+  <data name="Error_EmbedSubtitles" xml:space="preserve"><value>无法把字幕放进视频</value></data>
   <data name="Error_EmptyPlaylist" xml:space="preserve"><value>这个播放列表中没有可下载的视频。</value></data>
   <data name="Error_Network" xml:space="preserve"><value>网络连接失败。访问 YouTube 可能需要在「设置 → 网络与速度」中配置代理。</value></data>
   <data name="Error_NoCover" xml:space="preserve"><value>这个作品没有封面图片。</value></data>
@@ -214,6 +216,7 @@
   <data name="Label_NoSubtitles" xml:space="preserve"><value>不下载字幕</value></data>
   <data name="Label_Speech" xml:space="preserve"><value>语音识别</value></data>
   <data name="Label_Subtitles" xml:space="preserve"><value>{0} 字幕</value></data>
+  <data name="Label_SubtitlesEmbedded" xml:space="preserve"><value>嵌入字幕</value></data>
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新</value></data>
@@ -279,6 +282,8 @@
   <data name="Options_CodecDescription" xml:space="preserve"><value>H.264 兼容性最好；H.265 / AV1 体积更小</value></data>
   <data name="Options_Container" xml:space="preserve"><value>封装格式</value></data>
   <data name="Options_ContainerDescription" xml:space="preserve"><value>MP4 兼容性最好</value></data>
+  <data name="Options_EmbedSubtitles" xml:space="preserve"><value>嵌入视频</value></data>
+  <data name="Options_EmbedSubtitlesDescription" xml:space="preserve"><value>作为字幕轨放进视频，播放器中可以开关，不再单独保存字幕文件</value></data>
   <data name="Options_FileName" xml:space="preserve"><value>文件名</value></data>
   <data name="Options_FileNameDescription" xml:space="preserve"><value>或在下方自定义</value></data>
   <data name="Options_FileNamePattern" xml:space="preserve"><value>命名格式</value></data>
@@ -300,10 +305,13 @@
   <data name="Options_SubtitleFormat" xml:space="preserve"><value>字幕格式</value></data>
   <data name="Options_SubtitleFormatDescription" xml:space="preserve"><value>TXT 与 Markdown 只保留文字，适合阅读或做笔记</value></data>
   <data name="Options_SubtitleLanguage" xml:space="preserve"><value>字幕语言</value></data>
-  <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>默认使用设置中的语言；没有时使用自动生成的字幕</value></data>
-  <data name="Options_SubtitleNone" xml:space="preserve"><value>没有找到这个视频的字幕，可以用语音识别生成</value></data>
+  <data name="Options_SubtitleLanguageDescription" xml:space="preserve"><value>默认使用设置中的语言；没有时依次尝试自动生成的字幕、其他语言的字幕，最后用语音识别</value></data>
+  <data name="Options_SubtitleNoneOff" xml:space="preserve"><value>这个视频没有字幕。在「设置 → 附加组件」下载语音识别后，可自动生成字幕</value></data>
+  <data name="Options_SubtitleNoneSpeech" xml:space="preserve"><value>这个视频没有字幕，下载时会用语音识别生成</value></data>
   <data name="Options_Subtitles" xml:space="preserve"><value>字幕</value></data>
-  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>字幕语言在设置中调整</value></data>
+  <data name="Options_SubtitlesDescription" xml:space="preserve"><value>默认使用设置中的字幕语言</value></data>
+  <data name="Options_SubtitleSignIn" xml:space="preserve"><value>登录哔哩哔哩后才能获取它的字幕（包括 AI 字幕）</value></data>
+  <data name="Options_SubtitleSignInButton" xml:space="preserve"><value>去登录</value></data>
   <data name="Options_Title" xml:space="preserve"><value>下载选项</value></data>
   <data name="Picture_Auto" xml:space="preserve"><value>自动（有 HDR 时优先 HDR）</value></data>
   <data name="Picture_AutoNoHdr" xml:space="preserve"><value>自动</value></data>
@@ -414,7 +422,7 @@
   <data name="Settings_SpeechModelDescription" xml:space="preserve"><value>高精度识别更准确；快速适合配置较低的电脑</value></data>
   <data name="Settings_SpeechModelMissing" xml:space="preserve"><value>所选模型尚未下载（约 {0}），下载后即可使用语音识别。</value></data>
   <data name="Settings_SpeechOff" xml:space="preserve"><value>为没有字幕的视频，根据语音生成字幕。在本机运行，不会上传任何内容。</value></data>
-  <data name="Settings_SpeechReady" xml:space="preserve"><value>已启用 · 占用 {0}。下载字幕时在「字幕语言」中选择语音识别</value></data>
+  <data name="Settings_SpeechReady" xml:space="preserve"><value>已启用 · 占用 {0}。没有字幕的视频会自动用它生成字幕，也可以在「字幕语言」中直接选择</value></data>
   <data name="Settings_SpeechRemove" xml:space="preserve"><value>移除</value></data>
   <data name="Settings_SpeechRemoveFailed" xml:space="preserve"><value>无法移除：{0}</value></data>
   <data name="Settings_SpeedLimit" xml:space="preserve"><value>限速</value></data>
@@ -455,6 +463,7 @@
   <data name="Status_Canceled" xml:space="preserve"><value>已取消</value></data>
   <data name="Status_Completed" xml:space="preserve"><value>已完成</value></data>
   <data name="Status_CompletedFile" xml:space="preserve"><value>已完成 · {0}</value></data>
+  <data name="Status_CompletedNoSubtitles" xml:space="preserve"><value>已完成 · {0} · 未获取到字幕：{1}</value></data>
   <data name="Status_Connecting" xml:space="preserve"><value>正在连接…</value></data>
   <data name="Status_Converting" xml:space="preserve"><value>正在转换音频…</value></data>
   <data name="Status_Merging" xml:space="preserve"><value>正在合并音视频…</value></data>
@@ -466,9 +475,12 @@
   <data name="Status_Remaining" xml:space="preserve"><value>剩余 {0}</value></data>
   <data name="Status_Resuming" xml:space="preserve"><value>即将继续…</value></data>
   <data name="Status_Stalled" xml:space="preserve"><value>已 {0} 分钟没有进度，仍在尝试…</value></data>
+  <data name="Status_Subtitles" xml:space="preserve"><value>正在处理字幕…</value></data>
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>视频流已完成，正在下载音频流…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>视频流</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>等待中…</value></data>
+  <data name="Sub_NoSpeech" xml:space="preserve"><value>视频中没有识别到说话</value></data>
+  <data name="Sub_NotFound" xml:space="preserve"><value>没有找到字幕</value></data>
   <data name="SubFormat_Md" xml:space="preserve"><value>Markdown（带时间戳）</value></data>
   <data name="SubFormat_Txt" xml:space="preserve"><value>纯文本（TXT）</value></data>
   <data name="SubLang_Auto" xml:space="preserve"><value>{0}（自动生成）</value></data>

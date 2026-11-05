@@ -16,6 +16,10 @@ public sealed record FileEvent(string Path) : DownloadEvent;
 public sealed record ProgressEvent(DownloadProgress Progress) : DownloadEvent;
 /// <summary>Speech recognition (subtitles made from the sound) is this far along, 0-100.</summary>
 public sealed record RecognizingEvent(double Percent) : DownloadEvent;
+/// <summary>The video is fine, its subtitles are not: none were found, or making them failed. Why, for the list.</summary>
+public sealed record SubtitleProblemEvent(string Message) : DownloadEvent;
+/// <summary>Getting a video's subtitles after the video itself (looking further, converting, putting them inside).</summary>
+public sealed record SubtitleStepEvent : DownloadEvent;
 
 /// <summary>
 /// Parses the machine-readable lines VidFlow asks yt-dlp to print (see <see cref="YtDlpArgs"/>):

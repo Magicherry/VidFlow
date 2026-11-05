@@ -252,6 +252,12 @@
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="NoWrap"
                                     ToolTipService.ToolTip="{x:Bind StatusText, Mode=OneWay}" />
+                                <!--  Done without its subtitles: get them on their own  -->
+                                <HyperlinkButton
+                                    Margin="-12,-4,0,-6"
+                                    Click="RetrySubtitles_Click"
+                                    Content="{x:Bind l:L.Get('Action_RetrySubtitles')}"
+                                    Visibility="{x:Bind CanRetrySubtitles, Mode=OneWay}" />
                             </StackPanel>
 
                             <StackPanel

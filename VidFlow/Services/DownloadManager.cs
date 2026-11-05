@@ -143,6 +143,24 @@ public sealed class DownloadManager
         Changed();
     }
 
+    /// <summary>A done video whose subtitles could not be had: a new download of the subtitles alone, put next to
+    /// the video (in the format chosen; ones meant to go inside it come as SRT).</summary>
+    public void RetrySubtitles(DownloadItem item)
+    {
+        if (!item.CanRetrySubtitles) return;
+        var r = item.Request;
+        var folder = item.FilePath is { } f && Path.GetDirectoryName(f) is { } dir ? dir : null;
+        var request = r with
+        {
+            Mode = DownloadRequest.SubtitlesMode, WriteSubtitles = false, MaxHeight = 0, EmbedSubtitles = false,
+            SubtitleFormat = r.EmbedSubtitles ? SubtitleFiles.DefaultFormat : r.SubtitleFormat,
+            OutputFolder = folder ?? r.OutputFolder, FolderTemplate = folder is null ? r.FolderTemplate : "",
+        };
+        item.SubtitleProblem = null;
+        item.StatusText = item.FilePath is { } path ? L.Format("Status_CompletedFile", Path.GetFileName(path)) : L.Get("Status_Completed");
+        Enqueue(request, item.Title, item.Record.ThumbnailUrl, item.Record.PartIndex);
+    }
+
     public void Remove(DownloadItem item)
     {
         if (!item.CanRemove) return;
@@ -220,6 +238,7 @@ public sealed class DownloadManager
         item.LastActivity = DateTime.Now;
         item.StallReported = false;
         item.Recognizing = item.WaitingForTurn = false;
+        item.SubtitleProblem = null;
         using var cts = new CancellationTokenSource();
         item.Cts = cts;
         Log.Info($"Download start: {item.Request.Url} ({item.Request.Mode}, {item.Request.MaxHeight})");
@@ -230,7 +249,9 @@ public sealed class DownloadManager
             item.FilePath = path;
             item.Progress = 100;
             item.State = DownloadState.Completed;
-            item.StatusText = path is null ? L.Get("Status_Completed") : L.Format("Status_CompletedFile", Path.GetFileName(path));
+            item.StatusText = item.SubtitleProblem is { } problem
+                ? L.Format("Status_CompletedNoSubtitles", Path.GetFileName(path ?? item.Title), problem)
+                : path is null ? L.Get("Status_Completed") : L.Format("Status_CompletedFile", Path.GetFileName(path));
             Log.Info($"Download done: {path}");
             OnCompleted(item);
         }
@@ -311,6 +332,14 @@ public sealed class DownloadManager
                 item.Progress = percent;
                 item.StatusText = L.Format("Status_Recognizing", percent.ToString("0"));
                 UpdateOverallProgress();
+                break;
+            case SubtitleStepEvent:
+                item.State = DownloadState.Processing;
+                item.StatusText = L.Get("Status_Subtitles");
+                UpdateOverallProgress();
+                break;
+            case SubtitleProblemEvent { Message: var message }:
+                item.SubtitleProblem = message;
                 break;
         }
     }
