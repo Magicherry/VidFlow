@@ -28,8 +28,8 @@ public static partial class SubtitleFiles
     /// <summary>Prefix of a <see cref="DownloadRequest.SubtitleLanguage"/> that names an auto-generated track.</summary>
     public const string AutoPrefix = "auto:";
 
-    /// <summary>YouTube's auto-generated track in the video's own language is "xx-orig"; the other automatic ones are
-    /// machine translations of it.</summary>
+    /// <summary>YouTube's explicitly marked original automatic captions. Other original tracks are resolved from
+    /// metadata, so fallback never requests every machine translation.</summary>
     public const string AutoOriginal = AutoPrefix + ".*-orig";
 
     /// <summary>Prefix of a <see cref="DownloadRequest.SubtitleLanguage"/> asking for subtitles made by speech
@@ -88,8 +88,9 @@ public static partial class SubtitleFiles
                     if (!sub.Value.TryGetProperty("filepath", out var fp) || fp.GetString() is not { Length: > 0 } path) continue;
                     // Absolute when yt-dlp is given -P, as VidFlow does; relative to the folder otherwise.
                     if (folder is not null) path = System.IO.Path.GetFullPath(path, folder);
-                    if (!File.Exists(path) && System.IO.Path.ChangeExtension(path, extension) is var converted && File.Exists(converted)) path = converted;
-                    if (File.Exists(path)) files.Add(new(sub.Name, path));
+                    var converted = System.IO.Path.ChangeExtension(path, extension);
+                    if (HasContent(converted)) path = converted;
+                    if (HasContent(path)) files.Add(new(sub.Name, path));
                 }
             return (files, title, url);
         }
@@ -104,6 +105,7 @@ public static partial class SubtitleFiles
     public static string WriteText(SavedSubtitle source, string format, string? title, string? url)
     {
         var cues = Parse(File.ReadAllText(source.Path));
+        if (cues.Count == 0) throw new YtDlpException(L.Get("Error_NoSubtitles"));
         var path = System.IO.Path.ChangeExtension(source.Path, format);
         File.WriteAllText(path, format == "md"
             ? ToMarkdown(cues, title ?? System.IO.Path.GetFileNameWithoutExtension(source.Path), url, source.Language)
@@ -111,6 +113,34 @@ public static partial class SubtitleFiles
         if (!string.Equals(path, source.Path, StringComparison.OrdinalIgnoreCase)) File.Delete(source.Path);
         return path;
     }
+
+    /// <summary>A file alone is not a subtitle: empty responses, headers and cues without words don't count.</summary>
+    public static bool HasContent(string path)
+    {
+        try
+        {
+            if (!File.Exists(path)) return false;
+            var content = File.ReadAllText(path);
+            return System.IO.Path.GetExtension(path).ToLowerInvariant() switch
+            {
+                ".srt" or ".vtt" => Parse(content).Count > 0,
+                ".ass" or ".ssa" => content.Split('\n').Any(line =>
+                    line.TrimStart().StartsWith("Dialogue:", StringComparison.OrdinalIgnoreCase)
+                    && line.Split(',', 10) is { Length: 10 } fields
+                    && !string.IsNullOrWhiteSpace(Markup().Replace(fields[9], "").Replace("\\N", "").Replace("\\n", "").Replace("\\h", ""))),
+                ".lrc" => LrcLine().IsMatch(content),
+                _ => false,
+            };
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            Log.Info($"Subtitle unreadable: {System.IO.Path.GetFileName(path)}: {ex.Message}");
+            return false;
+        }
+    }
+
+    [GeneratedRegex(@"(?m)^\[\d+:\d{2}(?:[.:]\d+)?\](?:\[\d+:\d{2}(?:[.:]\d+)?\])*[^\S\r\n]*\S[^\r\n]*$")]
+    private static partial Regex LrcLine();
 
     [GeneratedRegex(@"(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})")]
     private static partial Regex Time();
@@ -126,7 +156,9 @@ public static partial class SubtitleFiles
     public static List<SubtitleCue> Parse(string content)
     {
         var cues = new List<SubtitleCue>();
-        var recent = new Queue<string>();
+        List<string> previous = [];
+        TimeSpan? previousEnd = null;
+        var previousDuration = TimeSpan.Zero;
         foreach (var block in BlankLine().Split(content.Replace("\r\n", "\n").Replace('\r', '\n')))
         {
             var lines = block.Split('\n');
@@ -134,16 +166,25 @@ public static partial class SubtitleFiles
             if (at < 0) continue; // header, numbers, NOTE / STYLE blocks
             var times = Time().Matches(lines[at]);
             if (times.Count < 2) continue;
-            var text = new List<string>();
-            foreach (var raw in lines.Skip(at + 1))
+            var start = ToTime(times[0]);
+            var end = ToTime(times[1]);
+            var text = lines.Skip(at + 1).Select(raw => WebUtility.HtmlDecode(Markup().Replace(raw, "")).Replace(' ', ' ').Trim())
+                .Where(line => line.Length > 0).ToList();
+            var shared = 0;
+            if (previousEnd is { } last && start <= last + TimeSpan.FromMilliseconds(20))
             {
-                var line = WebUtility.HtmlDecode(Markup().Replace(raw, "")).Replace(' ', ' ').Trim();
-                if (line.Length == 0 || recent.Contains(line)) continue;
-                text.Add(line);
-                recent.Enqueue(line);
-                if (recent.Count > 3) recent.Dequeue();
+                // Rolling captions repeat a suffix as the next cue's prefix. Ordinary adjacent repetitions,
+                // and phrases repeated after a pause, must remain in transcripts.
+                var rolling = start < last || end - start <= TimeSpan.FromMilliseconds(20)
+                    || previousDuration <= TimeSpan.FromMilliseconds(20) || text.Count > 1;
+                if (rolling)
+                    for (var count = Math.Min(previous.Count, text.Count); count > 0; count--)
+                        if (previous.TakeLast(count).SequenceEqual(text.Take(count))) { shared = count; break; }
             }
-            if (text.Count > 0) cues.Add(new(ToTime(times[0]), ToTime(times[1]), string.Join("\n", text)));
+            if (text.Count > shared) cues.Add(new(start, end, string.Join("\n", text.Skip(shared))));
+            previous = text;
+            previousEnd = end;
+            previousDuration = end - start;
         }
         return cues;
     }

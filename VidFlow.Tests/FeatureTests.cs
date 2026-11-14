@@ -1470,7 +1470,7 @@ public class OwnFolderTests
                 var folder = Directory.CreateDirectory(Path.Combine(root, name)).FullName;
                 var file = Path.Combine(folder, name + ".mp4");
                 File.WriteAllText(file, "v");
-                foreach (var e in extra) File.WriteAllText(Path.Combine(folder, e), "s");
+                foreach (var e in extra) File.WriteAllText(Path.Combine(folder, e), "1\n00:00:00,000 --> 00:00:01,000\nhello\n");
                 return file;
             }
 
@@ -2040,6 +2040,8 @@ public class VideoSubtitleTests
     {
         Assert.True(new DownloadTemplate { Subtitles = true, EmbedSubtitles = true }.ToRequest("u", "o").EmbedSubtitles);
         Assert.False(new DownloadTemplate { Mode = "audio", Subtitles = true, EmbedSubtitles = true }.ToRequest("u", "o").EmbedSubtitles);
+        Assert.False(new DownloadTemplate { Mode = "subtitles", EmbedSubtitles = true }.ToRequest("u", "o").EmbedSubtitles);
+        Assert.False(new DownloadTemplate { Subtitles = false, EmbedSubtitles = true }.ToRequest("u", "o").EmbedSubtitles);
     }
 
     [Fact]
@@ -2064,7 +2066,9 @@ public class VideoSubtitleTests
         {
             var video = Path.Combine(dir, "A [1].mp4");
             foreach (var f in new[] { "A [1].mp4", "A [1].zh-CN.srt", "A [1].danmaku.xml", "A [1].en.vtt", "B [2].zh.srt" })
-                File.WriteAllText(Path.Combine(dir, f), "");
+                File.WriteAllText(Path.Combine(dir, f), "1\n00:00:00,000 --> 00:00:01,000\nhello\n");
+            File.WriteAllText(Path.Combine(dir, "A [1].empty.srt"), "");
+            File.WriteAllText(Path.Combine(dir, "A [1].blank.vtt"), "WEBVTT\n\n00:00:00.000 --> 00:00:01.000\n<c> </c>\n");
             Assert.Equal(["A [1].en.vtt", "A [1].zh-CN.srt"], YtDlpService.SubtitlesBeside(video).Select(Path.GetFileName));
             Assert.Equal("zh-CN", YtDlpService.LanguageOf(Path.Combine(dir, "A [1].zh-CN.srt")));
         }
@@ -2072,5 +2076,95 @@ public class VideoSubtitleTests
         {
             Directory.Delete(dir, true);
         }
+    }
+}
+
+public class SubtitleRegressionTests
+{
+    [Theory]
+    [InlineData("{\"streams\":[{\"nb_read_packets\":\"10\"}]}", 1, true)]
+    [InlineData("{\"streams\":[{\"nb_read_packets\":\"0\"}]}", 1, false)]
+    [InlineData("{\"streams\":[{\"nb_read_packets\":\"N/A\"}]}", 1, false)]
+    [InlineData("{\"streams\":[{\"nb_read_packets\":\"10\"}]}", 2, false)]
+    [InlineData("{\"streams\":[]}", 1, false)]
+    [InlineData("not JSON", 1, false)]
+    public void EmbeddedSubtitlesMustContainPackets(string probe, int expectedTracks, bool expected) =>
+        Assert.Equal(expected, YtDlpService.HasEmbeddedSubtitles(probe, expectedTracks));
+
+    [Theory]
+    [InlineData("srt", "", false)]
+    [InlineData("srt", "1\n00:00:00,000 --> 00:00:01,000\n<i> </i>\n", false)]
+    [InlineData("vtt", "WEBVTT\nKind: captions\nLanguage: en\n", false)]
+    [InlineData("vtt", "<html>Service unavailable</html>", false)]
+    [InlineData("srt", "1\n00:00:00,000 --> 00:00:01,000\nhello\n", true)]
+    [InlineData("vtt", "WEBVTT\n\n00:00:00.000 --> 00:00:01.000\n<c>hello</c>\n", true)]
+    [InlineData("ass", "[Script Info]\nTitle: empty\n[Events]\n", false)]
+    [InlineData("ass", "Dialogue: 0,0:00:00.00,0:00:01.00,Default,,0,0,0,,{\\an8}\\N", false)]
+    [InlineData("ass", "Dialogue: 0,0:00:00.00,0:00:01.00,Default,,0,0,0,,hello", true)]
+    [InlineData("lrc", "[ti:title]\n[00:01.00]   \n", false)]
+    [InlineData("lrc", "[00:01.00]hello\n", true)]
+    public void OnlyCaptionsWithWordsCount(string extension, string content, bool expected)
+    {
+        var dir = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            var path = Path.Combine(dir, "caption." + extension);
+            File.WriteAllText(path, content);
+            Assert.Equal(expected, SubtitleFiles.HasContent(path));
+        }
+        finally { Directory.Delete(dir, true); }
+    }
+
+    [Fact]
+    public void EmptyDownloadsAreNotSuccessfulAndCannotEraseTheSource()
+    {
+        var dir = Directory.CreateTempSubdirectory().FullName;
+        try
+        {
+            var path = Path.Combine(dir, "video.en.srt");
+            File.WriteAllText(path, "");
+            var json = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                requested_subtitles = new { en = new { filepath = path } },
+            });
+            Assert.Empty(SubtitleFiles.Saved(json, "srt").Files);
+            Assert.Throws<YtDlpException>(() => SubtitleFiles.WriteText(new("en", path), "txt", null, null));
+            Assert.False(File.Exists(Path.ChangeExtension(path, "txt")));
+            Assert.True(File.Exists(path));
+        }
+        finally { Directory.Delete(dir, true); }
+    }
+
+    [Fact]
+    public void AutomaticCaptionsDoNotRequireAnOrigSuffix()
+    {
+        var info = Assert.IsType<VideoInfo>(InfoParser.Parse("""
+            {"title":"T","automatic_captions":{
+              "en":[{"url":"https://www.youtube.com/api/timedtext?lang=en&kind=asr"}],
+              "fr":[{"url":"https://www.youtube.com/api/timedtext?lang=en&tlang=fr"}],
+              "de":[]}}
+            """, "https://www.youtube.com/watch?v=a"));
+        Assert.Equal(["en"], info.AutoSubtitleLanguages);
+        Assert.True(info.HasSubtitles);
+    }
+
+    [Fact]
+    public void AutomaticFallbackTargetsOriginalsAndOverwritesFailedFiles()
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", SubtitleLanguage = SubtitleFiles.AutoOriginal }.ToRequest("https://www.youtube.com/watch?v=a", "o");
+        var args = YtDlpArgs.Download(req, new AppSettings(), new(@"C:\ff", null, false));
+        Assert.Contains("--write-auto-subs", args);
+        Assert.Contains("--no-write-subs", args);
+        Assert.Contains("--force-overwrites", args);
+        Assert.Equal(".*-orig", args[args.IndexOf("--sub-langs") + 1]);
+        Assert.Equal("vtt/srt/best", args[args.IndexOf("--sub-format") + 1]);
+    }
+
+    [Fact]
+    public void RetrySubtitlesUsesTheSavedVideosExactName()
+    {
+        var req = new DownloadTemplate { Mode = "subtitles", FileNameTemplate = "{title}-{resolution}" }.ToRequest("https://www.youtube.com/watch?v=a", "o");
+        var args = YtDlpService.SubtitleFetchArguments(req, @"C:\downloads\100% title-1080p.mkv", new AppSettings(), new(@"C:\ff", null, false));
+        Assert.Equal("100%% title-1080p.%(ext)s", args[args.IndexOf("-o") + 1]);
     }
 }

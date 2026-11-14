@@ -99,6 +99,10 @@
                         <InfoBadge x:Name="ConvertBadge" Visibility="Collapsed" />
                     </NavigationViewItem.InfoBadge>
                 </NavigationViewItem>
+                <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Subtitles')}" Tag="subtitles">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE7F0;" /></NavigationViewItem.Icon>
+                    <NavigationViewItem.InfoBadge><InfoBadge x:Name="SubtitleBadge" Visibility="Collapsed" /></NavigationViewItem.InfoBadge>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem Content="{x:Bind l:L.Get('Nav_Accounts')}" Tag="accounts">

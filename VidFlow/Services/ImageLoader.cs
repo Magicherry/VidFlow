@@ -1,6 +1,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.Storage;
+using Windows.Storage.FileProperties;
 
 namespace VidFlow.Services;
 
@@ -9,6 +11,56 @@ namespace VidFlow.Services;
 public static class ImageLoader
 {
     static string CacheDir => Path.Combine(AppSettings.DataDir, "thumbs");
+
+    /// <summary>Uses the local video's Windows thumbnail, falling back to a small frame for unsupported codecs.</summary>
+    public static async Task<BitmapImage?> LoadVideoAsync(string path, CancellationToken ct)
+    {
+        try
+        {
+            var file = await StorageFile.GetFileFromPathAsync(path).AsTask(ct);
+            using var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.VideosView, 192,
+                ThumbnailOptions.UseCurrentScale).AsTask(ct);
+            if (thumbnail is { Type: ThumbnailType.Image })
+            {
+                var image = new BitmapImage { DecodePixelWidth = 192 };
+                await image.SetSourceAsync(thumbnail).AsTask(ct);
+                return image;
+            }
+        }
+        catch (OperationCanceledException) { return null; }
+        catch (Exception ex) { Log.Info($"Windows video thumbnail not loaded ({path}): {ex.Message}"); }
+
+        var frame = Path.Combine(Path.GetTempPath(), $"VidFlow-thumb-{Guid.NewGuid():N}.jpg");
+        try
+        {
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            timeout.CancelAfter(TimeSpan.FromSeconds(15));
+            using var tools = await App.ToolUsage.UseAsync(timeout.Token);
+            if (ToolManager.FfmpegPath is not { } ffmpeg) return null;
+            var (code, _) = await ProcessRunner.RunAsync(ffmpeg,
+                ["-hide_banner", "-v", "error", "-nostdin", "-y", "-threads", "2", "-i", path,
+                    "-map", "0:V:0", "-an", "-sn", "-vf", "scale=192:108:force_original_aspect_ratio=decrease,thumbnail=30",
+                    "-frames:v", "1", "-filter_threads", "1", "-threads", "1", frame], null, timeout.Token);
+            if (code != 0 || !File.Exists(frame)) return null;
+            var bytes = await File.ReadAllBytesAsync(frame, timeout.Token);
+            var image = new BitmapImage { DecodePixelWidth = 192 };
+            using var stream = new MemoryStream(bytes);
+            await image.SetSourceAsync(stream.AsRandomAccessStream()).AsTask(timeout.Token);
+            return image;
+        }
+        catch (OperationCanceledException) { return null; }
+        catch (Exception ex)
+        {
+            Log.Info($"Video thumbnail not loaded ({path}): {ex.Message}");
+            return null;
+        }
+        finally
+        {
+            try { File.Delete(frame); }
+            catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
+        }
+    }
 
     public static async Task<BitmapImage?> LoadAsync(string? url)
     {

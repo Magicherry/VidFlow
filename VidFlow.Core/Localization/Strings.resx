@@ -130,7 +130,7 @@
   <data name="Drop_Caption" xml:space="preserve"><value>Download with VidFlow</value></data>
   <data name="Drop_Hint" xml:space="preserve"><value>Drop the link to start</value></data>
   <data name="Error_AsrFailed" xml:space="preserve"><value>Speech recognition failed.</value></data>
-  <data name="Error_AsrNotReady" xml:space="preserve"><value>Speech recognition isn&apos;t set up. Download it in Settings, under Speech recognition.</value></data>
+  <data name="Error_AsrNotReady" xml:space="preserve"><value>Speech recognition isn&apos;t set up. Download it in Settings › Add-ons › Speech recognition.</value></data>
   <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>Extracting audio needs ffmpeg. Install it in Settings → About &amp; updates.</value></data>
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube wants to confirm you&apos;re not a bot. Sign in on the Accounts page, or switch proxy node.</value></data>
   <data name="Error_ConvertFailed" xml:space="preserve"><value>The conversion failed.</value></data>
@@ -220,6 +220,56 @@
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>Downloaded from the official yt-dlp builds when you choose to install it; not bundled with VidFlow. Source code: ffmpeg.org.</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow is built on these open-source components. Click a license to read it.</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>Downloaded on demand and kept up to date automatically</value></data>
+  <data name="LocalSub_Action" xml:space="preserve"><value>Action</value></data>
+  <data name="LocalSub_Action_Embed" xml:space="preserve"><value>Embed an existing subtitle file</value></data>
+  <data name="LocalSub_Action_Extract" xml:space="preserve"><value>Export existing subtitles</value></data>
+  <data name="LocalSub_Action_Generate" xml:space="preserve"><value>Generate subtitles</value></data>
+  <data name="LocalSub_Action_GenerateAndEmbed" xml:space="preserve"><value>Generate and embed subtitles</value></data>
+  <data name="LocalSub_Action_Remove" xml:space="preserve"><value>Remove embedded subtitles</value></data>
+  <data name="LocalSub_ChooseSubtitle" xml:space="preserve"><value>Choose subtitles…</value></data>
+  <data name="LocalSub_ChooseSubtitleNote" xml:space="preserve"><value>Choose an SRT, ASS, SSA, VTT or LRC file with timestamps</value></data>
+  <data name="LocalSub_ChooseVideo" xml:space="preserve"><value>Choose a video…</value></data>
+  <data name="LocalSub_Description_Embed" xml:space="preserve"><value>Choose a timed subtitle file and save a new MKV. Existing subtitle tracks and original picture and sound are kept; speech recognition is not needed.</value></data>
+  <data name="LocalSub_Description_Extract" xml:space="preserve"><value>Export a text subtitle track without speech recognition. Image subtitle tracks need OCR and are not supported.</value></data>
+  <data name="LocalSub_Description_Generate" xml:space="preserve"><value>Recognize speech and save a separate subtitle or transcript file</value></data>
+  <data name="LocalSub_Description_GenerateAndEmbed" xml:space="preserve"><value>Save a new MKV with switchable subtitles. Existing subtitles, picture and sound are kept.</value></data>
+  <data name="LocalSub_Description_Remove" xml:space="preserve"><value>Remove all switchable subtitle tracks in a new copy. Subtitles burned into the picture cannot be removed.</value></data>
+  <data name="LocalSub_Detected" xml:space="preserve"><value>Detected {0} subtitle tracks</value></data>
+  <data name="LocalSub_DetectionNote" xml:space="preserve"><value>This detects embedded subtitle tracks. Words burned into the picture are not separate tracks; generate subtitles from the sound instead.</value></data>
+  <data name="LocalSub_DropNote" xml:space="preserve"><value>Choose or drop one local video here</value></data>
+  <data name="LocalSub_EmbedGenerated" xml:space="preserve"><value>Embed generated subtitles</value></data>
+  <data name="LocalSub_EmbedGeneratedNote" xml:space="preserve"><value>On: save a new MKV with switchable subtitles. Off: save a separate subtitle file.</value></data>
+  <data name="LocalSub_EmptyBody" xml:space="preserve"><value>Drag a video here, or click Choose a video.</value></data>
+  <data name="LocalSub_EmptyTitle" xml:space="preserve"><value>No video added yet</value></data>
+  <data name="LocalSub_EmptyTrack" xml:space="preserve"><value>The selected subtitle track contains no text.</value></data>
+  <data name="LocalSub_Failed" xml:space="preserve"><value>Processing failed</value></data>
+  <data name="LocalSub_GeneratedTrack" xml:space="preserve"><value>Generated subtitles</value></data>
+  <data name="LocalSub_GroupOptions" xml:space="preserve"><value>Subtitle options</value></data>
+  <data name="LocalSub_GroupOutput" xml:space="preserve"><value>Output</value></data>
+  <data name="LocalSub_ImageTrack" xml:space="preserve"><value>Choose a text subtitle track. Image subtitles cannot be exported as text without OCR.</value></data>
+  <data name="LocalSub_Inspecting" xml:space="preserve"><value>Detecting audio and subtitle tracks…</value></data>
+  <data name="LocalSub_LanguageNote" xml:space="preserve"><value>The language spoken in the video; recognition does not translate it</value></data>
+  <data name="LocalSub_MissingFile" xml:space="preserve"><value>The selected video no longer exists. Choose it again.</value></data>
+  <data name="LocalSub_MissingSubtitle" xml:space="preserve"><value>The selected subtitle file no longer exists. Choose it again.</value></data>
+  <data name="LocalSub_NoSpeech" xml:space="preserve"><value>No speech was recognized. No empty subtitle file was saved.</value></data>
+  <data name="LocalSub_NoTracks" xml:space="preserve"><value>This video has no embedded subtitle tracks to export or remove.</value></data>
+  <data name="LocalSub_OneVideo" xml:space="preserve"><value>Add one video at a time. Supported formats include MP4, MKV, MOV, WebM and AVI.</value></data>
+  <data name="LocalSub_OutputNote" xml:space="preserve"><value>Results are saved next to the original video</value></data>
+  <data name="LocalSub_Processing" xml:space="preserve"><value>Processing subtitles</value></data>
+  <data name="LocalSub_Progress" xml:space="preserve"><value>Processing progress</value></data>
+  <data name="LocalSub_Recognizing" xml:space="preserve"><value>Recognizing speech</value></data>
+  <data name="LocalSub_Saved" xml:space="preserve"><value>Saved a new file</value></data>
+  <data name="LocalSub_SetUpSpeech" xml:space="preserve"><value>Set up speech recognition</value></data>
+  <data name="LocalSub_SetUpTools" xml:space="preserve"><value>Manage components</value></data>
+  <data name="LocalSub_SpokenLanguage" xml:space="preserve"><value>Spoken language</value></data>
+  <data name="LocalSub_Start" xml:space="preserve"><value>Start processing</value></data>
+  <data name="LocalSub_SubtitleFile" xml:space="preserve"><value>Subtitle file</value></data>
+  <data name="LocalSub_TimedSubtitleRequired" xml:space="preserve"><value>Embedding needs a timed subtitle file. TXT and Markdown cannot be embedded.</value></data>
+  <data name="LocalSub_Track" xml:space="preserve"><value>Existing subtitle track</value></data>
+  <data name="LocalSub_VerifyFailed" xml:space="preserve"><value>The output subtitle tracks could not be verified. The original video was kept unchanged.</value></data>
+  <data name="LocalSub_Verifying" xml:space="preserve"><value>Checking the resulting subtitle tracks…</value></data>
+  <data name="LocalSub_Video" xml:space="preserve"><value>Local video</value></data>
+  <data name="LocalSub_WaitingSpeech" xml:space="preserve"><value>Waiting for another speech recognition task…</value></data>
   <data name="Login_Done" xml:space="preserve"><value>Done</value></data>
   <data name="Login_Instructions" xml:space="preserve"><value>Sign in below; the window closes when you&apos;re done</value></data>
   <data name="Login_InstructionsDouyin" xml:space="preserve"><value>Click 登录 at the top right and scan with the Douyin app</value></data>
@@ -255,6 +305,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>New download</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Nav_Subtitles" xml:space="preserve"><value>Subtitle tools</value></data>
   <data name="Nav_Templates" xml:space="preserve"><value>Presets</value></data>
   <data name="Notify_BatchCompleted" xml:space="preserve"><value>All {0} downloads finished</value></data>
   <data name="Notify_Completed" xml:space="preserve"><value>Download finished</value></data>
@@ -479,6 +530,7 @@
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>Video done, downloading audio…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>Video</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>Waiting…</value></data>
+  <data name="Status_WaitingTools" xml:space="preserve"><value>Waiting for component updates to finish…</value></data>
   <data name="Sub_NoSpeech" xml:space="preserve"><value>no speech was heard in it</value></data>
   <data name="Sub_NotFound" xml:space="preserve"><value>none were found</value></data>
   <data name="SubFormat_Md" xml:space="preserve"><value>Markdown (with timestamps)</value></data>
@@ -541,6 +593,7 @@
   <data name="Tools_NotChecked" xml:space="preserve"><value>Not checked for updates yet</value></data>
   <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · version {1} · system copy</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>Update all</value></data>
+  <data name="Tools_WorkBusy" xml:space="preserve"><value>Tasks are using these components. Wait for downloads, conversion, subtitles or model installation to finish, then try again.</value></data>
   <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>Parses and downloads videos</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>Exit VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>Download copied link</value></data>
@@ -559,7 +612,7 @@
   <data name="Update_DownloadingShort" xml:space="preserve"><value>Downloading…</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Update failed: {0}</value></data>
   <data name="Update_InstallBody" xml:space="preserve"><value>VidFlow will close, update, and reopen in a few seconds.</value></data>
-  <data name="Update_InstallBodyActive" xml:space="preserve"><value>VidFlow will close, update, and reopen in a few seconds. {0} downloads will pause and continue automatically afterwards.</value></data>
+  <data name="Update_InstallBodyActive" xml:space="preserve"><value>There are {0} active tasks. VidFlow will close and reopen after updating. Downloads resume automatically; local conversion, subtitle and component installation tasks will stop and must be started again.</value></data>
   <data name="Update_InstallNow" xml:space="preserve"><value>Restart to update</value></data>
   <data name="Update_InstallTitle" xml:space="preserve"><value>Install VidFlow {0}?</value></data>
   <data name="Update_Later" xml:space="preserve"><value>Later</value></data>

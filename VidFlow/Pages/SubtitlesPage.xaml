@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="VidFlow.Pages.SubtitlesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:VidFlow.Localization"
+    xmlns:tk="using:CommunityToolkit.WinUI.Controls"
+    NavigationCacheMode="Required">
+
+    <Grid x:Name="RootPanel" MaxWidth="{StaticResource PageMaxWidth}" Padding="36,24,36,0"
+        AllowDrop="True" Background="Transparent" DragOver="Page_DragOver" Drop="Page_Drop" RowSpacing="12">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers><AdaptiveTrigger MinWindowWidth="720" /></VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers><AdaptiveTrigger MinWindowWidth="0" /></VisualState.StateTriggers>
+                    <VisualState.Setters><Setter Target="RootPanel.Padding" Value="16,16,16,0" /></VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Same title and file action layout as Convert. -->
+        <Grid ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind l:L.Get('Nav_Subtitles')}" />
+            <Button x:Name="ChooseVideoButton" Grid.Column="1" Height="32" VerticalAlignment="Center" Click="ChooseVideo_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="14" Glyph="&#xE710;" />
+                    <TextBlock Text="{x:Bind l:L.Get('LocalSub_ChooseVideo')}" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <tk:SettingsCard x:Name="FolderCard" Grid.Row="1" Header="{x:Bind l:L.Get('Convert_Output')}">
+            <tk:SettingsCard.HeaderIcon><FontIcon Glyph="&#xE8B7;" /></tk:SettingsCard.HeaderIcon>
+            <ComboBox x:Name="FolderCombo" MinWidth="200" MaxWidth="320" SelectionChanged="FolderCombo_SelectionChanged"
+                AutomationProperties.Name="{x:Bind l:L.Get('Convert_Output')}" />
+        </tk:SettingsCard>
+
+        <!-- Same empty-state hierarchy, spacing and placement as Convert. -->
+        <StackPanel x:Name="EmptyState" Grid.Row="2" Margin="0,0,0,80"
+            HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+            <FontIcon FontSize="48" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Glyph="&#xE7F0;" />
+            <TextBlock HorizontalAlignment="Center" Style="{StaticResource BodyStrongTextBlockStyle}"
+                Text="{x:Bind l:L.Get('LocalSub_EmptyTitle')}" />
+            <TextBlock MaxWidth="420" HorizontalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind l:L.Get('LocalSub_EmptyBody')}" TextAlignment="Center" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <ScrollViewer x:Name="OptionsPanel" Grid.Row="2" Visibility="Collapsed"
+            HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+            <StackPanel Padding="0,8,0,4" Spacing="4">
+                <tk:SettingsCard x:Name="SourceCard" Click="ChooseVideo_Click" IsClickEnabled="True"
+                    AutomationProperties.Name="{x:Bind l:L.Get('LocalSub_Video')}">
+                    <tk:SettingsCard.Header>
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="96" Height="54" CornerRadius="4"
+                                Background="{ThemeResource ControlFillColorSecondaryBrush}">
+                                <Grid>
+                                    <FontIcon x:Name="SourcePlaceholder" FontSize="20" Glyph="&#xE714;"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                    <Image x:Name="SourceThumbnail" Stretch="UniformToFill" />
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                <TextBlock x:Name="SourceName" TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="SourcePath" TextTrimming="CharacterEllipsis"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            </StackPanel>
+                        </Grid>
+                    </tk:SettingsCard.Header>
+                    <tk:SettingsCard.ActionIcon><FontIcon Glyph="&#xE8E5;" /></tk:SettingsCard.ActionIcon>
+                </tk:SettingsCard>
+                <InfoBar x:Name="DetectionBar" Margin="0,4,0,0" IsClosable="False" Severity="Informational" Visibility="Collapsed" />
+
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{x:Bind l:L.Get('LocalSub_GroupOptions')}" />
+                <tk:SettingsCard x:Name="ActionCard" Header="{x:Bind l:L.Get('LocalSub_Action')}">
+                    <tk:SettingsCard.HeaderIcon><FontIcon x:Name="ActionIcon" Glyph="&#xE720;" /></tk:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="ActionCombo" MinWidth="200" SelectionChanged="Action_Changed"
+                        AutomationProperties.Name="{x:Bind l:L.Get('LocalSub_Action')}" />
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="EmbedCard" Header="{x:Bind l:L.Get('LocalSub_EmbedGenerated')}"
+                    Description="{x:Bind l:L.Get('LocalSub_EmbedGeneratedNote')}">
+                    <tk:SettingsCard.HeaderIcon><FontIcon Glyph="&#xE7F0;" /></tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="EmbedToggle" Toggled="Embed_Toggled"
+                        AutomationProperties.Name="{x:Bind l:L.Get('LocalSub_EmbedGenerated')}"
+                        OnContent="{x:Bind l:L.Get('Common_On')}" OffContent="{x:Bind l:L.Get('Common_Off')}" />
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="SubtitleFileCard" Header="{x:Bind l:L.Get('LocalSub_SubtitleFile')}"
+                    Description="{x:Bind l:L.Get('LocalSub_ChooseSubtitleNote')}" Visibility="Collapsed">
+                    <tk:SettingsCard.HeaderIcon><FontIcon Glyph="&#xE8A5;" /></tk:SettingsCard.HeaderIcon>
+                    <Button Click="ChooseSubtitle_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="14" Glyph="&#xE8E5;" />
+                            <TextBlock Text="{x:Bind l:L.Get('LocalSub_ChooseSubtitle')}" />
+                        </StackPanel>
+                    </Button>
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="LanguageCard" Header="{x:Bind l:L.Get('LocalSub_SpokenLanguage')}"
+                    Description="{x:Bind l:L.Get('LocalSub_LanguageNote')}">
+                    <tk:SettingsCard.HeaderIcon><FontIcon Glyph="&#xF2B7;" /></tk:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="LanguageCombo" MinWidth="200" AutomationProperties.Name="{x:Bind l:L.Get('LocalSub_SpokenLanguage')}" />
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="TrackCard" Header="{x:Bind l:L.Get('LocalSub_Track')}">
+                    <tk:SettingsCard.HeaderIcon><FontIcon Glyph="&#xE7F0;" /></tk:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="TrackCombo" MinWidth="200" MaxWidth="320" SelectionChanged="Track_Changed"
+                        AutomationProperties.Name="{x:Bind l:L.Get('LocalSub_Track')}" />
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="FormatCard" Header="{x:Bind l:L.Get('Options_SubtitleFormat')}"
+                    Description="{x:Bind l:L.Get('Options_SubtitleFormatDescription')}">
+                    <tk:SettingsCard.HeaderIcon><FontIcon Glyph="&#xE8A5;" /></tk:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="FormatCombo" MinWidth="200" AutomationProperties.Name="{x:Bind l:L.Get('Options_SubtitleFormat')}" />
+                </tk:SettingsCard>
+                <InfoBar x:Name="SpeechBar" Margin="0,4,0,0" IsClosable="False" Severity="Warning"
+                    Title="{x:Bind l:L.Get('Error_AsrNotReady')}" Visibility="Collapsed">
+                    <InfoBar.ActionButton><Button Click="SpeechSettings_Click" Content="{x:Bind l:L.Get('LocalSub_SetUpSpeech')}" /></InfoBar.ActionButton>
+                </InfoBar>
+                <InfoBar x:Name="ToolsBar" Margin="0,4,0,0" IsClosable="False" Severity="Warning"
+                    Title="{x:Bind l:L.Get('Error_ConvertNeedsFfmpeg')}" Visibility="Collapsed">
+                    <InfoBar.ActionButton><Button Click="ToolsSettings_Click" Content="{x:Bind l:L.Get('LocalSub_SetUpTools')}" /></InfoBar.ActionButton>
+                </InfoBar>
+
+                <tk:SettingsCard x:Name="StatusCard" Margin="0,12,0,0" HorizontalContentAlignment="Stretch"
+                    ContentAlignment="Vertical" Header="{x:Bind l:L.Get('LocalSub_Progress')}" Visibility="Collapsed">
+                    <tk:SettingsCard.HeaderIcon><FontIcon x:Name="StatusIcon" Glyph="&#xE895;" /></tk:SettingsCard.HeaderIcon>
+                    <StackPanel Spacing="8">
+                        <ProgressBar x:Name="JobProgress" Visibility="Collapsed" />
+                        <TextBlock x:Name="StatusText" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                        <Button x:Name="CopyErrorButton" HorizontalAlignment="Left" Click="CopyError_Click" Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                                <TextBlock Text="{x:Bind l:L.Get('Action_CopyError')}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </tk:SettingsCard>
+                <InfoBar x:Name="ResultBar" Margin="0,4,0,0" IsClosable="False" Severity="Success" Visibility="Collapsed">
+                    <InfoBar.ActionButton>
+                        <Button Click="ShowResult_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE838;" />
+                                <TextBlock Text="{x:Bind l:L.Get('Action_ShowInFolder')}" />
+                            </StackPanel>
+                        </Button>
+                    </InfoBar.ActionButton>
+                </InfoBar>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Persistent bottom actions, matching the conversion page. -->
+        <Grid x:Name="StartBar" Grid.Row="3" Padding="0,0,0,24" ColumnSpacing="12" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="SummaryText" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{StaticResource CaptionTextBlockStyle}" TextTrimming="CharacterEllipsis" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                <Button x:Name="CancelButton" Click="Cancel_Click" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="14" Glyph="&#xE711;" />
+                        <TextBlock Text="{x:Bind l:L.Get('Common_Cancel')}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="StartButton" MinWidth="120" Click="Start_Click" Style="{StaticResource AccentButtonStyle}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="14" Glyph="&#xE768;" />
+                        <TextBlock Text="{x:Bind l:L.Get('LocalSub_Start')}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

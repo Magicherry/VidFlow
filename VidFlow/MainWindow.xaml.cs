@@ -40,6 +40,7 @@ public sealed partial class MainWindow : Window
 
         App.Downloads.ActiveCountChanged += UpdateBadge;
         App.Converts.ActiveCountChanged += UpdateConvertBadge;
+        App.Subtitles.Changed += UpdateSubtitleBadge;
         AppWindow.Closing += AppWindow_Closing;
 
         NavView.SelectedItem = NavView.MenuItems[0];
@@ -189,6 +190,7 @@ public sealed partial class MainWindow : Window
         }
         App.Downloads.Shutdown();
         App.Converts.Shutdown();
+        App.Subtitles.Cancel();
         TrayIcon.Dispose();
     }
 
@@ -213,11 +215,18 @@ public sealed partial class MainWindow : Window
         ConvertBadge.Visibility = n > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
+    void UpdateSubtitleBadge()
+    {
+        SubtitleBadge.Value = 1;
+        SubtitleBadge.Visibility = App.Subtitles.Busy ? Visibility.Visible : Visibility.Collapsed;
+    }
+
     static Type PageFor(object? tag) => tag switch
     {
         "downloads" => typeof(DownloadsPage),
         "templates" => typeof(TemplatesPage),
         "convert" => typeof(ConvertPage),
+        "subtitles" => typeof(SubtitlesPage),
         "accounts" => typeof(AccountsPage),
         "settings" => typeof(SettingsPage),
         _ => typeof(HomePage),

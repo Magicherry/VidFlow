@@ -358,7 +358,7 @@ Update_Downloading	Downloading {0}… {1}%	正在下载 {0}… {1}%
 Update_DownloadingShort	Downloading…	下载中…
 Update_Failed	Update failed: {0}	更新失败：{0}
 Update_InstallBody	VidFlow will close, update, and reopen in a few seconds.	VidFlow 将关闭并在几秒内完成更新后自动重新打开。
-Update_InstallBodyActive	VidFlow will close, update, and reopen in a few seconds. {0} downloads will pause and continue automatically afterwards.	VidFlow 将关闭并在几秒内完成更新后自动重新打开。{0} 个正在进行的下载会暂停，更新后自动继续。
+Update_InstallBodyActive	There are {0} active tasks. VidFlow will close and reopen after updating. Downloads resume automatically; local conversion, subtitle and component installation tasks will stop and must be started again.	当前有 {0} 个任务正在进行。VidFlow 将关闭，更新后重新打开。下载任务会自动继续；本地转换、字幕处理和组件安装任务将停止，需要重新开始。
 Update_InstallNow	Restart to update	重启以更新
 Update_InstallTitle	Install VidFlow {0}?	安装 VidFlow {0}？
 Update_Later	Later	稍后
@@ -533,7 +533,7 @@ Settings_SpeechFailed	Download failed: {0}	下载失败：{0}
 Settings_SpeechDownload	Download	下载
 Settings_SpeechRemove	Remove	移除
 Settings_SpeechModel	Model	识别模型
-Error_AsrNotReady	Speech recognition isn't set up. Download it in Settings, under Speech recognition.	语音识别尚未启用。请先在「设置 → 语音识别」中下载。
+Error_AsrNotReady	Speech recognition isn't set up. Download it in Settings › Add-ons › Speech recognition.	语音识别尚未启用。请先在「设置 → 附加组件 → 语音识别」中下载。
 Error_AsrFailed	Speech recognition failed.	语音识别失败。
 Settings_SpeechGpu	Graphics card acceleration (NVIDIA)	显卡加速（NVIDIA）
 Settings_SpeechGpuOff	Recognizes several times faster on the graphics card. A further download of about {0}; the first time it is used takes about half a minute more to get ready.	用显卡识别，通常快数倍。需另外下载约 {0}；首次使用会多花约半分钟做准备。
@@ -599,3 +599,56 @@ Options_EmbedSubtitlesDescription	As subtitle tracks players can turn on, instea
 Options_SubtitleSignIn	Bilibili gives its subtitles (AI ones too) only when you are signed in	登录哔哩哔哩后才能获取它的字幕（包括 AI 字幕）
 Options_SubtitleSignInButton	Sign in	去登录
 Label_SubtitlesEmbedded	Embedded subtitles	嵌入字幕
+Nav_Subtitles	Subtitle tools	字幕工具
+LocalSub_Video	Local video	本地视频
+LocalSub_EmptyTitle	No video added yet	还没有添加视频
+LocalSub_EmptyBody	Drag a video here, or click Choose a video.	将视频拖到这里，或点击「选择视频」。
+LocalSub_ChooseVideo	Choose a video…	选择视频…
+LocalSub_DropNote	Choose or drop one local video here	选择本地视频，或将一个视频拖到这里
+LocalSub_Action	Action	处理方式
+LocalSub_Action_Generate	Generate subtitles	生成字幕
+LocalSub_Action_GenerateAndEmbed	Generate and embed subtitles	生成并内嵌字幕
+LocalSub_Action_Extract	Export existing subtitles	导出现有字幕
+LocalSub_Action_Remove	Remove embedded subtitles	移除内嵌字幕
+LocalSub_Description_Generate	Recognize speech and save a separate subtitle or transcript file	识别视频中的说话内容，保存为独立字幕或文字文件
+LocalSub_Description_GenerateAndEmbed	Save a new MKV with switchable subtitles. Existing subtitles, picture and sound are kept.	将生成的字幕作为可切换的字幕轨，另存为 MKV 视频。保留已有字幕和原始音画。
+LocalSub_Description_Extract	Export a text subtitle track without speech recognition. Image subtitle tracks need OCR and are not supported.	无需语音识别，直接导出已有的文本字幕轨。图像字幕需要 OCR，暂不支持导出。
+LocalSub_Description_Remove	Remove all switchable subtitle tracks in a new copy. Subtitles burned into the picture cannot be removed.	另存一份副本，移除所有可切换的字幕轨。画面中已经烧录的字幕无法移除。
+LocalSub_SpokenLanguage	Spoken language	说话语言
+LocalSub_LanguageNote	The language spoken in the video; recognition does not translate it	视频中说话的语言，识别会保留原文，不进行翻译
+LocalSub_Track	Existing subtitle track	现有字幕轨
+LocalSub_Detected	Detected {0} subtitle tracks	检测到 {0} 条字幕轨
+LocalSub_DetectionNote	This detects embedded subtitle tracks. Words burned into the picture are not separate tracks; generate subtitles from the sound instead.	这里检测的是视频内的字幕轨。画面中烧录的文字不属于独立字幕轨，可以通过识别语音生成字幕。
+LocalSub_OneVideo	Add one video at a time. Supported formats include MP4, MKV, MOV, WebM and AVI.	请一次添加一个视频。支持 MP4、MKV、MOV、WebM、AVI 等常见格式。
+LocalSub_SetUpSpeech	Set up speech recognition	配置语音识别
+LocalSub_SetUpTools	Manage components	管理组件
+LocalSub_Start	Start processing	开始处理
+LocalSub_Inspecting	Detecting audio and subtitle tracks…	正在检测音频和字幕轨…
+LocalSub_WaitingSpeech	Waiting for another speech recognition task…	正在等待其他语音识别任务完成…
+LocalSub_Recognizing	Recognizing speech	正在识别语音
+LocalSub_Processing	Processing subtitles	正在处理字幕
+LocalSub_Verifying	Checking the resulting subtitle tracks…	正在检查输出的字幕轨…
+LocalSub_Saved	Saved a new file	已保存新文件
+LocalSub_GeneratedTrack	Generated subtitles	语音识别字幕
+LocalSub_MissingFile	The selected video no longer exists. Choose it again.	所选视频已不存在，请重新选择。
+LocalSub_NoTracks	This video has no embedded subtitle tracks to export or remove.	这个视频没有可供导出或移除的内嵌字幕轨。
+LocalSub_ImageTrack	Choose a text subtitle track. Image subtitles cannot be exported as text without OCR.	请选择文本字幕轨。图像字幕需要先经过 OCR，无法直接导出为文字。
+LocalSub_EmptyTrack	The selected subtitle track contains no text.	所选字幕轨没有文字内容。
+LocalSub_NoSpeech	No speech was recognized. No empty subtitle file was saved.	没有识别到说话内容，未保存空字幕文件。
+LocalSub_VerifyFailed	The output subtitle tracks could not be verified. The original video was kept unchanged.	输出字幕轨未通过检查，原视频保持不变。
+LocalSub_GroupOptions	Subtitle options	字幕处理
+LocalSub_GroupOutput	Output	输出设置
+LocalSub_OutputNote	Results are saved next to the original video	处理后的文件保存在原视频所在的文件夹
+LocalSub_Progress	Processing progress	处理进度
+LocalSub_Failed	Processing failed	处理失败
+LocalSub_EmbedGenerated	Embed generated subtitles	将生成的字幕内嵌到视频
+LocalSub_EmbedGeneratedNote	On: save a new MKV with switchable subtitles. Off: save a separate subtitle file.	开启后另存为带可切换字幕的 MKV 视频；关闭则保存独立字幕文件
+LocalSub_Action_Embed	Embed an existing subtitle file	内嵌已有字幕文件
+LocalSub_Description_Embed	Choose a timed subtitle file and save a new MKV. Existing subtitle tracks and original picture and sound are kept; speech recognition is not needed.	选择带时间轴的字幕文件，另存为 MKV 视频。保留已有字幕和原始音画，无需语音识别。
+LocalSub_SubtitleFile	Subtitle file	字幕文件
+LocalSub_ChooseSubtitle	Choose subtitles…	选择字幕…
+LocalSub_ChooseSubtitleNote	Choose an SRT, ASS, SSA, VTT or LRC file with timestamps	请选择带时间轴的 SRT、ASS、SSA、VTT 或 LRC 字幕文件
+LocalSub_MissingSubtitle	The selected subtitle file no longer exists. Choose it again.	所选字幕文件已不存在，请重新选择。
+LocalSub_TimedSubtitleRequired	Embedding needs a timed subtitle file. TXT and Markdown cannot be embedded.	内嵌需要带时间轴的字幕文件，TXT 和 Markdown 无法内嵌。
+Status_WaitingTools	Waiting for component updates to finish…	正在等待组件更新完成…
+Tools_WorkBusy	Tasks are using these components. Wait for downloads, conversion, subtitles or model installation to finish, then try again.	组件正在被任务使用，请等待下载、转换、字幕处理或模型安装完成后再更新。

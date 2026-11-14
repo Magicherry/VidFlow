@@ -44,9 +44,7 @@ public static class AccountStore
             if (!File.Exists(CookieFile)) return false;
             var names = SessionCookieNames(p);
             var domain = Domain(p);
-            return File.ReadLines(CookieFile)
-                .Select(l => l.Split('\t'))
-                .Any(f => f.Length >= 7 && f[0].EndsWith(domain, StringComparison.OrdinalIgnoreCase) && names.Contains(f[5]));
+            return LiveCookies(domain).Any(f => names.Contains(f[5]));
         }
         catch (IOException)
         {
@@ -61,9 +59,7 @@ public static class AccountStore
         {
             if (!File.Exists(CookieFile)) return null;
             var domain = Domain(p);
-            var pairs = File.ReadLines(CookieFile)
-                .Select(l => l.Split('\t'))
-                .Where(f => f.Length >= 7 && f[0].EndsWith(domain, StringComparison.OrdinalIgnoreCase))
+            var pairs = LiveCookies(domain)
                 .Select(f => $"{f[5]}={f[6]}")
                 .ToList();
             return pairs.Count > 0 ? string.Join("; ", pairs) : null;
@@ -71,6 +67,23 @@ public static class AccountStore
         catch (IOException)
         {
             return null;
+        }
+    }
+
+    static IEnumerable<string[]> LiveCookies(string domain)
+    {
+        var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        foreach (var raw in File.ReadLines(CookieFile))
+        {
+            var line = raw.StartsWith("#HttpOnly_", StringComparison.Ordinal) ? raw[10..] : raw;
+            if (line.StartsWith('#')) continue;
+            var fields = line.Split('\t');
+            if (fields.Length < 7 || fields[5].Length == 0 || fields[6].Length == 0
+                || !long.TryParse(fields[4], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var expires)
+                || expires != 0 && expires <= now) continue;
+            var host = fields[0].TrimStart('.');
+            if (host.Equals(domain, StringComparison.OrdinalIgnoreCase) || host.EndsWith("." + domain, StringComparison.OrdinalIgnoreCase))
+                yield return fields;
         }
     }
 

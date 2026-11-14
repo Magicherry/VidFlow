@@ -130,7 +130,7 @@
   <data name="Drop_Caption" xml:space="preserve"><value>用 VidFlow 下载</value></data>
   <data name="Drop_Hint" xml:space="preserve"><value>松开以解析链接</value></data>
   <data name="Error_AsrFailed" xml:space="preserve"><value>语音识别失败。</value></data>
-  <data name="Error_AsrNotReady" xml:space="preserve"><value>语音识别尚未启用。请先在「设置 → 语音识别」中下载。</value></data>
+  <data name="Error_AsrNotReady" xml:space="preserve"><value>语音识别尚未启用。请先在「设置 → 附加组件 → 语音识别」中下载。</value></data>
   <data name="Error_AudioNeedsFfmpeg" xml:space="preserve"><value>提取音频需要 ffmpeg，请先在「设置 → 关于与更新」中安装。</value></data>
   <data name="Error_BotCheck" xml:space="preserve"><value>YouTube 要求验证身份。请在「账号」页面中登录，或更换代理节点。</value></data>
   <data name="Error_ConvertFailed" xml:space="preserve"><value>转换失败。</value></data>
@@ -220,6 +220,56 @@
   <data name="Licenses_FfmpegNote" xml:space="preserve"><value>仅在你选择安装时从 yt-dlp 官方构建下载，不随 VidFlow 分发。源代码见 ffmpeg.org。</value></data>
   <data name="Licenses_Intro" xml:space="preserve"><value>VidFlow 基于以下开源组件构建，点击许可名称可查看完整条款。</value></data>
   <data name="Licenses_YtDlpNote" xml:space="preserve"><value>按需下载，并自动保持最新</value></data>
+  <data name="LocalSub_Action" xml:space="preserve"><value>处理方式</value></data>
+  <data name="LocalSub_Action_Embed" xml:space="preserve"><value>内嵌已有字幕文件</value></data>
+  <data name="LocalSub_Action_Extract" xml:space="preserve"><value>导出现有字幕</value></data>
+  <data name="LocalSub_Action_Generate" xml:space="preserve"><value>生成字幕</value></data>
+  <data name="LocalSub_Action_GenerateAndEmbed" xml:space="preserve"><value>生成并内嵌字幕</value></data>
+  <data name="LocalSub_Action_Remove" xml:space="preserve"><value>移除内嵌字幕</value></data>
+  <data name="LocalSub_ChooseSubtitle" xml:space="preserve"><value>选择字幕…</value></data>
+  <data name="LocalSub_ChooseSubtitleNote" xml:space="preserve"><value>请选择带时间轴的 SRT、ASS、SSA、VTT 或 LRC 字幕文件</value></data>
+  <data name="LocalSub_ChooseVideo" xml:space="preserve"><value>选择视频…</value></data>
+  <data name="LocalSub_Description_Embed" xml:space="preserve"><value>选择带时间轴的字幕文件，另存为 MKV 视频。保留已有字幕和原始音画，无需语音识别。</value></data>
+  <data name="LocalSub_Description_Extract" xml:space="preserve"><value>无需语音识别，直接导出已有的文本字幕轨。图像字幕需要 OCR，暂不支持导出。</value></data>
+  <data name="LocalSub_Description_Generate" xml:space="preserve"><value>识别视频中的说话内容，保存为独立字幕或文字文件</value></data>
+  <data name="LocalSub_Description_GenerateAndEmbed" xml:space="preserve"><value>将生成的字幕作为可切换的字幕轨，另存为 MKV 视频。保留已有字幕和原始音画。</value></data>
+  <data name="LocalSub_Description_Remove" xml:space="preserve"><value>另存一份副本，移除所有可切换的字幕轨。画面中已经烧录的字幕无法移除。</value></data>
+  <data name="LocalSub_Detected" xml:space="preserve"><value>检测到 {0} 条字幕轨</value></data>
+  <data name="LocalSub_DetectionNote" xml:space="preserve"><value>这里检测的是视频内的字幕轨。画面中烧录的文字不属于独立字幕轨，可以通过识别语音生成字幕。</value></data>
+  <data name="LocalSub_DropNote" xml:space="preserve"><value>选择本地视频，或将一个视频拖到这里</value></data>
+  <data name="LocalSub_EmbedGenerated" xml:space="preserve"><value>将生成的字幕内嵌到视频</value></data>
+  <data name="LocalSub_EmbedGeneratedNote" xml:space="preserve"><value>开启后另存为带可切换字幕的 MKV 视频；关闭则保存独立字幕文件</value></data>
+  <data name="LocalSub_EmptyBody" xml:space="preserve"><value>将视频拖到这里，或点击「选择视频」。</value></data>
+  <data name="LocalSub_EmptyTitle" xml:space="preserve"><value>还没有添加视频</value></data>
+  <data name="LocalSub_EmptyTrack" xml:space="preserve"><value>所选字幕轨没有文字内容。</value></data>
+  <data name="LocalSub_Failed" xml:space="preserve"><value>处理失败</value></data>
+  <data name="LocalSub_GeneratedTrack" xml:space="preserve"><value>语音识别字幕</value></data>
+  <data name="LocalSub_GroupOptions" xml:space="preserve"><value>字幕处理</value></data>
+  <data name="LocalSub_GroupOutput" xml:space="preserve"><value>输出设置</value></data>
+  <data name="LocalSub_ImageTrack" xml:space="preserve"><value>请选择文本字幕轨。图像字幕需要先经过 OCR，无法直接导出为文字。</value></data>
+  <data name="LocalSub_Inspecting" xml:space="preserve"><value>正在检测音频和字幕轨…</value></data>
+  <data name="LocalSub_LanguageNote" xml:space="preserve"><value>视频中说话的语言，识别会保留原文，不进行翻译</value></data>
+  <data name="LocalSub_MissingFile" xml:space="preserve"><value>所选视频已不存在，请重新选择。</value></data>
+  <data name="LocalSub_MissingSubtitle" xml:space="preserve"><value>所选字幕文件已不存在，请重新选择。</value></data>
+  <data name="LocalSub_NoSpeech" xml:space="preserve"><value>没有识别到说话内容，未保存空字幕文件。</value></data>
+  <data name="LocalSub_NoTracks" xml:space="preserve"><value>这个视频没有可供导出或移除的内嵌字幕轨。</value></data>
+  <data name="LocalSub_OneVideo" xml:space="preserve"><value>请一次添加一个视频。支持 MP4、MKV、MOV、WebM、AVI 等常见格式。</value></data>
+  <data name="LocalSub_OutputNote" xml:space="preserve"><value>处理后的文件保存在原视频所在的文件夹</value></data>
+  <data name="LocalSub_Processing" xml:space="preserve"><value>正在处理字幕</value></data>
+  <data name="LocalSub_Progress" xml:space="preserve"><value>处理进度</value></data>
+  <data name="LocalSub_Recognizing" xml:space="preserve"><value>正在识别语音</value></data>
+  <data name="LocalSub_Saved" xml:space="preserve"><value>已保存新文件</value></data>
+  <data name="LocalSub_SetUpSpeech" xml:space="preserve"><value>配置语音识别</value></data>
+  <data name="LocalSub_SetUpTools" xml:space="preserve"><value>管理组件</value></data>
+  <data name="LocalSub_SpokenLanguage" xml:space="preserve"><value>说话语言</value></data>
+  <data name="LocalSub_Start" xml:space="preserve"><value>开始处理</value></data>
+  <data name="LocalSub_SubtitleFile" xml:space="preserve"><value>字幕文件</value></data>
+  <data name="LocalSub_TimedSubtitleRequired" xml:space="preserve"><value>内嵌需要带时间轴的字幕文件，TXT 和 Markdown 无法内嵌。</value></data>
+  <data name="LocalSub_Track" xml:space="preserve"><value>现有字幕轨</value></data>
+  <data name="LocalSub_VerifyFailed" xml:space="preserve"><value>输出字幕轨未通过检查，原视频保持不变。</value></data>
+  <data name="LocalSub_Verifying" xml:space="preserve"><value>正在检查输出的字幕轨…</value></data>
+  <data name="LocalSub_Video" xml:space="preserve"><value>本地视频</value></data>
+  <data name="LocalSub_WaitingSpeech" xml:space="preserve"><value>正在等待其他语音识别任务完成…</value></data>
   <data name="Login_Done" xml:space="preserve"><value>完成</value></data>
   <data name="Login_Instructions" xml:space="preserve"><value>在下方登录，完成后窗口自动关闭</value></data>
   <data name="Login_InstructionsDouyin" xml:space="preserve"><value>点击右上角「登录」，用抖音 App 扫码</value></data>
@@ -255,6 +305,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>下载列表</value></data>
   <data name="Nav_Home" xml:space="preserve"><value>新建下载</value></data>
   <data name="Nav_Settings" xml:space="preserve"><value>设置</value></data>
+  <data name="Nav_Subtitles" xml:space="preserve"><value>字幕工具</value></data>
   <data name="Nav_Templates" xml:space="preserve"><value>预设模板</value></data>
   <data name="Notify_BatchCompleted" xml:space="preserve"><value>{0} 个下载已全部完成</value></data>
   <data name="Notify_Completed" xml:space="preserve"><value>下载完成</value></data>
@@ -479,6 +530,7 @@
   <data name="Status_VideoDoneAudioNext" xml:space="preserve"><value>视频流已完成，正在下载音频流…</value></data>
   <data name="Status_VideoStream" xml:space="preserve"><value>视频流</value></data>
   <data name="Status_Waiting" xml:space="preserve"><value>等待中…</value></data>
+  <data name="Status_WaitingTools" xml:space="preserve"><value>正在等待组件更新完成…</value></data>
   <data name="Sub_NoSpeech" xml:space="preserve"><value>视频中没有识别到说话</value></data>
   <data name="Sub_NotFound" xml:space="preserve"><value>没有找到字幕</value></data>
   <data name="SubFormat_Md" xml:space="preserve"><value>Markdown（带时间戳）</value></data>
@@ -541,6 +593,7 @@
   <data name="Tools_NotChecked" xml:space="preserve"><value>尚未检查组件更新</value></data>
   <data name="Tools_SystemCopy" xml:space="preserve"><value>{0} · 版本 {1} · 系统中的版本</value></data>
   <data name="Tools_UpdateAll" xml:space="preserve"><value>全部更新</value></data>
+  <data name="Tools_WorkBusy" xml:space="preserve"><value>组件正在被任务使用，请等待下载、转换、字幕处理或模型安装完成后再更新。</value></data>
   <data name="Tools_YtDlpPurpose" xml:space="preserve"><value>解析和下载视频</value></data>
   <data name="Tray_Exit" xml:space="preserve"><value>退出 VidFlow</value></data>
   <data name="Tray_PasteLink" xml:space="preserve"><value>下载已复制的链接</value></data>
@@ -559,7 +612,7 @@
   <data name="Update_DownloadingShort" xml:space="preserve"><value>下载中…</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>更新失败：{0}</value></data>
   <data name="Update_InstallBody" xml:space="preserve"><value>VidFlow 将关闭并在几秒内完成更新后自动重新打开。</value></data>
-  <data name="Update_InstallBodyActive" xml:space="preserve"><value>VidFlow 将关闭并在几秒内完成更新后自动重新打开。{0} 个正在进行的下载会暂停，更新后自动继续。</value></data>
+  <data name="Update_InstallBodyActive" xml:space="preserve"><value>当前有 {0} 个任务正在进行。VidFlow 将关闭，更新后重新打开。下载任务会自动继续；本地转换、字幕处理和组件安装任务将停止，需要重新开始。</value></data>
   <data name="Update_InstallNow" xml:space="preserve"><value>重启以更新</value></data>
   <data name="Update_InstallTitle" xml:space="preserve"><value>安装 VidFlow {0}？</value></data>
   <data name="Update_Later" xml:space="preserve"><value>稍后</value></data>

@@ -16,6 +16,7 @@ public sealed class DownloadManager
     readonly DispatcherQueueTimer _saveTimer;
     int _completedSinceIdle;
     string? _lastCompletedFolder;
+    bool _stopping;
 
     public DownloadManager(DispatcherQueue dispatcher)
     {
@@ -121,6 +122,14 @@ public sealed class DownloadManager
 
     public void Cancel(DownloadItem item)
     {
+        if (item.Record.IsSubtitleRetry && !item.IsRunning)
+        {
+            item.Record.IsSubtitleRetry = false;
+            item.State = DownloadState.Completed;
+            item.StatusText = DownloadLabels.CompletedStatus(item.Record);
+            Changed();
+            return;
+        }
         if (item.State is DownloadState.Queued or DownloadState.Paused)
         {
             item.State = DownloadState.Canceled;
@@ -143,22 +152,14 @@ public sealed class DownloadManager
         Changed();
     }
 
-    /// <summary>A done video whose subtitles could not be had: a new download of the subtitles alone, put next to
-    /// the video (in the format chosen; ones meant to go inside it come as SRT).</summary>
+    /// <summary>Repair the same task, retaining its media path, subtitle warning and embedding choices.</summary>
     public void RetrySubtitles(DownloadItem item)
     {
         if (!item.CanRetrySubtitles) return;
-        var r = item.Request;
-        var folder = item.FilePath is { } f && Path.GetDirectoryName(f) is { } dir ? dir : null;
-        var request = r with
-        {
-            Mode = DownloadRequest.SubtitlesMode, WriteSubtitles = false, MaxHeight = 0, EmbedSubtitles = false,
-            SubtitleFormat = r.EmbedSubtitles ? SubtitleFiles.DefaultFormat : r.SubtitleFormat,
-            OutputFolder = folder ?? r.OutputFolder, FolderTemplate = folder is null ? r.FolderTemplate : "",
-        };
-        item.SubtitleProblem = null;
-        item.StatusText = item.FilePath is { } path ? L.Format("Status_CompletedFile", Path.GetFileName(path)) : L.Get("Status_Completed");
-        Enqueue(request, item.Title, item.Record.ThumbnailUrl, item.Record.PartIndex);
+        item.Record.IsSubtitleRetry = true;
+        item.State = DownloadState.Queued;
+        item.StatusText = L.Get("Status_Waiting");
+        Changed();
     }
 
     public void Remove(DownloadItem item)
@@ -182,6 +183,9 @@ public sealed class DownloadManager
     /// <summary>On exit: stop processes but keep running items as "queued" so they resume next launch.</summary>
     public void Shutdown()
     {
+        _stopping = true;
+        _saveTimer.Stop();
+        _stallTimer.Stop();
         foreach (var item in Items.Where(i => i.IsRunning))
         {
             item.PauseRequested = true; // not a user cancel
@@ -194,6 +198,7 @@ public sealed class DownloadManager
     /// <summary>Call after any state change: saves, refreshes the badge/taskbar, and starts queued work.</summary>
     void Changed()
     {
+        if (_stopping) return;
         ScheduleSave();
         ActiveCountChanged?.Invoke();
         UpdateOverallProgress();
@@ -211,6 +216,7 @@ public sealed class DownloadManager
 
     void Pump()
     {
+        if (_stopping) return;
         // One waiting for its turn at speech recognition isn't downloading anything: another download may go meanwhile.
         var running = Items.Count(i => i.IsRunning && !i.WaitingForTurn);
         // Prioritized items first (most recently prioritized first), then oldest first (the list is newest-on-top).
@@ -232,32 +238,55 @@ public sealed class DownloadManager
 
     async Task RunAsync(DownloadItem item)
     {
+        var repairing = item.Record.IsSubtitleRetry;
         item.State = DownloadState.Downloading;
         item.StatusText = L.Get("Status_Connecting");
         item.PauseRequested = false;
         item.LastActivity = DateTime.Now;
         item.StallReported = false;
         item.Recognizing = item.WaitingForTurn = false;
-        item.SubtitleProblem = null;
+        if (!repairing) item.SubtitleProblem = null;
         using var cts = new CancellationTokenSource();
         item.Cts = cts;
+        string? reportedProblem = null;
+        void Report(DownloadEvent e)
+        {
+            if (e is SubtitleProblemEvent p) Volatile.Write(ref reportedProblem, p.Message);
+            _dispatcher.TryEnqueue(() => { if (ReferenceEquals(item.Cts, cts)) Apply(item, e); });
+        }
         Log.Info($"Download start: {item.Request.Url} ({item.Request.Mode}, {item.Request.MaxHeight})");
         try
         {
-            var path = await Task.Run(() => YtDlpService.DownloadAsync(item.Request,
-                e => _dispatcher.TryEnqueue(() => Apply(item, e)), cts.Token));
-            item.FilePath = path;
+            if (App.ToolUsage.IsUpdating) item.StatusText = L.Get("Status_WaitingTools");
+            using var tools = await App.ToolUsage.UseAsync(cts.Token);
+            if (repairing)
+            {
+                if (item.FilePath is not { } file) throw new FileNotFoundException(L.Get("LocalSub_MissingFile"));
+                item.SubtitleProblem = await Task.Run(() => YtDlpService.RetrySubtitlesAsync(item.Request, file,
+                    Report, cts.Token));
+            }
+            else
+            {
+                item.FilePath = await Task.Run(() => YtDlpService.DownloadAsync(item.Request,
+                    Report, cts.Token));
+                item.SubtitleProblem = Volatile.Read(ref reportedProblem);
+            }
+            item.ErrorDetail = null;
             item.Progress = 100;
             item.State = DownloadState.Completed;
-            item.StatusText = item.SubtitleProblem is { } problem
-                ? L.Format("Status_CompletedNoSubtitles", Path.GetFileName(path ?? item.Title), problem)
-                : path is null ? L.Get("Status_Completed") : L.Format("Status_CompletedFile", Path.GetFileName(path));
-            Log.Info($"Download done: {path}");
-            OnCompleted(item);
+            item.StatusText = DownloadLabels.CompletedStatus(item.Record);
+            Log.Info($"{(repairing ? "Subtitle repair" : "Download")} done: {item.FilePath}");
+            if (!repairing) OnCompleted(item);
         }
         catch (OperationCanceledException)
         {
-            if (item.PauseRequested) SetPaused(item);
+            if (_stopping) item.Record.State = DownloadState.Queued;
+            else if (item.PauseRequested) SetPaused(item);
+            else if (repairing)
+            {
+                item.State = DownloadState.Completed;
+                item.StatusText = DownloadLabels.CompletedStatus(item.Record);
+            }
             else
             {
                 item.State = DownloadState.Canceled;
@@ -266,8 +295,17 @@ public sealed class DownloadManager
         }
         catch (Exception ex)
         {
-            item.State = DownloadState.Failed;
-            item.StatusText = ex.Message.Replace('\n', ' ');
+            if (repairing)
+            {
+                item.SubtitleProblem = ex.Message.Replace('\n', ' ');
+                item.State = DownloadState.Completed;
+                item.StatusText = DownloadLabels.CompletedStatus(item.Record);
+            }
+            else
+            {
+                item.State = DownloadState.Failed;
+                item.StatusText = ex.Message.Replace('\n', ' ');
+            }
             item.ErrorDetail = ex is YtDlpException { Detail: { } d } ? d : ex.ToString();
             Log.Warn($"Download failed: {item.Request.Url}: {ex.Message}");
             if (AppSettings.Current.NotifyOnFailure && !App.MainWindow.IsForeground)
@@ -275,6 +313,7 @@ public sealed class DownloadManager
         }
         finally
         {
+            if (!_stopping && item.State != DownloadState.Paused) item.Record.IsSubtitleRetry = false;
             item.Cts = null;
             item.Recognizing = item.WaitingForTurn = false;
             Changed();

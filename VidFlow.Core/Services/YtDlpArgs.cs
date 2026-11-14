@@ -43,7 +43,7 @@ public static class YtDlpArgs
     /// normally read from the page are passed in <see cref="Known"/>.</summary>
     public sealed record DirectMedia(string Url, string Referer, IReadOnlyDictionary<string, string?> Known);
 
-    public static List<string> Download(DownloadRequest req, AppSettings s, Environment env, DirectMedia? direct = null)
+    public static List<string> Download(DownloadRequest req, AppSettings s, Environment env, DirectMedia? direct = null, bool includeSubtitles = true)
     {
         var hasFfmpeg = env.FfmpegDir is not null;
         var platform = UrlTools.DetectPlatform(req.Url);
@@ -93,11 +93,13 @@ public static class YtDlpArgs
         if (req.IsSubtitles)
         {
             var (langs, automatic) = SubtitleFiles.Languages(req.SubtitleLanguage, s);
-            args.AddRange(["--skip-download", "--write-subs", "--sub-langs", langs]);
+            args.AddRange(["--skip-download", "--force-overwrites", automatic ? "--no-write-subs" : "--write-subs", "--sub-langs", langs]);
             if (automatic) args.Add("--write-auto-subs");
             // TXT and Markdown are written by VidFlow from SRT; the timed formats are ffmpeg's conversions.
             var target = SubtitleFiles.IsText(req.SubtitleFormat) ? "srt" : req.SubtitleFormat;
-            args.AddRange(hasFfmpeg ? ["--convert-subs", target] : ["--sub-format", target == "srt" ? "srt/vtt/best" : $"{target}/best"]);
+            // Prefer WebVTT when converting, rather than whichever source yt-dlp happens to rank last.
+            args.AddRange(hasFfmpeg && langs != "danmaku" ? ["--sub-format", "vtt/srt/best", "--convert-subs", target]
+                : ["--sub-format", target == "srt" ? "srt/vtt/best" : $"{target}/best"]);
             // Nothing is downloaded, so "after_move" never comes: list the files saved instead.
             args.AddRange(["--print", "after_video:" + SubtitleFiles.ResultTemplate]);
             args.AddRange(Common(s, env));
@@ -150,20 +152,22 @@ public static class YtDlpArgs
                 "--audio-quality", fmt is "flac" or "wav" or MediaFeatures.Original || req.AudioQuality <= 0 ? "0" : $"{req.AudioQuality}K"]);
         }
 
-        if (req.WriteSubtitles)
+        if (req.WriteSubtitles && includeSubtitles)
         {
             // Speech recognition makes them afterwards (YtDlpService): then yt-dlp only brings the danmaku.
             var (langs, automatic) = SubtitleFiles.IsSpeech(req.SubtitleLanguage) ? ("", false) : SubtitleFiles.Languages(req.SubtitleLanguage, s);
             if (platform == Platform.Bilibili && s.SaveDanmaku) langs = langs.Length > 0 ? langs + ",danmaku" : "danmaku";
             if (langs.Length > 0)
             {
-                args.AddRange(["--write-subs", "--sub-langs", langs]);
+                args.AddRange([automatic ? "--no-write-subs" : "--write-subs", "--sub-langs", langs, "--sub-format", "vtt/srt/best"]);
                 if (automatic) args.Add("--write-auto-subs");
                 // Bilibili already serves SRT, and its danmaku is XML that must not be converted. Other formats
                 // than SRT are made afterwards, from the SRT.
                 if (platform != Platform.Bilibili && hasFfmpeg) args.AddRange(["--convert-subs", "srt"]);
             }
         }
+
+        if (!includeSubtitles) args.AddRange(["--no-write-subs", "--no-write-auto-subs"]);
 
         if (s.EmbedMetadata && hasFfmpeg)
         {

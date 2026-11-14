@@ -81,5 +81,5 @@ public sealed class DownloadTemplate
         new(url, Mode is "audio" or "cover" or DownloadRequest.SubtitlesMode ? Mode : "video", Mode == "video" ? MaxHeight : 0,
             Subtitles && Mode is "video" or "audio", baseFolder, Codec, Container, AudioFormat, AudioQuality, AudioLanguage, Recode,
             FileNameTemplate, FolderTemplate, DynamicRange, SubtitleFiles.Normalize(SubtitleFormat), SubtitleLanguage,
-            EmbedSubtitles && Mode == "video");
+            EmbedSubtitles && Subtitles && Mode == "video");
 }

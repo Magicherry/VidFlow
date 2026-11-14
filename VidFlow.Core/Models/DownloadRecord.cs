@@ -18,6 +18,8 @@ public sealed class DownloadRecord
 
     /// <summary>The download is done but its subtitles could not be had (none found, recognition failed): why.</summary>
     public string? SubtitleProblem { get; set; }
+    /// <summary>Only repair this task's subtitles on resume; its media file is already complete.</summary>
+    public bool IsSubtitleRetry { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     /// <summary>Set by "download next": queued items with a later value start first.</summary>

@@ -69,7 +69,7 @@ public static class InfoParser
             Codecs = codecs,
             AudioLanguages = audioLanguages,
             SubtitleLanguages = SubtitleKeys(root, "subtitles").Where(k => k is not ("live_chat" or "danmaku")).ToList(),
-            AutoSubtitleLanguages = SubtitleKeys(root, "automatic_captions").Where(k => k.EndsWith("-orig", StringComparison.Ordinal)).ToList(),
+            AutoSubtitleLanguages = OriginalCaptionKeys(root),
         };
     }
 
@@ -159,6 +159,17 @@ public static class InfoParser
         root.TryGetProperty(name, out var subs) && subs.ValueKind == JsonValueKind.Object
             ? subs.EnumerateObject().Where(s => s.Value.ValueKind == JsonValueKind.Array && s.Value.GetArrayLength() > 0).Select(s => s.Name).ToList()
             : [];
+
+    static List<string> OriginalCaptionKeys(JsonElement root)
+    {
+        if (!root.TryGetProperty("automatic_captions", out var captions) || captions.ValueKind != JsonValueKind.Object) return [];
+        var keys = SubtitleKeys(root, "automatic_captions").Where(key => key is not ("live_chat" or "danmaku") &&
+            (key.EndsWith("-orig", StringComparison.Ordinal) || captions.GetProperty(key).EnumerateArray().Any(format =>
+                format.ValueKind == JsonValueKind.Object && Str(format, "url") is { } url && Uri.TryCreate(url, UriKind.Absolute, out var uri)
+                && !uri.Query.TrimStart('?').Split('&').Any(part => part.Split('=')[0].Equals("tlang", StringComparison.OrdinalIgnoreCase))))).ToList();
+        // YouTube may list the original twice ("en" and "en-orig"). Prefer its explicitly marked alias.
+        return keys.Where(key => !keys.Contains(key + "-orig", StringComparer.OrdinalIgnoreCase)).ToList();
+    }
 
     static long? Size(JsonElement f, double? duration)
     {

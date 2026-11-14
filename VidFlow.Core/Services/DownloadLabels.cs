@@ -112,10 +112,14 @@ public static class DownloadLabels
     /// (failures keep their error message).</summary>
     public static string? RestingStatus(DownloadRecord r) => r.State switch
     {
-        DownloadState.Completed => r.FilePath is null ? L.Get("Status_Completed") : L.Format("Status_CompletedFile", Path.GetFileName(r.FilePath)),
+        DownloadState.Completed => CompletedStatus(r),
         DownloadState.Canceled => L.Get("Status_Canceled"),
         DownloadState.Paused => L.Get("Status_Paused"),
         DownloadState.Queued => L.Get("Status_Resuming"),
         _ => null,
     };
+
+    public static string CompletedStatus(DownloadRecord r) => r.SubtitleProblem is { } problem
+        ? L.Format("Status_CompletedNoSubtitles", Path.GetFileName(r.FilePath ?? r.Title), problem)
+        : r.FilePath is null ? L.Get("Status_Completed") : L.Format("Status_CompletedFile", Path.GetFileName(r.FilePath));
 }

@@ -29,7 +29,7 @@ public sealed class Component
 /// <summary>
 /// Checks and installs the external components (yt-dlp, ffmpeg, Deno, aria2) for the whole app, so an install keeps
 /// going when the About page is left and shows its progress when it is opened again. With automatic updates on,
-/// checks once a day in the background and updates VidFlow's own copies while nothing is downloading (a running
+/// checks once a day in the background and updates VidFlow's own copies while no media jobs are active (a running
 /// yt-dlp or ffmpeg can't be replaced). Missing components are only installed when the user asks.
 /// </summary>
 public sealed class ComponentUpdater
@@ -45,7 +45,7 @@ public sealed class ComponentUpdater
         _timer = dispatcher.CreateTimer();
         _timer.Tick += async (_, _) =>
         {
-            // Not due, or put off because something was downloading: look again in an hour.
+            // Not due, or put off because other work was active: look again in an hour.
             _timer.Interval = TimeSpan.FromHours(1);
             await AutoUpdateAsync();
         };
@@ -154,6 +154,13 @@ public sealed class ComponentUpdater
     public async Task<bool> InstallAsync(IReadOnlyList<Component> components)
     {
         if (Installing || Checking || components.Count == 0) return true;
+        using var access = App.ActiveWorkCount == 0 ? App.ToolUsage.TryBeginUpdate() : null;
+        if (access is null)
+        {
+            LastResult = (false, L.Get("Tools_WorkBusy"));
+            Changed?.Invoke();
+            return false;
+        }
         Installing = true;
         LastResult = null;
         var done = new List<string>();
@@ -191,17 +198,17 @@ public sealed class ComponentUpdater
         return ok;
     }
 
-    /// <summary>Once a day: update VidFlow's own copies that are out of date. Waits while anything downloads,
+    /// <summary>Once a day: update VidFlow's own copies that are out of date. Waits while other work is active,
     /// and tries again later if a check or an install fails.</summary>
     async Task AutoUpdateAsync()
     {
         var s = AppSettings.Current;
         if (!s.AutoUpdateYtDlp || DateTime.Now - s.LastYtDlpUpdateCheck < AutoInterval) return;
-        if (Installing || Checking || App.Downloads.ActiveCount > 0) return;
+        if (Installing || Checking || App.ActiveWorkCount > 0) return;
         await RefreshAsync(refresh: true);
         var due = Components.Where(c => c.State == ToolState.UpdateAvailable).ToList();
         // Something may have started while checking.
-        if (App.Downloads.ActiveCount > 0) return;
+        if (App.ActiveWorkCount > 0) return;
         if (due.Count > 0)
         {
             Log.Info($"Updating in the background: {string.Join(", ", due.Select(c => $"{c.Name} {c.Version} → {c.Latest}"))}");

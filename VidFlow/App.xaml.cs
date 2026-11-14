@@ -12,9 +12,13 @@ public partial class App : Application
     public static MainWindow MainWindow { get; private set; } = null!;
     public static DownloadManager Downloads { get; private set; } = null!;
     public static ConvertQueue Converts { get; } = new();
+    public static LocalSubtitleJob Subtitles { get; } = new();
     public static UpdateController Updates { get; private set; } = null!;
     public static ComponentUpdater Tools { get; private set; } = null!;
     public static DispatcherQueue UiQueue { get; private set; } = null!;
+    public static ToolUsage ToolUsage { get; } = new();
+    public static int ActiveWorkCount => (Downloads?.ActiveCount ?? 0) + Converts.ActiveCount + (Subtitles.Busy ? 1 : 0)
+        + (Tools?.Installing == true ? 1 : 0) + (SpeechRecognizer.Installing ? 1 : 0);
 
     public App()
     {

@@ -42,6 +42,7 @@
 - **Content**: video, audio (MP3 / M4A / Opus / FLAC / WAV) or just the cover image
 - **Formats**: qualities listed as actually available, with estimated sizes; H.264 / H.265 / AV1 in MP4 / MKV / WebM; incompatible combinations are flagged and fixed in one click
 - **Extras**: audio tracks in other languages, subtitles, Bilibili danmaku, embedded cover, metadata and chapters; SponsorBlock marks or cuts sponsor segments on YouTube
+- **Local subtitle tools**: choose or drop your own video to detect subtitle tracks, generate SRT / VTT / ASS / LRC / TXT / Markdown from speech, or export existing text subtitles. Embed generated subtitles with a switch, embed an existing timed subtitle file without speech recognition, or remove subtitle tracks. Results are saved as new files; burned-in captions cannot be removed.
 - **Presets and naming**: five built-in presets plus your own; name files from {title}, {uploader}, {upload date} and more, and sort them by platform, uploader or date
 - **Queue**: pause and resume, retry, speed limit, parallel downloads; unfinished downloads continue after a restart
 - **Convenience**: drag a link onto the window or let VidFlow watch the clipboard; the app updates itself and rolls back if an update fails; Chinese and English UI

@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using VidFlow.Localization;
 using VidFlow.Models;
 
@@ -141,7 +143,7 @@ public static class YtDlpService
             if (req.IsAudio && req.AudioOutputFormat == MediaFeatures.Original)
                 req = req with { AudioFormat = await OriginalAudioFormatAsync(req, ct) };
             (code, error) = await RunWithCookieFallbackAsync(req.Url,
-                env => YtDlpArgs.Download(req, AppSettings.Current, env), OnLine, ct, accelerate: true);
+                env => YtDlpArgs.Download(req, AppSettings.Current, env, includeSubtitles: false), OnLine, ct, accelerate: true);
         }
 
         ct.ThrowIfCancellationRequested();
@@ -171,6 +173,23 @@ public static class YtDlpService
     /// recognition has been set up (installing it is the user saying they want that).</summary>
     static bool CanFallBackToSpeech(DownloadRequest req) => req.SubtitleLanguage.Length == 0 && SpeechRecognizer.CanRecognize;
 
+    static async IAsyncEnumerable<string> FallbackSubtitleLanguagesAsync(string url,
+        [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken ct)
+    {
+        yield return SubtitleFiles.AutoOriginal;
+        // Some extractors omit "-orig". Resolve those tracks explicitly; asking for all automatic captions would
+        // also fetch hundreds of machine translations. This extra extraction runs only if the first try failed.
+        VideoInfo? info = null;
+        try { info = await GetInfoAsync(url, ct) as VideoInfo; }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            Log.Info($"Automatic caption languages unavailable: {ex.Message}");
+        }
+        var automatic = info?.AutoSubtitleLanguages.Where(l => !l.EndsWith("-orig", StringComparison.Ordinal)).ToList();
+        if (automatic is { Count: > 0 }) yield return SubtitleFiles.AutoPrefix + string.Join(',', automatic.Select(Regex.Escape));
+        yield return AnyTrack;
+    }
+
     /// <summary>
     /// After a video (or audio) download with subtitles. yt-dlp brought the ones in the languages chosen; when none
     /// came and none in particular was asked for, the automatic ones in the video's own language are tried, then any
@@ -180,33 +199,40 @@ public static class YtDlpService
     static async Task<string?> CompleteSubtitlesAsync(DownloadRequest req, string file, Action<DownloadEvent> onEvent, CancellationToken ct)
     {
         var douyin = UrlTools.DetectPlatform(req.Url) == Platform.Douyin;
+        // All sidecars are fetched after the media is safe, including Bilibili's optional danmaku.
+        if (UrlTools.DetectPlatform(req.Url) == Platform.Bilibili && AppSettings.Current.SaveDanmaku)
+            await FetchBesideAsync(req, file, "danmaku", ct);
         if (SubtitleFiles.IsSpeech(req.SubtitleLanguage))
         {
             if (!await RecognizeBesideAsync(file, req.SubtitleLanguage, onEvent, ct)) return L.Get("Sub_NoSpeech");
         }
         else if (!HasSubtitlesBeside(file))
         {
-            if (req.SubtitleLanguage.Length > 0) return L.Get("Sub_NotFound");
+            var fetchError = !douyin ? await FetchBesideAsync(req, file, req.SubtitleLanguage, ct) : null;
+            if (req.SubtitleLanguage.Length > 0)
+            {
+                if (!HasSubtitlesBeside(file)) return fetchError ?? L.Get("Sub_NotFound");
+            }
             // Douyin's videos never have subtitles (and its downloads are not yt-dlp's to repeat).
-            if (!douyin)
-                foreach (var langs in new[] { SubtitleFiles.AutoOriginal, AnyTrack })
+            else if (!douyin && !HasSubtitlesBeside(file))
+                await foreach (var langs in FallbackSubtitleLanguagesAsync(req.Url, ct))
                 {
                     Log.Info($"No subtitles in the languages chosen, trying {langs}");
-                    await FetchBesideAsync(req, file, langs, ct);
+                    fetchError = await FetchBesideAsync(req, file, langs, ct) ?? fetchError;
                     if (!HasSubtitlesBeside(file)) continue;
-                    if (langs == AnyTrack) KeepOne(SubtitlesBeside(file));
+                    KeepOne(SubtitlesBeside(file));
                     break;
                 }
             if (!HasSubtitlesBeside(file))
             {
-                if (!SpeechRecognizer.CanRecognize) return L.Get("Sub_NotFound");
+                if (!SpeechRecognizer.CanRecognize) return fetchError ?? L.Get("Sub_NotFound");
                 Log.Info("No subtitles at all, making them by speech recognition");
                 if (!await RecognizeBesideAsync(file, SpeechFallback, onEvent, ct)) return L.Get("Sub_NoSpeech");
             }
         }
 
         var subtitles = SubtitlesBeside(file);
-        if (req.EmbedSubtitles && ToolManager.FfmpegPath is not null)
+        if (req.EmbedSubtitles)
             await EmbedAsync(file, subtitles, ct);
         else
             await ConvertBesideAsync(subtitles, SubtitleFiles.Normalize(req.SubtitleFormat), req.Url, ct);
@@ -214,16 +240,34 @@ public static class YtDlpService
     }
 
     /// <summary>One more yt-dlp run for subtitles alone, saved next to the video under its name.</summary>
-    static async Task FetchBesideAsync(DownloadRequest req, string file, string languages, CancellationToken ct)
+    static async Task<string?> FetchBesideAsync(DownloadRequest req, string file, string languages, CancellationToken ct)
     {
         var sub = req with
         {
             Mode = DownloadRequest.SubtitlesMode, WriteSubtitles = false, OutputFolder = Path.GetDirectoryName(file)!,
             FolderTemplate = "", SubtitleLanguage = languages, SubtitleFormat = SubtitleFiles.DefaultFormat, EmbedSubtitles = false,
         };
-        var (code, error) = await RunWithCookieFallbackAsync(sub.Url, env => YtDlpArgs.Download(sub, AppSettings.Current, env), _ => { }, ct);
+        var (code, error) = await RunWithCookieFallbackAsync(sub.Url, env => SubtitleFetchArguments(sub, file, AppSettings.Current, env), _ => { }, ct);
         ct.ThrowIfCancellationRequested();
         if (code != 0) Log.Info($"Subtitles ({languages}) not fetched: {error.Split('\n').LastOrDefault()}");
+        return code == 0 ? null : ErrorMapper.Friendly(error);
+    }
+
+    /// <summary>Repairs subtitles on an already saved video/audio file, preserving format and embedding choices.</summary>
+    public static async Task<string?> RetrySubtitlesAsync(DownloadRequest req, string file, Action<DownloadEvent> onEvent, CancellationToken ct)
+    {
+        if (!File.Exists(file)) throw new FileNotFoundException(L.Get("LocalSub_MissingFile"), file);
+        onEvent(new SubtitleStepEvent());
+        return await CompleteSubtitlesAsync(req, file, onEvent, ct);
+    }
+
+    internal static List<string> SubtitleFetchArguments(DownloadRequest sub, string file, AppSettings settings, YtDlpArgs.Environment env)
+    {
+        var args = YtDlpArgs.Download(sub, settings, env);
+        // Resolution / extension / title metadata may differ on this second extraction. Use the saved video's
+        // exact stem, escaping literal percent signs so yt-dlp cannot interpret them as template variables.
+        args[args.IndexOf("-o") + 1] = Path.GetFileNameWithoutExtension(file).Replace("%", "%%") + ".%(ext)s";
+        return args;
     }
 
     static readonly string[] SubtitleExtensions = [".srt", ".vtt", ".ass", ".ssa", ".lrc"];
@@ -237,7 +281,7 @@ public static class YtDlpService
         var stem = Path.GetFileNameWithoutExtension(file) + ".";
         return Directory.EnumerateFiles(folder)
             .Where(f => Path.GetFileName(f).StartsWith(stem, StringComparison.OrdinalIgnoreCase)
-                && SubtitleExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()))
+                && SubtitleExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()) && SubtitleFiles.HasContent(f))
             .Order(StringComparer.OrdinalIgnoreCase).ToList();
     }
 
@@ -285,6 +329,14 @@ public static class YtDlpService
         {
             var (code, error) = await ProcessRunner.RunAsync(ffmpeg, EmbedArguments(file, subtitles, part), null, ct);
             if (code != 0 || !File.Exists(part)) throw new YtDlpException(L.Get("Error_EmbedSubtitles"), error);
+            var ffprobe = Path.Combine(Path.GetDirectoryName(ffmpeg)!, "ffprobe.exe");
+            if (!File.Exists(ffprobe)) throw new YtDlpException(L.Get("Error_EmbedSubtitles"), "ffprobe is missing; kept the video and subtitle files");
+            var probe = new StringBuilder();
+            var (probeCode, probeError) = await ProcessRunner.RunAsync(ffprobe,
+                ["-v", "error", "-select_streams", "s", "-count_packets", "-show_entries", "stream=nb_read_packets", "-of", "json", part],
+                line => probe.AppendLine(line), ct, stdoutOnly: true);
+            if (probeCode != 0 || !HasEmbeddedSubtitles(probe.ToString(), subtitles.Count))
+                throw new YtDlpException(L.Get("Error_EmbedSubtitles"), probeError);
             File.Move(part, file, overwrite: true);
             foreach (var s in subtitles) MediaConverter.TryDelete(s);
         }
@@ -292,6 +344,19 @@ public static class YtDlpService
         {
             MediaConverter.TryDelete(part);
         }
+    }
+
+    internal static bool HasEmbeddedSubtitles(string json, int expected)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            return doc.RootElement.TryGetProperty("streams", out var streams) && streams.ValueKind == JsonValueKind.Array
+                && streams.GetArrayLength() == expected && streams.EnumerateArray().All(stream =>
+                    stream.TryGetProperty("nb_read_packets", out var packets) && packets.ValueKind == JsonValueKind.String
+                    && long.TryParse(packets.GetString(), out var count) && count > 0);
+        }
+        catch (JsonException) { return false; }
     }
 
     /// <summary>ffmpeg's arguments for <see cref="EmbedAsync"/> (pure, for testing).</summary>
@@ -423,17 +488,17 @@ public static class YtDlpService
         var saved = await RunOnce(req);
         if (saved.Files.Count == 0 && req.SubtitleLanguage.Length == 0)
         {
-            Log.Info("No subtitles in the chosen languages, trying the automatic ones");
-            saved = await RunOnce(req with { SubtitleLanguage = SubtitleFiles.AutoOriginal });
-            if (saved.Files.Count == 0)
+            await foreach (var languages in FallbackSubtitleLanguagesAsync(req.Url, ct))
             {
-                Log.Info("No automatic ones either, trying any track");
-                saved = await RunOnce(req with { SubtitleLanguage = AnyTrack });
+                Log.Info($"No subtitles in the chosen languages, trying {languages}");
+                saved = await RunOnce(req with { SubtitleLanguage = languages });
+                if (saved.Files.Count == 0) continue;
                 if (saved.Files.Count > 1)
                 {
                     var kept = KeepOne(saved.Files.Select(f => f.Path).ToList());
                     saved = (saved.Files.Where(f => f.Path == kept).ToList(), saved.Title, saved.Url);
                 }
+                break;
             }
         }
         if (saved.Files.Count == 0)
@@ -467,6 +532,7 @@ public static class YtDlpService
 
             var (srt, language) = await SpeechRecognizer.RecognizeAsync(audio, req.SubtitleLanguage[SubtitleFiles.SpeechPrefix.Length..],
                 Path.Combine(work, "speech"), p => onEvent(new RecognizingEvent(p)), ct);
+            if (!SubtitleFiles.HasContent(srt)) throw new YtDlpException(L.Get("LocalSub_NoSpeech"));
             // Where the audio would have gone (the same folders and name), with the language before the extension.
             var name = Path.Combine(req.OutputFolder, Path.ChangeExtension(Path.GetRelativePath(work, audio), null));
             var tag = File.Exists($"{name}.{language}.{req.SubtitleFormat}") ? $"{language}.asr" : language;

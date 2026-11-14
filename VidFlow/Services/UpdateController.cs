@@ -139,28 +139,40 @@ public sealed class UpdateController
         }
     }
 
-    /// <summary>Asks for confirmation (mentioning running downloads), then runs the installer and exits.
+    /// <summary>Asks for confirmation (mentioning all active work), then runs the installer and exits.
     /// Unfinished downloads resume after the update.</summary>
     public async Task InstallAsync(XamlRoot root)
     {
-        if (Latest is null) return;
-        var installer = await Task.Run(() => UpdateService.DownloadAsync(Latest, null, CancellationToken.None));
-
-        var active = App.Downloads.ActiveCount;
-        var dialog = new ContentDialog
+        if (_busy || Latest is null || State != UpdateState.Ready) return;
+        _busy = true;
+        try
         {
-            XamlRoot = root,
-            Title = L.Format("Update_InstallTitle", Latest.Version),
-            Content = active > 0 ? L.Format("Update_InstallBodyActive", active) : L.Get("Update_InstallBody"),
-            PrimaryButtonText = L.Get("Update_InstallNow"),
-            CloseButtonText = L.Get("Update_Later"),
-            DefaultButton = ContentDialogButton.Primary,
-            Style = (Style)Application.Current.Resources["DefaultContentDialogStyle"],
-        };
-        if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
-
-        UpdateService.LaunchInstaller(installer, Latest);
-        App.QuitForUpdate();
+            var manifest = Latest;
+            var installer = await Task.Run(() => UpdateService.DownloadAsync(manifest, null, CancellationToken.None));
+            _installer = installer;
+            var active = App.ActiveWorkCount;
+            var dialog = new ContentDialog
+            {
+                XamlRoot = root,
+                Title = L.Format("Update_InstallTitle", manifest.Version),
+                Content = active > 0 ? L.Format("Update_InstallBodyActive", active) : L.Get("Update_InstallBody"),
+                PrimaryButtonText = L.Get("Update_InstallNow"),
+                CloseButtonText = L.Get("Update_Later"),
+                DefaultButton = ContentDialogButton.Primary,
+                Style = (Style)Application.Current.Resources["DefaultContentDialogStyle"],
+            };
+            if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
+            UpdateService.LaunchInstaller(installer, manifest);
+            App.QuitForUpdate();
+        }
+        catch (Exception ex)
+        {
+            Log.Warn($"Update installation failed: {ex.Message}");
+            Error = Friendly(ex);
+            _installer = null;
+            Set(UpdateState.Failed);
+        }
+        finally { _busy = false; }
     }
 
     /// <summary>Called as VidFlow quits: a downloaded update installs now, silently, so the next start is the new

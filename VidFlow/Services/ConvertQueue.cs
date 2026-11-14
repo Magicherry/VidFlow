@@ -86,6 +86,8 @@ public sealed class ConvertQueue
         var dispatcher = App.UiQueue;
         try
         {
+            if (App.ToolUsage.IsUpdating) item.StatusText = L.Get("Status_WaitingTools");
+            using var tools = await App.ToolUsage.UseAsync(cts.Token);
             await Task.Run(() => MediaConverter.ConvertAsync(item.Source, dest, item.Target, p => dispatcher.TryEnqueue(() =>
             {
                 if (!item.IsConverting) return;
